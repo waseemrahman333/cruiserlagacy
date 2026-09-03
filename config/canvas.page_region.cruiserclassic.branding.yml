@@ -1,0 +1,22 @@
+uuid: 8dae40ba-6b58-4203-8590-1bf7ff932960
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.system_branding_block
+  theme:
+    - cruiserclassic
+id: cruiserclassic.branding
+region: branding
+theme: cruiserclassic
+component_tree:
+  '0:a58bd030-7cd1-4090-8c89-18a36666cf52':
+    uuid: a58bd030-7cd1-4090-8c89-18a36666cf52
+    component_id: block.system_branding_block
+    component_version: 7d528e00f56b3abf
+    inputs:
+      label: 'Site branding'
+      label_display: '0'
+      use_site_logo: true
+      use_site_name: false
+      use_site_slogan: false

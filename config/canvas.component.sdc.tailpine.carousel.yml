@@ -1,0 +1,39 @@
+uuid: 27725a81-7e44-4781-a566-9f981ee9f733
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: fe2078106a08d60a
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        autoplay:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        loop:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        slides:
+          title: Slides
+          description: 'Carousel slide items.'
+label: Carousel
+id: sdc.tailpine.carousel
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:carousel'

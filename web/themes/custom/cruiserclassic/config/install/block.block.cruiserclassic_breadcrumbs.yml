@@ -1,0 +1,18 @@
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - cruiserclassic
+id: cruiserclassic_breadcrumbs
+theme: cruiserclassic
+region: breadcrumb
+weight: 0
+provider: 
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  label_display: "0"
+  provider: system
+visibility: {}

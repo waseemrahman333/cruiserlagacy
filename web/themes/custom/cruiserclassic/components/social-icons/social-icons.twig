@@ -1,0 +1,155 @@
+{# ── Resolve props with fallbacks ─────────────────────────────── #}
+{% set icon_name        = iconTitle %}
+{% set icon_style       = iconStyle %}
+{% set icon_size_key    = iconSize %}
+{% set icon_color       = iconColor  %}
+{% set icon_bg_color    = iconBgColor %}
+{% set icon_hover_bg    = iconHoverBgColor %}
+{% set icon_hover_color = iconHoverColor|default('white') %}
+{% set icon_radius      = iconRadius|default('none') %}
+{% set enable_group     = enableGroupHover|default(false) %}
+{% set show_link_text   = showLinkText|default(false) %}
+{% set link_text        = linkText|default('') %}
+{% set icon_link        = iconLink|default('#') %}
+{% set use_as_share     = useAsShare|default(false) %}
+
+{# ── Size map ──────────────────────────────────────────────────── #}
+{% set sizeMap = {
+  'mini': 20,
+  'mini': 24,
+  'default': 32,
+  'lg': 40,
+  'xl': 48
+} %}
+{% set icon_px = sizeMap[icon_size_key]|default(32) %}
+
+{# ── Padding map (scales with size) ───────────────────────────── #}
+{% set paddingMap = {
+  'micro':   'p-1',
+  'mini':    'p-1.5',
+  'default': 'p-2',
+  'lg':      'p-2.5',
+  'xl':      'p-3',
+  '2xl':     'p-3.5'
+} %}
+{% set icon_padding = paddingMap[icon_size_key]|default('p-2.5') %}
+
+{# ── Radius map ────────────────────────────────────────────────── #}
+{% set radiusMap = {
+  'none': 'rounded-none',
+  'sm':   'rounded-sm',
+  'md':   'rounded-md',
+  'lg':   'rounded-lg',
+  'full': 'rounded-full'
+} %}
+{% set radius_class = radiusMap[icon_radius]|default('rounded-none') %}
+
+
+{% set gapMap = {
+  'none': 'gap-0 mb-0',
+  'sm': 'gap-2 mb-4',
+  'md':'gap-3 mb-4',
+  'lg':'gap-4 mb-4',
+} %}
+{% set icongap = icongap|default('sm') %}
+
+{# ── Icon color map ────────────────────────────────────────────── #}
+
+{% set icon_color_class = icon_color|default('text-primary') %}
+
+{# ── Bg color map ──────────────────────────────────────────────── #}
+
+{% set bg_class = icon_style == 'fill' ? icon_bg_color|default('bg-primary') : 'bg-transparent' %}
+
+{# ── Hover bg map ──────────────────────────────────────────────── #}
+
+{% set hover_bg_class = icon_hover_bg|default('hover:bg-secondary') %}
+{# {% set hover_bg_class =  ( icon_style == 'fill' ? hoverBgMap[icon_hover_bg] ~ ' outline-' ) %} #}
+{# ── Hover icon color map ──────────────────────────────────────── #}
+
+{% set hover_color_class = icon_hover_color|default('hover:text-white') %}
+
+{% set hover_color_class = icon_style == 'fill' ? icon_hover_color ~ ' hover:outline-2 ' ~ borderColorMap[icon_hover_color]  : ' ' ~ icon_hover_color
+%}
+{# ── Group hover map ───────────────────────────────────────────── #}
+
+{% set group_hover_class = enable_group ? icon_hover_bg|replace({'hover:':'group-hover:'}) ~ ' ' ~ icon_hover_color|replace({'hover:':'group-hover:'}) : '' %}
+
+{# ── Border map ────────────────────────────────────────────────── #}
+{% set borderColorMap = {
+    'hover:text-primary' : 'decoration-primary',
+    'hover:text-secondary' : 'decoration-secondary',
+    'hover:text-tertiary' : 'decoration-tertiary',
+    'hover:text-body-text' : 'decoration-body-text',
+    'hover:text-heading-text' : 'decoration-heading-text',
+    'hover:text-surface-primary' : 'decoration-surface-primary',
+    'hover:text-surface-secondary' : 'decoration-surface-secondary',
+    'hover:text-surface-tertiary' : 'decoration-surface-tertiary'
+} %}
+
+{# ── Outline style: icon color only, no bg ─────────────────────── #}
+{% set bg_class = icon_style == 'fill' ? icon_bg_color|default('bg-primary') : 'bg-transparent' %}
+{% if icon_style == 'outline' %}
+  {% set bg_class = 'bg-transparent outline-2 hover:outline-none' %}
+{% endif %}
+
+{# ── Wrapper layout ────────────────────────────────────────────── #}
+{% set wrapper_class = showLinkText
+  ? 'flex items-center justify-start ' ~ gapMap[icongap]
+  : 'inline-block h-fit w-fit '
+%}
+{# ── Safelist builder (forces Tailwind to keep all used classes) ── #}
+{% set _safelist = ['group-hover:text-primary','group-hover:text-secondary','group-hover:text-tertiary','group-hover:text-body-text','group-hover:text-heading-text','group-hover:text-surface-primary','group-hover:text-surface-secondary','group-hover:text-surface-tertiary','group-hover:bg-primary','group-hover:bg-secondary','group-hover:bg-tertiary','group-hover:bg-body-text','group-hover:bg-heading-text','group-hover:bg-surface-primary','group-hover:bg-surface-secondary','group-hover:bg-surface-tertiary'] %}
+
+
+{# ── Auto-generate share URL when useAsShare is enabled ──────────── #}
+{% if use_as_share %}
+  {% set pageUrl = url('<current>', {}, {'absolute': true})|render|striptags|trim %}
+
+   {% set shareUrlMap = {
+    'icon_facebook':  'https://www.facebook.com/sharer/sharer.php?u=' ~ pageUrl,
+    'icon_x':         'https://twitter.com/intent/tweet?url=' ~ pageUrl,
+    'icon_linkedin':  'https://www.linkedin.com/sharing/share-offsite/?url=' ~ pageUrl,
+    'icon_whatsapp':  'https://wa.me/?text=' ~ pageUrl,
+    'icon_mail':      'mailto:?body=' ~ pageUrl
+  } %}
+
+  {% if icon_name in shareUrlMap|keys %}
+    {% set icon_link = shareUrlMap[icon_name] %}
+  {% endif %}
+{% endif %}
+
+
+
+<div class="{{ wrapper_class }}">
+  
+<a  href="{{ icon_link }}"
+    {% if not (use_as_share and icon_name == 'icon_mail') %}target="_blank" rel="noopener noreferrer"{% endif %}
+    class="h-fit w-fit"
+    role="link"
+    aria-label="{{ link_text is not empty ? link_text : icon_name }}"
+    title="{{ link_text is not empty ? link_text : icon_name }}"
+    tabindex="0"
+  >
+    {{ icon('tailpine_icons', icon_name, {
+      size: icon_px,
+      attributes: {
+         class: bg_class ~ ' ' ~ icon_color_class  ~ ' ' ~  hover_bg_class  ~ ' ' ~  hover_color_class  ~ ' ' ~  radius_class  ~ ' ' ~ group_hover_class   ~ ' ' ~  group_hover_color_class ~' ' ,
+        'aria-hidden': 'true',
+        'focusable': 'false'
+      }
+     }) }}
+
+  </a>
+
+  {% if show_link_text %}
+    {# {% set icon_text %}
+      {% block iconText %}{% endblock %}
+    {% endset %}
+    {% if icon_text|trim is not empty %} #}
+      <div class="h-fit min-w-20">
+        {{ linkText }}
+      </div>
+    {# {% endif %}#}
+{% endif %} 
+</div>

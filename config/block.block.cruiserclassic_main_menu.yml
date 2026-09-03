@@ -1,0 +1,27 @@
+uuid: e58cd31a-f7fe-44b2-8acd-79020b388851
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: fo1XaTKZVGIBBk2VBWvnEObKO8P4xZPMV7KiLzPVlbc
+id: cruiserclassic_main_menu
+theme: cruiserclassic
+region: header_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 2
+  expand_all_items: true
+visibility: {  }

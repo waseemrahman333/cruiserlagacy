@@ -1,0 +1,36 @@
+uuid: 6f01f5b8-689a-49e8-9921-c6632f7aa413
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.paragraph.social_icons.field_select_icon
+    - field.field.paragraph.social_icons.field_social_link
+    - paragraphs.paragraphs_type.social_icons
+  module:
+    - link
+    - options
+id: paragraph.social_icons.default
+targetEntityType: paragraph
+bundle: social_icons
+mode: default
+content:
+  field_select_icon:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_social_link:
+    type: link
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

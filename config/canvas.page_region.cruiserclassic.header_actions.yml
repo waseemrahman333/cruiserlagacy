@@ -1,0 +1,22 @@
+uuid: 5fe27b8f-0908-49df-91a8-7c3f6bb077e0
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.system_menu_block.account
+  theme:
+    - cruiserclassic
+id: cruiserclassic.header_actions
+region: header_actions
+theme: cruiserclassic
+component_tree:
+  '0:4cbcaab7-0627-4f15-8f53-0fbbab66ef71':
+    uuid: 4cbcaab7-0627-4f15-8f53-0fbbab66ef71
+    component_id: block.system_menu_block.account
+    component_version: bc0ea0dab4832c55
+    inputs:
+      label: 'User account menu'
+      label_display: '0'
+      level: 1
+      depth: 2
+      expand_all_items: false

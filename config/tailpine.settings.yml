@@ -1,0 +1,48 @@
+_core:
+  default_config_hash: 5EpNIRMWbIc0uIpA6tMVhAQ6WEwkobWLpuRhezdGUik
+favicon:
+  use_default: true
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  node_user_picture: true
+logo:
+  use_default: true
+color_theme: cyberpunk
+tailpine_enable_color: false
+tailpine_color_primary: ''
+tailpine_color_primary_hover: ''
+tailpine_color_on_primary: ''
+tailpine_color_secondary: ''
+tailpine_color_tertiary: ''
+tailpine_color_body: ''
+tailpine_color_heading: ''
+tailpine_color_body_bg: ''
+tailpine_color_surface: ''
+tailpine_color_surface_hover: ''
+tailpine_color_surface_alt: ''
+tailpine_color_input: ''
+tailpine_color_muted: ''
+tailpine_color_border: ''
+tailpine_color_dark: ''
+tailpine_color_focus_ring: ''
+tailpine_color_shadow: ''
+tailpine_color_success: ''
+tailpine_color_warning: ''
+tailpine_color_error: ''
+tailpine_color_info: ''
+header_class: style4
+footer_class: style1
+header_fixed: '0'
+container_style: full
+show_color_switcher: true
+color_switcher_region: secondary_menu
+container_padding_mobile: 20
+container_padding_tablet: 60
+container_padding_desktop: 96
+container_padding_wide: 120
+body_font_size: '16'
+body_font_family: inter
+heading_font_family: archivo
+tailpine_colors_reset_done: true

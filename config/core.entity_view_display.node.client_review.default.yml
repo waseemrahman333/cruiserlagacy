@@ -1,0 +1,56 @@
+uuid: 87211339-4ac4-4824-b106-aaa2199f3c7f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.client_review.field_fleet_image
+    - field.field.node.client_review.field_review_description
+    - field.field.node.client_review.field_sub_title
+    - node.type.client_review
+  module:
+    - media_thumbnail_url_formatter
+    - nomarkup
+    - user
+id: node.client_review.default
+targetEntityType: node
+bundle: client_review
+mode: default
+content:
+  field_fleet_image:
+    type: media_thumbnail_url
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      absolute: false
+    third_party_settings:
+      nomarkup:
+        enabled: true
+        separator: '|'
+        referenced_entity: ''
+    weight: 101
+    region: content
+  field_review_description:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 103
+    region: content
+  field_sub_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

@@ -1,0 +1,19 @@
+uuid: 61d67665-539e-4bc0-9a7d-5c26e38dfca0
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.help_block
+  theme:
+    - cruiserclassic
+id: cruiserclassic.help
+region: help
+theme: cruiserclassic
+component_tree:
+  '0:bac64df7-e6c0-4ab2-86db-fd39f071ec9b':
+    uuid: bac64df7-e6c0-4ab2-86db-fd39f071ec9b
+    component_id: block.help_block
+    component_version: 2fc02d0eb487e62e
+    inputs:
+      label: Help
+      label_display: '0'

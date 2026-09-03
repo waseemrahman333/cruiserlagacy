@@ -1,0 +1,20 @@
+uuid: 4ef81136-aa6c-4861-9646-c83e762b0200
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+_core:
+  default_config_hash: N11TYXioKsawui7p0iPfIb1t8NNfToCOh35aK9OuiHU
+id: tailpine_develope_by
+theme: tailpine
+region: footer_bottom
+weight: 0
+provider: null
+plugin: 'block_content:ff6f6920-12a0-4b67-a41a-b39fb6747b90'
+settings:
+  id: tailpine_develope_by
+  label: 'Develop By'
+  label_display: '0'
+  provider: tailpine_tools
+visibility: {  }

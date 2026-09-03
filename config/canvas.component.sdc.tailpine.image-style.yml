@@ -1,0 +1,49 @@
+uuid: b9e395e7-37f8-4c24-98f6-54dec9d02b0e
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: bc7d83a28678c2ba
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        image:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        style_name:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        image_style_utility_classes:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: ImageStyle
+id: sdc.tailpine.image-style
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:image-style'

@@ -1,0 +1,84 @@
+
+{% set color_class = color_varient|default('secondary') %}
+{% set border_radius = rounded|striptags %}
+
+{% set base_classes = 'inline-flex items-center justify-between  font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
+
+
+
+{# -----color variant and style vairient mapping---- #}
+{% set colorSchemaMap = {
+  'solid': {
+    'primary':     'bg-primary text-primary-content hover:bg-primary/80 focus:ring-primary',
+    'secondary':   'bg-secondary text-secondary-content hover:bg-secondary/80 focus:ring-secondary',
+    'tertiary':    'bg-tertiary text-tertiary-content hover:bg-tertiary/80 focus:ring-tertiary',
+    'body':        'bg-body text-body-bg hover:bg-body/80 focus:ring-body',
+    'body-bg':     'bg-body-bg text-body border border-border hover:bg-surface-200 focus:ring-border',
+    'surface-100': 'bg-surface-100 text-body border border-border hover:bg-surface-200 focus:ring-border',
+    'surface-200': 'bg-surface-200 text-body border border-border hover:bg-surface-300 focus:ring-border',
+    'surface-300': 'bg-surface-300 text-body hover:bg-surface-300/80 focus:ring-border',
+    'success':     'bg-success text-success-content hover:bg-success/80 focus:ring-success',
+    'warning':     'bg-warning text-warning-content hover:bg-warning/80 focus:ring-warning',
+    'error':       'bg-error text-error-content hover:bg-error/80 focus:ring-error',
+    'dark':        'bg-dark text-content-on-dark hover:bg-dark/80 focus:ring-dark',
+    'transparent': 'bg-transparent text-body hover:bg-surface-200 focus:ring-border'
+  },
+  'outline': {
+    'primary':     'bg-transparent border border-primary text-primary hover:bg-primary hover:text-primary-content focus:ring-primary',
+    'secondary':   'bg-transparent border border-secondary text-secondary hover:bg-secondary hover:text-secondary-content focus:ring-secondary',
+    'tertiary':    'bg-transparent border border-tertiary text-tertiary hover:bg-tertiary hover:text-tertiary-content focus:ring-tertiary',
+    'body':        'bg-transparent border border-body text-body hover:bg-body hover:text-body-bg focus:ring-body',
+    'body-bg':     'bg-transparent border border-border text-body hover:bg-body-bg focus:ring-border',
+    'surface-100': 'bg-transparent border border-surface-100 text-surface-100 hover:!bg-surface-100 hover:!text-body',
+    'surface-200': 'bg-transparent border border-surface-200 text-surface-200 hover:bg-surface-200 focus:ring-border hover:text-heading',
+    'surface-300': 'bg-transparent border border-surface-300 text-surface-300 hover:bg-surface-300 focus:ring-border hover:text-heading',
+    'success':     'bg-transparent border border-success text-success hover:bg-success hover:text-success-content focus:ring-success',
+    'warning':     'bg-transparent border border-warning text-warning hover:bg-warning hover:text-warning-content focus:ring-warning',
+    'error':       'bg-transparent border border-error text-error hover:bg-error hover:text-error-content focus:ring-error',
+    'dark':        'bg-transparent border border-dark text-dark hover:bg-dark hover:text-content-on-dark focus:ring-dark',
+    'transparent': 'bg-transparent border border-transparent text-body hover:bg-surface-200 focus:ring-border'
+  }
+} %}
+
+{% set variant_key = style_variant|default('solid') %}
+{% set color_class = colorSchemaMap[variant_key][color_varient]|default(colorSchemaMap['solid']['primary']) %}
+
+
+{# button size mapping #}
+
+{% set sizeMap = {
+  'sm': 'text-sm md:text-base xl:text-base  py-2.5 px-5 gap-2',
+  'md': 'text-base md:text-base xl:text-lg  py-3 px-8 gap-4',
+  'lg': ' text-base md:text-base xl:text-lg py-4 px-10 gap-8'
+} %}
+
+{% set size_key = button_size|default('md') %}
+{% set size_class = sizeMap[size_key]|default(sizeMap['md']) %}
+
+{# CTA Button #}
+<a
+  href="{{ link }}"
+  role="button"
+  aria-label="{{ title }}"
+  title="{{ title }}"
+  {{ attributes.addClass(' ' ~ base_classes ~ ' ' ~ size_class  ~ ' '  ~ color_class ~ ' ' ~ border_radius ) }}
+>
+  {{ title }}
+
+  {# Optional Arrow Icon for 'with_arrow' variant #}
+  {% if button_style_values == 'with_arrow' or button_style_values == 'outline_with_arrow' %}
+    <svg class="w-4 h-4   transition-transform duration-500 group-hover:translate-x-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  {% endif %}
+  {% if button_style_values == 'hover_arrow_move' %}
+    <svg class="w-6 h-6 bg-secondary justify-end group-hover:rotate-90 group-hover:bg-primary group-hover:border-primary text-body-bg ease-linear duration-300 rounded-full border border-border group-hover:border-none p-2 rotate-45"
+      viewBox="0 0 16 19"
+      stroke="currentColor"
+      xmlns="http://www.w3.org/2000/svg">
+    <path d="M7 18C7 18.5523 7.44772 19 8 19C8.55228 19 9 18.5523 9 18H7ZM8.70711 0.292893C8.31658 -0.0976311 7.68342 -0.0976311 7.29289 0.292893L0.928932 6.65685C0.538408 7.04738 0.538408 7.68054 0.928932 8.07107C1.31946 8.46159 1.95262 8.46159 2.34315 8.07107L8 2.41421L13.6569 8.07107C14.0474 8.46159 14.6805 8.46159 15.0711 8.07107C15.4616 7.68054 15.4616 7.04738 15.0711 6.65685L8.70711 0.292893ZM9 18L9 1H7L7 18H9Z"
+        class="fill-secondary group-hover:fill-primary"></path>
+  </svg>
+  {% endif %}
+
+</a>

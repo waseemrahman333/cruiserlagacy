@@ -1,0 +1,37 @@
+uuid: 49a252c6-d151-450a-bbdb-af672b94611e
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.new_fleet
+  module:
+    - views
+active_version: d009e32409bd32ba
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:new_fleet-block_1'
+        label: 'new fleet: new fleet'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+  93508178fba636c3:
+    settings:
+      default_settings:
+        id: 'views_block:new_fleet-block_1'
+        label: 'new fleet'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'new fleet: new fleet'
+id: block.views_block.new_fleet-block_1
+provider: views
+source: block
+source_local_id: 'views_block:new_fleet-block_1'

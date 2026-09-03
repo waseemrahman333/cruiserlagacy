@@ -1,0 +1,31 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Hero (Cruiserclassic)
+status: stable
+description: "Hero Style One is used to group and display content in a way that is easily readable."
+group: Heros
+category: Hero
+props:
+  type: object
+  properties:
+    image_url:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Background Image
+      description: >
+        Background Image of the Hero
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Background Image'
+          width: 1900
+          height: 999
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['Welcome to our Website']          
+  
+slots:
+  cta:
+    title: Cta
+    description: "Link of the Hero. Links."
+

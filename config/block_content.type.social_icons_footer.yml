@@ -1,0 +1,8 @@
+uuid: 19d05c49-bb4e-4ef6-95a8-e14445b06e58
+langcode: en
+status: true
+dependencies: {  }
+id: social_icons_footer
+label: 'Social Icons Footer'
+revision: false
+description: null

@@ -1,0 +1,10 @@
+uuid: d53219c6-adaa-40cb-8b1f-919fa4dc27e2
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+id: cruiserclassic.header
+region: header
+theme: cruiserclassic
+component_tree: {  }

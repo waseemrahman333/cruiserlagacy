@@ -1,0 +1,21 @@
+uuid: 24b1bc0f-43ea-417a-a1e2-1ee291e903cf
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.adventure
+    - canvas.component.sdc.cruiserclassic.hero
+    - canvas.component.sdc.tailpine.canvas-herostylefour
+    - canvas.component.sdc.tailpine.canvas-herostyleone
+    - canvas.component.sdc.tailpine.canvas-herostylethree
+    - canvas.component.sdc.tailpine.canvas-herostyletwo
+name: Heros
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.adventure
+  - sdc.cruiserclassic.hero
+  - sdc.tailpine.canvas-herostylefour
+  - sdc.tailpine.canvas-herostyleone
+  - sdc.tailpine.canvas-herostylethree
+  - sdc.tailpine.canvas-herostyletwo

@@ -1,0 +1,101 @@
+uuid: 45b44405-18a0-44eb-8692-2852425de822
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: 7578211dd604f22e
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        embed_url:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'https://www.openstreetmap.org/export/embed.html?bbox=-0.1277%2C51.5074%2C-0.1000%2C51.5200&layer=mapnik'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        provider:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: google
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        height:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: lg
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        show_info_card:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        address:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '123 Main Street, London, UK'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        show_directions_link:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        show_fullscreen:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: true
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Map Embed (Canvas)'
+id: sdc.tailpine.canvas-map-embed
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-map-embed'

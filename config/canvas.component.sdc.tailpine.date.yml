@@ -1,0 +1,93 @@
+uuid: 380879af-8010-4e20-ab28-bffc02c64ba4
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: d403aa385483b751
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        date_source:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: static
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        static_date:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '24,5,2026'
+          expression: ℹ︎string␟value
+          derived_schema_metadata: {  }
+        field_reference:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata: {  }
+        start_date:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '23,05,2026'
+          expression: ℹ︎string␟value
+          derived_schema_metadata: {  }
+        end_date:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata: {  }
+        format:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: 'd M Y'
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        show_badge:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'date (Canvas)'
+id: sdc.tailpine.date
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:date'

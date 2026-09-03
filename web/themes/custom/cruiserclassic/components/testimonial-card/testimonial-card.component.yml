@@ -1,0 +1,28 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: Happy Client
+description: 'A card component with background color, image, or video support with overlay controls'
+group: Jeep Components
+status: stable
+props:
+  type: object
+  properties:
+    image:
+      type: string
+      title: Background Image
+      description: Upload a background image for the jeep card
+    image_alt:
+      type: string
+      title: Image Alt Text
+      description: Alternative text for the jeep image
+    title:
+      type: string
+      title: Jeep Title
+      description: Enter the title for the jeep card
+    subtitle:
+      type: string
+      title: Jeep Subtitle
+      description: Enter the subtitle for the jeep card
+    description:
+      type: string
+      title: Jeep Description
+      description: Enter the description for the jeep card

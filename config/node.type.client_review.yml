@@ -1,0 +1,18 @@
+uuid: 20527b40-840d-4ba6-bea5-e66ba280103f
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus:
+      - main
+    parent: 'main:'
+name: 'Client Review'
+type: client_review
+description: null
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: true

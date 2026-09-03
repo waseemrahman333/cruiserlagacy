@@ -1,0 +1,45 @@
+{#
+  Social Icons Footer Block
+  Loops through the paragraph field (field_social_icons).
+  Each paragraph item has:
+    - field_icon_name → icon machine name (select list)
+    - field_icon_url  → link with optional title as aria-label
+  All styling is hardcoded below — change values here to update globally.
+#}
+
+<div class="flex items-center min-w-10 w-fit gap-5">
+
+{# {{dump(content.field_social_icons)}} #}
+  {% for item in content.field_social_icons %}
+
+    {% if item['#paragraph'] is defined %}
+
+      {% set para = item['#paragraph'] %}
+ 
+      {% if para %}
+        {% set icon_name  = para.field_select_icon.value ?? '' %}
+        {% set icon_url   = para.field_links.url    ?? '#' %}
+        {% set icon_label = para.field_icon_url.title  ?? icon_name %}
+
+        {% if icon_name %}
+          {% include 'cruiserclassic:social-icons' with {
+            useAsShare:       false,
+            iconTitle:        icon_name,
+            iconLink:         icon_url,
+            showLinkText:     false,
+            iconSize:         'default',
+            iconStyle:        'fill',
+            iconColor:        'text-body-bg',
+            iconBgColor:      'bg-primary',
+            iconHoverBgColor: 'hover:bg-body-bg',
+            iconHoverColor:   'hover:text-primary',
+            iconRadius:       'md',
+            enableGroupHover: false,
+          } %}
+        {% endif %}
+      {% endif %}
+
+    {% endif %}
+  {% endfor %}
+
+</div>

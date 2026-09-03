@@ -1,0 +1,27 @@
+uuid: 83dc7cfc-7460-43df-aab0-38eb662f0953
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.main
+  module:
+    - system
+  theme:
+    - tailpine
+_core:
+  default_config_hash: N_A2IpfHVN-tyzJWk25ZhzC3kNQny4sHdcSeDU_rwzY
+id: tailpine_main_menu
+theme: tailpine
+region: header_menu
+weight: 0
+provider: null
+plugin: 'system_menu_block:main'
+settings:
+  id: 'system_menu_block:main'
+  label: 'Main navigation'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 2
+  expand_all_items: true
+visibility: {  }

@@ -1,0 +1,68 @@
+uuid: 3706e322-f7c1-457f-ba37-08d8479b9011
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: 29e2f5dcfd3beeba
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        content:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'This is the modal content Animo contemnentes nostri disputatione affirmatis turbent ipsam quippiam quas. Eorum enim iudicium de finibus bonorum et malorum, quoniam hanc copiosiorem esse naturam quam ceteras, quoniamque in iis utilitas maxime conspicua est, non modo philosophorum, verum etiam oratorum atque poëtarum amplissime laudata est.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        top_title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Modal Title'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        alignment:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: Center
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        button_text:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Close
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Modal (Canvas)'
+id: sdc.tailpine.canvas-modal
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-modal'

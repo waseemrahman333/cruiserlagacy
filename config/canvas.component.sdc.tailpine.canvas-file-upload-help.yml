@@ -1,0 +1,39 @@
+uuid: 80676c56-2811-4bf8-a6bd-3679ce5c5b72
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.canvas_html_block
+  module:
+    - text
+  theme:
+    - tailpine
+active_version: 375efed77e28d25c
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        description:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>This is <strong>formatted</strong> description</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'file upload help (Canvas)'
+id: sdc.tailpine.canvas-file-upload-help
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-file-upload-help'

@@ -1,0 +1,92 @@
+uuid: 48408bae-3469-4411-a7c9-e90acb14d882
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: e6cf1778532ad919
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        orientation:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: vertical
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        connector_style:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: line
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        show_dates:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: true
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        show_icons:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        alternate_sides:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        bg_color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: default
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        items:
+          title: 'Timeline items'
+          description: 'Add canvas-timelineitem components here.'
+label: 'Timeline (Canvas)'
+id: sdc.tailpine.canvas-timeline
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-timeline'

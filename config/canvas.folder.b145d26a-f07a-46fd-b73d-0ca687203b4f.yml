@@ -1,0 +1,13 @@
+uuid: b145d26a-f07a-46fd-b73d-0ca687203b4f
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.social-icons
+    - canvas.component.sdc.tailpine.canvas-tailpine_icons
+name: 'Tailpine Elements'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.social-icons
+  - sdc.tailpine.canvas-tailpine_icons

@@ -1,0 +1,41 @@
+uuid: 1198c849-c5ea-4c7a-922d-9d3c14d94e8f
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: 0cccb3cb718f0766
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        button_text:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        button_color:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        items:
+          title: 'Menu Items'
+          description: 'Dropdown menu items content.'
+label: Dropdown
+id: sdc.tailpine.dropdown
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:dropdown'

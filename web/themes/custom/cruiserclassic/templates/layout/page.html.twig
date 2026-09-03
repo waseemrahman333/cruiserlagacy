@@ -1,0 +1,81 @@
+{{ attach_library('tailpine/fixed-header') }}
+
+{% set containerMaxWidths = {
+  'wide': 'max-w-480',
+  'xl': 'max-w-384',
+  'lg': 'max-w-320',
+  'md': 'max-w-256'
+} %}
+
+
+<div class="  mx-auto min-h-screen flex flex-col {{ container_type not in ['full', 'fluid'] ? containerMaxWidths[container_type] : '' }}">
+  <!-- Header -->
+    {# <div class="flex items-center w-full flex-col justify-start "> #}
+      {% if page.top_bar %}
+      {{ page.top_bar }}
+       {% endif %}
+      {% if page.header %}
+         
+          {{ page.header }}
+      {% endif %}
+
+       {# {% if not is_admin_path %} #}
+      {% include '@cruiserclassic/templates/headers/' ~ header_template ~ '.html.twig' %}
+       {# {% endif %} #}
+    {# </div> #}
+    {% if page.secondary_menu %}
+            <div class="">
+              {{ page.secondary_menu }}
+          </div>
+    {% endif %}
+      {% if page.highlighted %}
+         
+          {{ page.highlighted }}
+      {% endif %}
+
+        {% if page.breadcrumb %}
+          <div class="{{ container_class }} px-4 sm:px-6 lg:px-8">
+            {{ page.breadcrumb }}
+          </div>
+        {% endif %}
+
+       {% if page.help %}
+          {{ page.help }}
+      {% endif %}
+  <!-- Main Content Area -->
+  <main role="main" class="flex-1 layout-container">
+    <div class="{{ container_class }}">
+      <div class="grid grid-cols-12 gap-6 py-6">
+        <!-- Left Sidebar -->
+        {% if page.sidebar_left %}
+          <aside class="col-span-12 md:col-span-3" role="complementary">
+            {{ page.sidebar_left }}
+          </aside>
+        {% endif %} 
+        <!-- Main Content -->
+        <section
+          class="
+            {% if page.sidebar_left and page.sidebar_right %}
+              col-span-12 md:col-span-6
+            {% elseif page.sidebar_left or page.sidebar_right %}
+              col-span-12 md:col-span-9
+            {% else %}
+              col-span-12
+            {% endif %}
+          "
+        >
+          <a id="main-content" tabindex="-1"></a>
+          {{ page.content }}
+        </section>
+        <!-- Right Sidebar -->
+        {% if page.sidebar_right %}
+          <aside class="col-span-12 md:col-span-3" role="complementary">
+            {{ page.sidebar_right }}
+          </aside>
+        {% endif %}
+      </div>
+    </div>
+  </main>
+  <!-- Footer -->
+          {% include '@tailpine/templates/footer-styles/' ~ footer_template ~ '.html.twig' %}
+</div>

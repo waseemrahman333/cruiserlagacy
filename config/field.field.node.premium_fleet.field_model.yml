@@ -1,0 +1,19 @@
+uuid: 2ddca652-426e-46ed-9d42-39bddade83fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_model
+    - node.type.premium_fleet
+id: node.premium_fleet.field_model
+field_name: field_model
+entity_type: node
+bundle: premium_fleet
+label: model
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

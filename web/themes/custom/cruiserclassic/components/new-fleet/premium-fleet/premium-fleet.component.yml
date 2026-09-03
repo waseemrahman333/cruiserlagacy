@@ -1,0 +1,20 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: new fleet (cruiserclassic)
+description: 'A card component with background color, image, or video support with overlay controls'
+group: Jeep Components
+status: stable
+props:
+  type: object
+  properties:
+    jeep_background:
+      type: string
+      title: Background Image
+      description: Upload a background image for the jeep card
+    jeep_title:
+      type: string
+      title: Jeep Title
+      description: Enter the title for the jeep card
+    jeep_year:
+      type: string
+      title: Jeep Year
+      description: Enter the year for the jeep card

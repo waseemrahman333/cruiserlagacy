@@ -1,0 +1,360 @@
+
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+  'success': 'bg-success text-success-content',
+  'warning': 'bg-warning text-warning-content',
+  'error': 'bg-error text-error-content',
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+{% set py_map = {
+  none:  'py-0',
+  xs:    'py-6 sm:py-8 lg:py-10',
+  sm:    'py-8 sm:py-12 lg:py-16',
+  md:    'py-10 sm:py-16 lg:py-20',
+  lg:    'py-12 sm:py-20 lg:py-24',
+  xl:    'py-16 sm:py-24 lg:py-32',
+  '2xl': 'py-20 sm:py-28 lg:py-36',
+  '3xl': 'py-24 sm:py-32 lg:py-40',
+  '4xl': 'py-28 sm:py-36 lg:py-44',
+  '5xl': 'py-32 sm:py-40 lg:py-48',
+  huge:  'py-40 sm:py-48 lg:py-64'
+} %}
+
+{# ══════════════════════════════════════════
+   GAP MAP
+══════════════════════════════════════════ #}
+{% set gap_map = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-4',
+  md:    'gap-6',
+  lg:    'gap-8',
+  xl:    'gap-10',
+  '2xl': 'gap-12',
+  '3xl': 'gap-16'
+} %}
+
+{% set row_gap_map = {
+  none:  'mt-0',
+  xs:    'mt-4',
+  sm:    'mt-6',
+  md:    'mt-8',
+  lg:    'mt-12',
+  xl:    'mt-16',
+  '2xl': 'mt-20',
+  '3xl': 'mt-24'
+} %}
+
+{# ══════════════════════════════════════════
+   WIDTH MAP  (max-width per row wrapper)
+══════════════════════════════════════════ #}
+{% set width_map = {
+  full: 'w-full',
+  fit:  'w-full md:w-1/2 xl:w-fit',
+  '25': 'w-full md:w-1/2 xl:w-1/4',
+  '33': 'w-full md:w-1/2 xl:w-1/3',
+  '50': 'w-full md:w-1/2 xl:w-1/2',
+  '66': 'w-full md:w-1/2 xl:w-2/3',
+  '75': 'w-full md:w-1/2 xl:w-3/4',
+  '80': 'w-full md:w-1/2 xl:w-4/5',
+  '90': 'w-full md:w-1/2 xl:w-9/10'
+} %}
+
+{# ══════════════════════════════════════════
+   ALIGNMENT MAP
+   justify-content for the row flex/grid
+══════════════════════════════════════════ #}
+{% set align_map = {
+  left:    { justify: 'justify-start',   items: 'justify-items-start',  text: 'text-left'   },
+  center:  { justify: 'justify-center',  items: 'justify-items-center', text: 'text-center' },
+  right:   { justify: 'justify-end',     items: 'justify-items-end',    text: 'text-right'  },
+  between: { justify: 'justify-between', items: 'justify-items-start',  text: 'text-left'   },
+  around:  { justify: 'justify-around',  items: 'justify-items-start',  text: 'text-left'   }
+} %}
+
+  {# underline thickness mapping #}
+{% set thickness_map = {
+  half: 'h-[0.5px]',
+  px:   'h-[1px]',
+  '2':  'h-[2px]',
+  '4':  'h-2',
+  '8':  'h-3'
+} %}
+
+{# ══════════════════════════════════════════
+   RESOLVE PROPS WITH FALLBACKS
+══════════════════════════════════════════ #}
+{% set bg = bg_variants[background_color]|default(bg_variants.transparent) %}
+{% set py_class  = py_map[padding_block    ?? 'lg'] ?? 'pt-10' %}
+{% set gap_class = gap_map[column_gap    ?? 'md'] ?? 'gap-6' %}
+{% set rgap      = row_gap_map[row_gap   ?? 'lg'] ?? 'mt-12' %}
+
+{# Column counts — default to max if not set #}
+{% set top_cols    = top_columns    ?? 3 %}
+{% set main_cols   = main_columns   ?? 4 %}
+{% set main_cols_tab   = main_columns_tab   ?? 4 %}
+{% set bottom_cols = bottom_columns ?? 3 %}
+
+{# Alignment objects #}
+{% set top_a    = align_map[top_alignment    ?? 'left'] %}
+{% set main_a   = align_map[main_alignment   ?? 'left'] %}
+{% set bottom_a = align_map[bottom_alignment ?? 'left'] %}
+
+{# Row max-width wrappers #}
+{% set top_w    = width_map[top_width    ?? 'full'] ?? 'max-w-full' %}
+{% set main_w   = width_map[main_width   ?? 'full'] ?? 'max-w-full' %}
+{% set bottom_w = width_map[bottom_width ?? 'full'] ?? 'max-w-full' %}
+
+{# underline classes#}
+{% set underline_   = width_map[top_width    ?? 'full'] ?? 'max-w-full' %}
+
+{% set thickness_class   = thickness_map[underline_thickness ?? 'px']   ?? '' %}
+{% set underline_color_class = bg_variants[underline_color]|default(bg_variants.light) %}
+
+
+{# ══════════════════════════════════════════
+   GRID COLUMN CLASS PER ROW
+   Uses number of ACTIVE columns (not just
+   slots filled) so the grid is always the
+   right width even for empty slots.
+══════════════════════════════════════════ #}
+
+{# Top grid #}
+{% if top_cols == 1 %}
+  {% set top_grid = 'grid-cols-1' %}
+{% elseif top_cols == 2 %}
+  {% set top_grid = 'grid-cols-1 md:grid-cols-2' %}
+{% elseif top_cols == 3 %}
+  {% set top_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
+{% else %}
+  {% set top_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4' %}
+{% endif %}
+
+{# Main grid #}
+{% if main_cols == 1 %}
+  {% set main_grid = 'grid-cols-1' %}
+{% elseif main_cols == 2 %}
+  {% set main_grid = 'grid-cols-1 md:grid-cols-2' %}
+{% elseif main_cols == 3 %}
+  {% set main_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
+{% elseif main_cols == 5 %}
+  {% set main_grid = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'  %}
+{% elseif main_cols == 6 %}
+  {% set main_grid = 'grid-cols-1 md:grid-cols-2  lg:grid-cols-4 xl:grid-cols-6'  %}
+{% else %}
+  {% set main_grid = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' %}
+{% endif %}
+
+{# Bottom grid #}
+{% if bottom_cols == 1 %}
+  {% set bottom_grid = 'grid-cols-1' %}
+{% elseif bottom_cols == 2 %}
+  {% set bottom_grid = 'grid-cols-1 md:grid-cols-2' %}
+{% else %}
+  {% set bottom_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
+{% endif %}
+
+
+{# ══════════════════════════════════════════
+   RENDER
+══════════════════════════════════════════ #}
+<footer
+  {{ attributes.addClass([
+    'footer-style-one',
+    'w-full',
+    'mx-auto',
+    'font-roboto',
+    'container',
+    bg,
+    py_class
+  ] | filter(v => v is not empty)) }}
+  role="contentinfo"
+>
+
+  {# Inner wrapper — contains all three rows stacked #}
+  <div class="footer-inner w-full flex flex-col">
+
+    {# ════════════════════════════════
+       TOP ROW
+    ════════════════════════════════ #}
+    {% if top_cols > 0 %}
+      <div class="footer-top w-full  ">
+        {# Width constrainer — centred, respects top_width prop #}
+        <div class="footer-top-inner {{top_grid }}
+                     {{ top_a.justify == 'justify-between' ? 'grid xl:flex xl:justify-between xl:items-center  xl:flex-nowrap' : 'grid '  }} {{ gap_class }}
+                    {{ top_a.justify }}">
+
+          {# Col 1 — always shown when top_cols >= 1 #}
+          <div class="footer-top-col-1  {{ top_w }}
+                      {{ top_a.text }}">
+                <div class="navbar--logo ">
+                      {% block top_first %}
+                     {% endblock %}
+                </div>
+             </div>
+
+          {# Col 2 — only shown when top_cols >= 2 #}
+          {% if top_cols >= 2 %}
+            <div class="footer-top-col-2   {{ top_w }}
+                        {{ top_a.text }}">
+              {{ top_middle }}
+            </div>
+          {% endif %}
+
+          {# Col 3 — only shown when top_cols == 3 #}
+          {% if top_cols >= 3 %}
+            <div class="footer-top-col-3 w-full  {{ top_w }}
+                        {{ top_a.text }}">
+              {{ top_secondlast }}
+            </div>
+          {% endif %}
+
+          {# Col 4 — only shown when top_cols == 4 #}
+          {% if top_cols == 4 %}
+            <div class="footer-top-col-3 w-full   {{ top_w }}
+                        {{ top_a.text }}">
+              {{ top_last }}
+            </div>
+          {% endif %}
+
+        </div>
+
+       {% if top_underline %}
+        <div class="content-block__underline w-full  mt-8
+                    {{ thickness_class }}
+                    {{ underline_color_class  }}">
+        </div>
+      {% endif %}
+      </div>
+    {% endif %}
+
+
+    {# ════════════════════════════════
+       MAIN ROW
+    ════════════════════════════════ #}
+    {% if main_cols > 0 %}
+      <div class="footer-main w-full  {{ top_cols > 0 ? rgap : '' }}">
+        <div class="footer-main-inner w-full {{main_grid}}   {{ main_a.justify == 'justify-between' ? 'grid xl:flex xl:justify-between xl:items-center  xl:flex-nowrap' : 'grid '  }} 
+                      {{ gap_class }}
+                   {{main_a.justify}} ">
+
+          {# Col 1 #}
+          <div class="footer-main-col-1 w-full  {{ main_w }} 
+                      {{ main_a.text }}">
+            {{ main_first }}
+          </div>
+
+          {# Col 2 #}
+          {% if main_cols >= 2 %}
+            <div class="footer-main-col-2 w-full {{ main_w }} 
+                        {{ main_a.text }}">
+              {{ main_second }}
+            </div>
+          {% endif %}
+
+          {# Col 3 #}
+          {% if main_cols >= 3 %}
+            <div class="footer-main-col-3 w-full {{ main_w }} 
+                        {{ main_a.text }}">
+              {{ main_third }}
+            </div>
+          {% endif %}
+
+          {# Col 4 #}
+          {% if main_cols >= 4 %}
+            <div class="footer-main-col-4 w-full {{ main_w }} 
+                        {{ main_a.text }}">
+              {{ main_fourth }}
+            </div>
+          {% endif %}
+
+           {# Col 5 #}
+          {% if main_cols >= 5 %}
+            <div class="footer-main-col-5 w-full {{ main_w }} 
+                        {{ main_a.text }}">
+              {{ main_fifth }}
+            </div>
+          {% endif %}
+
+           {# Col 6 #}
+          {% if main_cols == 6 %}
+            <div class="footer-main-col-6 w-full {{ main_w }} 
+                        {{ main_a.text }}">
+              {{ main_sixth }}
+            </div>
+          {% endif %}
+
+        </div>
+               {% if main_underline %}
+        <div class="content-block__underline w-full  mt-8
+                    {{ thickness_class }}
+                    {{ underline_color_class  }}">
+        </div>
+      {% endif %}
+      </div>
+    {% endif %}
+
+
+    {# ════════════════════════════════
+       BOTTOM ROW
+    ════════════════════════════════ #}
+    {% if bottom_cols > 0 %}
+      <div class="footer-bottom w-full 
+                  {{ (top_cols > 0 or main_cols > 0) ? rgap : '' }}">
+        <div class="footer-bottom-inner {{ bottom_grid }} {{ bottom_a.justify and bottom_w != 'w-full' ? 'grid xl:flex xl:justify-between xl:items-center  xl:flex-nowrap' : 'grid ' }}  
+                     {{ bottom_grid }} {{ gap_class }}
+                    {{ bottom_a.justify }}">
+
+          {# Col 1 #}
+          <div class="footer-bottom-col-1 w-full {{ bottom_w }}
+                      {{ bottom_a.text }}">
+            {{ bottom_first }}
+          </div>
+
+          {# Col 2 #}
+          {% if bottom_cols >= 2 %}
+            <div class="footer-bottom-col-2 w-full {{ bottom_w }}
+                        {{ bottom_a.text }}">
+              {{ bottom_middle }}
+            </div>
+          {% endif %}
+
+          {# Col 3 #}
+          {% if bottom_cols == 3 %}
+            <div class="footer-bottom-col-3 w-full {{ bottom_w }}
+                        {{ bottom_a.text }}">
+              {{ bottom_last }}
+            </div>
+          {% endif %}
+
+        </div>
+      </div>
+    {% endif %}
+
+  </div>{# /footer-inner #}
+
+</footer>
+
+
+
+
+
+
+
+
+
+
+

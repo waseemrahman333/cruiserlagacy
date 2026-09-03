@@ -1,0 +1,27 @@
+uuid: 4cbcaab7-0627-4f15-8f53-0fbbab66ef71
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.account
+  module:
+    - system
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: tKRUXJrO_qYGhHWsjO6TV0nTc3bJxmM5u3pLfFpJtZk
+id: cruiserclassic_useraccountmenu
+theme: cruiserclassic
+region: header_actions
+weight: 0
+provider: null
+plugin: 'system_menu_block:account'
+settings:
+  id: 'system_menu_block:account'
+  label: 'User account menu'
+  label_display: '0'
+  provider: system
+  level: 1
+  depth: 2
+  expand_all_items: false
+visibility: {  }

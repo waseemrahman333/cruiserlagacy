@@ -1,0 +1,65 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Start adventure (cruiserclassic)
+description: "A hero section with a background image, title, description, and call-to-action buttons."
+status: stable
+group: Heros
+category: Hero
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image_url:
+      title: Background Image
+      type: object 
+      $ref: json-schema-definitions://canvas.module/image
+      description:  Background Image of the Hero
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Background Image'
+          width: 1900
+          height: 999
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['Welcome to our Website']   
+    text_color: &color_field
+      type: string
+      title: Title color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - white
+        - light gray
+        - dark gray
+        - black
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        white: White
+        light gray: Light Gray
+        dark gray: Dark Gray
+        black: Black
+        transparent: Transparent
+      examples:
+        - white
+    description_text_color:
+      <<: *color_field
+      title: Description Color               
+    description:
+      title: Description
+      type: string
+      description: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>']     
+slots:
+  cta:
+    title: Call to Action
+    description: "Call to action buttons or links for the hero section."

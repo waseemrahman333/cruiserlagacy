@@ -1,0 +1,17 @@
+uuid: b545ff57-6a57-4116-871d-6babacbc3f22
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - canvas
+_core:
+  default_config_hash: Jtg2ZbEaVmgKuS8lDEIZJko2Za7PYAAIzl1Np0vLQYw
+id: global
+label: 'Global CSS'
+css:
+  original: ''
+  compiled: ''
+js:
+  original: ''
+  compiled: ''

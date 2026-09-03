@@ -1,0 +1,22 @@
+uuid: 0733a502-5778-4a89-a5a8-9da9290d02f3
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: _m_SBkVICQICR3XQ2bVr8QFPZNLsaMcjR4rJ_b8ryuk
+id: cruiserclassic_tabs
+theme: cruiserclassic
+region: highlighted
+weight: 0
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  label_display: '0'
+  provider: core
+  primary: true
+  secondary: true
+visibility: {  }

@@ -1,0 +1,19 @@
+uuid: e99398e1-e98b-48bd-bb3d-041dd82694b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.system_breadcrumb_block
+  theme:
+    - cruiserclassic
+id: cruiserclassic.breadcrumb
+region: breadcrumb
+theme: cruiserclassic
+component_tree:
+  '0:2c41fb64-2218-470f-9b24-0c16129f4a50':
+    uuid: 2c41fb64-2218-470f-9b24-0c16129f4a50
+    component_id: block.system_breadcrumb_block
+    component_version: 0d7e961dd03aa710
+    inputs:
+      label: Breadcrumbs
+      label_display: '0'

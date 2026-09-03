@@ -1,0 +1,48 @@
+uuid: 09f07174-19a7-40d8-9c8e-624da39b911f
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+active_version: 0a116be5401defb6
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        jeep_background:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        jeep_title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        jeep_year:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'new fleet (cruiserclassic)'
+id: sdc.cruiserclassic.premium-fleet
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:premium-fleet'

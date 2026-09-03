@@ -1,0 +1,15 @@
+uuid: bc7d92c5-879c-42dc-a041-656a6632227f
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-figure
+    - canvas.component.sdc.tailpine.node
+    - canvas.component.sdc.tailpine.node-teaser
+name: Content
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-figure
+  - sdc.tailpine.node
+  - sdc.tailpine.node-teaser

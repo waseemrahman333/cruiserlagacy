@@ -1,0 +1,8 @@
+uuid: 62fb1500-8dff-4cbe-9c7f-cfde4b29f108
+langcode: en
+status: true
+dependencies: {  }
+name: Drupak
+configEntityTypeId: component
+weight: 0
+items: {  }

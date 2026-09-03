@@ -1,0 +1,52 @@
+uuid: ea18db4f-d423-41d3-8d7d-a35001e084de
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.premium_fleet.field_fleet_image
+    - field.field.node.premium_fleet.field_model
+    - node.type.premium_fleet
+  module:
+    - media_thumbnail_url_formatter
+    - nomarkup
+    - user
+id: node.premium_fleet.default
+targetEntityType: node
+bundle: premium_fleet
+mode: default
+content:
+  field_fleet_image:
+    type: media_thumbnail_url
+    label: hidden
+    settings:
+      image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
+      absolute: false
+    third_party_settings:
+      nomarkup:
+        enabled: true
+        separator: '|'
+        referenced_entity: ''
+    weight: 101
+    region: content
+  field_model:
+    type: string
+    label: hidden
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings:
+      nomarkup:
+        enabled: true
+        separator: '|'
+        referenced_entity: ''
+    weight: 102
+    region: content
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden: {  }

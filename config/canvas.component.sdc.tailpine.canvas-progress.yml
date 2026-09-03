@@ -1,0 +1,83 @@
+uuid: 849fbaf8-fa1f-4565-9822-01b5ad10311e
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: 8b9e0e40f10faeff
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        value:
+          required: false
+          field_type: float
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value:
+            -
+              value: 0.0
+          expression: ℹ︎float␟value
+          derived_schema_metadata: {  }
+        max:
+          required: false
+          field_type: float
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value:
+            -
+              value: 100.0
+          expression: ℹ︎float␟value
+          derived_schema_metadata: {  }
+        label:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Loading
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        show_percentage:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value: null
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        height:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value: null
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Progress Bar (Canvas)'
+id: sdc.tailpine.canvas-progress
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-progress'

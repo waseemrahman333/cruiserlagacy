@@ -1,0 +1,23 @@
+# # Colors
+# # ----------------------------
+cruiserclassic_enable_color: true
+cruiserclassic_color_scheme: default
+cruiserclassic_base_primary_color: '#10B981'
+cruiserclassic_base_secondary_color: '#064E3B'
+cruiserclassic_base_tertiary_color: '#06B6D4'
+cruiserclassic_body_color: '#1F2937'
+cruiserclassic_body_bg_color: '#FFFFFF'
+cruiserclassic_h1_color: '#1F2937'
+cruiserclassic_h2_color: '#1F2937'
+cruiserclassic_h3_color: '#1F2937'
+cruiserclassic_h4_color: '#1F2937'
+cruiserclassic_success_color: '#14A44D'
+cruiserclassic_warning_color: '#E4A11B'
+cruiserclassic_error_color: '#DC4C64'
+header_class: style4
+footer_class: style1
+show_color_switcher: true
+color_switcher_region: secondary_menu
+body_font_size: '16'
+body_font_family: 'inter'
+heading_font_family: 'archivo'

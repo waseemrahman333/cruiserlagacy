@@ -1,0 +1,34 @@
+uuid: ece3f5b4-9e92-4b76-b71b-a5f8afaa5e54
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: 83f7f440936e05ba
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        logo_img:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        logo_title:
+          title: 'Logo title'
+          description: description
+        inner_content:
+          title: 'Inner Content'
+          description: description
+label: Sidebar
+id: sdc.tailpine.sidebar
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:sidebar'

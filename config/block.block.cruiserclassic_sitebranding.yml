@@ -1,0 +1,25 @@
+uuid: a58bd030-7cd1-4090-8c89-18a36666cf52
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: '-G_jFXWLKooKQEhTX1BDryzr43xBcEXUC5ydaQ0OKIE'
+id: cruiserclassic_sitebranding
+theme: cruiserclassic
+region: branding
+weight: 0
+provider: system
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  label_display: '0'
+  provider: system
+  use_site_logo: true
+  use_site_name: false
+  use_site_slogan: false
+visibility: {  }

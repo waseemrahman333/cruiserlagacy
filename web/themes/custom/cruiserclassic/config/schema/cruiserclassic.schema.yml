@@ -1,0 +1,74 @@
+# Schema for the configuration files of the cruiserclassic Subtheme.
+
+cruiserclassic.settings:
+  type: theme_settings
+  label: "cruiserclassic settings"
+  mapping:
+    # Colors.
+    # ----------------------------
+    cruiserclassic_enable_color:
+      type: boolean
+      label: "Enable color Sheme"
+    cruiserclassic_color_scheme:
+      type: string
+      label: "cruiserclassic Color Scheme"
+    cruiserclassic_base_primary_color:
+      type: string
+      label: "Primary base color"
+    cruiserclassic_base_secondary_color:
+      type: string
+      label: "Secondary base color"
+    cruiserclassic_base_tertiary_color:
+      type: string
+      label: "Tertiary base color"
+    cruiserclassic_body_color:
+      type: string
+      label: "Body color"
+    cruiserclassic_body_bg_color:
+      type: string
+      label: "Body Background Color"
+    cruiserclassic_h1_color:
+      type: string
+      label: "H1 color"
+    cruiserclassic_h2_color:
+      type: string
+      label: "H2 color"
+    cruiserclassic_h3_color:
+      type: string
+      label: "H3 color"
+    cruiserclassic_h4_color:
+      type: string
+      label: "H4 color"
+    cruiserclassic_success_color:
+      type: string
+      label: "Success Color"
+    cruiserclassic_warning_color:
+      type: string
+      label: "Warning Color"
+    cruiserclassic_error_color:
+      type: string
+      label: "Error Color"
+    container_style:
+      type: string
+      label: "Page container width"
+    # Typography settings.
+    body_font_size:
+      type: string
+      label: "Body font size"
+    body_font_family:
+      type: string
+      label: "Body font family"
+    heading_font_family:
+      type: string
+      label: "Heading font family"
+    # header style
+    header_class:
+      type: string
+      label: "Header style"
+    footer_class:
+      type: string
+      label: "Footer style"
+    header_fixed:
+      type: string
+      label: "Fixed Header"
+

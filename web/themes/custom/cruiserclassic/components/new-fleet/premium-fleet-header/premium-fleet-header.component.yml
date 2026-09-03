@@ -1,0 +1,19 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: New Fleet Header
+status: stable
+group: Fleet
+
+props:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Title
+      default: New Land Cruiser
+      examples: ['New Land Crouiser'] 
+
+slots:
+  main:
+    title: Fleet Content
+    description: "fleet content comes here"
+

@@ -1,0 +1,20 @@
+uuid: cf614973-446d-4958-8982-30f80ff86372
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: AdYyYVvhLA76oLBoLagJfn6oz2dKgE7n_qsJm-x4_9U
+id: cruiserclassic_primaryadminactions
+theme: cruiserclassic
+region: highlighted
+weight: 0
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  label_display: '0'
+  provider: core
+visibility: {  }

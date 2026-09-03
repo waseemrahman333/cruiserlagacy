@@ -1,0 +1,81 @@
+uuid: 1728df06-f0b7-4f63-8358-3c2ea244afc0
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: 495515edf446f01d
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        rating:
+          required: false
+          field_type: float
+          field_storage_settings:
+            min: 0
+            max: 5
+          field_instance_settings: {  }
+          field_widget: number
+          default_value: null
+          expression: ℹ︎float␟value
+          derived_schema_metadata: {  }
+        max_stars:
+          required: false
+          field_type: float
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value: null
+          expression: ℹ︎float␟value
+          derived_schema_metadata: {  }
+        size:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value: null
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value: null
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        show_text:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        text_position:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value: null
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        text:
+          title: text
+label: 'Rating (Canvas)'
+id: sdc.tailpine.rating
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:rating'

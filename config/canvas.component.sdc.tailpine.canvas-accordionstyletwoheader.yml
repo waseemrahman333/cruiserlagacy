@@ -1,0 +1,36 @@
+uuid: 74d1195a-e838-4d45-86a1-ebbc278b6598
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: 05fbbdd407d0cdaf
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'This is Accordion Style Two Header'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: content
+          description: 'Content of the  Accordion. Plain text.'
+        text:
+          title: 'Add  description text'
+          description: 'Add text'
+label: 'Accordion Style Two  Header (Canvas)'
+id: sdc.tailpine.canvas-accordionstyletwoheader
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-accordionstyletwoheader'

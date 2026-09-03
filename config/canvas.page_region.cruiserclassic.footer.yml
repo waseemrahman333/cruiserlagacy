@@ -1,0 +1,211 @@
+uuid: 8d9673cb-72ab-43b1-be83-ef3befcd8500
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.block_content.3d881ae4-f940-4f21-9e36-a080554175be
+    - canvas.component.block.block_content.ac90886a-66cf-49b5-9a76-ccaae6cfc43d
+    - canvas.component.block.block_content.b200c324-120c-4ca1-8719-48b6aee50cf4
+    - canvas.component.block.system_menu_block.more-links
+    - canvas.component.block.system_menu_block.quick-links
+    - canvas.component.block.webform_block
+    - canvas.component.sdc.cruiserclassic.footer
+    - canvas.component.sdc.cruiserclassic.footer-block
+    - canvas.component.sdc.tailpine.image
+    - field.field.media.image.field_media_image
+    - image.style.canvas_parametrized_width
+    - media.type.image
+  content:
+    - 'file:file:e8fbff50-d48d-4c11-b3ba-43ca6a94b11f'
+    - 'media:image:f5313faa-01f2-4724-bf30-6b46e9bd32aa'
+  module:
+    - file
+    - media
+    - options
+  theme:
+    - cruiserclassic
+id: cruiserclassic.footer
+region: footer
+theme: cruiserclassic
+component_tree:
+  '0:6f721c82-07ed-4682-ab82-3e1ed39c9941':
+    uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    component_id: sdc.cruiserclassic.footer
+    component_version: d8696059722a512e
+    inputs:
+      background_color: body-bg
+      padding_block: lg
+      column_gap: md
+      row_gap: lg
+      top_columns: 3
+      top_alignment: left
+      top_width: full
+      main_columns: 1
+      main_columns_tab: 4
+      main_alignment: left
+      main_width: full
+      bottom_columns: 3
+      bottom_alignment: left
+      bottom_width: full
+  '0:bottom_first:0:6d31c346-2968-4e08-bdd0-0ef6072c7745':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: bottom_first
+    uuid: 6d31c346-2968-4e08-bdd0-0ef6072c7745
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:bottom_first:0:content:0:2c16b644-ae0c-43f1-9a3f-d86f79cd3120':
+    parent_uuid: 6d31c346-2968-4e08-bdd0-0ef6072c7745
+    slot: content
+    uuid: 2c16b644-ae0c-43f1-9a3f-d86f79cd3120
+    component_id: block.block_content.3d881ae4-f940-4f21-9e36-a080554175be
+    component_version: f8304195d897836e
+    inputs:
+      label: 'Privacy Policy'
+      label_display: '0'
+      view_mode: full
+  '0:bottom_last:0:content:0:19cea814-66a3-4fa3-b0f6-56b3cdb8dfd3':
+    parent_uuid: f17f6dc5-1c6b-448f-8189-3bac3786274c
+    slot: content
+    uuid: 19cea814-66a3-4fa3-b0f6-56b3cdb8dfd3
+    component_id: block.block_content.b200c324-120c-4ca1-8719-48b6aee50cf4
+    component_version: 7fbd13d5281ea597
+    inputs:
+      label: 'Social Media Icons'
+      label_display: '0'
+      view_mode: full
+  '0:bottom_last:0:f17f6dc5-1c6b-448f-8189-3bac3786274c':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: bottom_last
+    uuid: f17f6dc5-1c6b-448f-8189-3bac3786274c
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:bottom_middle:0:content:0:8b72b713-2546-42e4-8910-d45cac59379b':
+    parent_uuid: e4de1d8f-85e5-4dcb-bc5d-c89530f1752d
+    slot: content
+    uuid: 8b72b713-2546-42e4-8910-d45cac59379b
+    component_id: block.block_content.ac90886a-66cf-49b5-9a76-ccaae6cfc43d
+    component_version: 064118e2132b214a
+    inputs:
+      label: 'Copy Rights'
+      label_display: '0'
+      view_mode: full
+  '0:bottom_middle:0:e4de1d8f-85e5-4dcb-bc5d-c89530f1752d':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: bottom_middle
+    uuid: e4de1d8f-85e5-4dcb-bc5d-c89530f1752d
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:main_first:0:c6c04c9a-a58b-417d-8867-96a856b380f9':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: main_first
+    uuid: c6c04c9a-a58b-417d-8867-96a856b380f9
+    component_id: sdc.tailpine.image
+    component_version: 9f04894f1f24e401
+    inputs:
+      media:
+        target_id: '11'
+      url: 'https://example.com'
+      enable_hover_zoom: false
+  '0:top_first:0:content:0:23334c24-6676-435e-9a7f-f61994a693f6':
+    parent_uuid: d3cb0105-d227-49d8-a1fe-fa8059e30d18
+    slot: content
+    uuid: 23334c24-6676-435e-9a7f-f61994a693f6
+    component_id: block.system_menu_block.quick-links
+    component_version: 631125561071f763
+    inputs:
+      label: 'Quick Links'
+      label_display: '0'
+      level: 1
+      depth: null
+      expand_all_items: false
+  '0:top_first:0:d3cb0105-d227-49d8-a1fe-fa8059e30d18':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: top_first
+    uuid: d3cb0105-d227-49d8-a1fe-fa8059e30d18
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:top_middle:0:4e9187d6-2392-46e9-8600-0599ff7f1715':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: top_middle
+    uuid: 4e9187d6-2392-46e9-8600-0599ff7f1715
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:top_middle:0:content:0:11019ad1-8873-44ae-a060-1d8994c31a2f':
+    parent_uuid: 4e9187d6-2392-46e9-8600-0599ff7f1715
+    slot: content
+    uuid: 11019ad1-8873-44ae-a060-1d8994c31a2f
+    component_id: block.system_menu_block.more-links
+    component_version: 4a4be5278a6a3081
+    inputs:
+      label: 'More Links'
+      label_display: '0'
+      level: 1
+      depth: null
+      expand_all_items: false
+  '0:top_secondlast:0:64350d13-4be0-44c1-b645-a6e283d8f787':
+    parent_uuid: 6f721c82-07ed-4682-ab82-3e1ed39c9941
+    slot: top_secondlast
+    uuid: 64350d13-4be0-44c1-b645-a6e283d8f787
+    component_id: sdc.cruiserclassic.footer-block
+    component_version: ff473be56b322c89
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      underline_color: border-white
+      content_width: full
+  '0:top_secondlast:0:content:0:4ab2e1bb-17dc-47a1-92d0-633e758cc29b':
+    parent_uuid: 64350d13-4be0-44c1-b645-a6e283d8f787
+    slot: content
+    uuid: 4ab2e1bb-17dc-47a1-92d0-633e758cc29b
+    component_id: block.webform_block
+    component_version: b5dca6ca0519bf1b
+    inputs:
+      label: Webform
+      label_display: '0'
+      webform_id: newsletter
+      default_data: ''
+      redirect: false
+      lazy: false

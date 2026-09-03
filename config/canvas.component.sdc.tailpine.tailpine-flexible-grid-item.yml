@@ -1,0 +1,107 @@
+uuid: 9dc240ae-052e-49be-b611-c2055e06f444
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - tailpine
+active_version: e425bf452eec4978
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        width_mobile:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: full
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        width_tablet:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: half
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        width_desktop:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: one_third
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        width_wide:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: one_third
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        extra_height:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: normal
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        align_self:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: default
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        extra_classes:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: overflow-hidden
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: 'Cell content'
+          description: 'Drop any component here.'
+label: 'Flexible Grid Item (Canvas)'
+id: sdc.tailpine.tailpine-flexible-grid-item
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:tailpine-flexible-grid-item'

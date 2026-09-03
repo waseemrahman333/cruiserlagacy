@@ -1,0 +1,48 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{{attach_library('cruiserclassic/testimonial-carousel')}}
+
+<section class="overflow-hidden">
+        <div class="responsive-review">
+
+{% for row in rows %}
+    {% set entity = row.content['#row']._entity ?? row._entity %}
+    {% set image = '' %}
+    {% if entity and entity.field_fleet_image.entity %}
+        {% set media_entity = entity.field_fleet_image.entity %}
+        {% if media_entity.field_media_image.entity %}
+            {% set image = file_url(media_entity.field_media_image.entity.uri.value) %}
+        {% endif %}
+    {% endif %}
+
+    {% set title = '' %}
+    {% if entity %}
+        {% set title = entity.field_title.value ?? entity.title.value ?? entity.label ?? '' %}
+    {% endif %}
+
+    {% set subtitle = '' %}
+    {% if entity and entity.field_sub_title %}
+        {% set subtitle = entity.field_sub_title.value ?? '' %}
+    {% endif %}
+
+    {% set description = '' %}
+    {% if entity and entity.field_review_description %}
+        {% set description = entity.field_review_description.value ?? '' %}
+    {% endif %}
+
+    {{ include('cruiserclassic:testimonial-card', {
+     image: image,
+    title: title,
+    subtitle: subtitle,
+    description: description
+  }) }}
+{% endfor %}
+
+        </div>
+    </section>

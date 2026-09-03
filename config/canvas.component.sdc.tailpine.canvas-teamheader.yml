@@ -1,0 +1,36 @@
+uuid: 9e53ceb0-f9ef-430d-9b21-bb4646d3142b
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: a39c6272b258ac59
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'This is Team Header'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: Content
+          description: 'Content of the Wrapper. Plain text.'
+        cta:
+          title: Link
+          description: 'Cta Link'
+label: 'Teams  Header (Canvas)'
+id: sdc.tailpine.canvas-teamheader
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-teamheader'

@@ -1,0 +1,24 @@
+uuid: e48bb227-a1d4-4119-92b8-8b85c9207bf9
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.social_icons_footer
+    - field.field.block_content.social_icons_footer.field_social_icons
+  module:
+    - entity_reference_revisions
+id: block_content.social_icons_footer.default
+targetEntityType: block_content
+bundle: social_icons_footer
+mode: default
+content:
+  field_social_icons:
+    type: entity_reference_revisions_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: ''
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden: {  }

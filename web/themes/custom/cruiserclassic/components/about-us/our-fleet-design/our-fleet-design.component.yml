@@ -1,0 +1,19 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name:  Fleet Design
+status: stable
+description: "Iconic Jeeps Intro components are used to group and display content in a readable format."
+props:
+  type: object
+  properties:    
+    title:
+      type: string
+      title:  Title
+      description: "Iconic Jeeps Intro Title"
+      examples: ['ICONIC JEEPS. ']
+    description:
+      title: description
+      type: string
+      description:  Iconic Jeeps Intro Description .
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['Classic Jeep design never goes out of style. At CruiserClassic, we combine heritage, craftsmanship, and advanced engineering to create exceptional vehicles that honor the past while embracing the future.']   

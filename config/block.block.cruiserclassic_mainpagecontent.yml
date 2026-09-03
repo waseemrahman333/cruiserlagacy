@@ -1,0 +1,22 @@
+uuid: ff9283cf-f2a7-4bcc-a12b-b9fbb0e854be
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: ZAOzIA5JArioqCIA6s2rRWeljx8CDORANheCd9zcKXA
+id: cruiserclassic_mainpagecontent
+theme: cruiserclassic
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'Main page content'
+  label_display: '0'
+  provider: system
+visibility: {  }

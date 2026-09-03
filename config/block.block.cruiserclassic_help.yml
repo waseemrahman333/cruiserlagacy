@@ -1,0 +1,22 @@
+uuid: bac64df7-e6c0-4ab2-86db-fd39f071ec9b
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - cruiserclassic
+_core:
+  default_config_hash: p80el4qHK3PJIPoUwdbvotsSadwHo-0Ob7lAwl_SbDg
+id: cruiserclassic_help
+theme: cruiserclassic
+region: help
+weight: 0
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  label_display: '0'
+  provider: help
+visibility: {  }

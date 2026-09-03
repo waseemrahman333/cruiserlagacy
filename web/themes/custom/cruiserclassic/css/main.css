@@ -1,0 +1,313 @@
+@import "tailwindcss";
+@config "../tailwind.config.mjs";
+
+[data-theme="mybrand"] {
+  color-scheme: light; /* or dark, depending on your bg */
+}
+[data-theme="mybrand"] {
+  --t-primary: #991F2A;  --t-on-primary: #FFFFFF;
+  --t-secondary: #A3A39E; --t-on-secondary: #FFFFFF;
+  --t-tertiary: #292A2C;   --t-on-tertiary: #FFFFFF;
+  --t-body: #555555; --t-body-bg: #FFFFFF;
+  --t-heading: #292A2C; --t-border: #D9D9D9; --t-dark: #111827;
+  --t-surface-100: #FFFFFF; --t-surface-200: #F9FAFB; --t-surface-300: #F3F4F6;
+  --t-success: #15803D; --t-on-success: #FFFFFF;
+  --t-warning: #B45309; --t-on-warning: #FFFFFF;
+  --t-error: #B91C1C; --t-on-error: #FFFFFF;
+  --t-info: #0369A1; --t-on-info: #FFFFFF;
+  --t-focus-ring: #984d54; --t-shadow: rgba(0, 0, 0, 0.1);
+}
+
+
+header .search-icon form {
+  @apply flex flex-row justify-around w-[300px] sm:w-[400px] items-center bg-white shadow px-4 py-2;
+
+  input[type="search"] {
+    @apply sm:w-[250px];
+  }
+  input[type="submit"] {
+    @apply  text-white cursor-pointer sm:w-[100px];
+  }
+}
+
+/* ===== Slick base overrides ===== */
+    /* =========================================
+   SLICK SLIDER
+========================================= */
+
+.responsive .slick-slide {
+    padding: 0 9px;
+    box-sizing: border-box;
+}
+
+.responsive .slick-list {
+    margin: 0 -9px;
+}
+
+.responsive-review .slick-slide {
+    padding: 0 9px;
+    box-sizing: border-box;
+}
+
+.responsive-review .slick-list {
+    margin: 0 -9px;
+}
+
+
+/*
+   IMPORTANT:
+   Do NOT use display:flex on .slick-track
+   when variableWidth:true is enabled.
+*/
+
+
+/* =========================================
+   CARD
+========================================= */
+
+/* Mobile + tablet */
+.card-slide {
+    width: calc(100vw - 24px);
+}
+
+.card-photo {
+    width: 100%;
+    aspect-ratio: 1.38 / 1;
+    height: auto;
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+
+    border-radius: 16px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 639px) {
+
+    .card-slide {
+        width: calc(100vw - 24px);
+    }
+
+    .card-photo {
+        aspect-ratio: 1.38 / 1;
+        border-radius: 12px;
+    }
+
+    .card-photo h2 {
+        font-size: 16px;
+    }
+
+    .card-photo span {
+        font-size: 10px;
+        padding: 5px 9px;
+    }
+}
+
+
+/* =========================================
+   MD / TABLET
+========================================= */
+
+@media (min-width: 640px) and (max-width: 1279px) {
+
+    .card-slide {
+        width: 420px;
+    }
+
+    .card-photo {
+        aspect-ratio: 1.5 / 1;
+    }
+}
+
+
+/* =========================================
+   XL / DESKTOP
+========================================= */
+
+@media (min-width: 1280px) {
+
+    .card-slide {
+        width: 490px;
+    }
+
+    .card-photo {
+        aspect-ratio: 490 / 307;
+        border-radius: 16px;
+    }
+}
+
+
+/* =========================================
+   SLICK DOTS
+========================================= */
+
+
+
+.slick-dotted.slick-slider {
+    margin-bottom: 0px;
+}
+
+.responsive .slick-dots {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.responsive .slick-dots li {
+    width: 15px;
+    height: 12px;
+    margin: 0;
+}
+
+.responsive .slick-dots li button {
+    width: 15px;
+    height: 12px;
+    padding: 0;
+}
+
+.responsive .slick-dots li button:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    width: 15px;
+    height: 12px;
+
+    background: #d9d9d9;
+    border-radius: 999px;
+
+    opacity: 1;
+    font-size: 0;
+}
+
+.responsive .slick-dots li.slick-active,
+.responsive .slick-dots li.slick-active button {
+    width: 40px;
+}
+
+.responsive .slick-dots li.slick-active button:before {
+    width: 40px;
+    height: 12px;
+    background: var(--color-primary);
+    border-radius: 999px;
+    opacity: 1;
+}
+
+
+
+
+
+.responsive-review .slick-dots {
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+.responsive-review .slick-dots li {
+    width: 15px;
+    height: 12px;
+    margin: 0;
+}
+
+.responsive-review .slick-dots li button {
+    width: 15px;
+    height: 12px;
+    padding: 0;
+}
+
+.responsive-review .slick-dots li button:before {
+    content: '';
+    position: absolute;
+    inset: 0;
+
+    width: 15px;
+    height: 12px;
+
+    background: #d9d9d9;
+    border-radius: 999px;
+
+    opacity: 1;
+    font-size: 0;
+}
+
+.responsive-review .slick-dots li.slick-active,
+.responsive-review .slick-dots li.slick-active button {
+    width: 40px;
+}
+
+.responsive-review .slick-dots li.slick-active button:before {
+    width: 40px;
+    height: 12px;
+    background: var(--color-primary);
+    border-radius: 999px;
+    opacity: 1;
+}
+
+/* =========================================
+   SECTION
+========================================= */
+
+.responsive {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.responsive .slick-list {
+    overflow: hidden;
+}
+
+
+.responsive-review {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 60px;
+}
+
+.responsive-review .slick-list {
+    overflow: hidden;
+}
+
+
+/* webform designing  */
+.webform-submission-newsletter-form{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+
+}
+
+.form-submit {
+   @apply self-end py-3 px-4;
+   height: auto;
+}
+.webform-flex--1{
+  @apply  w-3/5 h-fit ;
+}
+.webform-flex--2{
+  @apply self-end w-2/5 h-fit ;
+}
+
+
+@media (min-width: 768px) {
+  .webform-flex--2 {
+    @apply self-end w-2/5 h-fit;
+    flex: none; 
+  }
+}
+

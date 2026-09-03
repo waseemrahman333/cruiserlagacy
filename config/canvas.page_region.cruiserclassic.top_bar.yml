@@ -1,0 +1,10 @@
+uuid: 8740f121-caea-4ddc-b161-2e4da9eda57f
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+id: cruiserclassic.top_bar
+region: top_bar
+theme: cruiserclassic
+component_tree: {  }

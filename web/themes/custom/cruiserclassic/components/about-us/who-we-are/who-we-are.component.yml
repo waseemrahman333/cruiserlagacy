@@ -1,0 +1,32 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name:  Who We Are
+status: stable
+description: "Who we are components are used to group and display content in a readable format."
+props:
+  type: object
+  properties:    
+    title:
+      type: string
+      title:  Title
+      description: "Who we are Title"
+      examples: ['Who we are']
+    description:
+      title: description
+      type: string
+      description:  Who we are Description .
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['At CruiserClassic, our team of skilled engineers, master mechanics, restoration experts, interior artisans, and certified technicians is united by one passion craftiGng exceptional classic off-road vehicles']   
+    image:
+      $ref: 'json-schema-definitions://canvas.module/image'
+      type: object
+      title: 'who we are image'
+      examples:
+        - src: DrupakLogo.png
+          alt: icon
+          width: 800
+          height: 600          
+slots:
+  cta:
+    title: CTA
+    description: "content OF the CTA. Plain text."

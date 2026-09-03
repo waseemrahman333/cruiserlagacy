@@ -1,0 +1,25 @@
+uuid: 1ad6bde0-101d-445d-98d8-ad0e4692cd46
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:social_icons_footer:b200c324-120c-4ca1-8719-48b6aee50cf4'
+  module:
+    - block_content
+active_version: 7fbd13d5281ea597
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'block_content:b200c324-120c-4ca1-8719-48b6aee50cf4'
+        label: 'Social Media Icons'
+        label_display: '0'
+        provider: block_content
+        view_mode: full
+    fallback_metadata:
+      slot_definitions: null
+label: 'Social Media Icons'
+id: block.block_content.b200c324-120c-4ca1-8719-48b6aee50cf4
+provider: block_content
+source: block
+source_local_id: 'block_content:b200c324-120c-4ca1-8719-48b6aee50cf4'

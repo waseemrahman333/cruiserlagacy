@@ -1,0 +1,27 @@
+uuid: 4f35ee04-e751-4d8f-a48f-49fea31b2dd3
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.more-links
+  module:
+    - system
+active_version: 4a4be5278a6a3081
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'system_menu_block:more-links'
+        label: 'More Links'
+        label_display: '0'
+        provider: system
+        level: 1
+        depth: null
+        expand_all_items: false
+    fallback_metadata:
+      slot_definitions: null
+label: 'More Links'
+id: block.system_menu_block.more-links
+provider: system
+source: block
+source_local_id: 'system_menu_block:more-links'

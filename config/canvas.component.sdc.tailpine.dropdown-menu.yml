@@ -1,0 +1,47 @@
+uuid: 9ca5fecd-de4f-45e4-a277-e38f70103e77
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: e0092a64af318360
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        text:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        url:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        divider:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value: null
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Dropdown Menu'
+id: sdc.tailpine.dropdown-menu
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:dropdown-menu'

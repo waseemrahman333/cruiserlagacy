@@ -1,0 +1,25 @@
+uuid: 02a3d317-6946-4847-b339-9e3374b307b9
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-sponserheaderstyletwo
+    - canvas.component.sdc.tailpine.canvas-sponserlogoheader
+    - canvas.component.sdc.tailpine.canvas-sponserlogostyleone
+    - canvas.component.sdc.tailpine.canvas-sponserlogostyletwo
+    - canvas.component.sdc.tailpine.sponserheaderstyletwo
+    - canvas.component.sdc.tailpine.sponserlogoheader
+    - canvas.component.sdc.tailpine.sponserlogostyleone
+    - canvas.component.sdc.tailpine.sponserlogostyletwo
+name: 'Sponsors / Logos'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-sponserheaderstyletwo
+  - sdc.tailpine.canvas-sponserlogoheader
+  - sdc.tailpine.canvas-sponserlogostyleone
+  - sdc.tailpine.canvas-sponserlogostyletwo
+  - sdc.tailpine.sponserheaderstyletwo
+  - sdc.tailpine.sponserlogoheader
+  - sdc.tailpine.sponserlogostyleone
+  - sdc.tailpine.sponserlogostyletwo

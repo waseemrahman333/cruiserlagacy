@@ -1,0 +1,22 @@
+uuid: 1c725980-f5d5-46ce-8280-26df6a5712ea
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.system_menu_block.main
+  theme:
+    - cruiserclassic
+id: cruiserclassic.header_menu
+region: header_menu
+theme: cruiserclassic
+component_tree:
+  '0:e58cd31a-f7fe-44b2-8acd-79020b388851':
+    uuid: e58cd31a-f7fe-44b2-8acd-79020b388851
+    component_id: block.system_menu_block.main
+    component_version: 322535c0078cf59c
+    inputs:
+      label: 'Main navigation'
+      label_display: '0'
+      level: 1
+      depth: 2
+      expand_all_items: true

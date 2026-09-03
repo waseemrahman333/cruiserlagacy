@@ -1,0 +1,100 @@
+{{ attach_library('tailpine/fixed-header') }}
+
+<div class="min-h-screen  flex flex-col">
+
+  {# ─── 01 TOP BAR ──────────────────────────────────────────────────────────── #}
+  {% if page.top_bar|render|trim %}
+    <div class="top-bar w-full" role="navigation" aria-label="Top bar">
+      {{ page.top_bar }}
+    </div>
+  {% endif %}
+
+  {# ─── 02 HEADER ───────────────────────────────────────────────────────────── #}
+  {# {% include '@cruiserclassic/templates/headers/' ~ header_template ~ '.html.twig' %} #}
+
+  {# ── Secondary Menu ── #}
+  {% if page.secondary_menu|render|trim %}
+    <nav class="secondary-menu w-full" aria-label="Secondary navigation">
+      {{ page.secondary_menu }}
+    </nav>
+  {% endif %}
+
+  {# ─── 03 HERO ─────────────────────────────────────────────────────────────── #}
+  {% if page.hero|render|trim %}
+    <div class="hero-region w-full" role="region" aria-label="Hero">
+      {{ page.hero }}
+    </div>
+  {% endif %}
+
+  {# ─── 04 HIGHLIGHTED ──────────────────────────────────────────────────────── #}
+  {% if page.highlighted|render|trim %}
+    <div class="highlighted-region w-full" role="status" aria-live="polite">
+      {{ page.highlighted }}
+    </div>
+  {% endif %}
+
+  {# ─── 05 MAIN CONTENT AREA ────────────────────────────────────────────────── #}
+  <main role="main" class="flex-1">
+
+    {# Skip-to-content anchor #}
+    <a id="main-content" tabindex="-1"></a>
+
+    {# ── Breadcrumb ── #}
+    {% if page.breadcrumb|render|trim %}
+      <nav class="breadcrumb-region w-full" aria-label="Breadcrumb">
+        {{ page.breadcrumb }}
+      </nav>
+    {% endif %}
+
+    {# ── Help ── #}
+    {% if page.help|render|trim %}
+      <div class="help-region w-full">
+        {{ page.help }}
+      </div>
+    {% endif %}
+
+    {# ── 3-column grid: sidebar left / content / sidebar right ── #}
+    <div class="{{ container_class }} ">
+      <div class="grid grid-cols-12 gap-4">
+
+        {# Sidebar Left #}
+        {% if page.sidebar_left|render|trim %}
+          <aside
+            class="sidebar-left col-span-12 md:col-span-3"
+            role="complementary"
+            aria-label="Left sidebar"
+          >
+            {{ page.sidebar_left }}
+          </aside>
+        {% endif %}
+
+        {# Main Content #}
+        <section
+          class="content-region{% if page.sidebar_left|render|trim and page.sidebar_right|render|trim %}col-span-12 md:col-span-6 {% elseif page.sidebar_left|render|trim or page.sidebar_right|render|trim %}col-span-12 md:col-span-9 {% else %} col-span-12 {% endif %} "
+          aria-label="Main content"
+        >
+          {{ page.content }}
+        </section>
+
+        {# Sidebar Right #}
+        {% if page.sidebar_right|render|trim %}
+          <aside
+            class="sidebar-right col-span-12 md:col-span-3"
+            role="complementary"
+            aria-label="Right sidebar"
+          >
+            {{ page.sidebar_right }}
+          </aside>
+        {% endif %}
+
+      </div>{# end grid #}
+    </div>
+
+  </main>
+
+  {# ─── FOOTER ──────────────────────────────────────────────────────────────── #}
+  <footer class="bg-secondary">
+    {% include '@tailpine/templates/footer-styles/' ~ footer_template ~ '.html.twig' %}
+  </footer>
+
+</div>{# end min-h-screen flex container #}

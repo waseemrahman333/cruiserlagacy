@@ -1,0 +1,43 @@
+uuid: 9994e7f2-f6a2-4724-817c-32ffd2fd94c0
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: ea73b708fc41edee
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        firstTabTitle:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        tabTitleContent:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Tab One'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        tabContents:
+          title: 'tab inner content'
+          description: 'Render tab panels'
+label: 'Tailpine Tabs Wrapper (Canvas)'
+id: sdc.tailpine.canvas-tabswrapper
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-tabswrapper'

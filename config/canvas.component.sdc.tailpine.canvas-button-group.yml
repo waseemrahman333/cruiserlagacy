@@ -1,0 +1,21 @@
+uuid: c3b46bc6-2d7f-4ab5-985c-379fae068242
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: 89c84a6148871681
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions: {  }
+    fallback_metadata:
+      slot_definitions:
+        buttons:
+          title: Buttons
+          description: 'Button components to group.'
+label: 'Button Group (Canvas)'
+id: sdc.tailpine.canvas-button-group
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-button-group'

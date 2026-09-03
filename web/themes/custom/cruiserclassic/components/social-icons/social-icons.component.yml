@@ -1,0 +1,287 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Social Icons (cruiserclassic)
+description: Flexible icon component with full style, color, hover and border control.
+status: stable
+group: Tailpine Elements
+
+props:
+  type: object
+  properties:
+
+# ── Share Mode ──────────────────────────────────────────
+    useAsShare:
+      type: boolean
+      title: Use as Share Icon
+      description: "If enabled, this icon shares the CURRENT page automatically (ignores Icon Link URL). Only applies to Facebook, X, LinkedIn, and Mail icons — other icons fall back to Icon Link URL even if this is enabled."
+      default: false
+
+    # ── Icon Selection ──────────────────────────────────────
+    iconTitle:
+      type: string
+      title: Icon
+      description: Machine name of the icon (must match filename without .svg)
+      enum:
+        - icon_facebook
+        - icon_instagram
+        - icon_linkedin
+        - icon_youtube
+        - icon_drupal
+        - icon_x
+        - icon_mail
+        - icon_contact
+        - icon_location
+      meta:enum:
+        icon_facebook: "Facebook"
+        icon_instagram: "Instagram"
+        icon_linkedin: "LinkedIn"
+        icon_youtube: "YouTube"
+        icon_drupal: "Drupal"
+        icon_x: "X (Twitter)"
+        icon_mail: "Mail"
+        icon_contact: "Phone"
+        icon_location: "Location"
+      examples:
+        - "icon_instagram"
+      
+
+    # ── Icon Size ───────────────────────────────────────────
+    iconSize:
+      type: string
+      title: Icon Size
+      default: lg
+      enum: [mini, default, lg, xl]
+      meta:enum:
+        mini: "Mini"
+        default: "Default"
+        lg: "Large"
+        xl: "Extra Large"
+      examples:
+        - "default"
+
+    # ── Style Variant ───────────────────────────────────────
+    iconStyle:
+      type: string
+      title: Icon Style
+      default: solid
+      description: Visual treatment of the icon wrapper.
+      enum:
+        - solid
+        - fill
+        - outline
+      meta:enum:
+        solid: "Solid"
+        fill: "Fill"
+        outline: "Outline"
+      examples:
+        - "fill"
+
+
+    # ── Icon Color ──────────────────────────────────────────
+    iconColor:
+      type: string
+      title: Icon Color
+      default: text-tertiary
+      enum:
+        - text-primary
+        - text-secondary
+        - text-tertiary
+        - text-body
+        - text-body-bg
+        - text-surface-100
+        - text-surface-200
+        - text-surface-300
+        - text-success
+        - text-warning
+        - text-error
+        - text-dark
+        - text-transparent
+      meta:enum:
+        text-primary: Primary Color
+        text-secondary: Secondary Color
+        text-tertiary: Tertiary Color
+        text-body: Body Color
+        text-body-bg: Body Background Color
+        text-surface-100: Light Surface Color
+        text-surface-200: Medium Surface Color
+        text-surface-300: Strong Surface Color
+        text-success: Success Color
+        text-warning: Warning Color
+        text-error: Error Color
+        text-dark: Dark Color
+        text-transparent: Transparent Color
+      examples: ['text-surface-100']
+
+
+    # ── Background Color ────────────────────────────────────
+    iconBgColor:
+      type: string
+      title: Background Color
+      description: Only visible when style is fill.
+      default: bg-primary
+      enum:
+        - bg-primary
+        - bg-secondary
+        - bg-tertiary
+        - bg-body
+        - bg-body-bg
+        - bg-surface-100
+        - bg-surface-200
+        - bg-surface-300
+        - bg-success
+        - bg-warning
+        - bg-error
+        - bg-dark
+        - bg-transparent
+
+      meta:enum:
+        bg-primary: Primary Color
+        bg-secondary: Secondary Color
+        bg-tertiary: Tertiary Color
+        bg-body: Body Color
+        bg-body-bg: Body Background Color
+        bg-surface-100: Light Surface Color
+        bg-surface-200: Medium Surface Color
+        bg-surface-300: Strong Surface Color
+        bg-success: Success Color
+        bg-warning: Warning Color
+        bg-error: Error Color
+        bg-dark: Dark Color
+        bg-transparent: Transparent Color
+
+      examples:
+        - "bg-primary"
+
+    # ── Hover Colors ────────────────────────────────────────
+    iconHoverBgColor:
+      type: string
+      title: Hover Background Color
+      default: hover:bg-secondary
+      enum:
+        - hover:bg-primary
+        - hover:bg-secondary
+        - hover:bg-tertiary
+        - hover:bg-body
+        - hover:bg-body-bg
+        - hover:bg-surface-100
+        - hover:bg-surface-200
+        - hover:bg-surface-300
+        - hover:bg-success
+        - hover:bg-warning
+        - hover:bg-error
+        - hover:bg-dark
+        - hover:bg-transparent
+      meta:enum:
+        hover:bg-primary: Primary Color
+        hover:bg-secondary: Secondary Color
+        hover:bg-tertiary: Tertiary Color
+        hover:bg-body: Body Color
+        hover:bg-body-bg: Body Background Color
+        hover:bg-surface-100: Light Surface Color
+        hover:bg-surface-200: Medium Surface Color
+        hover:bg-surface-300: Strong Surface Color
+        hover:bg-success: Success Color
+        hover:bg-warning: Warning Color
+        hover:bg-error: Error Color
+        hover:bg-dark: Dark Color
+        hover:bg-transparent: Transparent Color
+      examples:
+        - hover:bg-tertiary
+
+    iconHoverColor:
+      type: string
+      title: Hover Icon Color
+      default: hover:text-tertiary
+      enum:
+        - hover:text-primary
+        - hover:text-secondary
+        - hover:text-tertiary
+        - hover:text-body
+        - hover:text-body-bg
+        - hover:text-surface-100
+        - hover:text-surface-200
+        - hover:text-surface-300
+        - hover:text-success
+        - hover:text-warning
+        - hover:text-error
+        - hover:text-dark
+        - hover:text-transparent
+      meta:enum:
+        hover:text-primary: Primary Color
+        hover:text-secondary: Secondary Color
+        hover:text-tertiary: Tertiary Color
+        hover:text-body: Body Color
+        hover:text-body-bg: Body Background Color
+        hover:text-surface-100: Light Surface Color
+        hover:text-surface-200: Medium Surface Color
+        hover:text-surface-300: Strong Surface Color
+        hover:text-success: Success Color
+        hover:text-warning: Warning Color
+        hover:text-error: Error Color
+        hover:text-dark: Dark Color
+        hover:text-transparent: Transparent Color
+
+      examples:
+        - hover:text-primary
+
+
+    # ── Border Radius ───────────────────────────────────────
+    iconRadius:
+      type: string
+      title: Icon Radius
+      default: none
+      enum:
+        - none
+        - sm
+        - md
+        - lg
+        - full
+      meta:enum:
+        none: "Square (no radius)"
+        sm: "Small radius"
+        md: "Medium radius"
+        lg: "Large radius"
+        full: "Fully rounded (circle)"
+
+
+    # ── icon link gap ───────────────────────────────────────
+    icongap:
+      type: string
+      title: Icons link gap
+      default: sm
+      enum:
+        - none
+        - sm
+        - md
+        - lg
+      meta:enum:
+        none: "No Gap"
+        sm: "Small Gap"
+        md: "Medium Gap"
+        lg: "Large Gap"
+      examples:
+        - "md"
+
+    # ── Group Hover ─────────────────────────────────────────
+    enableGroupHover:
+      type: boolean
+      title: Enable Group Hover
+      description: When true, icon also reacts when a parent with class 'group' is hovered.
+      default: false
+
+    # ── Link ────────────────────────────────────────────────
+    iconLink:
+      type: string
+      title: Icon Link URL
+      default: '#'
+      examples: ['https://facebook.com']
+
+    # ── Link Text ───────────────────────────────────────────
+    showLinkText:
+      type: boolean
+      title: Show Link Text
+      default: false
+
+    linkText:
+      type: string
+      title: Link Text
+      default: 'Learn More'

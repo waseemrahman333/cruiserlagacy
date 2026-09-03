@@ -1,0 +1,37 @@
+uuid: f39585ca-0bfa-40b8-9402-fded74ddbc1b
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.review_row
+  module:
+    - views
+active_version: f7421c12529971f4
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:review_row-block_1'
+        label: 'Review Row'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+  f7421c12529971f4:
+    settings:
+      default_settings:
+        id: 'views_block:review_row-block_1'
+        label: 'Review Row'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Review Row'
+id: block.views_block.review_row-block_1
+provider: views
+source: block
+source_local_id: 'views_block:review_row-block_1'

@@ -1,0 +1,36 @@
+uuid: bf3e2b5b-06af-478b-9c87-854fecb1114c
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: 6004561ffb0cc486
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'This is Post Style One Header'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: Content
+          description: 'Add the Post View in the Content region'
+        cta:
+          title: CTA
+          description: 'Call to Action.'
+label: 'Post Style One Header (Canvas)'
+id: sdc.tailpine.canvas-poststyleoneheader
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-poststyleoneheader'

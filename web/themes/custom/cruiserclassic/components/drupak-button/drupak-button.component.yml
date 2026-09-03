@@ -1,0 +1,88 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: Drupak Button
+status: stable
+description: "Primary and Transparent CTA button with hover swap effect."
+group: Drupak
+variants:
+  primary:
+    title: Primary
+    props:
+      title: "Get Started"
+      link: "https://www.example.com"
+      variants: primary
+      show_icon: true
+  secondary:
+    title: Transparent
+    props:
+      title: "Get Started"
+      link: "https://www.example.com"
+      variants: transparent
+      show_icon: true
+props:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Button Text
+      examples:
+        - "Get Started"
+    link:
+      type: string
+      title: Button URL
+      examples:
+        - "/consultation"
+    variants:
+      type: string
+      title: Button Style
+      enum:
+        - primary
+        - secondary
+      meta:enum:
+        primary: "Primary Button"
+        secondary: "Secondary Button"
+      examples:
+        - "primary"
+    color_schema:
+      type: string
+      title: Color Schema
+      description: "Choose a color schema for the component."
+      default: secondary
+      enum:
+        - bg-primary
+        - bg-secondary
+        - bg-tertiary
+        - bg-info
+        - bg-success
+        - bg-error
+        - 
+      "meta:enum":
+        bg-primary: "Primary Button"
+        bg-secondary: "Secondary Button"
+        bg-tertiary: "Tertiary Button"
+        bg-info: "Info Button"
+        bg-success: "Success Button"
+        bg-error: "Error Button"
+        bg-examples: ['primary']
+
+    show_icon:
+      type: boolean
+      title: Show SVG Icon
+      default: true
+
+    buttonRadius:
+      type: string
+      title: Button Radius
+      default: none
+      enum:
+        - none
+        - sm
+        - md
+        - lg
+        - full
+      meta:enum:
+        none: "Square (no radius)"
+        sm: "Small radius"
+        md: "Medium radius"
+        lg: "Large radius"
+        full: "Fully rounded (circle)"
+      

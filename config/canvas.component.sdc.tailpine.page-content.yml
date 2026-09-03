@@ -1,0 +1,21 @@
+uuid: c2eb1dc1-adaf-40c4-9a72-a957d807cfe2
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: d54b181baa9953d9
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: Content
+          description: 'Page content.'
+label: 'Page Content'
+id: sdc.tailpine.page-content
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:page-content'

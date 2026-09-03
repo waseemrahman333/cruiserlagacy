@@ -1,0 +1,21 @@
+uuid: 437a5455-830a-4ee8-af06-6083f39063cb
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: d54b181baa9953d9
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions: {  }
+    fallback_metadata:
+      slot_definitions:
+        content:
+          title: Content
+          description: 'Footer content.'
+label: 'Page Footer'
+id: sdc.tailpine.page-footer
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:page-footer'

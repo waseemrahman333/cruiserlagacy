@@ -1,0 +1,42 @@
+uuid: d0adf898-6328-441d-8d0e-91fa1b64c562
+langcode: en
+status: true
+dependencies:
+  theme:
+    - tailpine
+active_version: cfd496e7b5073e43
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        text:
+          required: true
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Read More'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        detail:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Lorem Ipsum ds w asfweee fasdfasdf cdefid asde f alsdfladsf  dslwefdfcd'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Open Close (Canvas)'
+id: sdc.tailpine.canvas-openclose
+provider: tailpine
+source: sdc
+source_local_id: 'tailpine:canvas-openclose'

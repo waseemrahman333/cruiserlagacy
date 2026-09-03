@@ -1,0 +1,15 @@
+uuid: f9a03fa3-d7c8-47ec-8c9b-b1ce8082ec23
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.search_form_block
+    - canvas.component.block.user_login_block
+    - canvas.component.sdc.tailpine.canvas-button-group
+name: Forms
+configEntityTypeId: component
+weight: 0
+items:
+  - block.search_form_block
+  - block.user_login_block
+  - sdc.tailpine.canvas-button-group

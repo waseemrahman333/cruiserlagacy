@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Theme override to display a view of unformatted rows.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{{attach_library('cruiserclassic/jeep-carousel')}}
+
+    <section class=" overflow-hidden">
+        <div class="responsive">
+
+            {% for row in rows %}
+                {% set entity = row.content['#row']._entity ?? row._entity %}
+                {% set jeep_background = '' %}
+                {% if entity and entity.field_fleet_image.entity %}
+                    {% set media_entity = entity.field_fleet_image.entity %}
+                    {% if media_entity.field_media_image.entity %}
+                        {% set jeep_background = file_url(media_entity.field_media_image.entity.uri.value) %}
+                    {% endif %}
+                {% endif %}
+
+                {% set jeep_title = '' %}
+                {% if entity %}
+                    {% set jeep_title = entity.field_title.value ?? entity.title.value ?? entity.label ?? '' %}
+                {% endif %}
+
+                {% set jeep_year = '' %}
+                {% if entity and entity.field_model %}
+                    {% set jeep_year = entity.field_model.value ?? '' %}
+                {% endif %}
+
+
+                {{ include('cruiserclassic:premium-fleet', {
+                    jeep_background: jeep_background,
+                    jeep_title: jeep_title,
+                    jeep_year: jeep_year
+                }) }}
+            {% endfor %}
+        </div>
+        </section>
