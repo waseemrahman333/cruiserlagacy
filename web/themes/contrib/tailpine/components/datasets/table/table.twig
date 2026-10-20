@@ -1,0 +1,199 @@
+{#
+  table.twig — Tailpine Table Component
+  
+  Works with:
+  - Drupal core table theme hook (theme('table', ...))
+  - Canvas SDC component system
+  - UI Suite / UI Patterns
+  - Any manual render array passing header/rows/footer
+  
+  All props have safe fallbacks so it never crashes on missing data.
+#}
+
+{# ══════════════════════════════════════════
+   SIZE MAP — cell padding per size token
+══════════════════════════════════════════ #}
+{% set size_map = {
+  xs:      'px-2 py-1 text-xs',
+  sm:      'px-3 py-2 text-sm',
+  default: 'px-5 py-3 text-sm',
+  lg:      'px-6 py-4 text-base',
+  xl:      'px-8 py-5 text-base'
+} %}
+
+{# ══════════════════════════════════════════
+   RESOLVE PROPS
+══════════════════════════════════════════ #}
+{% set cell_class  = size_map[size ?? 'default'] ?? 'px-5 py-3 text-sm' %}
+{% set is_bordered = bordered  ?? true %}
+{% set is_hover    = hoverable ?? true %}
+{% set is_sticky   = sticky    ?? false %}
+{% set is_stripe   = not (no_striping ?? false) %}
+{% set is_resp     = responsive ?? true %}
+{% set col_count   = header_columns ?? (header|length ?: 1) %}
+
+{# ══════════════════════════════════════════
+   BORDER CLASSES
+══════════════════════════════════════════ #}
+{% set border_table = is_bordered ? 'border border-border' : '' %}
+{% set border_cell  = is_bordered ? 'border-b border-border' : '' %}
+{% set border_head  = is_bordered ? 'border-b-2 border-border' : '' %}
+
+{# ══════════════════════════════════════════
+   TABLE ELEMENT
+══════════════════════════════════════════ #}
+
+{% set table_markup %}
+<div class="w-full overflow-hidden rounded-xl {{ border_table }} shadow-sm bg-body-bg">
+  <table
+    {{ (attributes|default(create_attribute())).addClass([
+      'w-full',
+      'border-collapse',
+      'text-left'
+    ]) }}
+  >
+
+    {# ── COLGROUPS ── #}
+    {% if colgroups %}
+      {% for colgroup in colgroups %}
+        <colgroup{% if colgroup.attributes %} {{ colgroup.attributes }}{% endif %}>
+          {% if colgroup.cols %}
+            {% for col in colgroup.cols %}
+              <col{% if col.attributes %} {{ col.attributes }}{% endif %} />
+            {% endfor %}
+          {% endif %}
+        </colgroup>
+      {% endfor %}
+    {% endif %}
+
+    {# ── CAPTION ── #}
+    {% if caption %}
+      <caption class="text-base font-semibold text-body
+                      text-center py-3 px-5
+                      bg-surface border-b border-border
+                      rounded-t-xl">
+        {{ caption }}
+      </caption>
+    {% endif %}
+
+    {# ── THEAD ── #}
+    {% if header %}
+      <thead class="bg-surface {{ is_sticky ? 'sticky top-0 z-10' : '' }}">
+        <tr class="{{ border_head }}">
+          {% for cell in header %}
+            {% set tag = cell.tag ?? 'th' %}
+            <{{ tag }}
+              {% if cell.attributes %}{{ cell.attributes }}{% endif %}
+              class="{{ cell_class }}
+                     font-semibold
+                     text-muted
+                     uppercase
+                     tracking-wide
+                     text-left
+                     {{ cell.active_table_sort ? 'text-success' : '' }}"
+            >
+              {%- if cell.content is iterable -%}
+                {{ cell.content|render }}
+              {%- else -%}
+                {{ cell.content|raw }}
+              {%- endif -%}
+            </{{ tag }}>
+          {% endfor %}
+        </tr>
+      </thead>
+    {% endif %}
+
+    {# ── TBODY ── #}
+    {% if rows %}
+      <tbody class="divide-y divide-border">
+        {% for row in rows %}
+
+          {# Per-row stripe: skip if row has no_striping or global no_striping is on #}
+          {% set row_stripe = is_stripe and not (row.no_striping ?? false) %}
+          {% set stripe_bg  = row_stripe
+            ? (loop.index is odd ? '' : 'bg-surface/60')
+            : '' %}
+
+          <tr
+            {% if row.attributes %}{{ row.attributes }}{% endif %}
+            class="{{ stripe_bg }}
+                   {{ is_hover ? 'hover:bg-surface transition-colors duration-150' : '' }}"
+          >
+            {% for cell in row.cells %}
+              {% set tag = cell.tag ?? 'td' %}
+              <{{ tag }}
+                {% if cell.attributes %}{{ cell.attributes }}{% endif %}
+                class="{{ cell_class }}
+                       text-body
+                       align-middle
+                       {{ border_cell }}"
+              >
+                {%- if cell.content is iterable -%}
+                  {{ cell.content|render }}
+                {%- else -%}
+                  {{ cell.content|raw }}
+                {%- endif -%}
+              </{{ tag }}>
+            {% endfor %}
+          </tr>
+
+        {% endfor %}
+      </tbody>
+
+    {% elseif empty %}
+      {# ── EMPTY STATE ── #}
+      <tbody>
+        <tr>
+          <td colspan="{{ col_count }}"
+              class="{{ cell_class }}
+                     text-center
+                     text-muted
+                     italic
+                     py-10">
+            {{ empty }}
+          </td>
+        </tr>
+      </tbody>
+    {% endif %}
+
+    {# ── TFOOT ── #}
+    {% if footer %}
+      <tfoot class="bg-surface border-t-2 border-border">
+        {% for row in footer %}
+          <tr>
+            {% for cell in row.cells %}
+              {% set tag = cell.tag ?? 'td' %}
+              <{{ tag }}
+                {% if cell.attributes %}{{ cell.attributes }}{% endif %}
+                class="{{ cell_class }}
+                       font-medium
+                       text-muted
+                       {{ border_cell }}"
+              >
+                {%- if cell.content is iterable -%}
+                  {{ cell.content|render }}
+                {%- else -%}
+                  {{ cell.content|raw }}
+                {%- endif -%}
+              </{{ tag }}>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tfoot>
+    {% endif %}
+
+  </table>
+</div>
+{% endset %}
+
+{# ══════════════════════════════════════════
+   RESPONSIVE WRAPPER
+   Only adds overflow-x-auto when responsive: true
+══════════════════════════════════════════ #}
+{% if is_resp %}
+  <div class="w-full overflow-x-auto">
+    {{ table_markup }}
+  </div>
+{% else %}
+  {{ table_markup }}
+{% endif %}

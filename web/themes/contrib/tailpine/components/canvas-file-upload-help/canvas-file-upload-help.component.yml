@@ -1,0 +1,17 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: file upload help (Canvas)
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    description:
+      type: string
+      title: description
+      description: description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>']

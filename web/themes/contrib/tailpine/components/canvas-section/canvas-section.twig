@@ -1,0 +1,291 @@
+
+{% set bg_image_available = bg_media is defined and bg_media.src is defined and bg_media.src %}
+
+
+{% set grid_columns = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'md:grid-cols-2 xl:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4',
+  5: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5',
+  6: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6',
+} %}
+
+
+{% set grid_column_classes = grid_columns[grid_layout]|default(1) %}
+
+
+{% set padding_top_map = {
+  "none": "pt-0",
+  "xs": "pt-2 md:pt-3 xl:pt-4",
+  "sm": "pt-2.5 md:pt-3.5 xl:pt-5",
+  "md": "pt-4 md:pt-6 xl:pt-8",
+  "lg": "pt-5 md:pt-7 xl:pt-10",
+  "xl": "pt-7 md:pt-10 xl:pt-14",
+  "2xl": "pt-8 md:pt-12 xl:pt-16",
+  "3xl": "pt-10 md:pt-14 xl:pt-20",
+  "huge": "pt-12 md:pt-16 xl:pt-24"
+} %}
+
+
+{% set padding_bottom_map = {
+  "none": "pb-0",
+  "xs": "pb-2 md:pb-3 xl:pb-4",
+  "sm": "pb-2.5 md:pb-3.5 xl:pb-5",
+  "md": "pb-4 md:pb-6 xl:pb-8",
+  "lg": "pb-5 md:pb-7 xl:pb-10",
+  "xl": "pb-7 md:pb-10 xl:pb-14",
+  "2xl": "pb-8 md:pb-12 xl:pb-16",
+  "3xl": "pb-10 md:pb-14 xl:pb-20",
+  "huge": "pb-12 md:pb-16 xl:pb-24"
+} %}
+
+ {% set padding_top_class = padding_top_map[padding_t]|default('xl') %}
+ {% set padding_bottom_class = padding_bottom_map[padding_b]|default('xl') %}
+
+
+{% set map_py = {
+  none:  "py-0",
+  xs:    "py-3 md:py-4.5 xl:py-6",
+  sm:   "py-6 md:py-10 xl:py-12",
+  md:    "py-12 md:py-14 xl:py-16",
+  lg:    "py-16 md:py-18 xl:py-20",
+  xl:    "py-18 md:py-20 xl:py-24",
+  '2xl': "py-20 md:py-24 xl:py-28",
+  '3xl': "py-24 md:py-28 xl:py-32",
+  huge:  "py-28 md:py-32 xl:py-40",
+} %}
+
+{% set class_py   = map_py[padding_block]      ?? '' %}
+
+{% set content_alignment_map = {
+  'left': 'text-left items-start',
+  'center': 'text-center items-center',
+  'right': 'text-right items-end',
+  'responsive': 'text-center items-center md:text-left md:items-start'
+} %}
+
+{% set add_content_alignment = content_alignment_map[content_alignment]|default(title_alignment_map.left) %}
+{# Normalize and default background color #}
+{% set bg_color = bg_color|default('primary')|striptags %}
+
+
+{% set gap_variants = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+  xxl:  "gap-8 md:gap-10 xl:gap-12"
+
+} %}
+
+
+{# ===== BACKGROUND COLOR (for solid color mode) ===== #}
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+
+{% set bg_color_variant = bg_variants[bg_color]|default(bg_variants.primary) %}
+
+{% set overlay_bg = bg_variants[overlay_color]|default(bg_variants.primary) %}
+
+{# ===== OVERLAY OPACITY (convert to decimal) ===== #}
+
+{% set overlay_opacity_map = {
+  '10': 'opacity-10',
+  '20': 'opacity-20',
+  '30': 'opacity-30',
+  '40': 'opacity-40',
+  '50': 'opacity-50',
+  '60': 'opacity-60',
+  '70': 'opacity-70',
+  '80': 'opacity-80'
+} %}
+
+{% set opacity_class = overlay_opacity_map[overlay_opacity]|default(overlay_opacity_map['70']) %}
+
+
+{# ===== image width when bg_type is image and color both===== #}
+{% set image_width_map = {
+  '20': 'h-1/5 xl:h-full  xl:w-1/5',
+  '30': 'h-3/10 xl:h-full xl:w-3/10',
+  '40': 'h-2/5 xl:h-full xl:w-2/5',
+  '50': 'h-1/2 xl:h-full xl:w-1/2',
+  '60': 'h-3/5 xl:h-full xl:w-3/5',
+  '70': 'h-7/10 xl:h-full xl:w-7/10',
+  '75': 'h-3/4 xl:h-full xl:w-3/4',
+  '80': 'h-[80%] xl:h-full xl:w-[80%]',
+  '90': 'h-[90%] xl:h-full xl:w-[90%]',
+  '100': 'h-full xl:h-full w-full'
+} %}
+
+{% set image_width_class = image_width_map[image_width|default('70')] %}
+
+{# {% set color_width = image_width_class|split(' ')|last %}  #}
+
+{% set remaining_map = {
+  '20': 'h-4/5 xl:h-full xl:w-4/5',
+  '30': 'h-7/10 xl:h-full xl:w-7/10',
+  '40': 'h-3/5 xl:h-full xl:w-3/5',
+  '50': 'h-1/2 xl:h-full xl:w-1/2',
+  '60': 'h-2/5 xl:h-full xl:w-2/5',
+  '70': 'h-3/10 xl:h-full xl:w-3/10',
+  '75': 'h-1/4 xl:h-full xl:w-1/4',
+  '80': 'h-[20%] xl:h-full xl:w-[20%]',
+  '90': 'h-1/10 xl:h-full xl:w-[10%]',
+  '100': 'h-0 xl:h-full w-0'
+} %}
+
+
+{% set color_bg_width_class = remaining_map[image_width|default('30')] %}
+{# {% set color_bg_width_class = 'w-full' ~ (remaining_map[color_width]|default('w-full')) %} #}
+{# Normalize columns to prevent invalid Tailwind classes #}
+{% set columns = columns|default(3) %}
+<section  {{ attributes.addClass(
+  'relative',
+  'w-full',
+  'h-fit',
+  'relative',
+  'bg-center',
+  'bg-cover',
+  'bg-no-repeat',
+  class_py,
+   bg_color_variant,
+  ) }}
+  {% if bg_image_available and background_type == 'image' %}
+      style="
+    background: url('{{ bg_media.src }}');
+    background-size: cover;
+    background-position: right center;
+    background-repeat: no-repeat;
+  "
+  {% endif %}
+>
+ 
+
+  <!-- Background Split Layer -->
+    {% if bg_image_available and background_type == 'both' %}
+  <div class="absolute inset-0 flex flex-col xl:flex-row">
+      <div 
+      class="w-full  {{image_width_class}} bg-cover bg-center"
+      style="background-image: url( '{{bg_media.src}}');"
+    ></div>
+    <div class="w-full {{color_bg_width_class}} {{ bg_color_variant}}"></div>
+
+  </div>
+   {% endif %}
+
+<div class=" wrapper mx-auto w-full max-w-480 container  {{enable_container ? 'container' : ' '}} grid ">
+
+  {# Color overlay only when image exists #}
+  {% if bg_image_available and enable_overlay %}
+  <div class="absolute inset-0 z-0  {{overlay_bg}} {{opacity_class}} pointer-events-none"></div>
+  {% endif %}
+
+   {# ---------------------------------------------------------- #}
+ {#  #}
+   {% if show_top_region %}
+  {% if heading or description or (cta is defined and cta.label and cta.url) %}
+
+  <div class="wrapper__header flex flex-col  gap-6 md:flex-row  {{reverse_top_content ? 'md:flex-row-reverse md:justify-between' : ' ' }} md:items-start md:justify-between xl:items-center">
+
+    {# Left: heading + Description #}
+    {% if show_heading or description %}
+      <div class="wrapper__text relative z-10  flex {{show_cta ? ' ' : add_content_alignment }} {{ (add_content_alignment and not show_cta) 
+    ? "w-full" 
+    : "md:w-2/3 xl:w-1/2" }} flex-col  {{show_cta ? 'md:w-7/10 xl:w-1/2' : ' '}} ">
+{# ------------------- #}
+      {% if show_heading %}
+        {% set heading_text %}
+          {% block heading %}
+
+          {% endblock %}
+        {% endset %}
+        {% if heading_text|trim is not empty %}
+          <div class="h-fit min-w-40 py-2">
+            {{ heading_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+              {# ------------------- #}
+      {% if show_description %}
+        {% set description_text %}
+          {% block text %}
+
+          {% endblock %}
+        {% endset %}
+        {% if description_text|trim is not empty %}
+        <div class="h-fit min-w-40 py-2">
+            {{ description_text }}
+            </div>
+        {% endif %}
+      {% endif %}
+      {# /------------------ #}
+      
+
+      </div>
+    {% endif %}
+
+    {# Right: CTA #}
+    {% if show_cta %}
+        {% set cta_content %}
+          {% block cta %}
+
+          {% endblock %}
+        {% endset %}
+        {% if cta_content|trim is not empty %}
+          <div class="md:w-1/5 {{cta_alignment}} md:min-h-fit cursor-pointer  {{reverse_top_content ? 'md:justify-start' : 'md:justify-end' }}  flex gap-2">
+            {{ cta_content }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+  </div>
+{% endif %}
+
+{% endif %}
+
+
+  {% if show_content_region %}
+
+        {% set main_content %}
+          {% block content %}
+
+          {% endblock %}
+        {% endset %}
+        {% if main_content|trim is not empty %}
+          <div class="grid w-full {{padding_top_class}} {{padding_bottom_class}} {{gap_variants[gap]|default(gap_variants["md"])}}  auto-rows-auto md:min-h-fit {{ grid_column_classes}}">
+               {{ main_content }}
+          </div>
+        {% endif %}
+      {% endif %}
+  {% if show_bottom_region %}
+        {% set bottom_content %}
+          {% block bottom_slot %}
+
+          {% endblock %}
+        {% endset %}
+        {% if bottom_content|trim is not empty %}
+          <div class="">
+            {{ bottom_content }}
+          </div>
+        {% endif %}
+      {% endif %}
+</div>
+</section>

@@ -1,0 +1,505 @@
+<?php
+
+/**
+ * @file
+ * Preprocess.misc.theme.
+ *
+ * Miscellaneous preprocess hooks that don't warrant their own file.
+ */
+
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Render\Element\StatusMessages;
+use Drupal\tailpine\TailpineColors;
+
+/**
+ * Implements hook_preprocess().
+ */
+function tailpine_preprocess(array &$variables, string $hook): void {
+  $variables['container_type'] = theme_get_setting('container_style') ?: 'full';
+}
+
+/**
+ * Implements hook_preprocess_image_widget().
+ */
+function tailpine_preprocess_image_widget(array &$variables): void {
+  $data = &$variables['data'];
+
+  // This prevents image widget templates from rendering preview container
+  // HTML to users that do not have permission to access these previews.
+  // @todo revisit in https://drupal.org/node/953034
+  // @todo revisit in https://drupal.org/node/3114318
+  if (isset($data['preview']['#access']) && $data['preview']['#access'] === FALSE) {
+    unset($data['preview']);
+  }
+}
+
+/**
+ * Implements hook_preprocess_input().
+ *
+ * Adds the input type variable to input templates.
+ */
+function tailpine_preprocess_input(array &$variables): void {
+  $variables['type'] = $variables['element']['#type'] ?? '';
+}
+
+/**
+ * Implements hook_preprocess_block__system_messages_block().
+ */
+function tailpine_preprocess_block__system_messages_block(array &$variables): void {
+  $variables['content'] = StatusMessages::renderMessages();
+}
+
+/**
+ * Implements hook_preprocess_paragraph__TYPE() for tailpine_slider.
+ */
+function tailpine_preprocess_paragraph__tailpine_slider(array &$variables): void {
+  $variables['#attached']['library'][] = 'tailpine/swiper';
+  $variables['#attached']['library'][] = 'tailpine/swiper-custom';
+}
+
+/**
+ * Generates a fluid CSS clamp value between two viewport points.
+ *
+ * @param float $min_size
+ *   Font size at the minimum viewport.
+ * @param float $max_size
+ *   Font size at the maximum viewport.
+ * @param float $min_viewport
+ *   Minimum viewport width.
+ * @param float $max_viewport
+ *   Maximum viewport width.
+ *
+ * @return string
+ *   CSS clamp() value.
+ */
+function tailpine_fluid_value(
+  float $min_size,
+  float $max_size,
+  float $min_viewport,
+  float $max_viewport,
+): string {
+  if ($max_viewport <= $min_viewport) {
+    return "{$min_size}px";
+  }
+
+  $slope = ($max_size - $min_size)
+    / ($max_viewport - $min_viewport);
+
+  $vw = $slope * 100;
+
+  $intercept = $min_size - ($slope * $min_viewport);
+
+  return sprintf(
+    'clamp(%spx, calc(%svw + %spx), %spx)',
+    $min_size,
+    round($vw, 4),
+    round($intercept, 4),
+    $max_size
+  );
+}
+
+// /**
+//  * Generates CSS variables for Tailpine container settings.
+//  *
+//  * @return string
+//  *   Generated container CSS.
+//  */
+// function tailpine_get_container_variables(): string {
+
+//   // $config = \Drupal::config('tailpine.settings');
+//   // Container padding values for different breakpoints.
+//   $container_padding = [
+//     390 => (float) (theme_get_setting('container_padding_mobile') ?: 20),
+//     768 => (float) (theme_get_setting('container_padding_tablet') ?: 60),
+//     1280 => (float) (theme_get_setting('container_padding_desktop') ?: 96),
+//     1920 => (float) (theme_get_setting('container_padding_wide') ?: 120),
+//   ];
+
+//   // Logo sizes.
+//   $customize_logo_size = theme_get_setting('tailpine_customize_logo_size');
+
+//   if ($customize_logo_size) {
+//     $logo_mobile = (int) (theme_get_setting('responsive_logo_mobile') ?: 73);
+//     $logo_tablet = (int) (theme_get_setting('responsive_logo_tablet') ?: 80);
+//     $logo_desktop = (int) (theme_get_setting('responsive_logo_desktop') ?: 100);
+//   }
+
+//   ksort($container_padding, SORT_NUMERIC);
+
+//   $viewports = array_keys($container_padding);
+//   $sizes = array_values($container_padding);
+
+//   // Container values.
+//   $mobile = $sizes[0];
+//   $tablet = $sizes[1];
+//   $desktop = $sizes[2];
+//   $wide_desktop = $sizes[3];
+
+//   // Mobile → Tablet.
+//   $mobile_tablet = tailpine_fluid_value(
+//     $mobile,
+//     $tablet,
+//     $viewports[0],
+//     $viewports[1]
+//   );
+
+//   // Tablet → Desktop.
+//   $tablet_desktop = tailpine_fluid_value(
+//     $tablet,
+//     $desktop,
+//     $viewports[1],
+//     $viewports[2]
+//   );
+
+//   // Desktop → Wide Desktop.
+//   $desktop_wide = tailpine_fluid_value(
+//     $desktop,
+//     $wide_desktop,
+//     $viewports[2],
+//     $viewports[3]
+//   );
+
+//   $variables = [];
+
+//   $variables = [];
+
+//   if ($customize_logo_size) {
+//     $variables[] = ":root {
+//     --t-container-padding-inline: {$mobile_tablet};
+//     --t-logo-width: {$logo_mobile}px;
+//   }";
+
+//     $variables[] = "@media (min-width: {$viewports[1]}px) {
+//     :root {
+//       --t-container-padding-inline: {$tablet_desktop};
+//       --t-logo-width: {$logo_tablet}px;
+//     }
+//   }";
+
+//     $variables[] = "@media (min-width: {$viewports[2]}px) {
+//     :root {
+//       --t-container-padding-inline: {$desktop_wide};
+//       --t-logo-width: {$logo_desktop}px;
+//     }
+//   }";
+//   }
+//   else {
+//     // Container variables only.
+//     $variables[] = ":root {
+//     --t-container-padding-inline: {$mobile_tablet};
+//   }";
+
+//     $variables[] = "@media (min-width: {$viewports[1]}px) {
+//     :root {
+//       --t-container-padding-inline: {$tablet_desktop};
+//     }
+//   }";
+
+//     $variables[] = "@media (min-width: {$viewports[2]}px) {
+//     :root {
+//       --t-container-padding-inline: {$desktop_wide};
+//     }
+//   }";
+//   }
+//   return implode("\n\n", $variables);
+// }
+
+
+// ------------------------
+
+/**
+ * Generates CSS variables for Tailpine container, logo, and typography settings.
+ *
+ * @return string
+ *   Generated CSS variables.
+ */
+function tailpine_get_container_variables(): string {
+
+  // Responsive viewport breakpoints.
+  $viewports = [390, 768, 1280, 1920];
+
+  // Container padding values.
+  $container_padding = [
+    390 => (float) (theme_get_setting('container_padding_mobile') ?: 20),
+    768 => (float) (theme_get_setting('container_padding_tablet') ?: 60),
+    1280 => (float) (theme_get_setting('container_padding_desktop') ?: 96),
+    1920 => (float) (theme_get_setting('container_padding_wide') ?: 120),
+  ];
+
+  // Responsive logo sizes.
+  $customize_logo_size = theme_get_setting('tailpine_customize_logo_size');
+
+  $logo_sizes = [];
+
+  if ($customize_logo_size) {
+    $logo_sizes = [
+      390 => (int) (theme_get_setting('responsive_logo_mobile') ?: 73),
+      768 => (int) (theme_get_setting('responsive_logo_tablet') ?: 80),
+      1280 => (int) (theme_get_setting('responsive_logo_desktop') ?: 100),
+    ];
+  }
+
+  // Responsive heading size defaults.
+  $heading_defaults = [
+    'h1' => [
+      'mobile' => 36,
+      'tablet' => 56,
+      'desktop' => 80,
+      'wide_desktop' => 112,
+    ],
+    'h2' => [
+      'mobile' => 30,
+      'tablet' => 40,
+      'desktop' => 56,
+      'wide_desktop' => 72,
+    ],
+    'h3' => [
+      'mobile' => 26,
+      'tablet' => 32,
+      'desktop' => 40,
+      'wide_desktop' => 48,
+    ],
+    'h4' => [
+      'mobile' => 22,
+      'tablet' => 26,
+      'desktop' => 32,
+      'wide_desktop' => 36,
+    ],
+    'h5' => [
+      'mobile' => 20,
+      'tablet' => 22,
+      'desktop' => 24,
+      'wide_desktop' => 28,
+    ],
+    'h6' => [
+      'mobile' => 18,
+      'tablet' => 20,
+      'desktop' => 20,
+      'wide_desktop' => 24,
+    ],
+  ];
+
+  $breakpoint_names = [
+    'mobile',
+    'tablet',
+    'desktop',
+    'wide_desktop',
+  ];
+
+  // Calculate fluid container padding values.
+  $container_sizes = array_values($container_padding);
+
+  $container_values = [
+    tailpine_fluid_value(
+      $container_sizes[0],
+      $container_sizes[1],
+      $viewports[0],
+      $viewports[1]
+    ),
+    tailpine_fluid_value(
+      $container_sizes[1],
+      $container_sizes[2],
+      $viewports[1],
+      $viewports[2]
+    ),
+    tailpine_fluid_value(
+      $container_sizes[2],
+      $container_sizes[3],
+      $viewports[2],
+      $viewports[3]
+    ),
+    $container_sizes[3] . 'px',
+  ];
+
+  // Collect CSS variable values for every heading.
+  $heading_values = [];
+
+  foreach ($heading_defaults as $heading => $defaults) {
+    $sizes = [];
+
+    foreach ($breakpoint_names as $index => $breakpoint) {
+      $setting_name = $heading . '_' . $breakpoint;
+      $saved_value = theme_get_setting($setting_name);
+
+      $sizes[] = (float) (
+        $saved_value !== NULL && $saved_value !== ''
+          ? $saved_value
+          : $defaults[$breakpoint]
+      );
+    }
+
+    $heading_values[$heading] = [
+      tailpine_fluid_value(
+        $sizes[0],
+        $sizes[1],
+        $viewports[0],
+        $viewports[1]
+      ),
+      tailpine_fluid_value(
+        $sizes[1],
+        $sizes[2],
+        $viewports[1],
+        $viewports[2]
+      ),
+      tailpine_fluid_value(
+        $sizes[2],
+        $sizes[3],
+        $viewports[2],
+        $viewports[3]
+      ),
+      $sizes[3] . 'px',
+    ];
+  }
+
+  // Assemble all variables into one root block per breakpoint.
+  $variables = [];
+
+  foreach ($viewports as $index => $viewport) {
+    $declarations = [];
+
+    // Container padding.
+    $declarations[] = '--t-container-padding-inline: '
+      . $container_values[$index] . ';';
+
+    // Logo width, when customization is enabled.
+    if (isset($logo_sizes[$viewport])) {
+      $declarations[] = '--t-logo-width: '
+        . $logo_sizes[$viewport] . 'px;';
+    }
+
+    // Heading typography.
+    foreach ($heading_values as $heading => $values) {
+      $declarations[] = '--' . $heading . '-size: '
+        . $values[$index] . ';';
+    }
+
+    $root = ":root {\n  " . implode("\n  ", $declarations) . "\n}";
+
+    if ($index === 0) {
+      // Base styles for mobile.
+      $variables[] = $root;
+    }
+    else {
+      // Responsive styles for tablet, desktop, and wide desktop.
+      $variables[] = "@media (min-width: {$viewport}px) {\n  "
+        . str_replace("\n", "\n  ", $root)
+        . "\n}";
+    }
+  }
+
+  return implode("\n\n", $variables);
+}
+
+
+// ------------------------
+
+/**
+ * Returns the custom color theme CSS variables.
+ *
+ * @return string
+ *   The generated custom color CSS variables.
+ */
+function tailpine_get_color_variables(): string {
+  if (!theme_get_setting('tailpine_enable_color') || theme_get_setting('color_theme') !== 'custom') {
+    return '';
+  }
+
+  $css_lines = [];
+
+  foreach (TailpineColors::VARIABLES as $var_name => $meta) {
+    $setting_key = TailpineColors::getSettingKey($var_name);
+    $value = theme_get_setting($setting_key);
+
+    if ($value) {
+      $sanitized = TailpineColors::sanitizeColorValue($value);
+
+      if ($sanitized !== '') {
+        $css_var = TailpineColors::getCssVarName($var_name);
+        $css_lines[] = "$css_var: $sanitized;";
+      }
+    }
+  }
+
+  if (empty($css_lines)) {
+    return '';
+  }
+
+  return 'html[data-theme="custom"] {' . "\n"
+    . '  ' . implode("\n  ", $css_lines) . "\n"
+    . "}\n";
+}
+
+/**
+ * Generates the Tailpine runtime CSS variables file.
+ *
+ * @return string|null
+ *   The generated file path, or NULL if generation failed.
+ */
+function tailpine_generate_variables_css(): ?string {
+  $theme_path = \Drupal::service('extension.list.theme')->getPath('tailpine');
+
+  $directory = DRUPAL_ROOT . '/' . $theme_path . '/css';
+  $file_path = $directory . '/theme-variables.css';
+
+  $file_system = \Drupal::service('file_system');
+
+  // Create the directory if it does not exist.
+  if (!$file_system->prepareDirectory(
+    $directory,
+    FileSystemInterface::CREATE_DIRECTORY
+    | FileSystemInterface::MODIFY_PERMISSIONS
+  )) {
+    return NULL;
+  }
+
+  $css = "/*
+ * Tailpine Runtime Design Variables.
+ *
+ * This file is generated automatically from Tailpine theme settings.
+ * Do not edit this file manually.
+ */
+
+";
+
+  // Add container variables.
+  $css .= tailpine_get_container_variables();
+
+  $css .= "\n";
+
+  // Add custom color variables.
+  $css .= tailpine_get_color_variables();
+
+  $css .= "\n";
+
+  try {
+    $file_system->saveData(
+      $css,
+      $file_path,
+      FileSystemInterface::EXISTS_REPLACE
+    );
+  }
+  catch (\Exception $e) {
+    \Drupal::logger('tailpine')->error(
+      'Unable to generate Tailpine variables CSS: @message',
+      [
+        '@message' => $e->getMessage(),
+      ]
+    );
+
+    return NULL;
+  }
+
+  return $file_path;
+}
+
+/**
+ * Returns the Tailpine runtime variables CSS URI.
+ *
+ * The CSS file is regenerated from the current theme settings.
+ *
+ * @return string|null
+ *   The generated file URI.
+ */
+function tailpine_get_variables_css_uri(): ?string {
+  return tailpine_generate_variables_css();
+}

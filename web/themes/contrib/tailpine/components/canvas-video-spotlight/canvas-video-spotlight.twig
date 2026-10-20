@@ -1,0 +1,108 @@
+{#
+/**
+ * Video Spotlight (Canvas)
+ *
+ * Variables: provider, embed_url, aspect_ratio, show_poster, show_play_overlay,
+ *            muted, loop, poster
+ *
+ * Theme tokens: bg-dark, bg-body-bg, text-body-bg, text-primary, focus:ring-focus
+ */
+#}
+{% set safe_provider = provider|default('youtube')|striptags %}
+{% set safe_url      = embed_url|default('')|striptags %}
+{% set safe_ratio    = aspect_ratio|default('16-9')|striptags %}
+
+{% set ratio_map = {
+  '16-9': 'aspect-video',
+  '4-3':  'aspect-[4/3]',
+  '1-1':  'aspect-square',
+  '9-16': 'aspect-[9/16]',
+} %}
+{% set ratio_class = ratio_map[safe_ratio]|default('aspect-video') %}
+
+{# Build autoplay URL params server-side #}
+{% set autoplay_suffix = '?autoplay=1' %}
+{% if muted|default(false) %}{% set autoplay_suffix = autoplay_suffix ~ '&mute=1' %}{% endif %}
+{% if loop|default(false) %}{% set autoplay_suffix = autoplay_suffix ~ '&loop=1' %}{% endif %}
+
+<div
+  class="canvas-video-spotlight relative overflow-hidden rounded-2xl {{ ratio_class }} w-full bg-dark"
+  x-data="{ playing: false }"
+  {{ attributes }}
+>
+
+  {# Poster (shown before play) #}
+  {% if show_poster|default(true) and poster and poster.src %}
+    <div
+      class="canvas-video-spotlight__poster absolute inset-0"
+      x-show="!playing"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+    >
+      <img
+        src="{{ poster.src|striptags }}"
+        alt="{{ poster.alt|default('')|striptags }}"
+        loading="lazy"
+        class="w-full h-full object-cover"
+        width="{{ poster.width|default(1280) }}"
+        height="{{ poster.height|default(720) }}"
+      >
+
+      {% if show_play_overlay|default(true) %}
+        <button
+          type="button"
+          class="canvas-video-spotlight__play absolute inset-0 flex items-center justify-center bg-dark/30 hover:bg-dark/40 transition-colors group focus:outline-none focus:ring-4 focus:ring-focus"
+          x-on:click="playing = true"
+          aria-label="{{ 'Play video'|t }}"
+        >
+          <span class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-body-bg/90 flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+            <svg class="w-6 h-6 md:w-8 md:h-8 text-primary ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </span>
+        </button>
+      {% endif %}
+    </div>
+  {% else %}
+    {# No poster — show play button on dark background #}
+    {% if show_play_overlay|default(true) %}
+      <div class="absolute inset-0 flex items-center justify-center bg-dark" x-show="!playing">
+        <button
+          type="button"
+          class="canvas-video-spotlight__play w-20 h-20 rounded-full bg-body-bg/90 flex items-center justify-center hover:scale-110 transition-transform focus:outline-none focus:ring-4 focus:ring-focus"
+          x-on:click="playing = true"
+          aria-label="{{ 'Play video'|t }}"
+        >
+          <svg class="w-8 h-8 text-primary ml-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+      </div>
+    {% endif %}
+  {% endif %}
+
+  {# Video media (shown after play) #}
+  <div class="canvas-video-spotlight__media absolute inset-0" x-show="playing">
+    {% if safe_provider == 'self-hosted' %}
+      <video
+        class="w-full h-full object-cover"
+        x-bind:src="playing ? '{{ safe_url }}' : ''"
+        {% if muted|default(false) %}muted{% endif %}
+        {% if loop|default(false) %}loop{% endif %}
+        controls
+        playsinline
+      ></video>
+    {% else %}
+      <iframe
+        class="canvas-video-spotlight__iframe w-full h-full border-0"
+        x-bind:src="playing ? '{{ safe_url ~ autoplay_suffix }}' : ''"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+        allowfullscreen
+        title="{{ 'Video'|t }}"
+        loading="lazy"
+      ></iframe>
+    {% endif %}
+  </div>
+
+</div>

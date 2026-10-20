@@ -1,0 +1,30 @@
+/* ==========================================================================
+   TAILPINE UTILITY SOURCES
+   ========================================================================== */
+
+/*
+ * Defines Tailwind utility classes required by Tailpine components.
+ * These classes are included in the compiled stylesheet during the build.
+ */
+
+@source inline("grid-cols-{1,2,3,4,5,6,7,8,9,10,11,12}");
+@source inline("{sm,md,lg,xl,2xl}:grid-cols-{1,2,3,4,5,6,7,8,9,10,11,12}");
+@source inline("col-span-{1,2,3,4,5,6,7,8,9,10,11,12,full}");
+@source inline("{sm,md,lg,xl,2xl}:col-span-{1,2,3,4,5,6,7,8,9,10,11,12,full}");
+@source inline("gap-{0,2,4,6,8,10,12,16}");
+@source inline("{sm,md,lg,xl,2xl}:gap-{0,2,4,6,8,10,12,16}");
+@source inline("grid-rows-{1,2,3,4,5,6}");
+@source inline("px-{4,6,8} py-{2,3,4} text-{sm,base,lg} leading-8 lg:mr-10");
+@source inline("row-span-2");
+@source inline("items-{start,center,end,stretch}");
+@source inline("self-{start,center,end}");
+
+@source inline("bg-primary text-primary-content border border-primary-content hover:bg-primary/80 focus:ring-primary bg-secondary text-secondary-content border-secondary-content hover:bg-secondary/80 focus:ring-secondary bg-tertiary text-tertiary-content border-tertiary-content hover:bg-tertiary/80 focus:ring-tertiary bg-body text-body-content border-body-content hover:bg-body/80 focus:ring-body bg-body-bg text-body-bg-content border-body-bg-content hover:bg-body-bg/80 focus:ring-body-bg bg-surface-100 text-surface-100-content border-surface-100-content hover:bg-surface-100/80 focus:ring-surface-100 bg-surface-200 text-surface-200-content border-surface-200-content hover:bg-surface-200/80 focus:ring-surface-200 bg-surface-300 text-surface-300-content border-surface-300-content hover:bg-surface-300/80 focus:ring-surface-300 bg-dark text-dark-content border-dark-content hover:bg-dark/80 focus:ring-dark bg-success text-success-content border-success-content hover:bg-success/80 focus:ring-success bg-warning text-warning-content border-warning-content hover:bg-warning/80 focus:ring-warning bg-error text-error-content border-error-content hover:bg-error/80 focus:ring-error bg-transparent border-primary text-primary hover:bg-primary hover:text-primary-content focus:ring-primary border-secondary text-secondary hover:bg-secondary hover:text-secondary-content focus:ring-secondary border-tertiary text-tertiary hover:bg-tertiary hover:text-tertiary-content focus:ring-tertiary border-body text-body hover:bg-body hover:text-body-content focus:ring-body border-body-bg text-body-bg hover:bg-body-bg hover:text-body-bg-content focus:ring-body-bg border-surface-100 text-surface-100 hover:bg-surface-100 hover:text-surface-100-content focus:ring-surface-100 border-surface-200 text-surface-200 hover:bg-surface-200 hover:text-surface-200-content focus:ring-surface-200 border-surface-300 text-surface-300 hover:bg-surface-300 hover:text-surface-300-content focus:ring-surface-300 border-dark text-dark hover:bg-dark hover:text-dark-content focus:ring-dark border-success text-success hover:bg-success hover:text-success-content focus:ring-success border-warning text-warning hover:bg-warning hover:text-warning-content focus:ring-warning border-error text-error hover:bg-error hover:text-error-content focus:ring-error");
+
+@source inline("bg-{primary,secondary,tertiary,body,body-bg,surface-100,surface-200,surface-300,dark,success,warning,error}");
+@source inline("text-{primary-content,secondary-content,tertiary-content,body-content,body-bg-content,surface-100-content,surface-200-content,surface-300-content,dark-content,success-content,warning-content,error-content}");
+@source inline("border-{primary-content,secondary-content,tertiary-content,body-content,body-bg-content,surface-100-content,surface-200-content,surface-300-content,dark-content,success-content,warning-content,error-content}");
+@source inline("hover:bg-{primary,secondary,tertiary,body,body-bg,surface-100,surface-200,surface-300,dark,success,warning,error}/80");
+@source inline("focus:ring-{primary,secondary,tertiary,body,body-bg,surface-100,surface-200,surface-300,dark,success,warning,error}");
+
+@source inline("after:bg-surface-100 !bg-dark/20");

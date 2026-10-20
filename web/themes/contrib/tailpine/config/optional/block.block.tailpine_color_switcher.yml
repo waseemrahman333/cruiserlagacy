@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - tailpine_color_switcher
+  theme:
+    - tailpine
+id: tailpine_color_switcher
+theme: tailpine
+region: footer_bottom
+weight: 10
+provider: null
+plugin: tailpine_color_switcher
+settings:
+  id: tailpine_color_switcher
+  label: 'Color Theme Switcher'
+  label_display: '0'
+  provider: tailpine_color_switcher
+visibility: {}

@@ -1,0 +1,35 @@
+{#
+/**
+ * Footer Menu List Component
+ * 
+ * Simple footer menu matching the design style
+ */
+#}
+
+<div class="footer-menu-list">
+  
+  {# Title #}
+  {% if title %}
+    <h3 class="{{ title_classes }} font-medium text-lg md:text-xl  tracking-[3%] leading-5.5 mb-[10px] ">
+      {{ title }}
+    </h3>
+    
+    {# Divider line under title #}
+
+      <div class="{{ divider_classes }} w-full h-[0.5px] bg-body-bg"></div>
+  {% endif %}
+  
+  {# Menu Items #}
+  {% if items %}
+    <ul class="{{ list_classes }} flex flex-col gap-2.5">
+      {% for item in items %}
+        <li class=" ">
+          <a href="{{ item.url }}" class="{{ link_classes }} hover:text-primary text-sm sm:text-base md:text-lg font-normal">
+            {{ item.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  
+</div>

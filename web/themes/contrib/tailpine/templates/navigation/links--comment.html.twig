@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Theme override for comment links.
+ *
+ * Available variables:
+ * - links: A list of link objects.
+ * - attributes: HTML attributes for the UL wrapper.
+ * - heading: (optional) A heading to precede the links.
+ *
+ * @see \Drupal\Core\Theme\ThemePreprocess::preprocessLinks()
+ */
+#}
+{% include "tailpine:links" with {
+  links: links,
+  attributes: attributes,
+  heading: heading is defined ? heading : null,
+} only %}

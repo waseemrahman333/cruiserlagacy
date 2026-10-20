@@ -1,0 +1,62 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: FAQ Block (Canvas)
+group: Tailpine
+status: stable
+description: Frequently asked questions with accordion, two-column grid, or simple list layout.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    style:
+      type: string
+      title: Layout style
+      default: accordion
+      enum: [accordion, two-col-grid, simple-list]
+      meta:enum:
+        accordion: Accordion
+        two-col-grid: Two-column grid
+        simple-list: Simple list
+      examples:
+        - accordion
+
+    heading:
+      type: string
+      title: Section heading
+      examples:
+        - 'Frequently Asked Questions'
+
+    show_search:
+      type: boolean
+      title: Show search input
+      default: false
+      examples:
+        - false
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: default
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - default
+
+slots:
+  items:
+    title: FAQ items
+    description: Add canvas-faq-blockitem components here.

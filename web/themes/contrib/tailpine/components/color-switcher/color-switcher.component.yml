@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Color Theme Switcher
+description: "Interactive color palette block powered by Alpine.js. Clicking a swatch sets data-theme on <html> instantly and persists the choice to localStorage."
+status: stable
+group: Tailpine
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+    themes:
+      type: object
+      title: "Theme color map"
+      description: "Keyed object of theme machine name to color data (label, primary, secondary, bg)."
+    current_theme:
+      type: string
+      title: "Current theme"
+      description: "Server-configured active theme name, used as fallback before localStorage loads."
+      examples:
+        - cyberpunk
+        - emerald
+    show_labels:
+      type: boolean
+      title: "Show labels"
+      description: "Display the theme name below each color swatch."

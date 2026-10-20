@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "../../../contrib/tailpine/css/theme-tokens.css";
+@import "../../../contrib/tailpine/css/theme-source.css";
+@import "../../../contrib/tailpine/css/theme.css";
+@source "../../../contrib/tailpine/components/**/*.twig";
+@source "../../../contrib/tailpine/components/**/*.yml";
+@source "../../../contrib/tailpine/components/**/**/*.twig";
+@source "../../../contrib/tailpine/components/**/**/*.yml";
+@source "../../../contrib/tailpine/templates/**/*.twig";
+
+@source inline("after:bg-t-surface-200");
+
+@source inline("after:bg-surface-200");
+
+@source inline("after:bg-t-surface-200");
+
+@source inline("after:bg-surface-200");
+
+/*
+ * Custom Fonts
+ *
+ * Add your custom font-face declarations here.
+ *
+ * 1. Place your font files inside the subtheme's `fonts` folder.
+ * 2. Update the `font-family` name and font file path below.
+ * 3. Use the same font-family name in `theme-tokens.css`.
+ *
+ * Example:
+ *   --font-body: "Open Sans";
+ *   --font-heading: "Open Sans";
+ */
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('../fonts/Open_Sans/OpenSans-Variable.ttf') format('truetype');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Custom Theme Fonts
+ *
+ * If "Custom" is selected for the Body or Heading font in the
+ * Tailpine theme settings, define your font family here.
+ *
+ * Add your custom font files to the subtheme's font folder and
+ * update the variables below with the font family name.
+ *
+ * A sample custom font is already included in the font folder
+ * for reference.
+ */
+
+@theme {
+  --font-body: "Open Sans";
+  --font-heading: "Open Sans";
+}

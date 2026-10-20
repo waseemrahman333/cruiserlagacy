@@ -1,0 +1,32 @@
+# This is so your IDE knows about the syntax for fixes and autocomplete.
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+# The human readable name.
+name: Alert (Canvas)
+description: drupal status messages.
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    messages:
+      type: string
+      title: Messages
+      description: The alert message content (HTML allowed).
+      examples: ['<p>This is an alert message.</p>']
+
+    auto_dismiss:
+      type: number
+      title: Auto Dismiss
+      description: Time in ms before alert auto-dismisses.
+    variant:
+      type: string
+      title: Variant
+      description: Visual style variant for non-standard alert types.
+    status_headings:
+      type: object
+      title: Status Headings
+      description: 'Keyed array of ARIA label overrides per alert type (e.g. {''error'': ''Error''}).'

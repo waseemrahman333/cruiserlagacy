@@ -1,0 +1,29 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Accordion Style Two (Canvas)
+status: stable
+description: "Accordion are used to group and display content in a way that is easily readable."
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['This is Accordion Style Two']    
+    default_open:
+      title: Open by default
+      type: boolean
+      description: Whether the accordion is expanded on initial load.
+      default: false
+      examples: [false]      
+    description:
+      title: Description
+      type: string
+      description: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is the  <strong>formatted</strong> description of the Accordion Style Two</p>']

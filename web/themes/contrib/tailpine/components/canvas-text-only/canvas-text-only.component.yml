@@ -1,0 +1,620 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Text Only (Canvas)
+status: stable
+group: Tailpine
+description: >
+  Highly flexible standalone rich-text block. Control every aspect of
+  typography, spacing, borders, and background directly from Canvas —
+  no image or slot required.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes on the root element.
+
+    # --- Content ---
+
+    text_content:
+      type: string
+      title: Text Content
+      description: >
+        The text to display. Supports full HTML formatting — paragraphs,
+        headings, bold, italic, lists, links, etc.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>This is a flexible <strong>text-only</strong> block.</p>'
+
+    html_tag:
+      type: string
+      title: Wrapper Tag
+      description: The HTML element that wraps the content.
+      default: div
+      enum:
+        - div
+        - section
+        - article
+        - aside
+        - blockquote
+        - figure
+        - p
+        - span
+      meta:enum:
+        div: Div (generic block)
+        section: Section (landmark)
+        article: Article (self-contained)
+        aside: Aside (supplementary)
+        blockquote: Blockquote (quoted text)
+        figure: Figure (captioned content)
+        p: Paragraph
+        span: Span (inline)
+      examples:
+        - div
+
+    # --- Typography ---
+
+    font_size:
+      type: string
+      title: Font Size
+      description: Responsive font size applied to the wrapper.
+      default: default
+      enum:
+        - default
+        - text-8xl
+        - text-7xl
+        - text-6xl
+        - text-5xl
+        - text-4xl
+        - text-3xl
+        - text-2xl
+        - text-xl
+        - text-lg
+        - text-base
+        - text-sm
+        - text-xs
+      meta:enum:
+        default: Default (inherit)
+        text-8xl: 8XL — 96px
+        text-7xl: 7XL — 72px
+        text-6xl: 6XL — 60px
+        text-5xl: 5XL — 48px
+        text-4xl: 4XL — 36px
+        text-3xl: 3XL — 30px
+        text-2xl: 2XL — 24px
+        text-xl: XL — 20px
+        text-lg: LG — 18px
+        text-base: Base — 16px
+        text-sm: SM — 14px
+        text-xs: XS — 12px
+      examples:
+        - default
+
+    font_weight:
+      type: string
+      title: Font Weight
+      default: default
+      enum:
+        - default
+        - font-thin
+        - font-light
+        - font-normal
+        - font-medium
+        - font-semibold
+        - font-bold
+        - font-extrabold
+        - font-black
+      meta:enum:
+        default: Default (inherit)
+        font-thin: Thin (100)
+        font-light: Light (300)
+        font-normal: Normal (400)
+        font-medium: Medium (500)
+        font-semibold: Semibold (600)
+        font-bold: Bold (700)
+        font-extrabold: Extra Bold (800)
+        font-black: Black (900)
+      examples:
+        - default
+
+    font_style:
+      type: string
+      title: Font Style
+      default: default
+      enum:
+        - default
+        - italic
+        - not-italic
+      meta:enum:
+        default: Default (inherit)
+        italic: Italic
+        not-italic: Normal
+      examples:
+        - default
+
+    line_height:
+      type: string
+      title: Line Height
+      default: default
+      enum:
+        - default
+        - leading-none
+        - leading-tight
+        - leading-snug
+        - leading-normal
+        - leading-relaxed
+        - leading-loose
+      meta:enum:
+        default: Default (inherit)
+        leading-none: None (1)
+        leading-tight: Tight (1.25)
+        leading-snug: Snug (1.375)
+        leading-normal: Normal (1.5)
+        leading-relaxed: Relaxed (1.625)
+        leading-loose: Loose (2)
+      examples:
+        - leading-relaxed
+
+    letter_spacing:
+      type: string
+      title: Letter Spacing
+      default: default
+      enum:
+        - default
+        - tracking-tighter
+        - tracking-tight
+        - tracking-normal
+        - tracking-wide
+        - tracking-wider
+        - tracking-widest
+      meta:enum:
+        default: Default (inherit)
+        tracking-tighter: Tighter (-0.05em)
+        tracking-tight: Tight (-0.025em)
+        tracking-normal: Normal (0)
+        tracking-wide: Wide (0.025em)
+        tracking-wider: Wider (0.05em)
+        tracking-widest: Widest (0.1em)
+      examples:
+        - default
+
+    text_transform:
+      type: string
+      title: Text Transform
+      default: default
+      enum:
+        - default
+        - uppercase
+        - lowercase
+        - capitalize
+        - normal-case
+      meta:enum:
+        default: Default (inherit)
+        uppercase: UPPERCASE
+        lowercase: lowercase
+        capitalize: Capitalize Each Word
+        normal-case: Normal
+      examples:
+        - default
+
+    text_decoration:
+      type: string
+      title: Text Decoration
+      default: default
+      enum:
+        - default
+        - underline
+        - overline
+        - line-through
+        - no-underline
+      meta:enum:
+        default: Default (none)
+        underline: Underline
+        overline: Overline
+        line-through: Strikethrough
+        no-underline: Remove decoration
+      examples:
+        - default
+
+    # --- Text Alignment ---
+
+    horizontal_align:
+      type: string
+      title: Text Alignment
+      default: left
+      enum:
+        - left
+        - center
+        - right
+        - justify
+      meta:enum:
+        left: Left
+        center: Center
+        right: Right
+        justify: Justify
+      examples:
+        - left
+
+    # --- Colors ---
+
+    text_color:
+      type: string
+      title: Text Color
+      default: default
+      enum:
+        - default
+        - body
+        - heading
+        - muted
+        - primary
+        - secondary
+        - tertiary
+        - success
+        - warning
+        - error
+        - on-primary
+        - body-bg
+      meta:enum:
+        default: Default (inherit)
+        body: Body text
+        heading: Heading
+        muted: Muted / subdued
+        primary: Primary brand
+        secondary: Secondary brand
+        tertiary: Tertiary accent
+        success: Success
+        warning: Warning
+        error: Error
+        on-primary: On primary / on dark
+        body-bg: On dark background
+      examples:
+        - default
+
+    bg_color:
+      type: string
+      title: Background Color
+      default: transparent
+      enum:
+        - transparent
+        - default
+        - surface
+        - surface-alt
+        - primary
+        - secondary
+        - tertiary
+        - dark
+        - light
+        - success
+        - warning
+        - error
+      meta:enum:
+        transparent: Transparent (none)
+        default: Page background
+        surface: Surface / card
+        surface-alt: Alternate surface
+        primary: Primary brand
+        secondary: Secondary brand
+        tertiary: Tertiary accent
+        dark: Dark section
+        light: Light surface
+        success: Success
+        warning: Warning
+        error: Error
+      examples:
+        - transparent
+
+    # --- Border ---
+
+    border_side:
+      type: string
+      title: Border Side
+      default: none
+      enum:
+        - none
+        - border
+        - border-t
+        - border-b
+        - border-l
+        - border-r
+        - border-x
+        - border-y
+      meta:enum:
+        none: None (no border)
+        border: All sides
+        border-t: Top only
+        border-b: Bottom only
+        border-l: Left only
+        border-r: Right only
+        border-x: Left & Right
+        border-y: Top & Bottom
+      examples:
+        - none
+
+    border_width:
+      type: string
+      title: Border Width
+      default: '1'
+      enum:
+        - '0'
+        - '1'
+        - '2'
+        - '4'
+        - '8'
+      meta:enum:
+        '0': 0px
+        '1': 1px (default)
+        '2': 2px
+        '4': 4px
+        '8': 8px
+      examples:
+        - '1'
+
+    border_style:
+      type: string
+      title: Border Style
+      default: border-solid
+      enum:
+        - border-solid
+        - border-dashed
+        - border-dotted
+        - border-double
+      meta:enum:
+        border-solid: Solid
+        border-dashed: Dashed
+        border-dotted: Dotted
+        border-double: Double
+      examples:
+        - border-solid
+
+    border_color:
+      type: string
+      title: Border Color
+      default: border
+      enum:
+        - border
+        - primary
+        - secondary
+        - tertiary
+        - dark
+        - success
+        - warning
+        - error
+      meta:enum:
+        border: Default border color
+        primary: Primary brand
+        secondary: Secondary brand
+        tertiary: Tertiary accent
+        dark: Dark
+        success: Success
+        warning: Warning
+        error: Error
+      examples:
+        - border
+
+    # --- Width ---
+
+    text_width:
+      type: string
+      title: Width
+      default: full
+      enum:
+        - full
+        - '90%'
+        - '80%'
+        - '75%'
+        - '70%'
+        - '66%'
+        - '60%'
+        - '50%'
+        - '40%'
+        - '33%'
+        - '25%'
+      meta:enum:
+        full: Full width (100%)
+        '90%': 90%
+        '80%': 80%
+        '75%': 75%
+        '70%': 70%
+        '66%': Two thirds (66%)
+        '60%': 60%
+        '50%': Half (50%)
+        '40%': 40%
+        '33%': One third (33%)
+        '25%': One quarter (25%)
+      examples:
+        - full
+
+    max_width:
+      type: string
+      title: Max Width
+      default: none
+      enum:
+        - none
+        - max-w-prose
+        - max-w-sm
+        - max-w-md
+        - max-w-lg
+        - max-w-xl
+        - max-w-2xl
+        - max-w-3xl
+        - max-w-4xl
+        - max-w-5xl
+        - max-w-6xl
+      meta:enum:
+        none: None (unconstrained)
+        max-w-prose: Prose (65ch — ideal reading width)
+        max-w-sm: SM — 24rem (384px)
+        max-w-md: MD — 28rem (448px)
+        max-w-lg: LG — 32rem (512px)
+        max-w-xl: XL — 36rem (576px)
+        max-w-2xl: 2XL — 42rem (672px)
+        max-w-3xl: 3XL — 48rem (768px)
+        max-w-4xl: 4XL — 56rem (896px)
+        max-w-5xl: 5XL — 64rem (1024px)
+        max-w-6xl: 6XL — 72rem (1152px)
+      examples:
+        - none
+
+    # --- Spacing ---
+
+    padding_block:
+      type: string
+      title: Padding Block (Top / Bottom)
+      default: '0'
+      enum:
+        - '0'
+        - '8'
+        - '16'
+        - '24'
+        - '32'
+        - '40'
+        - '48'
+        - '64'
+        - '80'
+        - '96'
+        - '128'
+        - '160'
+      meta:enum:
+        '0': None
+        '8': XS
+        '16': SM
+        '24': Base
+        '32': MD
+        '40': LG
+        '48': XL
+        '64': 2XL
+        '80': 3XL
+        '96': 4XL
+        '128': 5XL
+        '160': 6XL
+      examples:
+        - '0'
+
+    padding_inline:
+      type: string
+      title: Padding Inline (Left / Right)
+      default: '0'
+      enum:
+        - '0'
+        - '8'
+        - '16'
+        - '24'
+        - '32'
+        - '40'
+        - '48'
+        - '64'
+        - '80'
+        - '96'
+        - '128'
+        - '160'
+      meta:enum:
+        '0': None
+        '8': XS
+        '16': SM
+        '24': Base
+        '32': MD
+        '40': LG
+        '48': XL
+        '64': 2XL
+        '80': 3XL
+        '96': 4XL
+        '128': 5XL
+        '160': 6XL
+      examples:
+        - '0'
+
+    margin_block:
+      type: string
+      title: Margin Block (Top / Bottom)
+      default: '0'
+      enum:
+        - '0'
+        - '8'
+        - '16'
+        - '24'
+        - '32'
+        - '40'
+        - '48'
+        - '64'
+        - '80'
+        - '96'
+        - '128'
+        - '160'
+      meta:enum:
+        '0': None
+        '8': XS
+        '16': SM
+        '24': Base
+        '32': MD
+        '40': LG
+        '48': XL
+        '64': 2XL
+        '80': 3XL
+        '96': 4XL
+        '128': 5XL
+        '160': 6XL
+      examples:
+        - '0'
+
+    margin_inline:
+      type: string
+      title: Margin Inline (Left / Right)
+      default: '0'
+      enum:
+        - '0'
+        - '8'
+        - '16'
+        - '24'
+        - '32'
+        - '40'
+        - '48'
+        - '64'
+        - '80'
+        - '96'
+        - '128'
+        - '160'
+      meta:enum:
+        '0': None
+        '8': XS
+        '16': SM
+        '24': Base
+        '32': MD
+        '40': LG
+        '48': XL
+        '64': 2XL
+        '80': 3XL
+        '96': 4XL
+        '128': 5XL
+        '160': 6XL
+      examples:
+        - '0'
+
+    # --- Shadow ---
+
+    shadow:
+      type: string
+      title: Shadow
+      default: none
+      enum:
+        - none
+        - shadow-theme
+      meta:enum:
+        none: None
+        shadow-theme: Theme shadow
+      examples:
+        - none
+
+    # --- Prose mode ---
+
+    use_prose:
+      type: boolean
+      title: Enable Prose Formatting
+      description: >
+        Apply Tailwind Typography-style spacing to embedded HTML — headings,
+        paragraphs, lists, blockquotes, and links are styled automatically.
+      default: false
+      examples:
+        - false

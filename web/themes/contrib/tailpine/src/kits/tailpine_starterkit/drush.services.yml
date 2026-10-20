@@ -1,0 +1,5 @@
+services:
+  tailpine.commands:
+    class: 'Drush\Commands\tailpine\ThemeSetupCommands'
+    tags:
+      - name: 'drush.command'

@@ -1,0 +1,89 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Image Mosaic (Canvas)
+group: Tailpine
+status: stable
+description: Responsive image gallery with grid, masonry, bento, or justified layouts. Optional lightbox.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    layout:
+      type: string
+      title: Gallery layout
+      default: grid
+      enum: [grid, masonry, bento, justified]
+      meta:enum:
+        grid: Grid
+        masonry: Masonry
+        bento: Bento
+        justified: Justified
+      examples:
+        - grid
+
+    columns:
+      type: string
+      title: Columns
+      default: '3'
+      enum: ['2', '3', '4']
+      meta:enum:
+        '2': 2 columns
+        '3': 3 columns
+        '4': 4 columns
+      examples:
+        - '3'
+
+    show_lightbox:
+      type: boolean
+      title: Enable lightbox
+      description: Click images to open in a fullscreen lightbox.
+      default: true
+      examples:
+        - true
+
+    show_captions:
+      type: boolean
+      title: Show captions
+      default: false
+      examples:
+        - false
+
+    hover_effect:
+      type: string
+      title: Hover effect
+      default: zoom
+      enum: [zoom, overlay, slide]
+      meta:enum:
+        zoom: Zoom
+        overlay: Overlay
+        slide: Slide caption
+      examples:
+        - zoom
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: default
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - default
+
+slots:
+  items:
+    title: Images
+    description: Add canvas-image-mosaicitem components here.

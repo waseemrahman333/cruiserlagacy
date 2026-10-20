@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Input
+status: stable
+group: Forms & Inputs
+description: An <input> form element component.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    type:
+      type: string
+      description: Input type (text, email, password, etc.)
+    name:
+      type: string
+      description: Name attribute for the input
+    value:
+      type: string
+      description: Value of the input
+    placeholder:
+      type: string
+      description: Placeholder text
+slots:
+  children:
+    title: Children
+    description: Optional additional rendered elements.

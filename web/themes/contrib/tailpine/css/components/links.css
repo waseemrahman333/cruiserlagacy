@@ -1,0 +1,52 @@
+/**
+ * @file
+ * Visual styles for link lists.
+ * Uses var(--color-*) semantic tokens — works across all 25 themes.
+ */
+
+.links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.links li {
+  display: inline;
+  margin-right: 0.5em;
+}
+
+ul.inline,
+ul.links.inline {
+  display: inline;
+  padding-left: 0; /* LTR */
+}
+
+[dir="rtl"] ul.inline,
+[dir="rtl"] ul.links.inline {
+  padding-right: 0;
+  padding-left: 15px;
+}
+
+ul.inline li,
+.links.inline li {
+  display: inline;
+  padding: 0 0.5em;
+  list-style-type: none;
+}
+
+.links a,
+ul.links a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.links a:hover,
+ul.links a:hover {
+  opacity: 0.8;
+}
+
+ul.links a.is-active {
+  color: var(--color-primary);
+  font-weight: 600;
+}

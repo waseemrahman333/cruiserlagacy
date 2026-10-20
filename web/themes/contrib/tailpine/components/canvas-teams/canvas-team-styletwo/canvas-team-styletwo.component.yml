@@ -1,0 +1,43 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Teams style two (Canvas)
+status: stable
+description: "team two are used to group and display content in a way that is easily readable."
+group: Teams & Testimonials
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  imageurl
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: 'member.png'
+          alt: 'Team Image'
+          width: 120
+          height: 120
+    title:
+      title: Title
+      type: string
+      description: "title of the team member"
+      examples: ['John Doe']
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "designation of the team member"
+      examples: ['CEO']
+    description:
+      title: Description
+      type: string
+      description: "introduction of the team member "
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is the <strong>formatted</strong> description of the Team Style Two member</p>']
+slots:
+  icons:
+    title: Icons
+    description: "social icon links of the team member"

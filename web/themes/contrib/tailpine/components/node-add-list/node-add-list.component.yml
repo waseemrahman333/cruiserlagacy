@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+title: 'Node Add List'
+name: Node Add List
+status: stable
+defaults:
+  types: []
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    types:
+      type: array
+      description: 'A list of content types, each with an add_link and description.'
+      items:
+        type: object
+        properties:
+          type:
+            type: [string, 'null']
+          add_link:
+            type: string
+            description: 'Rendered link to add content of this type.'
+          description:
+            type: string
+            description: 'A brief description of the content type.'

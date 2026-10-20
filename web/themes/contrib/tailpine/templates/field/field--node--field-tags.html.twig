@@ -1,0 +1,60 @@
+{#
+/**
+ * @file
+ * Theme override for the field_tags field on nodes.
+ *
+ * Renders taxonomy term tags as styled pill badges.
+ * Hover state is driven by Tailwind group-hover so no CSS file changes
+ * are needed. The rendered <a> inside item.content inherits color via
+ * Tailwind v4 preflight (a { color: inherit; text-decoration: inherit; }).
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the field wrapper.
+ * - label: The label for this field.
+ * - label_hidden: Whether the label display is set to 'hidden'.
+ * - label_display: The label display mode (above, inline, hidden, visually_hidden).
+ * - items: List of all field items, each item contains:
+ *   - attributes: HTML attributes for the item wrapper.
+ *   - content: The rendered field item (link to taxonomy term).
+ * - field_name: The field machine name.
+ * - multiple: Whether the field has multiple values.
+ *
+ * @see template_preprocess_field()
+ */
+#}
+<div{{ attributes.addClass(['field', 'field--name-field-tags', 'field--type-entity-reference', 'field--label-' ~ label_display]) }}>
+
+  {% if label_display == 'above' or label_display == 'inline' %}
+    <div class="field__label text-xs font-semibold text-muted uppercase tracking-wide mb-2">
+      {{ label }}
+    </div>
+  {% endif %}
+
+  <ul class="node__tags-list flex flex-wrap gap-1.5 list-none m-0 p-0">
+    {% for item in items %}
+      {#
+        group/tag scoped group so each badge triggers its own hover state
+        independently when multiple tags are shown side-by-side.
+        Tailwind v4 preflight sets `a { color: inherit; text-decoration: inherit; }`
+        so the rendered <a> inherits the span's text-muted and transitions to
+        text-on-primary on group hover without requiring any CSS file changes.
+      #}
+      {#
+        [&_a]:[color:inherit] and [&_a:hover]:[color:inherit] are placed in
+        Tailwind's utilities layer which has higher cascade priority than
+        @layer base. This overrides the `a:not([class]) { color: primary }`
+        rule in base-elements.css so the link inherits the span colour.
+
+        Hover uses bg-primary/10 + text-primary (tinted surface + primary
+        text) instead of a solid primary fill, giving reliable contrast
+        across all 25 themes regardless of what --color-primary is.
+      #}
+      <li{{ item.attributes.addClass(['group/tag', 'inline-flex']) }}>
+        <span class="node__tag inline-flex items-center px-2.5 py-0.5 bg-surface-alt border border-border text-muted text-xs font-medium transition-colors [&_a]:[color:inherit] [&_a:hover]:[color:inherit] [&_a]:no-underline group-hover/tag:bg-primary/10 group-hover/tag:border-primary group-hover/tag:text-primary">
+          {{ item.content }}
+        </span>
+      </li>
+    {% endfor %}
+  </ul>
+
+</div>

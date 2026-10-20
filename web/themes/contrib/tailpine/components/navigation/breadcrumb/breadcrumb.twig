@@ -1,0 +1,81 @@
+{% set breadcrumbStyle = breadcrumb_style|default('')|striptags %}
+
+{% if breadcrumb %}
+  <nav class="breadcrumb m-4" role="navigation" aria-label="Breadcrumb">
+    <h2 id="system-breadcrumb" class="sr-only">{{ 'Breadcrumb'|t }}</h2>
+    
+ {% if breadcrumbStyle == "secondary" %}
+      <ul class="flex items-center gap-2.5 text-base text-body" x-data="{active: 1}">      
+      {% for item in breadcrumb %}
+        {% set text = item.title|striptags %}
+          
+        <li class="flex ">
+
+          {% if item.url %}
+            <a href="{{ item.url }}" class="crumb flex flex-col items-center gap-2 group" @click.prevent="active = {{ loop.index }}">
+            <span :class="active === {{ loop.index }}
+                ? 'w-8 h-8 flex items-center justify-center bg-primary text-body-bg border-0'
+                : 'w-8 h-8 flex items-center justify-center bg-surface-alt text-body border border-border'">
+                {{ loop.index }}
+            </span>
+            <span :class="active === {{ loop.index }} ? 'text-primary' : 'text-body'">{{ text }}</span>
+        </a>
+            
+          {% else %}
+            <span class="text-muted font-medium">{{ text }}</span>
+          {% endif %}
+          {% if not loop.last %}
+            <span class="border-b-1 border-border w-20 h-fit mt-4"></span>
+          {% endif %}
+        </li>
+      {% endfor %}
+       </ul>
+      {% else %}
+       {% if breadcrumbStyle == "tertiary"  %}
+        <ul class="flex px-8 py-5 items-center gap-2.5 text-base bg-muted w-fit text-body" x-data="{active: 1}">
+          {% else %}
+      <ul class="flex items-center gap-4 text-base text-body" x-data="{active: 1}">
+          {% endif %}
+        {% for item in breadcrumb %}
+          {% set text = item.title|striptags %}
+          <li class="flex items-center gap-2">
+            {% if item.url %}
+            {% if breadcrumbStyle == "tertiary"  %}
+              <a
+                href="{{ item.url }}"
+                class="transition hover:text-body-bg px-3.5 py-2.5 hover:font-semibold  hover:bg-primary active:bg-primary  active:text-body-bg font-medium"
+                @click.prevent="active = {{ loop.index }}"
+                :class="active === {{ loop.index }} ? 'text-body-bg bg-primary px-3.5 py-2.5 font-semibold' : 'text-body'"
+              >
+                {{ text }}
+              </a>
+              {% else %}
+              <a
+                href="{{ item.url }}"
+                class="transition hover:text-primary active:text-primary font-medium"
+                @click.prevent="active = {{ loop.index }}"
+                :class="active === {{ loop.index }} ? 'text-primary font-semibold' : 'text-body'"
+              >
+                {{ text }}
+              </a>
+              {% endif %}
+            {% else %}
+              <span class=" font-medium">{{ text }}</span>
+            {% endif %}
+            {# Add separator unless it's the last item #}
+            {% if not loop.last %}
+            {# if breadcrumbStyle == 'default' #}
+           {% if breadcrumbStyle == 'primary' %}
+              <span class="mx-2 "> &#47; </span>
+            {% else %}
+              <span class="mx-2 "> &gt; </span>
+              {% endif %}
+            {% endif %}
+          </li>
+        
+        {% endfor %}
+     </ul>
+      {% endif %}
+    
+  </nav>
+{% endif %}

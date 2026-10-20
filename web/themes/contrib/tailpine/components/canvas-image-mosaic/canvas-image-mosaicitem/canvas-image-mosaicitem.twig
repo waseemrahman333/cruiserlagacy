@@ -1,0 +1,41 @@
+{#
+/**
+ * Image Mosaic Item (Canvas) — child
+ *
+ * Variables: image, caption
+ *
+ * Theme tokens: bg-surface-alt, text-muted, bg-dark, text-body-bg
+ */
+#}
+{% set safe_caption = caption|default('')|striptags %}
+
+<div
+  class="canvas-image-mosaicitem relative overflow-hidden rounded-xl group"
+  {% if image and image.src %}
+    x-on:click="typeof openLightbox !== 'undefined' ? openLightbox('{{ image.src|striptags }}', '{{ image.alt|default('')|striptags }}') : null"
+    style="cursor: pointer;"
+  {% endif %}
+  {{ attributes }}
+>
+  {% if image and image.src %}
+    <img
+      src="{{ image.src|striptags }}"
+      alt="{{ image.alt|default('')|striptags }}"
+      loading="lazy"
+      class="canvas-image-mosaicitem__img w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      width="{{ image.width|default(800) }}"
+      height="{{ image.height|default(600) }}"
+    >
+  {% else %}
+    <div class="canvas-image-mosaicitem__placeholder h-48 bg-surface-alt flex items-center justify-center text-muted rounded-xl">
+      {{ 'Add an image'|t }}
+    </div>
+  {% endif %}
+
+  {% if safe_caption %}
+    <div class="canvas-image-mosaicitem__caption absolute bottom-0 left-0 right-0 bg-dark/70 text-body-bg text-xs px-3 py-2 translate-y-full transition-transform group-hover:translate-y-0">
+      {{ safe_caption }}
+    </div>
+  {% endif %}
+
+</div>

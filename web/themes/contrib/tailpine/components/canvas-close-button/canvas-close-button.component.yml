@@ -1,0 +1,26 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Close Button (Canvas)
+status: stable
+description: Close/dismiss button with X icon.
+group: UI
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    label:
+      type: string
+      title: Accessible Label
+      description: Screen reader label.
+      default: 'Close'
+    size:
+      type: string
+      title: Size
+      description: Button size.
+      default: md
+      enum:
+        - sm
+        - md
+        - lg

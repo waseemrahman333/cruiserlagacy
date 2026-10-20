@@ -1,0 +1,20 @@
+{#
+/**
+ * @file
+ * Theme override for displaying a view as a table.
+ *
+ * Delegates to the tailpine:views-table SDC for consistent styling.
+ *
+ * @see template_preprocess_views_view_table()
+ */
+#}
+{{ include('tailpine:views-table', {
+  attributes: attributes,
+  caption: caption,
+  caption_needed: caption_needed,
+  sticky: sticky,
+  responsive: true,
+  header: header,
+  rows: rows,
+  empty: empty,
+}) }}

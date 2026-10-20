@@ -1,0 +1,37 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Step Trail Item (Canvas)
+group: Tailpine
+status: stable
+description: A single step inside a canvas-step-trail.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    label:
+      type: string
+      title: Label
+      description: Step title text.
+      examples:
+        - 'Create account'
+
+    description:
+      type: string
+      title: Description
+      description: Supporting text for this step. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Fill in your name and email address.</p>'
+
+    icon:
+      type: string
+      title: Icon
+      description: Icon character or short text shown in the marker (for icon style).
+      examples:
+        - '✓'

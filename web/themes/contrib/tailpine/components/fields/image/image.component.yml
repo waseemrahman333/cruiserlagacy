@@ -1,0 +1,57 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: Image
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    style_name:
+      type: [string, 'null']
+      description: style name.
+    src:
+      type: ['string', 'null']
+      title: Source URL
+      description: The image source URL.
+    alt:
+      type: ['string', 'null']
+      title: Alt Text
+      description: Accessible alternative text for the image.
+    title:
+      type: ['string', 'null']
+      title: Title
+      description: Image title attribute value.
+    loading:
+      type: string
+      title: Loading
+      description: Image loading attribute value.
+      default: lazy
+      enum:
+        - lazy
+        - eager
+        - auto
+    width:
+      type: ['integer', 'string', 'null']
+      title: Width
+      description: Image width in pixels.
+    height:
+      type: ['integer', 'string', 'null']
+      title: Height
+      description: Image height in pixels.
+    responsive:
+      type: boolean
+      title: Responsive
+      description: Apply max-w-full to make the image responsive.
+      default: true
+    align:
+      type: ['string', 'null']
+      title: Alignment
+      description: Horizontal image alignment (start, center, end).
+    image_utility_classes:
+      type: array
+      title: Image Utility Classes
+      description: Additional Tailwind utility classes for the image element.
+      items:
+        type: string

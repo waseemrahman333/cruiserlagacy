@@ -1,0 +1,100 @@
+{#
+/**
+ * @file
+ * Theme override for article nodes in full view mode.
+ *
+ * Available variables:
+ * - node: The node entity.
+ * - label: The node title (also shown by page-title block above).
+ * - url: The node URL.
+ * - content: All rendered node content (render array).
+ * - attributes: HTML attributes for the article wrapper.
+ * - title_attributes: HTML attributes for the title element.
+ * - content_attributes: HTML attributes for the content wrapper.
+ * - author_attributes: HTML attributes for the author element.
+ * - title_prefix: Output before the title (contextual links).
+ * - title_suffix: Output after the title (contextual links).
+ * - display_submitted: Whether to show author/date info.
+ * - author_picture: Rendered author picture.
+ * - author_name: Rendered author name (link for authenticated users).
+ * - author_attributes: HTML attributes for the author element.
+ * - date: Formatted publication date.
+ * - metadata: Additional metadata markup.
+ * - view_mode: Current view mode (full).
+ *
+ * @see template_preprocess_node()
+ */
+#}
+{%
+  set classes = [
+    'node',
+    'node--type-article',
+    'node--view-mode-full',
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished bg-error/10',
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+
+  {# ── Page title ──────────────────────────────────────────────────────── #}
+  {# Rendered here because the Tailpine block layout has no page-title     #}
+  {# block placed — the node template is responsible for its own h1.       #}
+  {{ title_prefix }}
+  {% if label %}
+    <h1{{ title_attributes.addClass(['node__title', 'text-3xl', 'font-bold', 'text-heading', 'leading-tight', 'mb-6']) }}>
+      {{ label }}
+    </h1>
+  {% endif %}
+  {{ title_suffix }}
+
+  {# ── Author / Date meta ───────────────────────────────────────────────── #}
+  {% if display_submitted %}
+    <div class="node__meta flex items-center gap-3 mb-6 pb-6 border-b border-border">
+      {% if author_picture %}
+        <div class="w-10 h-10 rounded-full overflow-hidden ring-1 ring-border flex-shrink-0 bg-surface-alt">
+          {{ author_picture }}
+        </div>
+      {% endif %}
+      <div{{ author_attributes.addClass(['node__submitted', 'text-sm', 'text-muted']) }}>
+        {% trans %}By {{ author_name }} · {{ date }}{% endtrans %}
+        {{ metadata }}
+      </div>
+    </div>
+  {% endif %}
+
+  {# ── Featured image ───────────────────────────────────────────────────── #}
+  {% if content.field_image %}
+    <div class="node__featured-image mb-8 overflow-hidden [&_img]:w-full [&_img]:h-auto [&_img]:block">
+      {{ content.field_image }}
+    </div>
+  {% endif %}
+
+  {# ── Body / main content ──────────────────────────────────────────────── #}
+  <div{{ content_attributes.addClass(['node__content', 'prose', 'max-w-none', 'mb-8']) }}>
+    {{ content|without('field_image', 'field_tags', 'links', 'comment') }}
+  </div>
+
+  {# ── Tags ─────────────────────────────────────────────────────────────── #}
+  {% if content.field_tags %}
+    <div class="node__tags mb-8 pt-6 border-t border-border">
+      {{ content.field_tags }}
+    </div>
+  {% endif %}
+
+  {# ── Node action links (edit, delete, etc.) ───────────────────────────── #}
+  {% if content.links %}
+    <div class="node__links mb-6">
+      {{ content.links }}
+    </div>
+  {% endif %}
+
+  {# ── Comments ─────────────────────────────────────────────────────────── #}
+  {% if content.comment %}
+    <div class="node__comments mt-8 pt-8 border-t border-border">
+      {{ content.comment }}
+    </div>
+  {% endif %}
+
+</article>

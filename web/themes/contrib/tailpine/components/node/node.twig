@@ -1,0 +1,35 @@
+
+<article{{ (attributes|default(create_attribute())).addClass(node_classes|default([])) }}>
+
+  {{ title_prefix }}
+
+  {% if label and view_mode != 'full' %}
+    <h2{{ (title_attributes|default(create_attribute())).addClass(['text-xl', 'font-bold', 'mb-3']) }}>
+      <a href="{{ url|default('/') }}" rel="bookmark" class="text-heading hover:text-primary transition-colors">
+        {{ label }}
+      </a>
+    </h2>
+  {% endif %}
+
+  {{ title_suffix }}
+
+  {% if display_submitted %}
+    <div class="flex items-center gap-2 text-xs text-muted mb-6 pb-4 border-b border-border">
+      {% if author_picture %}
+        <span class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-surface-alt">
+          {{ author_picture }}
+        </span>
+      {% endif %}
+      <span>{{ author_info|default('') }}</span>
+    </div>
+  {% endif %}
+
+  <div{{ (content_attributes|default(create_attribute())).addClass([
+    'prose',
+    'max-w-none',
+    view_mode == 'full' ? 'max-w-4xl',
+  ]) }}>
+    {{ content }}
+  </div>
+
+</article>

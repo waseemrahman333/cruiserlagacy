@@ -1,0 +1,19 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: file upload help
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    description:
+      type: string
+      title: File upload
+      description: This is the File Upload Option
+      default: Please Upload Your Picture
+    descriptions:
+      type: object
+      title: Descriptions
+      description: Array of file upload description items.

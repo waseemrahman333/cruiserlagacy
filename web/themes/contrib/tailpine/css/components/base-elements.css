@@ -1,0 +1,376 @@
+/**
+ * @file
+ * Global bare-element styles using @layer base.
+ *
+ * NOTE: This file must be imported AFTER @theme in main.css so that
+ * Tailwind utilities referencing theme tokens (bg-dark, text-body, etc.)
+ * resolve correctly.
+ */
+
+/* text-muted replace with text-body */
+   /* bg-surface-100-alt. replace with bg-surface-300 */
+  /*  */
+
+
+@layer base {
+  /* =====================================================================
+     HEADINGS
+     ===================================================================== */
+  h1 { @apply text-3xl font-bold mb-4 leading-tight; }
+  h2 { @apply text-2xl font-semibold mb-3 leading-tight; }
+  h3 { @apply text-xl font-semibold mb-2 leading-snug; }
+  h4 { @apply text-lg font-medium mb-2; }
+  h5 { @apply text-base font-medium mb-1; }
+  h6 { @apply text-sm font-medium  mb-1; }
+
+  /* =====================================================================
+     BUTTONS
+     -----
+     Scoped to content regions to avoid conflicts with Drupal's admin
+     toolbar, contextual links, CKEditor, and Layout Builder controls.
+     ===================================================================== */
+   /* main button:not([class*="js-"]):not([class*="ck-"]):not([class*="dropbutton"]):not([class*="toolbar-"]):not([class*="contextual"]):not([class*="mobile-menu-toggle"]),
+  .region-content button:not([class*="js-"]):not([class*="ck-"]):not([class*="dropbutton"]),
+  
+  .button,
+  main [type="submit"]:not([class*="ck-"]),
+  main [type="button"]:not([class*="ck-"]),
+  main [type="reset"] {
+    @apply inline-flex items-center px-4 py-2 text-sm font-medium
+           bg-dark text-body-bg border border-transparent
+           cursor-pointer transition-colors duration-200;
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  main button:not([class*="js-"]):not([class*="ck-"]):not([class*="dropbutton"]):not([class*="toolbar-"]):not([class*="contextual"]):not([class*="mobile-menu-toggle"]):hover,
+  .region-content button:not([class*="js-"]):not([class*="ck-"]):not([class*="dropbutton"]):hover,
+  .button:hover,
+  main [type="submit"]:not([class*="ck-"]):hover,
+  main [type="button"]:not([class*="ck-"]):hover {
+    opacity: 0.9;
+  } */
+
+  .button--primary,
+  .button-action,
+  [type="submit"].button--primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  .button--primary:hover,
+  .button-action:hover {
+    background-color: var(--color-primary-hover);
+    opacity: 1;
+  }
+
+  .button--danger,
+  .button--delete {
+    background-color: var(--color-error);
+    color: var(--color-on-primary);
+  }
+
+  .button--danger:hover {
+    opacity: 0.9;
+  }
+
+  .button--small,
+  .button-small {
+    @apply px-3 py-1 text-xs;
+  }
+
+  /* =====================================================================
+     FORM INPUTS
+     ===================================================================== */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="url"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="week"] {
+    @apply block w-full px-3 py-2 text-sm text-body bg-surface-200
+           border border-border transition-colors duration-200
+           placeholder:text-body;
+    border-radius: 0;
+  }
+  
+  /* Use :focus-visible so mouse users don't see aggressive focus rings,
+     while keyboard users retain clear a11y indicators. */
+  input[type="text"]:focus-visible,
+  input[type="email"]:focus-visible,
+  input[type="password"]:focus-visible,
+  input[type="search"]:focus-visible,
+  input[type="url"]:focus-visible,
+  input[type="tel"]:focus-visible,
+  input[type="number"]:focus-visible,
+  input[type="date"]:focus-visible,
+  input[type="time"]:focus-visible,
+  input[type="datetime-local"]:focus-visible,
+  input[type="month"]:focus-visible,
+  input[type="week"]:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+    border-color: var(--color-focus);
+  }
+
+  select {
+    @apply block w-full px-3 py-2 text-sm text-body bg-surface-200
+           border border-border cursor-pointer transition-colors duration-200;
+    border-radius: 0;
+  }
+
+  select:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  textarea {
+    @apply block w-full px-3 py-2 text-sm text-body bg-surface-200
+           border border-border resize-y transition-colors duration-200;
+    min-height: 120px;
+    max-height: 600px;
+    border-radius: 0;
+  }
+
+  textarea:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  [type="checkbox"],
+  [type="radio"] {
+    @apply w-4 h-4 cursor-pointer;
+    accent-color: var(--color-primary);
+  }
+
+  /* =====================================================================
+     LINKS
+     ===================================================================== */
+  a:not([class]) {
+    color: var(--color-primary);
+    transition: color 0.2s;
+  }
+
+  a:not([class]):hover {
+    color: var(--color-primary-hover);
+    @apply underline;
+  }
+
+  a:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  /* =====================================================================
+     TABLES
+     ===================================================================== */
+  table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  th {
+    @apply text-left font-semibold text-body bg-surface-300 py-3 px-4
+           border-b border-border;
+  }
+
+  td {
+    @apply py-3 px-4 border-b border-border text-body bg-surface-100 transition-colors duration-200;
+  }
+
+  tr:hover td {
+    background-color: var(--color-surface-hover);
+  }
+
+  /* =====================================================================
+     ADMIN LIST ITEMS & DETAILS
+     ===================================================================== */
+  .admin-list dt, dl.admin-list dt { @apply font-semibold text-body text-sm; }
+  .admin-list dd, dl.admin-list dd { @apply text-body text-sm mb-4; }
+  .admin-list a { @apply font-medium text-sm; color: var(--color-primary); }
+  .admin-list a:hover { @apply underline; color: var(--color-primary-hover); }
+  .admin-list .description, dl.admin-list .description { @apply text-body text-xs mt-0.5; }
+  .system-compact-link { @apply py-1.5 text-sm; }
+
+  details {
+    @apply border border-border mb-3 transition-colors duration-200;
+    border-radius: 0;
+  }
+
+  details > summary {
+    @apply px-4 py-3 font-medium text-body text-sm cursor-pointer select-none bg-surface-100 transition-colors duration-200;
+    list-style: none;
+  }
+
+  details > summary:hover {
+    background-color: var(--color-surface-hover);
+  }
+
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details[open] > summary {
+    @apply border-b border-border;
+  }
+
+  details > *:not(summary) {
+    @apply px-4 py-3 bg-body-bg;
+  }
+
+  /* =====================================================================
+     MISC ELEMENTS
+     ===================================================================== */
+  hr {
+    @apply border-t border-border my-6;
+    border-left: 0; border-right: 0; border-bottom: 0;
+  }
+
+  dl { @apply mb-4; }
+  dt { @apply font-semibold text-body text-sm; }
+  dd { @apply text-body text-sm ml-4 mb-2; }
+
+  ul:not([class]) { @apply list-disc ml-6 mb-4 text-body; }
+  ol:not([class]) { @apply list-decimal ml-6 mb-4 text-body; }
+  li { @apply leading-relaxed; }
+
+  blockquote {
+    @apply border-l-4 border-primary pl-4 italic text-body my-4 bg-surface-100 py-2 pr-2;
+    border-radius: 0;
+  }
+
+  pre {
+    @apply bg-dark text-body-bg text-sm p-4 overflow-x-auto my-4;
+    border-radius: 0;
+  }
+
+  code {
+    @apply bg-surface-300 text-sm px-1.5 py-0.5 font-mono text-body;
+    border-radius: 0;
+  }
+
+  /* =====================================================================
+     DRUPAL SPECIFIC
+     ===================================================================== */
+  .action-links a {
+    @apply inline-flex items-center px-4 py-2 text-sm font-medium
+           border border-transparent
+           cursor-pointer transition-colors duration-200;
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border-radius: 0;
+    text-decoration: none;
+  }
+
+  .action-links a:hover {
+    background-color: var(--color-primary-hover);
+    text-decoration: none;
+  }
+
+  .form-item label { @apply block text-sm font-medium text-body mb-1; }
+  .form-item .description { @apply mt-1 text-xs text-body; }
+
+  .form-item--error label { color: var(--color-error); }
+  .form-item--error-message { color: var(--color-error); @apply mt-1 text-xs; }
+  .form-item--error input,
+  .form-item--error select,
+  .form-item--error textarea { border-color: var(--color-error); }
+
+  .dropbutton-widget .dropbutton a,
+  .dropbutton-widget .dropbutton button {
+    @apply text-sm px-3 py-1.5 bg-surface-100 text-body border-border hover:bg-surface-300 transition-colors duration-200;
+  }
+
+  /* ---------------------------------------------------------------------
+     DRUPAL MESSAGES (status / warning / error)
+     --------------------------------------------------------------------- */
+  .messages {
+    @apply px-4 py-3 mb-4 border-l-4 text-sm;
+    border-radius: 0;
+  }
+
+  .messages--status {
+    background-color: color-mix(in srgb, var(--color-success) 12%, var(--color-body-bg));
+    border-left-color: var(--color-success);
+    color: var(--color-success);
+  }
+
+  .messages--warning {
+    background-color: color-mix(in srgb, var(--color-warning) 12%, var(--color-body-bg));
+    border-left-color: var(--color-warning);
+    color: var(--color-warning);
+  }
+
+  .messages--error {
+    background-color: color-mix(in srgb, var(--color-error) 12%, var(--color-body-bg));
+    border-left-color: var(--color-error);
+    color: var(--color-error);
+  }
+
+  .messages--info {
+    background-color: color-mix(in srgb, var(--color-info) 12%, var(--color-body-bg));
+    border-left-color: var(--color-info);
+    color: var(--color-info);
+  }
+
+  /* ---------------------------------------------------------------------
+     DRUPAL TABS (primary / secondary)
+     --------------------------------------------------------------------- */
+  .tabs {
+    @apply flex flex-wrap gap-0 border-b border-border mb-4 list-none ml-0;
+  }
+
+  .tabs__tab {
+    @apply m-0;
+  }
+
+  .tabs__link {
+    @apply inline-block px-4 py-2 text-sm font-medium text-body border-b-2 border-transparent transition-colors duration-200;
+    text-decoration: none;
+  }
+
+  .tabs__link:hover {
+    color: var(--color-primary);
+    background-color: var(--color-surface-hover);
+  }
+
+  .tabs__link.is-active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  /* ---------------------------------------------------------------------
+     DRUPAL PAGER
+     --------------------------------------------------------------------- */
+  .pager__items {
+    @apply flex flex-wrap gap-1 justify-center my-6 list-none ml-0;
+  }
+
+  .pager__item {
+    @apply m-0;
+  }
+
+  .pager__link,
+  .pager__item a {
+    @apply inline-flex items-center px-3 py-1.5 text-sm border border-border bg-surface-100 text-body transition-colors duration-200;
+    text-decoration: none;
+  }
+
+  .pager__link:hover,
+  .pager__item a:hover {
+    background-color: var(--color-surface-hover);
+    border-color: var(--color-primary);
+  }
+
+  .pager__item.is-active .pager__link,
+  .pager__item--current a {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-primary);
+  }
+}

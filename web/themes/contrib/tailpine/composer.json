@@ -1,0 +1,21 @@
+{
+    "name": "drupal/tailpine",
+    "description": "TailwindCSS and AlpineJS based Drupal theme built with Single Directory Components (SDC) and full Drupal Canvas editor support for flexible, component-driven page building.",
+    "type": "drupal-theme",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/tailpine",
+    "authors": [
+        {
+            "name": "S M Azmat Shah",
+            "email": "azmatnvm@gmail.com"
+        }
+    ],
+    "require": {
+        "drupal/canvas": "^1.10"
+    },
+    "autoload": {
+        "psr-4": {
+            "Drush\\Commands\\tailpine\\": "Commands/tailpine"
+        }
+    }
+}

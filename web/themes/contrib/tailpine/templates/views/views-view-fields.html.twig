@@ -1,0 +1,29 @@
+{#
+/**
+ * @file
+ * Theme override for a views row with inline fields.
+ * Note: This template renders Views fields directly without SDC delegation
+ * because Views field output is too dynamic for static SDC component props.
+ *
+ * Available variables:
+ * - fields: A list of fields with handler, content, raw, label,
+ *   inline, separator, class, wrapper_element, wrapper_attributes,
+ *   label_element, label_attributes, label_suffix properties.
+ *
+ * @see template_preprocess_views_view_fields()
+ */
+#}
+{% for field in fields %}
+  {% if field.wrapper_element %}
+    <{{ field.wrapper_element }}{{ field.wrapper_attributes }}>
+  {% endif %}
+  {% if field.label_element %}
+    <{{ field.label_element }}{{ field.label_attributes }}>
+      {{- field.label -}}{{ field.label_suffix }}
+    </{{ field.label_element }}>
+  {% endif %}
+  {{- field.content -}}
+  {% if field.wrapper_element %}
+    </{{ field.wrapper_element }}>
+  {% endif %}
+{% endfor %}

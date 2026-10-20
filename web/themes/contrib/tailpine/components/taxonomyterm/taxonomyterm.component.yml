@@ -1,0 +1,61 @@
+# This is so your IDE knows about the syntax for fixes and autocomplete.
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+# The human readable name.
+name: Taxonomy term
+description: drupal page taxonomy term.
+status: stable
+
+
+# Schema for the props. We support www.json-schema.org. Learn more about the
+# syntax there.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: title
+    title_prefix:
+      type: object
+      title: Title Prefix
+      description: Contextual links and other title prefix content.
+    title_suffix:
+      type: object
+      title: Title Suffix
+      description: Contextual links and other title suffix content.
+    url:
+      type: string
+      title: URL
+      description: Taxonomy term URL.
+    name:
+      type: string
+      title: Name
+      description: Taxonomy term name.
+    content:
+      type: string
+      title: Content
+      description: Rendered taxonomy term content.
+
+    term:
+      type: object
+      title: Taxonomy Term
+      description: The taxonomy term entity providing bundle and id.
+      properties:
+        bundle:
+          type: string
+          title: Bundle
+          description: The vocabulary machine name.
+        id:
+          type: ['integer', 'string']
+          title: Term ID
+          description: The taxonomy term ID.
+
+    page:
+      type: boolean
+      title: Page Display
+      description: Whether this term is being viewed as a standalone page.
+      default: false

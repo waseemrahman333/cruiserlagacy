@@ -1,0 +1,31 @@
+{# ---------------------------------------------------------------------------
+ # Accordion Style 1 – Centered Header + Items
+ # --------------------------------------------------------------------------- #}
+
+{% set wrapper_attributes = attributes|default(create_attribute()) %}
+
+<!-- Accordion Style 1 -->
+<div
+  {{ wrapper_attributes.addClass(
+    'max-w-4xl mx-auto py-15 px-5 md:py-[92px] md:px-12.5 lg:py-26'
+  ) }}
+>
+  {% if title %}
+    <div class="text-center">
+      <h2 class="text-3xl md:text-4xl lg:text-[46px] font-medium text-body
+                 mb-[30px] md:mb-[40px] lg:mb-[50px]">
+        {% block title %}
+          {{ title }}
+        {% endblock %}
+      </h2>
+    </div>
+  {% endif %}
+
+  {% if content %}
+    <div class="mb-2">
+      {% block content %}
+        {{ content }}
+      {% endblock %}
+    </div>
+  {% endif %}
+</div>

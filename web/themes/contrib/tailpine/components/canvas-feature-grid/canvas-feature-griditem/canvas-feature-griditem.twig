@@ -1,0 +1,36 @@
+{#
+/**
+ * Feature Grid Item (Canvas) — child
+ *
+ * Variables: icon, title, body, show_icon
+ * Slots: cta
+ *
+ * Theme tokens: bg-primary, text-primary, text-heading, text-muted
+ */
+#}
+{% set safe_icon  = icon|default('')|striptags %}
+{% set safe_title = title|default('')|striptags %}
+
+<div
+  class="canvas-feature-griditem flex flex-col gap-4 p-6 rounded-2xl"
+  {{ attributes }}
+>
+
+  {% if show_icon|default(true) and safe_icon %}
+    <div class="canvas-feature-griditem__icon w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl flex-shrink-0">
+      {{ safe_icon }}
+    </div>
+  {% endif %}
+
+  <div class="canvas-feature-griditem__content flex-1">
+    {% if safe_title %}
+      <h3 class="canvas-feature-griditem__title font-semibold text-lg text-heading mb-2">{{ safe_title }}</h3>
+    {% endif %}
+    {% if body %}
+      <div class="canvas-feature-griditem__body text-muted text-sm leading-relaxed">{{ body|raw }}</div>
+    {% endif %}
+  </div>
+
+  {% block cta %}{% endblock %}
+
+</div>

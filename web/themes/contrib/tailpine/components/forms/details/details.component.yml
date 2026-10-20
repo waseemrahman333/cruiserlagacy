@@ -1,0 +1,35 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Details
+status: stable
+group: Forms & Inputs
+description: The details element is used to create a disclosure widget from which the user can obtain additional information or controls.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      description: The title text for the details element.
+    required:
+      type: [boolean, 'null']
+      description: Specifies if the details element is required.
+    errors:
+      type: ['array', 'string', 'null']
+      description: Any errors for this details element, may not be set.
+    summary_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Summary HTML attributes
+      description: HTML attributes for the summary element.
+    description:
+      type: string
+      description: The description of the details element.
+    value:
+      type: string
+      description: The value of the details element.
+slots:
+  children:
+    title: Children Slot
+    description: The rendered child elements of the details element.

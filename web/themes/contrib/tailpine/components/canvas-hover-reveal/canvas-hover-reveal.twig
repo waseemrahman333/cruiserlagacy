@@ -1,0 +1,68 @@
+{#
+/**
+ * Hover Reveal (Canvas)
+ *
+ * Variables: reveal_direction, show_overlay, overlay_opacity, keep_visible_on_mobile
+ * Slots: front, reveal
+ *
+ * Theme tokens: bg-surface-alt, text-muted, text-body-bg, bg-dark
+ */
+#}
+{% set safe_dir     = reveal_direction|default('up')|striptags %}
+{% set safe_opacity = overlay_opacity|default('40')|striptags %}
+{% set mobile_show  = keep_visible_on_mobile|default(false) %}
+
+{% set hidden_map = {
+  'up':    'translate-y-full',
+  'down':  '-translate-y-full',
+  'left':  'translate-x-full',
+  'right': '-translate-x-full',
+  'fade':  'opacity-0',
+} %}
+{% set reveal_hidden  = hidden_map[safe_dir]|default('translate-y-full') %}
+{% set reveal_inactive = mobile_show ? '' : reveal_hidden %}
+
+<div
+  class="canvas-hover-reveal canvas-hover-reveal--{{ safe_dir }} relative overflow-hidden min-h-48"
+  x-data="{ hovered: false }"
+  x-on:mouseenter="hovered = true"
+  x-on:mouseleave="hovered = false"
+  {{ attributes }}
+>
+
+  {# Front layer #}
+  <div class="canvas-hover-reveal__front w-full h-full min-h-48">
+    {% block front %}
+      {% if front %}
+        {{ front }}
+      {% else %}
+        <div class="h-64 bg-surface-alt flex items-center justify-center text-muted rounded-xl">{{ 'Front content'|t }}</div>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+  {# Overlay on front when hovered #}
+  {% if show_overlay|default(true) %}
+    <div
+      class="canvas-hover-reveal__overlay absolute inset-0 bg-dark/{{ safe_opacity }} transition-opacity duration-300"
+      x-bind:class="hovered ? 'opacity-100' : 'opacity-0'"
+    ></div>
+  {% endif %}
+
+  {# Reveal layer #}
+  <div
+    class="canvas-hover-reveal__reveal absolute inset-0 flex items-center justify-center transition-all duration-300"
+    x-bind:class="hovered ? 'translate-y-0 translate-x-0 opacity-100' : '{{ reveal_inactive }}'"
+  >
+    {% block reveal %}
+      {% if reveal %}
+        {{ reveal }}
+      {% else %}
+        <div class="text-body-bg text-center p-6">
+          <p class="font-semibold text-lg">{{ 'Hover content'|t }}</p>
+        </div>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+</div>

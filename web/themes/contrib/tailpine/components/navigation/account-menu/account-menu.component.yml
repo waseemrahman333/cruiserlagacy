@@ -1,0 +1,41 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Account Menu
+description: User account dropdown menu with logged-in and logged-out states.
+status: stable
+group: Navigation
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes for the wrapping element.
+    logged_in:
+      type: boolean
+      title: Logged In
+      description: Whether the current user is authenticated.
+      default: false
+    display_name:
+      type: string
+      title: Display Name
+      description: The display name of the user, used to build the avatar initial and label.
+    use_avatar_image:
+      type: boolean
+      title: Use Avatar Image
+      description: 'Agar true ho to profile picture dikhega, warna hamesha first-letter + username dikhega.'
+      default: true
+    items:
+      type: array
+      title: Menu Items
+      description: Array of account menu action links (e.g. View Profile, Log out).
+      items:
+        type: object
+        properties:
+          title:
+            type: string
+            title: Item Title
+            description: The display text of the menu item.
+          url:
+            type: string
+            title: Item URL
+            description: The URL the item links to.

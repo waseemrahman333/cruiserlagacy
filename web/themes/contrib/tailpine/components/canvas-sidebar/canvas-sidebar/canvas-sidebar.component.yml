@@ -1,0 +1,31 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Sidebar (Canvas)
+group: Layout
+description: Sidebar
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    logo_img:
+      title: Logo image
+      description: Logo Images description
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      examples:
+        - src: 'logo.svg'
+          alt: 'Logo Image'
+          width: 150
+          height: 50
+    logo_title:
+      title: Logo title
+      type: string
+      description: Logo title description
+      examples: ['My Website']
+slots:
+  inner_content:
+    title: Inner Content
+    description: description

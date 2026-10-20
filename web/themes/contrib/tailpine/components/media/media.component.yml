@@ -1,0 +1,46 @@
+# This is so your IDE knows about the syntax for fixes and autocomplete.
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+# The human readable name.
+name: Media Name
+description: media name
+status: stable
+# Schema for the props. We support www.json-schema.org. Learn more about the
+# syntax there.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    label:
+      type: string
+      title: This is the label Title
+      description: This is the Media File
+      default: Test
+    title_suffix:
+      type: object
+      title: Title Suffix
+      description: Contextual links and other title suffix content.
+    content:
+      type: string
+      title: Content
+      description: Rendered media content.
+
+    bundle:
+      type: string
+      title: Media Bundle
+      description: The media type machine name (e.g. image, video).
+
+    isPublished:
+      type: boolean
+      title: Published
+      description: Whether the media entity is published.
+      default: true
+
+    view_mode:
+      type: string
+      title: View Mode
+      description: The current view mode (e.g. full, thumbnail).
+      default: full

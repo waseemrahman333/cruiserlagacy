@@ -1,0 +1,84 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Countdown (Canvas)
+group: Tailpine
+status: stable
+description: Live countdown timer with days, hours, minutes, and seconds. Three display styles.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    target_date:
+      type: string
+      title: Target date
+      description: ISO 8601 date-time string the timer counts down to (e.g. 2026-12-31T23:59:59).
+      examples:
+        - '2026-12-31T23:59:59'
+
+    style:
+      type: string
+      title: Display style
+      default: boxed
+      enum: [minimal, boxed, flip]
+      meta:enum:
+        minimal: Minimal
+        boxed: Boxed
+        flip: Flip card
+      examples:
+        - boxed
+
+    show_days:
+      type: boolean
+      title: Show days
+      default: true
+      examples:
+        - true
+
+    show_hours:
+      type: boolean
+      title: Show hours
+      default: true
+      examples:
+        - true
+
+    show_minutes:
+      type: boolean
+      title: Show minutes
+      default: true
+      examples:
+        - true
+
+    show_seconds:
+      type: boolean
+      title: Show seconds
+      default: true
+      examples:
+        - true
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: dark
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - dark
+
+slots:
+  expired:
+    title: Expired content
+    description: Content shown when the countdown reaches zero.

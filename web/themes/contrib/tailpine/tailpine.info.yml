@@ -1,0 +1,34 @@
+name: Tailpine
+type: theme
+base theme: false
+description: "A modern Drupal Theme powered by Tailwind CSS and Alpine.js, designed for flexibility, speed, and clean UI development."
+core_version_requirement: ^10.2 || ^11 || ^12
+
+generator: "starterkit_theme:11.1.1"
+logo: logo.svg
+libraries:
+  - tailpine/main
+  # - tailpine/base
+  - tailpine/alpine
+  - tailpine/fixed-header
+regions:
+  top_bar: Top Bar
+  header: Header
+  branding: Branding
+  header_menu: Header Menu
+  header_actions: Header Action
+  search: Search
+  secondary_menu: Secondary Menu
+  breadcrumb: Breadcrumb
+  highlighted: Highlighted
+  help: Help
+  sidebar_left: Sidebar Left
+  content: Content
+  sidebar_right: Sidebar Right
+  footer_top: Footer Top
+  footer: Footer
+  footer_bottom: Footer Bottom
+
+dependencies:
+  - drupal:canvas
+  - drupal:search

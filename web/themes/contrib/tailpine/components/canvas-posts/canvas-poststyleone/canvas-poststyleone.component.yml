@@ -1,0 +1,47 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Post Style One (Canvas)
+status: stable
+description: "Post Style One is used to group and display content in a way that is easily readable."
+group: Cards & Posts
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  imageurl
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: 'card.jpg'
+          alt: 'card Image'   
+    title:
+      title: Title
+      type: string
+      description: "Title of the card. Plain text."
+      examples: ['Example Title']
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle of the card. Plain text."
+      examples: ['Example subtitle']
+    description:
+      title: Description
+      type: string
+      description: "Description of the card. Plain text." 
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>'] 
+    date:
+      title: Date
+      type: string
+      description: "Date of the card. Plain text."
+      examples: ['June 20, 2024']
+
+slots:
+  cta:
+    title: CTA
+    description: "Call to action."

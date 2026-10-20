@@ -1,0 +1,69 @@
+<?php
+
+/**
+ * @file
+ * Form alter hooks for non-theme-settings forms.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter() for user_login_form.
+ */
+function tailpine_form_user_login_form_alter(array &$form, FormStateInterface $form_state): void {
+
+  $form['custom_title'] = [
+    '#type' => 'markup',
+    '#markup' => '
+      <div class="text-center mb-8 animate-fade-in">
+        <img src="' . base_path() . \Drupal::theme()->getActiveTheme()->getPath() . '/logo.svg" alt="Logo"
+          class="mx-auto w-40 h-20 mb-4 drop-shadow-md">
+        <h2 class="text-3xl font-extrabold bg-gradient-to-r
+          from-primary via-tertiary to-secondary bg-clip-text text-transparent">
+          ' . t('Welcome Back') . '
+        </h2>
+        <p class="text-gray-700 mt-2">
+          ' . t('Log in to your account and continue your journey') . '
+        </p>
+      </div>
+    ',
+    '#weight' => -100,
+  ];
+
+  $form['#prefix'] = '<div class="flex items-center justify-center ">'
+    . '<div class="backdrop-blur-md bg-white/10 border mx-auto border-gray-700'
+    . ' p-8 sm:p-12 w-full max-w-xl transform transition duration-500">';
+  $form['#suffix'] = '</div></div>';
+
+  $form['name']['#prefix'] = '<div class="relative w-full">';
+  $form['name']['#suffix'] = '</div>';
+  $form['name']['#attributes']['class'][] = 'w-full pr-4 py-3 mb-4 border border-gray-700'
+    . ' bg-white/5 text-gray-200 placeholder-gray-400 focus:outline-none'
+    . ' focus:ring-2 focus:ring-indigo-500 transition-all duration-300 rounded-lg';
+  $form['name']['#attributes']['placeholder'] = t('Username or Email');
+
+  $form['pass']['#attributes']['class'][] = 'w-full pr-4 py-3 mb-4 border border-gray-700'
+    . ' bg-white/5 placeholder-gray-400 focus:outline-none focus:ring-2'
+    . ' focus:ring-indigo-500 transition-all duration-300';
+  $form['pass']['#attributes']['placeholder'] = t('Password');
+
+  $form['actions']['submit']['#attributes']['class'][] = 'w-full py-3 px-4 cursor-pointer'
+    . ' font-semibold text-lg text-white bg-gradient-to-r from-primary to-secondary'
+    . ' focus:ring-4 focus:ring-secondary transition-all duration-500 ease-in-out transform';
+  $form['actions']['#attributes']['class'][] = 'flex justify-center mt-4';
+
+  $form['footer_links'] = [
+    '#type' => 'markup',
+    '#markup' => '
+      <div class="text-center mt-8 text-gray-700 text-sm">
+        <a href="/user/password" class="hover:text-primary transition">
+          ' . t('Forgot your password?') . '
+        </a><br>
+        <a href="/user/register" class="hover:text-secondary transition">
+          ' . t('Create a new account') . '
+        </a>
+      </div>
+    ',
+    '#weight' => 100,
+  ];
+}

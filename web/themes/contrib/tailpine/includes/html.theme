@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Preprocess logic for the html.html.twig template.
+ */
+
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_preprocess_html().
+ */
+function tailpine_preprocess_html(array &$variables): void {
+  if (!isset($variables['attributes']['class'])) {
+    $variables['attributes']['class'] = [];
+  }
+
+  $body_font = theme_get_setting('body_font_family') ?: 'opensans';
+  $heading_font = theme_get_setting('heading_font_family') ?: 'montserrat';
+  $font_size = theme_get_setting('body_font_size') ?: '16';
+
+  $font_map = [
+    'inter' => 'Inter',
+    'opensans' => 'Open Sans',
+    'montserrat' => 'Montserrat',
+  ];
+
+  $container_max_width_map = [
+    'full' => 'none',
+    'fluid' => '1920px',
+    'wide' => '1920px',
+    'xl' => '1536px',
+    'lg' => '1280px',
+    'md' => '1024px',
+  ];
+
+  $container_style = theme_get_setting('container_style') ?: 'fluid';
+  $container_max_width = $container_max_width_map[$container_style] ?? '1536px';
+
+  $container_styles = [
+    "--container-max-width: {$container_max_width}",
+    "--base-font-size: {$font_size}px",
+  ];
+
+  // Add body font only when not custom.
+  if ($body_font !== 'custom') {
+    $body_font_family = $font_map[$body_font] ?? 'Open Sans';
+    $container_styles[] = '--font-body: "' . $body_font_family . '"';
+  }
+
+  // Add heading font only when not custom.
+  if ($heading_font !== 'custom') {
+    $heading_font_family = $font_map[$heading_font] ?? 'Inter';
+    $container_styles[] = '--font-heading: "' . $heading_font_family . '"';
+  }
+
+  $variables['html_attributes']->setAttribute(
+    'style',
+    Markup::create(implode('; ', $container_styles) . ';')
+  );
+
+  $color_theme = theme_get_setting('color_theme') ?: 'coffee';
+
+  // If "custom" is stored but custom colors are disabled, fall back to the
+  // default emerald theme so the page never renders with an unstyled theme.
+  if ($color_theme === 'custom' && !theme_get_setting('tailpine_enable_color')) {
+    $color_theme = 'emerald';
+  }
+
+  $variables['html_attributes']->setAttribute('data-theme', $color_theme);
+  $variables['color_theme'] = $color_theme;
+}

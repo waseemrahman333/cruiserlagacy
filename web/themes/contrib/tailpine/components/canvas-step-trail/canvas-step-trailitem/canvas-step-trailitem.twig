@@ -1,0 +1,35 @@
+{#
+/**
+ * Step Trail Item (Canvas) — child
+ *
+ * Variables: label, description, icon
+ *
+ * Theme tokens: bg-primary, text-on-primary, border-border, text-heading, text-muted
+ */
+#}
+<div
+  class="canvas-step-trailitem relative flex gap-4 pb-10 last:pb-0"
+  {{ attributes }}
+>
+  {# Connector line #}
+  <div class="canvas-step-trailitem__connector absolute left-4 top-9 bottom-0 w-px bg-border [.canvas-step-trailitem:last-child_&]:hidden"></div>
+
+  {# Marker #}
+  <div class="canvas-step-trailitem__marker flex-shrink-0 w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center text-sm font-bold z-10">
+    {% if icon %}{{ icon|striptags }}{% endif %}
+  </div>
+
+  <div class="canvas-step-trailitem__content pt-1 flex-1">
+    {% if label %}
+      <div class="canvas-step-trailitem__label text-heading font-semibold text-base">
+        {{ label|striptags }}
+      </div>
+    {% endif %}
+    {% if description %}
+      <div class="canvas-step-trailitem__description text-muted text-sm mt-1">
+        {{ description|raw }}
+      </div>
+    {% endif %}
+  </div>
+
+</div>

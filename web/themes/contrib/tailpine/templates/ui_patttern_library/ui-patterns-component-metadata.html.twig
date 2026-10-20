@@ -1,0 +1,81 @@
+{#
+/**
+ * @file
+ * UI Patterns meta information.
+ */
+#}
+{% if component is not empty %}
+  <div class="bg-body-bg  border-border rounded-xl shadow-sm p-6 space-y-4">
+
+    <p class="text-md text-muted">
+      <span class="font-semibold text-body">ID:</span>
+      <code class="bg-surface text-tertiary px-2 py-0.5 rounded">{{ component.id }}</code>
+    </p>
+
+    {% if component.description %}
+      <p class="text-body">{{ component.description }}</p>
+    {% endif %}
+
+    {% if component.status %}
+      <p>
+        <span class="text-md font-medium text-muted">Status:</span>
+        <span class="inline-block text-xs uppercase tracking-wide font-bold rounded px-2 py-0.5
+          {% if component.status == 'stable' %}
+            bg-success/15 text-success
+          {% elseif component.status == 'deprecated' %}
+            bg-warning/15 text-warning
+          {% else %}
+            bg-surface text-body
+          {% endif %}
+        ">
+          {{ component.status }}
+        </span>
+      </p>
+    {% endif %}
+
+    {% if component.links %}
+      <div>
+        <h4 class="text-md font-semibold text-body mb-1">Documentation</h4>
+        {% if component.links|length > 1 %}
+          <ul class="list-disc list-inside text-tertiary space-y-1">
+            {% for link in component.links %}
+              <li>
+                <a class="hover:underline" href="{{ link.url }}" target="_blank">
+                  {{ link.title|default('External documentation'|t) }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>
+            {% set link = component.links|first %}
+            <a class="text-tertiary hover:underline" href="{{ link.url }}" target="_blank">
+              {{ link.title|default('External documentation'|t) }}
+            </a>
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if component.replaces %}
+      <p class="text-md text-muted">
+        <span class="font-semibold">Replaces:</span>
+        <a href="{{ url('ui_patterns_library.single', {
+          provider: component.replaces|split(':')|first,
+          machineName: component.replaces|split(':')|last
+        }) }}"
+        class="text-tertiary hover:underline">{{ component.replaces }}</a>
+      </p>
+    {% endif %}
+
+    {% if component.tags %}
+      <p class="text-md text-muted">
+        <span class="font-semibold">Tags:</span>
+        <span class="inline-block bg-surface text-body px-2 py-0.5 rounded">
+          {{ component.tags|join(', ') }}
+        </span>
+      </p>
+    {% endif %}
+
+  </div>
+{% endif %}

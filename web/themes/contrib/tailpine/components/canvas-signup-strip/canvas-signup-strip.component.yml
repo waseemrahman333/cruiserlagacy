@@ -1,0 +1,102 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Signup Strip (Canvas)
+group: Tailpine
+status: stable
+description: Email newsletter signup bar with heading, subheading, social proof, and three layout options.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    layout:
+      type: string
+      title: Layout
+      default: inline
+      enum: [inline, stacked, split]
+      meta:enum:
+        inline: Inline
+        stacked: Stacked (centred)
+        split: Split (text left, form right)
+      examples:
+        - inline
+
+    heading:
+      type: string
+      title: Heading
+      description: Primary heading text.
+      examples:
+        - 'Stay in the loop'
+
+    subheading:
+      type: string
+      title: Subheading
+      description: Supporting text below the heading. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Get the latest updates delivered to your inbox.</p>'
+
+    show_social_proof:
+      type: boolean
+      title: Show social proof
+      description: Display subscriber count above the heading.
+      default: false
+      examples:
+        - false
+
+    subscriber_count:
+      type: string
+      title: Subscriber count
+      description: Text shown when show_social_proof is true.
+      examples:
+        - '12,000+ subscribers'
+
+    show_privacy_note:
+      type: boolean
+      title: Show privacy note
+      description: Display a small privacy disclaimer below the form.
+      default: true
+      examples:
+        - true
+
+    form_action:
+      type: string
+      title: Form action URL
+      description: 'URL the form submits to. Accepts any Drupal path, webform URL (e.g. /webform/my_form), or controller route.'
+      default: '#'
+      examples:
+        - '/webform/newsletter'
+
+    form_method:
+      type: string
+      title: Form method
+      default: post
+      enum: [post, get]
+      meta:enum:
+        post: POST (recommended)
+        get: GET
+      examples:
+        - post
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: primary
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - primary

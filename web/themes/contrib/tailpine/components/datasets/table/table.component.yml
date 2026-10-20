@@ -1,0 +1,175 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Table
+status: stable
+group: "Data Display"
+description: "Responsive data table with full Tailpine styling. Works with Drupal core table theme hook and Canvas."
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    caption:
+      type: ["string", "null"]
+      title: "Caption"
+      description: "Optional caption displayed above the table."
+      default: ""
+      examples: ["User List", "Sales Report"]
+
+    sticky:
+      type: boolean
+      title: "Sticky Header"
+      description: "Makes the table header stick to the top on scroll."
+      default: false
+      examples: [false]
+
+    empty:
+      type: ["string", "null"]
+      title: "Empty Message"
+      description: "Message shown when there are no rows."
+      default: ""
+      examples: ["No results found."]
+
+    header_columns:
+      type: integer
+      title: "Header Column Count"
+      description: "Number of columns. Used for empty message colspan."
+      default: 1
+      examples: [4]
+
+    no_striping:
+      type: boolean
+      title: "Disable Row Striping"
+      description: "Turn off alternating row background colors."
+      default: false
+      examples: [false]
+
+    responsive:
+      type: boolean
+      title: "Responsive Wrapper"
+      description: "Wraps the table in a horizontally scrollable container on small screens."
+      default: true
+      examples: [true]
+
+    bordered:
+      type: boolean
+      title: "Bordered"
+      description: "Show borders on all cells."
+      default: true
+      examples: [true]
+
+    hoverable:
+      type: boolean
+      title: "Hoverable Rows"
+      description: "Highlight rows on hover."
+      default: true
+      examples: [true]
+
+    size:
+      type: string
+      title: "Table Size"
+      description: "Controls padding density of cells."
+      default: default
+      examples: ["default"]
+      oneOf:
+        - const: xs
+          title: "XS — Extra compact"
+        - const: sm
+          title: "SM — Compact"
+        - const: default
+          title: "Default — Standard"
+        - const: lg
+          title: "LG — Relaxed"
+        - const: xl
+          title: "XL — Spacious"
+
+    colgroups:
+      type: array
+      title: "Column Groups"
+      description: "Array of colgroup objects from Drupal's table theme hook."
+      default: []
+      items:
+        type: object
+        properties:
+          attributes:
+            type: object
+          cols:
+            type: array
+            items:
+              type: object
+              properties:
+                attributes:
+                  type: object
+
+    header:
+      type: array
+      title: "Header Cells"
+      description: "Array of header cell objects from Drupal's table theme hook."
+      default: []
+      items:
+        type: object
+        properties:
+          content:
+            type: ["string", "null"]
+            title: "Cell Content"
+          tag:
+            type: string
+            title: "HTML Tag"
+            default: th
+          attributes:
+            type: object
+          active_table_sort:
+            type: boolean
+
+    rows:
+      type: array
+      title: "Table Rows"
+      description: "Array of row objects from Drupal's table theme hook."
+      default: []
+      items:
+        type: object
+        properties:
+          attributes:
+            type: object
+          no_striping:
+            type: boolean
+          cells:
+            type: array
+            items:
+              type: object
+              properties:
+                content:
+                  type: ["string", "null"]
+                  title: "Cell Content"
+                tag:
+                  type: string
+                  title: "HTML Tag"
+                  default: td
+                attributes:
+                  type: object
+
+    footer:
+      type: array
+      title: "Footer Rows"
+      description: "Array of footer row objects from Drupal's table theme hook."
+      default: []
+      items:
+        type: object
+        properties:
+          attributes:
+            type: object
+          cells:
+            type: array
+            items:
+              type: object
+              properties:
+                content:
+                  type: ["string", "null"]
+                tag:
+                  type: string
+                  default: td
+                attributes:
+                  type: object

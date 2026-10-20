@@ -1,0 +1,61 @@
+{#
+/**
+ * Split Panel (Canvas)
+ *
+ * Variables:
+ * - ratio: '50-50'|'40-60'|'33-67'
+ * - reverse: bool
+ * - sticky_side: 'left'|'right'|'none'
+ * - show_divider: bool
+ * - vertical_align: 'top'|'center'|'bottom'
+ *
+ * Slots: left, right
+ *
+ * Theme tokens: bg-surface-alt, border-border, text-muted
+ */
+#}
+{% set safe_ratio  = ratio|default('50-50')|striptags %}
+{% set safe_sticky = sticky_side|default('none')|striptags %}
+{% set safe_align  = vertical_align|default('top')|striptags %}
+
+{% set ratio_map = {
+  '50-50': 'md:grid-cols-2',
+  '40-60': 'md:grid-cols-[2fr_3fr]',
+  '33-67': 'md:grid-cols-[1fr_2fr]',
+} %}
+{% set align_map = {
+  'top':    'items-start',
+  'center': 'items-center',
+  'bottom': 'items-end',
+} %}
+
+{% set ratio_class   = ratio_map[safe_ratio]|default('md:grid-cols-2') %}
+{% set align_class   = align_map[safe_align]|default('items-start') %}
+{% set divider_class = show_divider|default(false) ? 'md:divide-x divide-border' : '' %}
+
+<div
+  class="canvas-split-panel w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16 grid grid-cols-1 gap-8 md:gap-12 {{ ratio_class }} {{ align_class }} {{ divider_class }}"
+  {{ attributes }}
+>
+
+  <div class="canvas-split-panel__left {{ reverse|default(false) ? 'md:order-2' : '' }} {{ safe_sticky == 'left' ? 'md:sticky md:top-8 md:self-start' : '' }}">
+    {% block left %}
+      {% if left %}
+        {{ left }}
+      {% else %}
+        <div class="h-48 bg-surface-alt rounded-xl flex items-center justify-center text-muted">{{ 'Left panel'|t }}</div>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+  <div class="canvas-split-panel__right {{ reverse|default(false) ? 'md:order-1' : '' }} {{ safe_sticky == 'right' ? 'md:sticky md:top-8 md:self-start' : '' }}">
+    {% block right %}
+      {% if right %}
+        {{ right }}
+      {% else %}
+        <div class="h-48 bg-surface-alt rounded-xl flex items-center justify-center text-muted">{{ 'Right panel'|t }}</div>
+      {% endif %}
+    {% endblock %}
+  </div>
+
+</div>

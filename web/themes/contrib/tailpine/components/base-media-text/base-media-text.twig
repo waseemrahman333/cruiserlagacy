@@ -1,0 +1,152 @@
+
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+{% set class_list = [
+  'leading-8',
+  'lg:pr-18',
+] %}
+{% set bg_color_variant = bg_variants[bg_color]|default(bg_variants.primary) %}
+
+
+{# Padding Block Variants (Top/Bottom) And Inline Variants (Left/Right) #}
+
+{% set padding_variants = {
+  none: { block: 'py-0', inline: 'px-0' },
+
+  xs: { block: 'py-1 md:py-1.5 xl:py-2', inline: 'px-1 md:px-1.5 xl:px-2' },
+  sm: { block: 'py-2 md:py-3 xl:py-4', inline: 'px-2 md:px-3 xl:px-4' },
+  md: { block: 'py-3 md:py-4 xl:py-6', inline: 'px-3 md:px-4 xl:px-6' },
+  lg: { block: 'py-4 md:py-6 xl:py-8', inline: 'px-4 md:px-6 xl:px-8' },
+  xl: { block: 'py-6 md:py-8 xl:py-10', inline: 'px-6 md:px-8 xl:px-10' },
+  '2xl': { block: 'py-8 md:py-10 xl:py-12', inline: 'px-8 md:px-10 xl:px-12' },
+  '3xl': { block: 'py-10 md:py-12 xl:py-16', inline: 'px-10 md:px-12 xl:px-16' },
+  huge: { block: 'py-12 md:py-16 xl:py-25', inline: 'px-12 md:px-16 xl:px-25' },
+} %}
+
+
+{% set section_padding_inline_class = padding_variants[section_padding_inline].inline ?? '' %}
+{% set section_padding_block_class = padding_variants[section_padding_block].block ?? '' %}
+
+{% set flex_direction_map = {
+  'row': 'lg:flex-row',
+  'row-reverse': 'lg:flex-row-reverse',
+  'column': 'lg:flex-col',
+  'column-reverse': 'lg:flex-col-reverse',
+} %}
+{% set lg_flex_class = flex_direction_map[layout_direction|default('row')]|default('lg:flex-row') %}
+
+{% set content_padding_inline_class = padding_variants[content_padding_inline].inline ?? '' %}
+{% set content_padding_block_class = padding_variants[content_padding_block].block ?? '' %}
+
+{% set horizontal_alignment_map = {
+  'left': 'text-left items-start',
+  'center': 'text-center items-center',
+  'right': 'text-right items-end'
+} %}
+{% set vertical_alignment_map = {
+  'top': 'justify-start',
+  'center': 'justify-center',
+  'bottom': ' justify-end'
+} %}
+
+
+{% set add_horizontal_alignment = horizontal_alignment_map[content_horizontal_alignment]|default(horizontal_alignment_map.left) %}
+{% set add_vertical_alignment = vertical_alignment_map[content_vertical_alignment]|default(vertical_alignment_map.top) %}
+
+
+{% set gap_variants = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+  xxl:  "gap-8 md:gap-10 xl:gap-12",
+
+} %}
+
+<section {{ (attributes|default(create_attribute())).addClass(
+  'wrapper',
+  'relative',
+  'mx-auto',
+  'flex',
+  'w-full',
+  'flex-col',
+  'gap-10',
+  'relative',
+   bg_color_variant,
+   'wrapper',
+   'mx-auto'
+) }}>
+
+  <div class="flex flex-col {{ section_padding_inline_class }} {{ section_padding_block_class }} {{ lg_flex_class }} {{ enable_container ? 'container' : '' }}  gap-[clamp(30px,5vw,40px)]">
+    
+    {# Image Column #}
+    {% if image %}
+     <div class="lg:w-1/2">
+    <img
+      class=" w-full h-full object-cover"
+      src="{{ image.src }}"
+      alt="{{ image.alt }}"
+      loading="lazy"
+        />
+   </div>
+    {% endif %}
+
+    {# Content Column #}
+    <div class="info_container flex flex-col {{ add_horizontal_alignment }} {{ add_vertical_alignment }}   {{ gap_variants[gap]|default(gap_variants["8px"]) }} lg:w-1/2 {{ content_padding_inline_class }} {{ content_padding_block_class }} ">
+
+      {% if show_heading %}
+        {% set heading_text %}
+          {% block heading %}
+
+          {% endblock %}
+        {% endset %}
+        {% if heading_text|trim is not empty %}
+          <div class="h-fit min-w-30 ">
+            {{ heading_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+    <!-- sub hero Description -->
+      {% if show_description %}
+        {% set description_text %}
+          {% block text %}
+
+          {% endblock %}
+        {% endset %}
+        {% if description_text|trim is not empty %}
+         <div class="h-fit min-w-30 ">
+            {{ description_text }}
+         </div>
+        {% endif %}
+      {% endif %}
+
+      {% if cta %}
+        <div class="flex min-w-30 ">
+          {{ cta }}
+        </div>
+      {% endif %}
+
+  </div>
+</section>
+
+
+
+    
+

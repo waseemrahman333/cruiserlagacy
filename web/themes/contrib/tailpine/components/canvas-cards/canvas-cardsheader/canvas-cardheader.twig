@@ -1,0 +1,143 @@
+{# ---------------------------------------------------------------------------
+ # Wrapper Component
+ # --------------------------------------------------------------------------- #}
+
+{# Normalize and default background color #}
+{# {% set bg_color = bg_color|default('primary')|striptags %}
+
+{% set bg_variants = {
+  'primary': 'bg-primary text-body-bg',
+  'secondary': 'bg-secondary text-on-primary',
+  'gradient': 'bg-gradient-to-r from-primary to-secondary text-body-bg',
+  'tertiary': 'bg-tertiary text-body-bg'
+} %}
+
+{% set bg_color_variant = bg_variants[bg_color]|default(bg_variants.primary) %}
+
+
+{% set columns = columns|default(3) %}
+
+<div
+  {{ attributes.addClass(
+    'wrapper',
+    'max-w-[1920px]',
+    'mx-auto',
+    'w-full',
+    'px-[clamp(20px,5vw,50px)]',
+    'xl:px-24',
+    'py-[clamp(81px,5vw,107px)]',
+    'grid',
+    'gap-8',
+    bg_color_variant
+  ) }}
+>
+  
+  {% if title or description %}
+    <div class="wrapper__text grid gap-5 md:w-7/10 xl:w-1/2 text-">
+      {% if title %}
+        <h2 class="text-[clamp(34px,6vw,50px)] font-medium tracking-tight leading-[1.15]">
+          {{ title }}
+        </h2>
+      {% endif %}
+
+      {% if description %}
+        <div class="text-[clamp(14px,2vw,18px)] font-light leading-relaxed tracking-wide">
+          {{ description }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  
+  {% if content %}
+    <div
+      class="
+        wrapper__cards
+        grid
+        grid-cols-1
+        gap-6
+        md:grid-cols-2
+        lg:grid-cols-{{ columns }}
+      "
+    >
+      {{ content }}
+    </div>
+  {% endif %}
+</div> #}
+
+
+{# Normalize and default background color #}
+{% set bg_color = bg_color|default('secondary')|striptags %}
+
+{% set bg_variants = {
+  'transparent': 'bg-transparent text-body',
+  'light': 'bg-surface text-body',
+  'dark': 'bg-dark text-body-bg',
+  'primary': 'bg-primary text-on-primary',
+  'secondary': 'bg-secondary text-body-bg',
+} %}
+
+{% set color_classes = {
+  'primary': 'text-primary',
+  'secondary': 'text-secondary',
+  'tertiary': 'text-tertiary',
+  'white': 'text-body-bg',
+  'light gray': 'text-muted',
+  'dark gray': 'text-body',
+  'black': 'text-dark',
+  'transparent': 'text-transparent',
+} %}
+
+{% set color = text_color|default('default') %}
+{% set title_color = color_classes[color]|default('text-body-bg') %}
+{% set description_color = color_classes[description_text_color]|default('text-body-bg') %}
+{% set bg_color_variant = bg_variants[bg_color]|default(bg_variants.secondary) %}
+
+{# Normalize columns — literal class map so Tailwind's scanner can find them.
+   This value now applies ONLY at the largest breakpoint (xl). #}
+{% set column_variants = {
+  1: 'xl:grid-cols-1',
+  2: 'xl:grid-cols-2',
+  3: 'xl:grid-cols-3',
+  4: 'xl:grid-cols-4',
+  5: 'xl:grid-cols-5',
+} %}
+
+{% set columns_class = column_variants[columns]|default(column_variants[3]) %}
+
+<div
+  {{ attributes.addClass(
+    'wrapper',
+    'max-w-[1920px]',
+    'mx-auto',
+    'w-full',
+    'px-[clamp(20px,5vw,50px)]',
+    'xl:px-24',
+    'py-[clamp(81px,5vw,107px)]',
+    'grid',
+    'gap-8',
+    bg_color_variant
+  ) }}
+>
+  {% if title or description %}
+    <div class="wrapper__text grid gap-5 md:w-7/10 xl:w-1/2">
+      {% if title %}
+        <h2 class="{{ title_color }}  text-[clamp(34px,6vw,50px)] font-medium tracking-tight leading-[1.15]">
+          {{ title }}
+        </h2>
+      {% endif %}
+      {% if description %}
+        <div class="{{ description_color }} text-[clamp(14px,2vw,18px)] font-light leading-relaxed tracking-wide">
+          {{ description }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if content %}
+    <div class="wrapper__cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:ga-6 xl:gap-8 {{ columns_class }}">
+      {{ content }}
+    </div>
+  {% endif %}
+</div>
+

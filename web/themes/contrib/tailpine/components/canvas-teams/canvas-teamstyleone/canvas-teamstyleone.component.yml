@@ -1,0 +1,33 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Team Style One (Canvas)
+status: stable
+description: "Team components are used to group and display content in a readable format."
+group: Teams & Testimonials
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  Image URL
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: 'member.png'
+          alt: 'Team Image'
+          width: 320
+          height: 400
+    
+    name:
+      title: Name
+      type: string
+      description: "Name of the card. Plain text."
+      examples: ['Example Name']
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle of the card. Plain text."
+      examples: ['Example subtitle']

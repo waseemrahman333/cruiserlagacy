@@ -1,0 +1,58 @@
+{#
+/**
+ * Pricing Shelf Item (Canvas) — child
+ *
+ * Variables: plan_name, price_monthly, price_annual, description, show_badge,
+ *            badge_text, show_cta
+ * Slots: features, cta
+ *
+ * Reads `annual` from parent Alpine x-data scope via nested inheritance.
+ *
+ * Theme tokens: bg-surface, border-border, text-heading, text-muted, text-on-primary,
+ *               bg-primary, focus:ring-focus, text-primary
+ */
+#}
+<div
+  class="canvas-pricing-shelfitem relative flex flex-col bg-surface rounded-2xl border border-border p-8 shadow-sm"
+  {{ attributes }}
+>
+
+  {% if show_badge|default(false) and badge_text %}
+    <span class="canvas-pricing-shelfitem__badge absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary text-xs font-semibold px-4 py-1 rounded-full whitespace-nowrap">
+      {{ badge_text|striptags }}
+    </span>
+  {% endif %}
+
+  {% if plan_name %}
+    <h3 class="canvas-pricing-shelfitem__name text-heading font-bold text-xl mb-2">{{ plan_name|striptags }}</h3>
+  {% endif %}
+
+  {# Price — switches based on parent annual toggle via Alpine nested scope #}
+  <div class="canvas-pricing-shelfitem__price mb-4">
+    {% if price_monthly %}
+      <div class="text-4xl font-extrabold text-heading" x-show="!annual">{{ price_monthly|striptags }}</div>
+    {% endif %}
+    {% if price_annual %}
+      <div class="text-4xl font-extrabold text-heading" x-show="annual">{{ price_annual|striptags }}</div>
+    {% endif %}
+  </div>
+
+  {% if description %}
+    <div class="canvas-pricing-shelfitem__description text-muted text-sm mb-6">{{ description|raw }}</div>
+  {% endif %}
+
+  <div class="canvas-pricing-shelfitem__features flex-1 mb-6">
+    {% block features %}{% endblock %}
+  </div>
+
+  {% if show_cta|default(true) %}
+    <div class="canvas-pricing-shelfitem__cta mt-auto">
+      {% block cta %}
+        <button type="button" class="w-full bg-primary text-on-primary hover:opacity-90 font-semibold py-3 rounded-xl transition-colors focus:outline-none focus:ring-2 focus:ring-focus">
+          {{ 'Get started'|t }}
+        </button>
+      {% endblock %}
+    </div>
+  {% endif %}
+
+</div>

@@ -1,0 +1,26 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Collapse (Canvas)
+status: stable
+description: Collapsible content panel with Alpine.js toggle.
+group: UI
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: Title
+      description: Collapse trigger title.
+      examples: ['Click to Expand']
+    open:
+      type: boolean
+      title: Open by Default
+      description: Whether collapse starts open.
+      default: false
+slots:
+  content:
+    title: Content
+    description: Collapsible content.

@@ -1,0 +1,49 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Sub Page Hero (Canvas)
+description: Sub Page Hero
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    # bg_image:
+    #   title: Background Image
+    #   description: Background Image URL
+    #   type: string
+    bg_image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Background Image
+      description: >
+        Background Image of the Hero
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Background Image'
+          width: 1600
+          height: 999
+
+    show_heading:
+      type: boolean
+      title: show heading slot 
+      examples:
+        - true
+      default:
+        - true
+    show_description:
+      type: boolean
+      title: Show description text
+      examples:
+        - true
+      default:
+        - true
+
+slots:
+  heading:
+    title: "heading"
+    description: "heading of the sub page hero section."
+  text:
+    title: "text"
+    description: "text of the main section."

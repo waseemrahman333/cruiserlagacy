@@ -1,0 +1,176 @@
+{# ══════════════════════════════════════════
+   STYLE MAPS
+══════════════════════════════════════════ #}
+{% set bg_variants = {
+  'primary':     'bg-primary text-primary-content',
+  'secondary':   'bg-secondary text-secondary-content',
+  'tertiary':    'bg-tertiary text-tertiary-content',
+  'body':        'bg-body text-body-bg',
+  'body-bg':     'bg-body-bg text-body',
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+  'dark':        'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent text-body xl:text-body-bg'
+} %}
+
+{% set py_map = {
+  none: 'py-0',
+  xs:   'py-2',
+  sm:   'py-4',
+  md:   'py-6',
+  lg:   'py-8'
+} %}
+
+{% set gap_map = {
+  none: 'gap-0',
+  xs:   'gap-2',
+  sm:   'gap-4',
+  md:   'gap-6',
+  lg:   'gap-8',
+  xl:   'gap-10'
+} %}
+
+{# ══════════════════════════════════════════
+   RESOLVE PROPS WITH FALLBACKS
+══════════════════════════════════════════ #}
+{% set variant   = variant   ?? 'menu-right' %}
+{% set bg        = bg_variants[background_color] ?? bg_variants['body-bg'] %}
+{% set py_class  = py_map[padding_block ?? 'sm'] ?? 'py-4' %}
+{% set gap_class = gap_map[column_gap ?? 'md']   ?? 'gap-6' %}
+{% set shadow_on  = header_shadow ?? false %}
+{% set border_on = show_border ?? false %}
+
+
+
+{% set is_sticky_transparent =
+  header_behavior == 'sticky' and background_color == 'transparent'
+%}
+
+
+<header class="site-header {{ {
+      'sticky': 'sticky',
+      'fixed': 'fix',
+      'static': 'relative'
+    }[header_behavior] }} z-100">
+<div
+  x-data
+  {% if background_color == 'transparent' %}
+    x-init="
+      const updateScroll = () => {
+        const scrolled = window.scrollY > 20;
+        $el.classList.toggle('!bg-dark/20', scrolled);
+        $el.classList.toggle('!text-body', scrolled);
+        $el.classList.toggle('xl:!text-white', scrolled);
+        $el.classList.toggle('!backdrop-blur-lg', scrolled);
+        $el.classList.toggle('!border-b', scrolled);
+        $el.classList.toggle('!border-white/10', scrolled);
+      };
+      window.addEventListener('scroll', updateScroll, { passive: true });
+      updateScroll();
+    "
+  {% endif %}
+  class=" site-header__inner  flex items-center z-50 {{ py_class }} {{ is_sticky_transparent ? '!bg-body/40 !backdrop-blur-xl text-body xl:!text-body-bg' : bg }} {{ border_on ? 'border-b border-border' : '' }} {{ shadow_on ? 'shadow-md' : '' }}">
+
+  {# ============================================================
+     VARIANT: CENTERED MENU
+     Branding |       Menu       | Actions + Search
+     ============================================================ #}
+  {% if variant == 'menu-center' %}
+    <div class="flex items-center justify-between w-full container ">
+
+      {# Branding #}
+      <div class="header-branding min-w-20">
+        {{ branding }}
+      </div>
+
+      {# Desktop centered menu #}
+      <div class="hidden xl:min-w-30 xl:!block ">
+        {{ menu }}
+      </div>
+
+      {# Right actions #}
+
+      <div class="flex items-center gap-6 ">
+
+          {% if show_search %}
+          <div class="hidden xl:!block min-w-5 self-center min-h-5">
+              {{ search }}
+          </div>
+          {% endif %}
+
+          <div class="hidden xl:!block min-w-20">
+          {{ actions }}
+          </div>
+      </div>
+
+      {# Mobile menu #}
+           <div class="xl:hidden flex items-center min-w-10 {{gap_class}} ">
+                    <div class="hidden md:!block min-w-10">
+                    {{ actions }}
+                    </div>
+                      {% if show_search %}
+                          <div class="min-w-5 self-center min-h-5">
+                              {{ search }}
+                          </div>
+                          {% endif %}
+                    <div class="min-w-8">
+                        {{ menu }}
+                    </div>
+            </div>
+
+    </div>
+
+  {# ============================================================
+     VARIANT: RIGHT MENU
+     Branding |                    Menu + Actions
+     ============================================================ #}
+  {% elseif variant == 'menu-right' %}
+
+    <div class="flex items-center justify-between w-full container ">
+
+      {# Branding #}
+      <div class="header-branding min-w-20">
+        {{ branding }}
+      </div>
+
+      {# Desktop centered menu #}
+         <div class="flex items-center {{gap_class}} ">
+              <div class="hidden min-w-20 xl:!block ">
+                  {{ menu }}
+              </div>
+
+                {# Right actions #}
+                <div class="flex items-center gap-6 ">
+                          {% if show_search %}
+                          <div class="hidden xl:!block min-w-5 self-center min-h-5">
+                              {{ search }}
+                          </div>
+                          {% endif %}
+                        <div class="hidden xl:!block min-w-20">
+                        {{ actions }}
+                        </div>
+
+                  </div>
+        </div>
+
+        {# Mobile menu #}
+            <div class="xl:hidden flex items-center gap-5 ">
+                      <div class="hidden md:!block min-w-10">
+                      {{ actions }}
+                      </div>
+                          {% if show_search %}
+                          <div class="min-w-5 self-center min-h-5">
+                              {{ search }}
+                          </div>
+                          {% endif %}
+                      <div class="min-w-8">
+                          {{ menu }}
+                      </div>
+              </div>
+
+    </div>
+
+  {% endif %}
+</div>
+</header>

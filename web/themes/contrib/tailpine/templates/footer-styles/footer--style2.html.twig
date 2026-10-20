@@ -1,0 +1,26 @@
+<footer class="bg-secondary text-on-primary container">
+
+  {# 🔼 Footer Top #}
+  {% if page.footer_top %}
+    <div class="w-full flex py-8 border-b border-on-primary/20">
+      {{ page.footer_top }}
+    </div>
+  {% endif %}
+
+  {# 🔲 Footer Main #}
+  {% if page.footer %}
+    <div class="w-full mx-auto px-4 py-10 border-b border-on-primary/20">
+      {{ page.footer }}
+    </div>
+  {% endif %}
+
+
+
+  {# 🔽 Footer Bottom #}
+  {% if page.footer_bottom %}
+    <div class="w-full mx-auto px-4 py-6">
+      {{ page.footer_bottom }}
+    </div>
+  {% endif %}
+
+</footer>

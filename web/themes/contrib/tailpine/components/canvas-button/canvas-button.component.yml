@@ -1,0 +1,134 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+name: Button Cta (Tailpine)
+status: stable
+description: "CTA buttons are used to display call-to-action links."
+group: Tailpine
+variants:
+  primary:
+    title: Primary
+  secondary:
+    title: Secondary
+  tertiary:
+    title: Tertiary
+  body:
+    title: Body
+  success:
+    title: Success
+  warning:
+    title: Warning
+  error:
+    title: Error
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: Title
+      description: "CTA Title."
+      examples: ['Click Here']
+    link:
+      type: string
+      title: Link
+      description: "URL for the CTA."
+      examples: ['https://example.com']
+    color_varient:
+      type: string
+      title: Color Variant
+      description: "Choose a color schema for the component."
+      default: secondary
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+      meta:enum:
+        primary: Primary Color Button 
+        secondary: Secondary Color Button 
+        tertiary: Tertiary Color Button
+        body: Body Color Button
+        body-bg: Body Bg Color Button
+        surface-100: Light Surface Color Button
+        surface-200: Medium Surface Color Button
+        surface-300: Strong Surface Color Button
+        dark: Dark Color Button
+      examples: ['primary']
+
+    rounded:
+      type: string
+      title: Rounded Variant
+      description: "Choose the Rouned corner size of the component."
+      enum:
+        - rounded-none
+        - rounded-sm
+        - rounded-md
+        - rounded-lg
+        - rounded-xl
+        - rounded-full
+      meta:enum:
+        rounded-none: "Rounded None"
+        rounded-sm: "Rounded Small"
+        rounded-md: "Rounded Medium"
+        rounded-lg: "Rounded Large"
+        rounded-xl: "Rounded Extra Large"
+        rounded-full: "Rounded Full"
+      examples:
+        - 'rounded-none'
+    style_variant:
+      type: string
+      title: Button Style Variant
+      description: "Choose the variant for the component."
+      enum:
+        - solid
+        - outline
+      "meta:enum":
+        solid: "Solid Button"
+        outline: "Outline Button"
+      examples:
+        - 'solid'
+
+    button_size:
+      type: string
+      title: Button Size
+      description: "Choose the button size"
+      enum:
+        - sm
+        - md
+        - lg
+      "meta:enum":
+        sm: "Small Button"
+        md: "Medium Button"
+        lg: "Large Button"
+      examples:
+        - 'md'
+    show_arrow:
+      type: boolean
+      title: Show Arrow
+      description: Display an arrow icon inside the button.
+      default: false
+      examples:
+        - true
+    add_border:
+      type: boolean
+      title: Add Border
+      description: Display an Border arround the Button.
+      default: false
+      examples:
+        - false
+    open_new_tab:
+      type: boolean
+      title: Open in New Tab
+      description: "If enabled, the link opens in a new browser tab."
+      default: false
+      examples:
+        - false

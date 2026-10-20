@@ -1,0 +1,95 @@
+{#
+/**
+ * Flexible Grid Item (Canvas)
+ *
+ * A single cell inside a Flexible Grid parent. Width is set per breakpoint
+ * using fraction labels that map to CSS Grid col-span-* classes.
+ *
+ * Breakpoint tiers:
+ *   Mobile  — no prefix  — all screen sizes (base)
+ *   Tablet  — md:        — ≥ 768px
+ *   Desktop — lg:        — ≥ 1024px
+ *   Wide    — xl:        — ≥ 1280px
+ *
+ * Available variables:
+ * - width_mobile:  (string) Fraction enum — mobile col-span. Default: full.
+ * - width_tablet:  (string) Fraction enum — md: col-span. Default: half.
+ * - width_desktop: (string) Fraction enum — lg: col-span. Default: one_third.
+ * - width_wide:    (string) Fraction enum — xl: col-span. Default: one_third.
+ * - extra_height:  (string) normal|double. Default: normal.
+ * - align_self:    (string) default|top|center|bottom. Default: default.
+ * - extra_classes: (string) Optional additional CSS classes.
+ * - content:       (markup) Slot — any child component.
+ *
+ * Fraction → col-span mapping (same for all breakpoints, prefix changes):
+ *   full          → col-span-12
+ *   half          → col-span-6
+ *   one_third     → col-span-4
+ *   two_thirds    → col-span-8
+ *   one_quarter   → col-span-3
+ *   three_quarters→ col-span-9
+ *   one_sixth     → col-span-2
+ *   five_sixths   → col-span-10
+ *
+ * Tailwind v4 — @source inline() directives required in css/main.css:
+ *
+ *   @source inline("{md:,lg:,xl:,}col-span-{2,3,4,6,8,9,10,12}");
+ *   @source inline("row-span-2");
+ *   @source inline("self-{start,center,end}");
+ *
+ * (col-span-{1..12} without prefix and with all breakpoint prefixes are
+ * already covered by existing @source inline() entries in css/main.css.)
+ */
+#}
+
+{# Width → col-span fragment map (same for all breakpoints) #}
+{% set width_map = {
+  'full':           'col-span-12',
+  'half':           'col-span-6',
+  'one_third':      'col-span-4',
+  'two_thirds':     'col-span-8',
+  'one_quarter':    'col-span-3',
+  'three_quarters': 'col-span-9',
+  'one_sixth':      'col-span-2',
+  'five_sixths':    'col-span-10',
+} %}
+
+{# Resolve per-breakpoint span classes #}
+{% set mobile_span  = width_map[width_mobile|default('full')]|default('col-span-12') %}
+{% set tablet_span  = width_map[width_tablet|default('half')]|default('col-span-6') %}
+{% set desktop_span = width_map[width_desktop|default('one_third')]|default('col-span-4') %}
+{% set wide_span    = width_map[width_wide|default('one_third')]|default('col-span-4') %}
+
+{% set tablet_class  = 'md:' ~ tablet_span %}
+{% set desktop_class = 'lg:' ~ desktop_span %}
+{% set wide_class    = 'xl:' ~ wide_span %}
+
+{# Resolve row-span (double height) #}
+{% set height_class = (extra_height == 'double') ? 'row-span-2' : '' %}
+
+{# Resolve self-alignment #}
+{% set self_map = {
+  'default': '',
+  'top':     'self-start',
+  'center':  'self-center',
+  'bottom':  'self-end',
+} %}
+{% set self_class = self_map[align_self|default('default')]|default('') %}
+
+{# Sanitise extra_classes #}
+{% set extra_safe = extra_classes|default('')|striptags %}
+
+<div {{ attributes.addClass(
+  mobile_span,
+  tablet_class,
+  desktop_class,
+  wide_class,
+  height_class,
+  self_class,
+  extra_safe
+) }}>
+  {% set content_slot %}
+    {% block content %}{% endblock %}
+  {% endset %}
+  {{ content_slot }}
+</div>

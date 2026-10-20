@@ -1,0 +1,67 @@
+# This is so your IDE knows about the syntax for fixes and autocomplete.
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+# The human readable name.
+name: search result (Canvas)
+group: Forms & Inputs
+description: search result.
+status: stable
+
+
+# Schema for the props. We support www.json-schema.org. Learn more about the
+# syntax there.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: title
+      description: The title of the search result.
+      examples: ['Example Search Result Title']
+    result_title:
+      type: string
+      title: result title
+      description: The title of the search result link.
+      examples: ['Example Search Result Link Title']
+    result_url:
+      type:
+        - string
+      title: Result url
+      format: uri
+      description: The URL of the search result link.
+      examples: ['https://example.com/search-result']
+    snippet:
+      type: string
+      title: snippet
+      description: The snippet of the search result.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is an <strong>example</strong> snippet for the search result.</p>']
+    title_prefix:
+      type: string
+      title: Title Prefix
+      description: Additional output before the title tag.
+    title_suffix:
+      type: string
+      title: Title Suffix
+      description: Additional output after the title tag.
+    title_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Title Attributes
+      description: HTML attributes for the title element.
+    content_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Content Attributes
+      description: HTML attributes for the content element.
+    url:
+      type: string
+      title: URL
+      description: The URL of the search result.
+    info:
+      type: string
+      title: Info
+      description: Search result metadata info string.

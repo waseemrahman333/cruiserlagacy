@@ -1,0 +1,69 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Pullquote (Canvas)
+group: Tailpine
+status: stable
+description: Styled blockquote with four border accent styles, optional attribution, and optional avatar image.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    border_style:
+      type: string
+      title: Border style
+      default: left-bar
+      enum: [left-bar, corner-accent, centered, full-box]
+      meta:enum:
+        left-bar:      Left bar
+        corner-accent: Corner accent
+        centered:      Centered
+        full-box:      Full box
+      examples:
+        - left-bar
+
+    quote:
+      type: string
+      title: Quote
+      description: The quotation text. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Design is not just what it looks like and feels like. Design is how it works.</p>'
+
+    author:
+      type: string
+      title: Author
+      description: Name of the person quoted.
+      examples:
+        - 'Steve Jobs'
+
+    source:
+      type: string
+      title: Source
+      description: Publication, title, or context for the quote.
+      examples:
+        - 'Fortune Magazine, 2003'
+
+    show_avatar:
+      type: boolean
+      title: Show avatar
+      description: Display an avatar image next to the attribution.
+      default: false
+      examples:
+        - false
+
+    avatar:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Avatar image
+      description: Portrait photo of the quoted person.
+      examples:
+        - src: 'avatar.jpg'
+          alt: 'Steve Jobs'
+          width: 80
+          height: 80

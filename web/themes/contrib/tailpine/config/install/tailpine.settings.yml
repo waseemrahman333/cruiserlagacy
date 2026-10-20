@@ -1,0 +1,48 @@
+# Color theme (data-theme attribute value).
+color_theme: coffee
+tailpine_enable_color: false
+# Custom color overrides — empty by default; populated via the settings form.
+tailpine_color_primary: ''
+tailpine_color_on_secondary: ''
+# tailpine_color_primary_hover: ''
+tailpine_color_on_primary: ''
+tailpine_color_secondary: ''
+tailpine_color_tertiary: ''
+tailpine_color_body: ''
+tailpine_color_heading: ''
+tailpine_color_body_bg: ''
+tailpine_color_surface_100: ''
+tailpine_color_surface_200: ''
+tailpine_color_surface_300: ''
+tailpine_color_dark: ''
+tailpine_color_border: ''
+tailpine_color_focus_ring: ''
+tailpine_color_shadow: ''
+tailpine_color_success: ''
+tailpine_color_on_success: ''
+tailpine_color_warning: ''
+tailpine_color_on_warning: ''
+tailpine_color_error: ''
+tailpine_color_on_error: ''
+tailpine_color_info: ''
+tailpine_color_on_info: ''
+# Migration flag — prevents repeated clearing of color defaults.
+tailpine_colors_reset_done: true
+# Layout settings.
+container_style: fluid
+container_padding_mobile: 20
+container_padding_tablet: 60
+container_padding_desktop: 96
+container_padding_wide: 120
+
+header_class: style4
+footer_class: style2
+header_fixed: '0'
+show_color_switcher: false
+color_switcher_region: secondary_menu
+body_font_size: '16'
+body_font_family: 'inter'
+heading_font_family: 'Montserrat'
+
+logo:
+  use_default: true

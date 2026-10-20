@@ -1,0 +1,27 @@
+<header class="w-full mx-auto {{ header_fixed_class }} bg-body-bg">
+  <div
+    class=" relative  flex items-center justify-between  container py-4 text-body shadow-md"
+    x-data="{ open: false, mobOpen: false, searchOpen: false }"
+    @click.away="searchOpen = false"
+    @keydown.escape="searchOpen = false"
+  >
+   <!-- Right: Menu -->
+    <div class="flex items-center gap-6 flex-shrink-0">
+      {{  page.branding }}
+    </div>
+ 
+    <!-- Centered branding (absolute, works on all breakpoints) -->
+    <div class="header_branding absolute z-40 left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
+      {{ page.header_menu  }}
+    </div>
+   <!-- Left: Search -->
+   <div class="flex items-center gap-6 flex-shrink-0">
+    <div class="search-icon flex-shrink-0">
+      {{ page.search }}
+    </div>
+    <div class="right-actions  justify-end items-center gap-4">
+      {{ page.header_actions }}
+   </div>
+   </div>
+</div>
+  </header>

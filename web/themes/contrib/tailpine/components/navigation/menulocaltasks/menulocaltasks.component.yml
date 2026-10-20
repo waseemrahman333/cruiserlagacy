@@ -1,0 +1,20 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Local Tasks
+status: stable
+group: Navigation
+description: 'Theme override for rendering primary and secondary local tasks as tabs and pills respectively.'
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+slots:
+  primary:
+    title: Primary
+    description: 'Primary tasks as main navigation items, displayed as tabs.'
+
+  secondary:
+    title: Secondary
+    description: 'Secondary tasks or sub-navigation items, displayed as pills.'

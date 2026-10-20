@@ -1,0 +1,43 @@
+{% set color_classes = {
+  'primary': 'text-primary',
+  'secondary': 'text-secondary',
+  'tertiary': 'text-tertiary',
+  'white': 'text-body-bg',
+  'light gray': 'text-muted',
+  'dark gray': 'text-body',
+  'black': 'text-dark',
+  'transparent': 'text-transparent',
+} %}
+
+{# {% set bg_image = image_url.src|default('') %} #}
+{% set color = text_color|default('default') %}
+{% set title_color = color_classes[color]|default('text-body-bg') %}
+{% set description_color = color_classes[description_text_color]|default('text-body-bg') %}
+
+
+<section class="w-full bg-center bg-cover bg-no-repeat" style="background-image: linear-gradient(rgba(10,15,20,0.7), rgba(10,15,20,0.7)), url('{{ image_url.src }}');">
+	<div class="container mx-auto max-w-480 px-[clamp(20px,5vw,120px)] font-archivo flex flex-col gap-8 pt-[clamp(327px,25vw,478px)] pb-[clamp(5rem,12vw,180px)] text-body-bg">
+		<div
+			class="flex flex-col xl:flex-row justify-between  xl:items-center  gap-8">
+			<!-- Left Text Block -->
+			{% if title %}
+				<div class="heading lg:max-[600px]">
+					<h1 class=" {{ title_color }} font-bold text-[clamp(2.5rem,6vw,6.5rem)] leading-tight">
+						{{ title }}
+					</h1>
+				</div>
+			{% endif %}
+			<!-- Right Content -->
+			<div class="flex flex-col gap-6 xl:gap-10 pt-0 xl:pt-9 md:max-w-[434px] w-auto">
+				{% if description %}
+					<div class=" {{ description_color }} text-base font-normal md:text-xl">
+						{{ description }}
+					</div>
+				{% endif %}
+				<div class="hero_cta">
+					{{ cta }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

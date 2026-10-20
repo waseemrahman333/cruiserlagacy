@@ -1,0 +1,69 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Divider (Canvas)
+group: Tailpine
+status: stable
+description: Section divider with optional centred label. Supports line, wave, zigzag, angle, and curve styles.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    style:
+      type: string
+      title: Style
+      description: Visual style of the divider.
+      default: line
+      enum:
+        - line
+        - wave
+        - zigzag
+        - angle
+        - curve
+      meta:enum:
+        line: Straight line
+        wave: Wave
+        zigzag: Zigzag
+        angle: Angled
+        curve: Curved
+      examples:
+        - line
+
+    show_label:
+      type: boolean
+      title: Show label
+      description: Display a short text label centred on the divider.
+      default: false
+      examples:
+        - false
+
+    label:
+      type: string
+      title: Label
+      description: Short text shown centred on the divider when show_label is true.
+      examples:
+        - 'OR'
+
+    color:
+      type: string
+      title: Color
+      description: Semantic color token for the divider line.
+      default: border
+      enum:
+        - border
+        - primary
+        - secondary
+        - accent
+        - muted
+      meta:enum:
+        border: Default border
+        primary: Primary
+        secondary: Secondary
+        accent: Accent
+        muted: Muted
+      examples:
+        - border

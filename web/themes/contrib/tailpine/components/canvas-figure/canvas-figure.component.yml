@@ -1,0 +1,41 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Figure (Canvas)
+status: stable
+description: Figure element with image and optional caption.
+group: Content
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image_url:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title:  Image
+      description: "URL of the figure image."
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Background Image'
+          width: 1600
+          height: 999
+    image_alt:
+      type: string
+      title: Image Alt Text
+      description: Alternative text for the image.
+      examples: ['An example figure image']
+    caption:
+      type: string
+      title: Caption
+      description: Figure caption text.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is a <strong>figure</strong> caption.</p>']
+    figure_utility_classes:
+      type: array
+      items:
+        type: string
+      title: Utility Classes
+      description: Additional Tailwind classes.
+      default: []

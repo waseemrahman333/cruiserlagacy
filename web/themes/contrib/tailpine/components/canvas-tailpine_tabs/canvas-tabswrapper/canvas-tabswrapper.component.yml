@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Tailpine Tabs Wrapper (Canvas)
+status: stable
+description: A full tab wrapper
+group: tailpine tabs
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    firstTabTitle:
+      type: string
+      title: tab one title
+      description: 'main title of the tab section'
+    tabTitleContent:
+      type: string
+      title: tab title content
+      description: 'Render tab buttons'
+      examples: ['Tab One', 'Tab Two', 'Tab Three']
+
+
+slots:
+  tabContents:
+    title: tab inner content
+    description: Render tab panels

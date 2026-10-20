@@ -1,0 +1,285 @@
+{#
+/**
+ * Text Only (Canvas)
+ *
+ * Highly flexible standalone rich-text block for the Canvas page builder.
+ * Controls typography, color, spacing, borders, and width without any image
+ * or slot dependency.
+ *
+ * Available variables:
+ * - text_content: (markup) Rich HTML text to render.
+ * - html_tag: (string) Wrapper element — div, section, article, aside,
+ *   blockquote, figure, p, span. Defaults to div.
+ * - font_size: (string) Tailwind font-size key or 'default'.
+ * - font_weight: (string) Tailwind font-weight class or 'default'.
+ * - font_style: (string) 'italic' | 'not-italic' | 'default'.
+ * - line_height: (string) Tailwind leading-* class or 'default'.
+ * - letter_spacing: (string) Tailwind tracking-* class or 'default'.
+ * - text_transform: (string) Tailwind transform class or 'default'.
+ * - text_decoration: (string) Tailwind decoration class or 'default'.
+ * - horizontal_align: (string) 'left' | 'center' | 'right' | 'justify'.
+ * - text_color: (string) Semantic color key or 'default'.
+ * - bg_color: (string) Background variant key.
+ * - border_side: (string) Which sides to border — 'none', 'border',
+ *   'border-t', 'border-b', 'border-l', 'border-r', 'border-x', 'border-y'.
+ * - border_width: (string) '0' | '1' | '2' | '4' | '8'.
+ * - border_style: (string) Tailwind border-style class.
+ * - border_color: (string) Semantic border color key.
+ * - text_width: (string) Width percentage key or 'full'.
+ * - max_width: (string) Tailwind max-w-* class or 'none'.
+ * - padding_block: (string) Spacing scale key (top/bottom).
+ * - padding_inline: (string) Spacing scale key (left/right).
+ * - margin_block: (string) Spacing scale key (top/bottom).
+ * - margin_inline: (string) Spacing scale key (left/right).
+ * - shadow: (string) 'none' | 'shadow-theme'.
+ * - use_prose: (bool) Apply prose formatting to inner HTML.
+ *
+ * Theme tokens:
+ * - text-body, text-heading, text-muted, text-primary, text-secondary,
+ *   text-tertiary, text-on-primary, text-body-bg
+ * - bg-transparent, bg-body-bg, bg-surface, bg-surface-alt, bg-primary,
+ *   bg-secondary, bg-tertiary, bg-dark
+ * - border-border, border-primary, border-secondary, border-dark
+ */
+#}
+
+
+
+{# ===== Sanitise inputs ===== #}
+{% set safe_tag = html_tag %}
+{% set safe_size = font_size|default('default')|striptags %}
+{% set safe_weight = font_weight|default('default')|striptags %}
+{% set safe_style = font_style|default('default')|striptags %}
+{% set safe_leading = line_height|default('default')|striptags %}
+{% set safe_tracking = letter_spacing|default('default')|striptags %}
+{% set safe_transform = text_transform|default('default')|striptags %}
+{% set safe_decoration = text_decoration|default('default')|striptags %}
+{% set safe_align = horizontal_align|default('left')|striptags %}
+{% set safe_text_color = text_color|default('default')|striptags %}
+{% set safe_bg = bg_color|default('transparent')|striptags %}
+{% set safe_border_side = border_side|default('none')|striptags %}
+{% set safe_border_width = border_width|default('1')|striptags %}
+{% set safe_border_style = border_style|default('border-solid')|striptags %}
+{% set safe_border_color = border_color|default('border')|striptags %}
+{% set safe_width = text_width|default('full')|striptags %}
+{% set safe_max_width = max_width|default('none')|striptags %}
+{% set safe_padding_block = padding_block|default('0')|striptags %}
+{% set safe_padding_inline = padding_inline|default('0')|striptags %}
+{% set safe_margin_block = margin_block|default('0')|striptags %}
+{% set safe_margin_inline = margin_inline|default('0')|striptags %}
+{% set safe_shadow = shadow|default('none')|striptags %}
+{% set safe_prose = use_prose|default(false) %}
+
+{# ===== Font size map (responsive) ===== #}
+{% set size_map = {
+  'text-8xl': 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl',
+  'text-7xl': 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl',
+  'text-6xl': 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
+  'text-5xl': 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl',
+  'text-4xl': 'text-xl sm:text-2xl md:text-3xl lg:text-4xl',
+  'text-3xl': 'text-lg sm:text-xl md:text-2xl lg:text-3xl',
+  'text-2xl': 'text-base sm:text-lg md:text-xl lg:text-2xl',
+  'text-xl':  'text-base md:text-lg lg:text-xl',
+  'text-lg':  'text-base lg:text-lg',
+  'text-base': 'text-base',
+  'text-sm':  'text-sm',
+  'text-xs':  'text-xs',
+} %}
+
+{# ===== Text color map ===== #}
+{% set text_color_map = {
+  'body':       'text-body',
+  'heading':    'text-heading',
+  'muted':      'text-muted',
+  'primary':    'text-primary',
+  'secondary':  'text-secondary',
+  'tertiary':   'text-tertiary',
+  'success':    'text-success',
+  'warning':    'text-warning',
+  'error':      'text-error',
+  'on-primary': 'text-on-primary',
+  'body-bg':    'text-body-bg',
+} %}
+
+{# ===== Background map ===== #}
+{% set bg_map = {
+  'transparent': 'bg-transparent',
+  'default':     'bg-body-bg',
+  'surface':     'bg-surface',
+  'surface-alt': 'bg-surface-alt',
+  'primary':     'bg-primary',
+  'secondary':   'bg-secondary',
+  'tertiary':    'bg-tertiary',
+  'dark':        'bg-dark',
+  'light':       'bg-surface',
+  'success':     'bg-success',
+  'warning':     'bg-warning',
+  'error':       'bg-error',
+} %}
+
+{# ===== Border color map ===== #}
+{% set border_color_map = {
+  'border':    'border-border',
+  'primary':   'border-primary',
+  'secondary': 'border-secondary',
+  'tertiary':  'border-tertiary',
+  'dark':      'border-dark',
+  'success':   'border-success',
+  'warning':   'border-warning',
+  'error':     'border-error',
+} %}
+
+{# ===== Border width suffix map ===== #}
+{% set border_width_map = {
+  '0': '-0',
+  '1': '',
+  '2': '-2',
+  '4': '-4',
+  '8': '-8',
+} %}
+
+{# ===== Text alignment map ===== #}
+{% set align_map = {
+  'left':    'text-left',
+  'center':  'text-center',
+  'right':   'text-right',
+  'justify': 'text-justify',
+} %}
+
+{# ===== Width map ===== #}
+{% set width_map = {
+  'full': 'w-full',
+  '90%':  'w-full lg:w-[90%]',
+  '80%':  'w-full lg:w-[80%]',
+  '75%':  'w-full lg:w-3/4',
+  '70%':  'w-full lg:w-[70%]',
+  '66%':  'w-full lg:w-2/3',
+  '60%':  'w-full lg:w-[60%]',
+  '50%':  'w-full md:w-1/2',
+  '40%':  'w-full md:w-[40%]',
+  '33%':  'w-full md:w-1/3',
+  '25%':  'w-full sm:w-1/2 md:w-1/4',
+} %}
+
+{# ===== Spacing scale maps ===== #}
+{% set padding_block_map = {
+  '0':   'py-0',
+  '8':   'py-1 md:py-1.5 xl:py-2',
+  '16':  'py-2 md:py-3 xl:py-4',
+  '24':  'py-3 md:py-4.5 xl:py-6',
+  '32':  'py-4 md:py-6 xl:py-8',
+  '40':  'py-5 md:py-8 xl:py-10',
+  '48':  'py-6 md:py-10 xl:py-12',
+  '64':  'py-8 md:py-12 xl:py-16',
+  '80':  'py-10 md:py-14 xl:py-20',
+  '96':  'py-12 md:py-16 xl:py-24',
+  '128': 'py-16 md:py-24 xl:py-32',
+  '160': 'py-20 md:py-32 xl:py-40',
+} %}
+
+{% set padding_inline_map = {
+  '0':   'px-0',
+  '8':   'px-1 md:px-1.5 xl:px-2',
+  '16':  'px-2 md:px-3 xl:px-4',
+  '24':  'px-3 md:px-4.5 xl:px-6',
+  '32':  'px-4 md:px-6 xl:px-8',
+  '40':  'px-5 md:px-8 xl:px-10',
+  '48':  'px-6 md:px-10 xl:px-12',
+  '64':  'px-8 md:px-12 xl:px-16',
+  '80':  'px-10 md:px-14 xl:px-20',
+  '96':  'px-12 md:px-16 xl:px-24',
+  '128': 'px-16 md:px-24 xl:px-32',
+  '160': 'px-20 md:px-32 xl:px-40',
+} %}
+
+{% set margin_block_map = {
+  '0':   'my-0',
+  '8':   'my-1 md:my-1.5 xl:my-2',
+  '16':  'my-2 md:my-3 xl:my-4',
+  '24':  'my-3 md:my-4.5 xl:my-6',
+  '32':  'my-4 md:my-6 xl:my-8',
+  '40':  'my-5 md:my-8 xl:my-10',
+  '48':  'my-6 md:my-10 xl:my-12',
+  '64':  'my-8 md:my-12 xl:my-16',
+  '80':  'my-10 md:my-14 xl:my-20',
+  '96':  'my-12 md:my-16 xl:my-24',
+  '128': 'my-16 md:my-24 xl:my-32',
+  '160': 'my-20 md:my-32 xl:my-40',
+} %}
+
+{% set margin_inline_map = {
+  '0':   'mx-0',
+  '8':   'mx-1 md:mx-1.5 xl:mx-2',
+  '16':  'mx-2 md:mx-3 xl:mx-4',
+  '24':  'mx-3 md:mx-4.5 xl:mx-6',
+  '32':  'mx-4 md:mx-6 xl:mx-8',
+  '40':  'mx-5 md:mx-8 xl:mx-10',
+  '48':  'mx-6 md:mx-10 xl:mx-12',
+  '64':  'mx-8 md:mx-12 xl:mx-16',
+  '80':  'mx-10 md:mx-14 xl:mx-20',
+  '96':  'mx-12 md:mx-16 xl:mx-24',
+  '128': 'mx-16 md:mx-24 xl:mx-32',
+  '160': 'mx-20 md:mx-32 xl:mx-40',
+} %}
+
+{# ===== Resolve all class tokens ===== #}
+{% set resolved_size       = (safe_size != 'default') ? (size_map[safe_size]|default('')) : '' %}
+{% set resolved_weight     = (safe_weight != 'default') ? safe_weight : '' %}
+{% set resolved_style      = (safe_style != 'default') ? safe_style : '' %}
+{% set resolved_leading    = (safe_leading != 'default') ? safe_leading : '' %}
+{% set resolved_tracking   = (safe_tracking != 'default') ? safe_tracking : '' %}
+{% set resolved_transform  = (safe_transform != 'default') ? safe_transform : '' %}
+{% set resolved_decoration = (safe_decoration != 'default') ? safe_decoration : '' %}
+{% set resolved_align      = align_map[safe_align]|default('text-left') %}
+{% set resolved_text_color = (safe_text_color != 'default') ? (text_color_map[safe_text_color]|default('')) : '' %}
+{% set resolved_bg         = bg_map[safe_bg]|default('bg-transparent') %}
+{% set resolved_width      = width_map[safe_width]|default('w-full') %}
+{% set resolved_max_width  = (safe_max_width != 'none') ? safe_max_width : '' %}
+{% set resolved_py         = padding_block_map[safe_padding_block]|default('py-0') %}
+{% set resolved_px         = padding_inline_map[safe_padding_inline]|default('px-0') %}
+{% set resolved_my         = margin_block_map[safe_margin_block]|default('my-0') %}
+{% set resolved_mx         = margin_inline_map[safe_margin_inline]|default('mx-0') %}
+{% set resolved_shadow     = (safe_shadow != 'none') ? safe_shadow : '' %}
+
+{# ===== Border class assembly ===== #}
+{% set resolved_border = '' %}
+{% if safe_border_side != 'none' %}
+  {% set bw_suffix = border_width_map[safe_border_width]|default('') %}
+  {% set resolved_border = safe_border_side ~ bw_suffix ~ ' ' ~ safe_border_style ~ ' ' ~ (border_color_map[safe_border_color]|default('border-border')) %}
+{% endif %}
+
+{# ===== Prose class ===== #}
+{% set resolved_prose = safe_prose ? 'prose prose-sm max-w-none [&_a]:text-primary [&_a]:underline [&_strong]:text-heading [&_h1]:text-heading [&_h2]:text-heading [&_h3]:text-heading' : '' %}
+
+{# ===== Inline-element check ===== #}
+{# span and p should not use block-level width classes that cause layout issues #}
+{% set is_inline = (safe_tag == 'span') %}
+
+{# ===== Final class list ===== #}
+{% set classes = [
+  resolved_width,
+  resolved_max_width,
+  resolved_bg,
+  resolved_text_color,
+  resolved_align,
+  resolved_size,
+  resolved_weight,
+  resolved_style,
+  resolved_leading,
+  resolved_tracking,
+  resolved_transform,
+  resolved_decoration,
+  resolved_py,
+  resolved_px,
+  resolved_my,
+  resolved_mx,
+  resolved_shadow,
+  resolved_border,
+  resolved_prose,
+]|join(' ')|trim %}
+
+{# ===== Render ===== #}
+<{{ safe_tag }}
+  class="{{ classes }}"
+  {{ attributes }}
+>{{ text_content }}</{{ safe_tag }}>

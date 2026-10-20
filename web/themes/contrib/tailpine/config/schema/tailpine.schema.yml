@@ -1,0 +1,168 @@
+# Schema for the configuration files of the tailpine theme.
+
+tailpine.settings:
+  type: theme_settings
+  label: "tailpine settings"
+  mapping:
+    # Color theme (data-theme attribute value).
+    color_theme:
+      type: string
+      label: "Color theme"
+    # Enable custom color overrides.
+    tailpine_enable_color:
+      type: boolean
+      label: "Enable custom color scheme"
+    # Custom color variables (22 --t-* CSS properties).
+    tailpine_color_primary:
+      type: string
+      label: "Primary color"
+    tailpine_color_primary_hover:
+      type: string
+      label: "Primary hover color"
+    tailpine_color_on_primary:
+      type: string
+      label: "On primary color"
+    tailpine_color_secondary:
+      type: string
+      label: "Secondary color"
+    tailpine_color_on_secondary:
+      type: string
+      label: "On Secondary color"
+    tailpine_color_tertiary:
+      type: string
+      label: "Tertiary color"
+    tailpine_color_on_tertiary:
+      type: string
+      label: "On Tertiary color"
+    tailpine_color_body:
+      type: string
+      label: "Body text color"
+    tailpine_color_heading:
+      type: string
+      label: "Heading text color"
+    tailpine_color_body_bg:
+      type: string
+      label: "Body background color"
+    tailpine_color_surface:
+      type: string
+      label: "Surface color"
+    tailpine_color_surface_100:
+      type: string
+      label: "Surface color light"
+    tailpine_color_surface_200:
+      type: string
+      label: "Surface color medium"
+    tailpine_color_surface_300:
+      type: string
+      label: "Surface color darker"
+    tailpine_color_surface_hover:
+      type: string
+      label: "Surface hover color"
+    tailpine_color_surface_alt:
+      type: string
+      label: "Surface alt color"
+    tailpine_color_input:
+      type: string
+      label: "Input background color"
+    tailpine_color_muted:
+      type: string
+      label: "Muted text color"
+    tailpine_color_border:
+      type: string
+      label: "Border color"
+    tailpine_color_dark:
+      type: string
+      label: "Dark color"
+    tailpine_color_focus_ring:
+      type: string
+      label: "Focus ring color"
+    tailpine_color_shadow:
+      type: string
+      label: "Shadow color"
+    tailpine_color_success:
+      type: string
+      label: "Success color"
+    tailpine_color_on_success:
+      type: string
+      label: "On Success color"
+    tailpine_color_warning:
+      type: string
+      label: "On Warning color"
+    tailpine_color_on_warning:
+      type: string
+      label: "On Warning color"
+    tailpine_color_error:
+      type: string
+      label: "Error color"
+    tailpine_color_on_error:
+      type: string
+      label: "On Error color"
+    tailpine_color_info:
+      type: string
+      label: "Info color"
+    tailpine_color_on_info:
+      type: string
+      label: "On Info color"
+    # Header and footer styles.
+    header_class:
+      type: string
+      label: "Header style"
+    footer_class:
+      type: string
+      label: "Footer style"
+    header_fixed:
+      type: string
+      label: "Fixed header"
+    container_style:
+      type: string
+      label: "Page container width"
+    show_color_switcher:
+      type: boolean
+      label: "Show frontend color theme switcher"
+    color_switcher_region:
+      type: string
+      label: "Color switcher region"
+
+    container_padding_mobile:
+      type: integer
+      label: "Container padding mobile"
+
+    container_padding_tablet:
+      type: integer
+      label: "Container padding tablet"
+
+    container_padding_desktop:
+      type: integer
+      label: "Container padding desktop"
+
+    container_padding_wide:
+      type: integer
+      label: "Container padding wide desktop"
+
+    # Typography settings.
+    body_font_size:
+      type: string
+      label: "Body font size"
+    body_font_family:
+      type: string
+      label: "Body font family"
+    heading_font_family:
+      type: string
+      label: "Heading font family"
+      
+    # Migration flag — set to TRUE once seeded Emerald defaults are cleared.
+    tailpine_colors_reset_done:
+      type: boolean
+      label: "Color defaults reset migration done"
+    tailpine_customize_logo_size:
+      type: boolean
+      label: 'Customize responsive logo size'
+    responsive_logo_mobile:
+      type: integer
+      label: 'Responsive logo width on mobile'
+    responsive_logo_tablet:
+      type: integer
+      label: 'Responsive logo width on tablet'
+    responsive_logo_desktop:
+      type: integer
+      label: 'Responsive logo width on desktop'

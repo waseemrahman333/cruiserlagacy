@@ -1,0 +1,133 @@
+{#
+/**
+ * @file
+ * Tailpine Views Table SDC.
+ *
+ * Handles the Views-specific table structure where rows use `columns`
+ * (not `cells`) and headers have sort indicator + URL support.
+ */
+#}
+{% set table_markup %}
+<div class="w-full overflow-hidden rounded-xl border border-border shadow-sm bg-body-bg">
+  <table{{ (attributes|default(create_attribute())).addClass([
+    'w-full',
+    'border-collapse',
+    'text-left',
+    'text-sm',
+  ]) }}>
+
+    {% if caption_needed %}
+      <caption class="text-base font-semibold text-body text-center py-3 px-5 bg-surface border-b border-border">
+        {{ caption }}
+      </caption>
+    {% endif %}
+
+    {% if header %}
+      <thead class="bg-surface {{ sticky ? 'sticky top-0 z-10' : '' }}">
+        <tr class="border-b-2 border-border">
+          {% for key, column in header %}
+            {% if column.default_classes %}
+              {%
+                set column_classes = [
+                  'views-field',
+                  'views-field-' ~ fields[key]|default(''),
+                ]
+              %}
+            {% endif %}
+            <th{{ column.attributes.addClass(column_classes|default([])).addClass([
+              'px-5 py-3',
+              'font-semibold',
+              'text-muted',
+              'uppercase',
+              'tracking-wide',
+              'text-xs',
+            ]).setAttribute('scope', 'col') }}>
+              {%- if column.wrapper_element -%}
+                <{{ column.wrapper_element }}>
+                  {%- if column.url -%}
+                    <a href="{{ column.url }}" title="{{ column.title }}" rel="nofollow" class="hover:text-primary transition-colors">
+                      {{ column.content }}{{ column.sort_indicator }}
+                    </a>
+                  {%- else -%}
+                    {{ column.content }}{{ column.sort_indicator }}
+                  {%- endif -%}
+                </{{ column.wrapper_element }}>
+              {%- else -%}
+                {%- if column.url -%}
+                  <a href="{{ column.url }}" title="{{ column.title }}" rel="nofollow" class="hover:text-primary transition-colors">
+                    {{ column.content }}{{ column.sort_indicator }}
+                  </a>
+                {%- else -%}
+                  {{- column.content }}{{ column.sort_indicator }}
+                {%- endif -%}
+              {%- endif -%}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+    {% endif %}
+
+    {% if rows %}
+      <tbody class="divide-y divide-border">
+        {% for row in rows %}
+          <tr{{ row.attributes.addClass([
+            loop.index is odd ? '' : 'bg-surface/40',
+            'hover:bg-primary/5',
+            'transition-colors',
+            'duration-150',
+          ]) }}>
+            {% for key, column in row.columns %}
+              {% if column.default_classes %}
+                {%
+                  set column_classes = [
+                    'views-field',
+                  ]
+                %}
+                {% for field in column.fields %}
+                  {% set column_classes = column_classes|merge(['views-field-' ~ field]) %}
+                {% endfor %}
+              {% endif %}
+              <td{{ column.attributes.addClass(column_classes|default([])).addClass([
+                'px-5 py-3',
+                'text-body',
+                'align-middle',
+                'border-b',
+                'border-border',
+              ]) }}>
+                {%- if column.wrapper_element -%}
+                  <{{ column.wrapper_element }}>
+                    {% for content in column.content %}
+                      {{ content.separator }}{{ content.field_output }}
+                    {% endfor %}
+                  </{{ column.wrapper_element }}>
+                {%- else -%}
+                  {% for content in column.content %}
+                    {{- content.separator }}{{ content.field_output -}}
+                  {% endfor %}
+                {%- endif %}
+              </td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    {% elseif empty %}
+      <tbody>
+        <tr>
+          <td colspan="{{ header|length ?: 1 }}" class="px-5 py-10 text-center text-muted italic">
+            {{ empty }}
+          </td>
+        </tr>
+      </tbody>
+    {% endif %}
+
+  </table>
+</div>
+{% endset %}
+
+{% if responsive %}
+  <div class="w-full overflow-x-auto">
+    {{ table_markup }}
+  </div>
+{% else %}
+  {{ table_markup }}
+{% endif %}

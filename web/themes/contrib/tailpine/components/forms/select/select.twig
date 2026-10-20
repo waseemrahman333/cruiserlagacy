@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * Theme override for a select element.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the <select> tag.
+ * - options: The <option> element children as rendered by form_select_options().
+ *
+ * @see template_preprocess_select()
+ */
+#}
+{% set classes = [
+  'block',
+  'w-full',
+  'bg-input',
+  'border',
+  'border-border',
+  'text-body',
+  'text-sm',
+  'focus:ring-2',
+  'focus:ring-[var(--color-primary)]',
+  'focus:border-transparent',
+  'px-3',
+  'py-2',
+  'transition-colors',
+  'duration-150',
+  'cursor-pointer',
+  'appearance-none',
+  'hover:border-muted',
+] %}
+
+{% apply spaceless %}
+  <select{{ (attributes|default(create_attribute())).addClass(classes) }}>
+    {% for option in options %}
+      {% if option.type == 'optgroup' %}
+        <optgroup label="{{ option.label }}">
+          {% for sub_option in option.options %}
+            <option value="{{ sub_option.value }}"{{ sub_option.selected ? ' selected="selected"' }}>{{ sub_option.label }}</option>
+          {% endfor %}
+        </optgroup>
+      {% elseif option.type == 'option' %}
+        <option value="{{ option.value }}"{{ option.selected ? ' selected="selected"' }}>{{ option.label }}</option>
+      {% endif %}
+    {% endfor %}
+  </select>
+{% endapply %}

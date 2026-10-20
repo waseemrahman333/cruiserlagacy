@@ -1,0 +1,45 @@
+{#
+/**
+ * @file
+ * Theme override for article nodes in teaser view mode.
+ *
+ * Renders the node as a card using the tailpine:node-teaser SDC.
+ * Content is split into individual pieces before passing to the
+ * component so the card layout can arrange them independently.
+ *
+ * Available variables: see template_preprocess_node().
+ *
+ * @see template_preprocess_node()
+ */
+#}
+{%
+  set node_classes = [
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished bg-error/10',
+    'node--view-mode-teaser',
+  ]
+%}
+
+{% include "tailpine:node-teaser" with {
+  attributes: attributes,
+  node_classes: node_classes,
+  label: label,
+  url: url,
+  image: content.field_image,
+  body: content|without('field_image', 'field_tags', 'links'),
+  tags: content.field_tags,
+  links: content.links,
+  display_submitted: display_submitted,
+  author_picture: author_picture,
+  author_name: author_name,
+  author_attributes: author_attributes,
+  date: date,
+  metadata: metadata,
+  title_prefix: title_prefix,
+  title_suffix: title_suffix,
+  title_attributes: title_attributes,
+  content_attributes: content_attributes,
+} only %}

@@ -1,0 +1,25 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Teams  Header (Canvas)
+status: stable
+description: "Team Wrapper are used to group and display content in a way that is easily readable."
+group: Teams & Testimonials
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['This is Team Header']          
+
+slots:
+  content:
+    title: Content
+    description: "Content of the Wrapper. Plain text."
+  cta:
+    title: Link
+    description: Cta Link

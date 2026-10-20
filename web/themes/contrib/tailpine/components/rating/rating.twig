@@ -1,0 +1,114 @@
+
+
+
+{% set size_variants = {
+  sm: "w-4 h-4",
+  md: "w-5 h-5",
+  lg: "w-6 h-6"
+} %}
+
+
+
+
+{% set color_variants = {
+  'primary': 'text-primary',
+  'secondary': 'text-secondary',
+  'tertiary': 'text-tertiary',
+  'success': 'text-success',
+  'warning': 'text-warning',
+  'error': 'text-error',
+  'white': 'text-body-bg',
+  'light': 'text-border',
+  'medium': 'text-muted',
+  'dark': 'text-body',
+  'transparent': 'text-body opacity-0'
+} %}
+
+{% set star_size = size_variants[size|default('md')]|default('w-5 h-5') %}
+{% set star_color = color_variants[color|default('warning')]|default('text-warning') %}
+{% set rating = rating|default(0) %}
+{% set max_stars = max_stars|default(5) %}
+{% set show_text = show_text|default(false) %}
+{% set text_position = text_position|default('right') %}
+
+{% set size = "sm" ? 16 %}
+
+
+{% set rating_text %}
+  {% block text %}{% endblock %}
+{% endset %}
+<div class="flex items-center gap-2">
+
+  {# TEXT LEFT #}
+  {# TEXT LEFT #}
+  {% if show_text and text_position == 'left' and rating_text|trim is not empty %}
+    <div class="h-fit min-w-20">
+      {{ rating_text }}
+    </div>
+  {% endif %}
+
+<div class="flex items-center gap-1">
+  {% for i in 1..max_stars %}
+    
+    {# FULL STAR #}
+    {% if i <= rating %}
+      <svg class="{{ star_size }} {{ star_color }}"   viewBox="0 0 24 24" fill="currentColor">
+        <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"/>
+      </svg>
+
+    {# HALF STAR #}
+    {% elseif i - rating < 1 %}
+      {% if star_size  == "w-4 h-4" %}
+          <div class="relative {{ star_size }}">
+        <svg class="absolute {{ star_size }} inset-0 text-border" viewBox="0 0 16 16" fill="currentColor">
+             <path d="M7.192 2.14c.299-.718 1.317-.718 1.616 0l1.388 3.337 3.603.289c.776.062 1.091 1.03.499 1.537l-2.745 2.351.838 3.515c.181.757-.643 1.355-1.307.95L8 12.236l-3.084 1.883c-.664.405-1.488-.193-1.307-.95l.838-3.515-2.745-2.351c-.592-.507-.277-1.475.499-1.537l3.603-.289 1.388-3.337Z"/>
+        </svg>
+
+        <svg class="absolute inset-0 w-full h-full {{ star_color }}  overflow-hidden"
+            fill="currentColor"
+            style="width: {{ (rating - (i - 1)) * 100 }}%">
+            <path d="M7.192 2.14c.299-.718 1.317-.718 1.616 0l1.388 3.337 3.603.289c.776.062 1.091 1.03.499 1.537l-2.745 2.351.838 3.515c.181.757-.643 1.355-1.307.95L8 12.236l-3.084 1.883c-.664.405-1.488-.193-1.307-.95l.838-3.515-2.745-2.351c-.592-.507-.277-1.475.499-1.537l3.603-.289 1.388-3.337Z"/>
+        </svg>
+        </div>
+      {% elseif star_size  == "w-5 h-5" %}
+        <div class="relative {{ star_size }}">
+          <svg class="absolute  {{ star_size }} inset-0 text-border" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M8.99 2.675c.373-.897 1.647-.897 2.02 0l1.735 4.172 4.503.362c.97.078 1.363 1.288.624 1.921l-3.431 2.939 1.048 4.394c.226.947-.803 1.694-1.633 1.188L10 15.295l-3.856 2.356c-.83.506-1.859-.241-1.633-1.188l1.048-4.394-3.431-2.939c-.739-.633-.346-1.843.624-1.921l4.503-.362 1.735-4.172Z"/>
+                     </svg>
+
+          <svg class="absolute inset-0 w-full h-full {{ star_color }} overflow-hidden"
+              fill="currentColor"
+              style="width: {{ (rating - (i - 1)) * 100 }}%">
+        <path d="M8.99 2.675c.373-.897 1.647-.897 2.02 0l1.735 4.172 4.503.362c.97.078 1.363 1.288.624 1.921l-3.431 2.939 1.048 4.394c.226.947-.803 1.694-1.633 1.188L10 15.295l-3.856 2.356c-.83.506-1.859-.241-1.633-1.188l1.048-4.394-3.431-2.939c-.739-.633-.346-1.843.624-1.921l4.503-.362 1.735-4.172Z"/>
+          </svg>
+        </div>
+       {% else %}
+        <div class="relative {{ star_size }}">
+          <svg class="absolute inset-0 text-border" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"/>
+          </svg>
+
+          <svg class="absolute inset-0 {{ star_color }} overflow-hidden"
+              fill="currentColor"
+              style="width: {{ (rating - (i - 1)) * 100 }}%">
+            <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"/>
+          </svg>
+        </div>
+       {% endif %}
+
+    {% else %}
+      <svg class="{{ star_size }} text-border" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"/>
+      </svg>
+    {% endif %}
+    
+  {% endfor %}
+</div>
+
+ {# TEXT RIGHT #}
+  {% if show_text and text_position == 'right' and rating_text|trim is not empty %}
+    <div class="h-fit min-w-20">
+      {{ rating_text }}
+    </div>
+  {% endif %}
+</div>

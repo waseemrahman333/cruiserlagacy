@@ -1,0 +1,48 @@
+/**
+ * @file
+ * Stylesheet for search results.
+ * Uses var(--color-*) semantic tokens.
+ */
+
+.search-results {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.search-result {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-result:last-child {
+  border-bottom: none;
+}
+
+.search-result__title {
+  margin: 0 0 0.25rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+}
+
+.search-result__title a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.search-result__title a:hover {
+  text-decoration: underline;
+}
+
+.search-result__snippet {
+  color: var(--color-body);
+  font-size: 0.875rem;
+  margin: 0.25rem 0;
+  line-height: 1.6;
+}
+
+.search-result__info {
+  color: var(--color-muted);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}

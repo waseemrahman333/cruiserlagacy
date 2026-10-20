@@ -1,0 +1,50 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: TestimonialStyle One (Canvas)
+status: stable
+description: "Testimonial  Wrapper are used to group and display content in a way that is easily readable."
+group: Teams & Testimonials
+
+slots:
+  rating:
+    title: Rating Stars
+    description: "the show the rating region"
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  Image URL
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: 'member.png'
+          alt: 'Team Image'
+          width: 320
+          height: 400
+    name:
+      title: Name
+      type: string
+      description: "Name of the User. Plain text."
+      examples: ['John Doe']
+    description:
+      title: Description
+      type: string
+      description: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>']   
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle. of the Testimonial. Plain text."
+      examples: ['Customer']
+    show_rating:
+      title: Show Rating Region
+      type: boolean
+      default: false
+      examples: [true]

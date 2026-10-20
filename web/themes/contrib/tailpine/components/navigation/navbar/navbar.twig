@@ -1,0 +1,111 @@
+{#
+/**
+ * @file
+ * Navbar Component — responsive navigation bar with mobile toggle.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the nav element.
+ * - expand: Breakpoint where navbar expands to desktop layout (sm/md/lg/xl).
+ * - bg_color: Background colour key (primary/secondary/tertiary/white/transparent).
+ * - brand: (slot) Brand logo/name.
+ * - navigation: (slot) Navigation links.
+ * - actions: (slot) Action buttons/links.
+ */
+#}
+{% set expand_bp = expand|default('md') %}
+{% set bg = bg_color|default('primary') %}
+
+{#
+  Class maps replace dynamic Tailwind interpolation (e.g. "{{ expand_bp }}:flex")
+  which Tailwind JIT cannot see. Every possible value maps to a full static class string.
+#}
+{% set bg_map = {
+  'primary':     'bg-primary',
+  'secondary':   'bg-secondary',
+  'tertiary':    'bg-tertiary',
+  'white':       'bg-body-bg',
+  'transparent': 'bg-transparent',
+  'body':        'bg-body-bg',
+} %}
+{% set desktop_nav_map = {
+  'sm': 'hidden sm:flex sm:items-center sm:space-x-4',
+  'md': 'hidden md:flex md:items-center md:space-x-4',
+  'lg': 'hidden lg:flex lg:items-center lg:space-x-4',
+  'xl': 'hidden xl:flex xl:items-center xl:space-x-4',
+} %}
+{% set desktop_actions_map = {
+  'sm': 'hidden sm:flex sm:items-center',
+  'md': 'hidden md:flex md:items-center',
+  'lg': 'hidden lg:flex lg:items-center',
+  'xl': 'hidden xl:flex xl:items-center',
+} %}
+{% set mobile_button_map = {
+  'sm': 'flex items-center sm:hidden',
+  'md': 'flex items-center md:hidden',
+  'lg': 'flex items-center lg:hidden',
+  'xl': 'flex items-center xl:hidden',
+} %}
+{% set mobile_panel_map = {
+  'sm': 'sm:hidden',
+  'md': 'md:hidden',
+  'lg': 'lg:hidden',
+  'xl': 'xl:hidden',
+} %}
+
+{% set bg_class           = bg_map[bg]|default('bg-primary') %}
+{% set desktop_nav_class  = desktop_nav_map[expand_bp]|default('hidden md:flex md:items-center md:space-x-4') %}
+{% set desktop_act_class  = desktop_actions_map[expand_bp]|default('hidden md:flex md:items-center') %}
+{% set mobile_btn_class   = mobile_button_map[expand_bp]|default('flex items-center md:hidden') %}
+{% set mobile_panel_class = mobile_panel_map[expand_bp]|default('md:hidden') %}
+
+<nav{{ (attributes|default(create_attribute())).addClass([bg_class, 'text-body-bg']) }}
+  x-data="{ mobileMenuOpen: false }">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center">
+        {% block brand %}
+          {{ brand }}
+        {% endblock %}
+      </div>
+
+      <!-- Desktop Navigation -->
+      <div class="{{ desktop_nav_class }}">
+        {% block navigation %}
+          {{ navigation }}
+        {% endblock %}
+      </div>
+
+      <div class="{{ desktop_act_class }}">
+        {% block actions %}
+          {{ actions }}
+        {% endblock %}
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="{{ mobile_btn_class }}">
+        <button
+          type="button"
+          @click="mobileMenuOpen = !mobileMenuOpen"
+          :aria-expanded="mobileMenuOpen.toString()"
+          aria-controls="navbar-mobile-menu"
+          class="inline-flex items-center justify-center p-2 hover:bg-dark/10 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focus"
+        >
+          <span class="sr-only">{{ 'Open main menu'|t }}</span>
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="navbar-mobile-menu" x-show="mobileMenuOpen" x-cloak class="{{ mobile_panel_class }}">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      {{ navigation }}
+    </div>
+    <div class="pt-4 pb-3 border-t border-border">
+      {{ actions }}
+    </div>
+  </div>
+</nav>

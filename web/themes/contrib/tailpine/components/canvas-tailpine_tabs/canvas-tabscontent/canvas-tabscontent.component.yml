@@ -1,0 +1,55 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Tailpine Tabs Item (Canvas)
+description: Single tab item with dual render mode
+status: stable
+group: tailpine tabs
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    tabButtons:
+      type: string
+      description: Tab display title (e.g., "Home")
+      title: Tab Button Title
+      default: Tab
+      example: Home
+    tabid:
+      type: string
+      description: Unique identifier for the tab (used for Alpine.js state management)
+      title: Tab ID
+      default: tab1
+      example: tab1
+    tabStyle:
+      type: string
+      description: Visual style treatment for the tab
+      default: underline
+      enum:
+        - underline
+        - default_fill
+        - outline
+        - primary_fill
+        - secondary_fill
+        - icon_tabs
+    render_mode:
+      type: string
+      enum: ["tabsHeader", "content"]
+      description: Defines if this component renders header or content
+      default: tabsHeader
+      example: tabsHeader
+    activClasses:
+      type: string
+      title: Active Classes
+      description: Computed active CSS classes for this tab.
+    tabStyle_classes:
+      type: array
+      items:
+        type: string
+      title: Tab Style Classes
+      description: Computed CSS classes for the tab style.
+slots:
+  tabContent:
+    title: tab Content
+    description: "content of the tab"

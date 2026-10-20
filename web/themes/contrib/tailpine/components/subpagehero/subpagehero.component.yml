@@ -1,0 +1,22 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Sub Page Hero
+description: Sub Page Hero
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    bg_image:
+      title: Background Image
+      description: Background Image URL
+      type: string
+slots:
+  title:
+    title: Title
+    description: Title
+  description:
+    title: Description
+    description: description

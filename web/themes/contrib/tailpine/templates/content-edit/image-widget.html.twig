@@ -1,0 +1,32 @@
+{#
+/**
+ * @file
+ * Theme override for an image field widget.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - data: Render elements of the image widget.
+ *
+ * @see template_preprocess_image_widget()
+ */
+#}
+
+{#
+  Rendered inline — not delegated to tailpine:image-widget SDC — to avoid
+  JSON Schema recursion. The data render array contains nested Attribute
+  objects that cannot be JSON-encoded by the SDC prop validator.
+#}
+<div{{ attributes.addClass('image-widget', 'border', 'border-border', 'bg-surface', 'p-4') }}>
+  {% if data.preview %}
+    <div class="image-preview mb-4 overflow-hidden border border-border">
+      {{ data.preview|raw }}
+    </div>
+  {% endif %}
+  <div class="image-widget-data">
+    {% for key, item in data %}
+      {% if key != 'preview' %}
+        {{ item|raw }}
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

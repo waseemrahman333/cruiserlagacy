@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+title: 'Image Formatter'
+name: Image Formatter
+description: 'A simple image formatter to display an image with a link.'
+defaults:
+  image: ''
+  url: '/'
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image:
+      type: [string, 'null']
+      description: Rendered HTML of the image.
+    url:
+      type: [string, 'null']
+      description: The URL to link the image.
+    image_formatter_utility_classes:
+      type: array
+      title: Image Formatter Utility Classes
+      description: Additional Tailwind utility classes for the image formatter wrapper.
+      items:
+        type: string

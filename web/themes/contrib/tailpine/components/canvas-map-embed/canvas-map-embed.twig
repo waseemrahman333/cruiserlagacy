@@ -1,0 +1,57 @@
+{#
+/**
+ * Map Embed (Canvas)
+ *
+ * Variables: embed_url, provider, height, show_info_card, address,
+ *            show_directions_link, show_fullscreen
+ *
+ * Theme tokens: bg-surface-alt, text-muted, bg-surface, text-body, text-primary, focus:ring-focus
+ */
+#}
+{% set safe_url     = embed_url|default('')|striptags %}
+{% set safe_address = address|default('')|striptags %}
+{% set safe_height  = height|default('lg')|striptags %}
+
+{% set height_map = {
+  'sm': 'h-48',
+  'md': 'h-72',
+  'lg': 'h-96',
+  'xl': 'h-[500px]',
+} %}
+{% set height_class = height_map[safe_height]|default('h-96') %}
+
+<div
+  class="canvas-map-embed relative w-full overflow-hidden rounded-2xl {{ height_class }}"
+  {{ attributes }}
+>
+
+  {% if safe_url %}
+    <iframe
+      src="{{ safe_url }}"
+      class="canvas-map-embed__iframe w-full h-full border-0"
+      loading="lazy"
+      title="{{ 'Map'|t }}"
+      {% if show_fullscreen|default(true) %}allowfullscreen{% endif %}
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  {% else %}
+    <div class="w-full h-full bg-surface-alt flex items-center justify-center text-muted rounded-2xl">
+      <span>{{ 'Enter an embed URL to display the map.'|t }}</span>
+    </div>
+  {% endif %}
+
+  {% if show_info_card|default(false) and safe_address %}
+    <div class="canvas-map-embed__info-card absolute top-4 left-4 bg-surface rounded-xl shadow-lg p-4 max-w-xs">
+      <p class="text-body text-sm font-medium mb-1">{{ safe_address }}</p>
+      {% if show_directions_link|default(false) %}
+        <a
+          href="https://maps.google.com?q={{ safe_address|url_encode }}"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-primary text-xs font-medium underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-focus rounded"
+        >{{ 'Get directions'|t }} &#x2192;</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+</div>

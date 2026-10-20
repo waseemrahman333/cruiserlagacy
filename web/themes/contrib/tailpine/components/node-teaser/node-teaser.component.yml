@@ -1,0 +1,94 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Node Teaser
+status: stable
+description: "Card-style teaser component for article node listings."
+group: Content
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: HTML attributes for the article wrapper element.
+
+    node_classes:
+      type: array
+      title: Node Classes
+      description: BEM and state classes built from node context.
+      items:
+        type: string
+
+    label:
+      type: string
+      title: Label
+      description: The node title.
+
+    url:
+      type: string
+      title: URL
+      description: Canonical URL of the node.
+
+    display_submitted:
+      type: boolean
+      title: Display Submitted
+      description: Whether to show author name and publication date.
+      default: false
+
+    author_name:
+      type: string
+      title: Author Name
+      description: Rendered author name (may be a link for authenticated users).
+
+    date:
+      type: string
+      title: Date
+      description: Formatted publication date.
+
+    title_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Title HTML attributes
+      description: HTML attributes for the h2 title element.
+
+    author_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Author HTML attributes
+      description: HTML attributes for the author element.
+
+    content_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Content HTML attributes
+      description: HTML attributes for the body excerpt wrapper.
+
+slots:
+  title_prefix:
+    title: Title Prefix
+    description: Drupal contextual links prefix — required for in-place editing.
+
+  title_suffix:
+    title: Title Suffix
+    description: Drupal contextual links suffix.
+
+  author_picture:
+    title: Author Picture
+    description: Rendered author avatar image.
+
+  image:
+    title: Featured Image
+    description: Rendered field_image output.
+
+  body:
+    title: Body Excerpt
+    description: Rendered body/text content with image, tags and links excluded.
+
+  tags:
+    title: Tags
+    description: Rendered field_tags output.
+
+  links:
+    title: Node Links
+    description: Rendered node action links (read more, edit, etc.).
+
+  metadata:
+    title: Metadata
+    description: Additional metadata markup from Drupal.

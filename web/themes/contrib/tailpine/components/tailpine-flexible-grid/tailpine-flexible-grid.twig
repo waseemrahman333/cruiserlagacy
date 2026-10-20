@@ -1,0 +1,93 @@
+{#
+/**
+ * Flexible Grid (Canvas)
+ *
+ * A CSS Grid container whose column count is independently configurable for
+ * each of four responsive tiers. Drop Flexible Grid Item components into the
+ * content slot; they self-size using col-span-* classes.
+ *
+ * Breakpoint tiers:
+ *   Mobile  — no prefix  — all screen sizes (base)
+ *   Tablet  — md:        — ≥ 768px
+ *   Desktop — lg:        — ≥ 1024px
+ *   Wide    — xl:        — ≥ 1280px
+ *
+ * Available variables:
+ * - columns_mobile:  (int 1–12) Column tracks — mobile. Default: 1.
+ * - columns_tablet:  (int 1–12) Column tracks — md:. Default: 6.
+ * - columns_desktop: (int 1–12) Column tracks — lg:. Default: 12.
+ * - columns_wide:    (int 1–12) Column tracks — xl:. Default: 12.
+ * - gap:             (string) none|small|medium|large|xlarge. Default: medium.
+ * - align_items:     (string) top|center|bottom|stretch. Default: stretch.
+ * - extra_classes:   (string) Optional additional CSS classes.
+ * - content:         (markup) Slot — Flexible Grid Item components.
+ *
+ * Layout contract:
+ * Fractional widths in child Grid Items (Half, One-third, etc.) assume a
+ * 12-column parent. Changing desktop/wide away from 12 may cause fractions to
+ * not divide evenly. Keeping columns_desktop and columns_wide at 12 is
+ * strongly recommended.
+ *
+ * Tailwind v4 — @source inline() directives required in css/main.css:
+ *
+ *   @source inline("{md:,lg:,xl:,}grid-cols-{1,2,3,4,5,6,7,8,9,10,11,12}");
+ *   @source inline("gap-{0,2,4,6,8}");
+ *   @source inline("items-{start,center,end,stretch}");
+ *
+ * (grid-cols-{1..12} without prefix and gap-{0,2,4,6,8,10,12,16} are already
+ * covered by existing @source inline() entries in css/main.css.)
+ */
+#}
+
+{# Sanitise and clamp integer props to 1–12 #}
+{% set col_mobile  = columns_mobile|default(1)|abs %}
+{% set col_tablet  = columns_tablet|default(6)|abs %}
+{% set col_desktop = columns_desktop|default(12)|abs %}
+{% set col_wide    = columns_wide|default(12)|abs %}
+
+{% if col_mobile < 1 %}{% set col_mobile = 1 %}{% endif %}
+{% if col_mobile > 12 %}{% set col_mobile = 12 %}{% endif %}
+{% if col_tablet < 1 %}{% set col_tablet = 1 %}{% endif %}
+{% if col_tablet > 12 %}{% set col_tablet = 12 %}{% endif %}
+{% if col_desktop < 1 %}{% set col_desktop = 1 %}{% endif %}
+{% if col_desktop > 12 %}{% set col_desktop = 12 %}{% endif %}
+{% if col_wide < 1 %}{% set col_wide = 1 %}{% endif %}
+{% if col_wide > 12 %}{% set col_wide = 12 %}{% endif %}
+
+{# Resolve gap class #}
+{% set gap_map = {
+  'none':   'gap-0',
+  'small':  'gap-2',
+  'medium': 'gap-4',
+  'large':  'gap-6',
+  'xlarge': 'gap-8',
+} %}
+{% set gap_class = gap_map[gap|default('medium')]|default('gap-4') %}
+
+{# Resolve align-items class #}
+{% set align_map = {
+  'top':     'items-start',
+  'center':  'items-center',
+  'bottom':  'items-end',
+  'stretch': 'items-stretch',
+} %}
+{% set align_class = align_map[align_items|default('stretch')]|default('items-stretch') %}
+
+{# Sanitise extra_classes #}
+{% set extra_safe = extra_classes|default('')|striptags %}
+
+<div {{ attributes.addClass(
+  'grid',
+  'grid-cols-' ~ col_mobile,
+  'md:grid-cols-' ~ col_tablet,
+  'lg:grid-cols-' ~ col_desktop,
+  'xl:grid-cols-' ~ col_wide,
+  gap_class,
+  align_class,
+  extra_safe
+) }}>
+  {% set content_slot %}
+    {% block content %}{% endblock %}
+  {% endset %}
+  {{ content_slot }}
+</div>

@@ -1,0 +1,36 @@
+{#
+/**
+ * Button Group Component
+ * 
+ * Groups multiple buttons together with shared borders.
+ */
+#}
+
+
+{% set layout_map = {
+  'horizontal': 'flex-row',
+  'vertical': 'flex-col'
+} %}
+
+{% set layout_class = layout_map[layout|default('horizontal')] %}
+
+{% set gap_variants = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+  xxl:  "gap-8 md:gap-10 xl:gap-12"
+
+} %}
+
+{% set gap_class = gap_variants[gap|default('md')] %}
+
+<div class="flex {{layout_class }} {{ gap_class }} min-w-20" role="group">
+{% if buttons %}
+  {% block buttons %}
+    {{ buttons }}
+  {% endblock %}
+{% endif %}
+</div>

@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * UI Pattern meta information.
+ */
+#}
+
+
+<table class="w-full text-sm text-left border border-border rounded-md overflow-hidden shadow">
+  <thead class="bg-surface text-md uppercase text-body">
+    <tr>
+      <th class="px-4 py-3 border-b border-border">{{ 'Name'|t }}</th>
+      <th class="px-4 py-3 border-b border-border">{{ 'Label'|t }}</th>
+      <th class="px-4 py-3 border-b border-border">{{ 'Type'|t }}</th>
+      <th class="px-4 py-3 border-b border-border">{{ 'Description'|t }}</th>
+    </tr>
+  </thead>
+  <tbody class="divide-y divide-border bg-body-bg">
+    {% for slot_id, slot in component.slots %}
+      <tr>
+        <td class="px-4 py-3 font-mono text-body"><code>{{ slot_id }}</code></td>
+        <td class="px-4 py-3 text-body">{{ slot.title }}</td>
+        <td class="px-4 py-3 text-tertiary font-semibold">{{ 'Slot'|t }}</td>
+        <td class="px-4 py-3 text-body">{{ slot.description }}</td>
+      </tr>
+    {% endfor %}
+
+    {% for prop_id, prop in component.props.properties %}
+      {% if prop_id != 'attributes' and prop_id != 'variant' %}
+        <tr>
+          <td class="px-4 py-3 font-mono text-body"><code>{{ prop_id }}</code></td>
+          <td class="px-4 py-3 text-body">{{ prop.title }}</td>
+          <td class="px-4 py-3 text-purple-600 font-semibold">
+            {{ prop.ui_patterns.type_definition.label }}
+          </td>
+          <td class="px-4 py-3 text-body">
+            {% for line in prop.ui_patterns.summary %}
+              {{ line }}<br>
+            {% endfor %}
+          </td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+
+

@@ -1,0 +1,87 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Video Spotlight (Canvas)
+group: Tailpine
+status: stable
+description: Video embed (YouTube, Vimeo, or self-hosted) with poster image and play-on-click behaviour.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    provider:
+      type: string
+      title: Video provider
+      default: youtube
+      enum: [youtube, vimeo, self-hosted]
+      meta:enum:
+        youtube: YouTube
+        vimeo: Vimeo
+        self-hosted: Self-hosted
+      examples:
+        - youtube
+
+    embed_url:
+      type: string
+      title: Embed URL
+      description: YouTube/Vimeo embed URL or self-hosted video file URL.
+      examples:
+        - 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+
+    aspect_ratio:
+      type: string
+      title: Aspect ratio
+      default: 16-9
+      enum: ['16-9', '4-3', '1-1', '9-16']
+      meta:enum:
+        '16-9': '16:9 (Widescreen)'
+        '4-3': '4:3 (Standard)'
+        '1-1': '1:1 (Square)'
+        '9-16': '9:16 (Portrait)'
+      examples:
+        - '16-9'
+
+    show_poster:
+      type: boolean
+      title: Show poster
+      description: Display a poster image before the video plays.
+      default: true
+      examples:
+        - true
+
+    show_play_overlay:
+      type: boolean
+      title: Show play button
+      description: Display a play button overlay on the poster.
+      default: true
+      examples:
+        - true
+
+    muted:
+      type: boolean
+      title: Muted
+      default: false
+      examples:
+        - false
+
+    loop:
+      type: boolean
+      title: Loop
+      default: false
+      examples:
+        - false
+
+    poster:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Poster image
+      description: Thumbnail shown before the video plays.
+      examples:
+        - src: 'video-poster.jpg'
+          alt: 'Video preview'
+          width: 1280
+          height: 720

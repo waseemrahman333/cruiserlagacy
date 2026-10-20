@@ -1,0 +1,69 @@
+{#
+/**
+ * Pullquote (Canvas)
+ *
+ * Variables:
+ * - border_style: 'left-bar'|'corner-accent'|'centered'|'full-box'
+ * - quote: rich-text HTML string
+ * - author: string
+ * - source: string
+ * - show_avatar: bool
+ * - avatar: Canvas image object
+ *
+ * Accessibility:
+ * - Uses <figure>/<blockquote>/<figcaption> semantics.
+ * - Avatar is decorative when attribution text is present.
+ *
+ * Theme tokens: border-primary, border-border, bg-surface, text-heading, text-body, text-muted
+ */
+#}
+{% set safe_style = border_style|default('left-bar')|striptags %}
+
+{% set style_map = {
+  'left-bar':      'border-l-4 border-primary pl-6 py-2',
+  'corner-accent': 'border-t-4 border-l-4 border-primary pt-5 pl-5',
+  'centered':      'border-t border-b border-border py-8 text-center',
+  'full-box':      'border border-border rounded-xl p-8 bg-surface',
+} %}
+{% set style_class = style_map[safe_style]|default('border-l-4 border-primary pl-6 py-2') %}
+
+<figure
+  class="canvas-pullquote canvas-pullquote--{{ safe_style }} w-full max-w-3xl mx-auto my-8 {{ style_class }}"
+  {{ attributes }}
+>
+
+  <blockquote class="canvas-pullquote__quote text-xl font-serif italic leading-relaxed text-heading mb-6">
+    {% if quote %}{{ quote|raw }}{% else %}<p>"Add your quote text here."</p>{% endif %}
+  </blockquote>
+
+  {% if author or (show_avatar and avatar and avatar.src) %}
+    <figcaption class="canvas-pullquote__attribution flex items-center {{ safe_style == 'centered' ? 'justify-center' : '' }} gap-3">
+
+      {% if show_avatar and avatar and avatar.src %}
+        <img
+          src="{{ avatar.src|striptags }}"
+          alt="{{ avatar.alt|default('')|striptags }}"
+          loading="lazy"
+          class="canvas-pullquote__avatar w-12 h-12 rounded-full object-cover flex-shrink-0"
+          width="{{ avatar.width|default(80) }}"
+          height="{{ avatar.height|default(80) }}"
+        >
+      {% endif %}
+
+      <div>
+        {% if author %}
+          <cite class="canvas-pullquote__author block font-semibold not-italic text-body text-base">
+            — {{ author|striptags }}
+          </cite>
+        {% endif %}
+        {% if source %}
+          <span class="canvas-pullquote__source block text-sm text-muted">
+            {{ source|striptags }}
+          </span>
+        {% endif %}
+      </div>
+
+    </figcaption>
+  {% endif %}
+
+</figure>

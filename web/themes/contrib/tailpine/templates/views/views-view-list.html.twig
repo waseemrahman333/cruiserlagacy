@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Theme override for a view template to display a list of rows.
+ *
+ * @see template_preprocess_views_view_list()
+ */
+#}
+{% if attributes %}
+  <div{{ attributes.addClass('views-view-list') }}>
+{% endif %}
+  {% if title %}
+    <h3 class="text-lg font-semibold text-body mb-3">{{ title }}</h3>
+  {% endif %}
+
+  <{{ list.type }}{{ list.attributes.addClass([
+    list.type == 'ul' ? 'list-disc' : 'list-decimal',
+    'pl-5',
+    'space-y-1',
+    'text-body',
+  ]) }}>
+    {% for row in rows %}
+      <li{{ row.attributes.addClass('py-0.5') }}>
+        {{- row.content -}}
+      </li>
+    {% endfor %}
+  </{{ list.type }}>
+
+{% if attributes %}
+  </div>
+{% endif %}

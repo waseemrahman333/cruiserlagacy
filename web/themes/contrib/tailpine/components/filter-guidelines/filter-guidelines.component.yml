@@ -1,0 +1,23 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: filter tips
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    format:
+      type: array
+      title: Format
+      description: Descriptions and a CSS ID in the form of 'module-name/filter-id' (only used when 'long' is TRUE) for each filter in one or more text formats.
+      items:
+        type: string
+      default: []
+
+    tips:
+      type: ['array', 'string', 'null']
+      title: Tips
+      description: Descriptions and a CSS ID in the form of 'module-name/filter-id'
+      default: []

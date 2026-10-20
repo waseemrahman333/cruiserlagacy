@@ -1,0 +1,366 @@
+
+{# ===== BACKGROUND COLOR (for solid color mode) ===== #}
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+  'success': 'bg-success text-success-content',
+  'warning': 'bg-warning text-warning-content',
+  'error': 'bg-error text-error-content',
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+  {# bg-colors #}
+{% set bg_color_class = bg_variants[bg_color] %}
+
+{# ===== OVERLAY COLOR ===== #}
+
+{% set show_overlay = enable_overlay and background_type in ['image', 'video', 'both'] %}
+
+{% set overlay_bg = bg_variants[overlay_color]|default(bg_variants.primary) %}
+
+{# ===== OVERLAY OPACITY (convert to decimal) ===== #}
+
+{% set overlay_opacity_map = {
+  '10': 'opacity-10',
+  '20': 'opacity-20',
+  '30': 'opacity-30',
+  '40': 'opacity-40',
+  '50': 'opacity-50',
+  '60': 'opacity-60',
+  '70': 'opacity-70',
+  '80': 'opacity-80'
+} %}
+
+{% set opacity_class = overlay_opacity_map[overlay_opacity]|default(overlay_opacity_map['70']) %}
+
+
+{# ===== HORIZONTAL CONTENT ALIGNMENT ===== #}
+
+{% set content_alignment_map = {
+  'left': ' Justify-start items-start',
+  'center': 'text-center justify-center items-center',
+  'right': 'text-right justify-end items-end',
+  'responsive': 'text-center items-center md:text-left md:items-start'
+} %}
+
+{% set alignment_map = {
+  'left': 'text-left',
+  'center': 'text-center',
+  'right': 'text-right'
+} %}
+
+{% set justify_class = content_alignment_map[content_alignment]|default(content_alignment_map.left) %}
+
+{# ===== content direction===== #}
+{% set direction_map = {
+  'row': 'xl:flex-row',
+  'column': 'xl:flex-col',
+  'reverse': 'xl:flex-row-reverse'
+} %}
+
+{% set direction_class = direction_map[content_direction|default('row')] %}
+{% set spacing_map = {
+  "none": {
+    pt: { m: "pt-0", t: "md:pt-0", d: "xl:pt-0" },
+    pb: { m: "pb-0", t: "md:pb-0", d: "xl:pb-0" }
+  },
+
+  "xs": {
+    pt: { m: "pt-[24px]", t: "md:pt-[32px]", d: "xl:pt-[48px]" },
+    pb: { m: "pb-[24px]", t: "md:pb-[32px]", d: "xl:pb-[48px]" }
+  },
+
+  "sm": {
+    pt: { m: "pt-[32px]", t: "md:pt-[48px]", d: "xl:pt-[64px]" },
+    pb: { m: "pb-[32px]", t: "md:pb-[48px]", d: "xl:pb-[64px]" }
+  },
+
+  "md": {
+    pt: { m: "pt-[40px]", t: "md:pt-[56px]", d: "xl:pt-[80px]" },
+    pb: { m: "pb-[40px]", t: "md:pb-[56px]", d: "xl:pb-[80px]" }
+  },
+
+  "lg": {
+    pt: { m: "pt-[48px]", t: "md:pt-[64px]", d: "xl:pt-[96px]" },
+    pb: { m: "pb-[48px]", t: "md:pb-[64px]", d: "xl:pb-[96px]" }
+  },
+
+  "xl": {
+    pt: { m: "pt-[64px]", t: "md:pt-[80px]", d: "xl:pt-[128px]" },
+    pb: { m: "pb-[64px]", t: "md:pb-[80px]", d: "xl:pb-[128px]" }
+  },
+
+  "2xl": {
+    pt: { m: "pt-[80px]", t: "md:pt-[96px]", d: "xl:pt-[160px]" },
+    pb: { m: "pb-[80px]", t: "md:pb-[96px]", d: "xl:pb-[160px]" }
+  },
+
+  "3xl": {
+    pt: { m: "pt-[96px]", t: "md:pt-[128px]", d: "xl:pt-[192px]" },
+    pb: { m: "pb-[96px]", t: "md:pb-[128px]", d: "xl:pb-[192px]" }
+  },
+
+  "4xl": {
+    pt: { m: "pt-[112px]", t: "md:pt-[160px]", d: "xl:pt-[256px]" },
+    pb: { m: "pb-[112px]", t: "md:pb-[160px]", d: "xl:pb-[224px]" }
+  },
+
+  "5xl": {
+    pt: { m: "pt-[160px]", t: "md:pt-[192px]", d: "xl:pt-[320px]" },
+    pb: { m: "pb-[128px]", t: "md:pb-[192px]", d: "xl:pb-[256px]" }
+  },
+
+  "6xl": {
+    pt: { m: "pt-[256px]", t: "md:pt-[320px]", d: "xl:pt-[448px]" },
+    pb: { m: "pb-[160px]", t: "md:pb-[224px]", d: "xl:pb-[320px]" }
+  },
+  "7xl": {
+    pt: { m: "pt-[320px]", t: "md:pt-[448px]", d: "xl:pt-[576px]" },
+    pb: { m: "pb-[192px]", t: "md:pb-[256px]", d: "xl:pb-[384px]" }
+  },
+  "8xl": {
+    pt: { m: "pt-[256px]", t: "md:pt-[448px]", d: "xl:pt-[672px]" },
+    pb: { m: "pb-[256px]", t: "md:pb-[320px]", d: "xl:pb-[448px]" }
+  }
+
+} %}
+
+
+{% set pt_mobile_class = spacing_map[padding_top_m].pt.m ?? '' %}
+{% set pt_md_class     = spacing_map[padding_top_t].pt.t ?? '' %}
+{% set pt_xl_class     = spacing_map[padding_top_d].pt.d ?? '' %}
+
+{% set pb_mobile_class = spacing_map[padding_bottom_m].pb.m ?? '' %}
+{% set pb_md_class     = spacing_map[padding_bottom_t].pb.t ?? '' %}
+{% set pb_xl_class     = spacing_map[padding_bottom_d].pb.d ?? '' %}
+
+
+{# ===== Content gap===== #}
+
+{% set gap_variants = {
+  "0":  "gap-0",
+  "4":  "gap-1",
+  "8":  "gap-0.5 md:gap-1 xl:gap-2",
+  "12": "gap-1 md:gap-2 xl:gap-3",
+  "16": "gap-1 md:gap-2 xl:gap-4",
+  "20": "gap-1 md:gap-3 xl:gap-5",
+  "24": "gap-2 md:gap-3 xl:gap-6",
+  "32": "gap-2 md:gap-4 xl:gap-8",
+  "40": "gap-2 md:gap-5 xl:gap-10",
+  "48": "gap-3 md:gap-8 xl:gap-12"
+} %}
+{# ===== Content width===== #}
+{% set width_map = {
+  '50': 'w-full xl:w-1/2',
+  '60': 'w-full xl:w-3/5',
+  '70': 'w-full xl:w-7/10',
+  '75': 'w-full xl:w-3/4',
+  '80': 'w-full xl:w-[80%]',
+  '90': 'w-full xl:w-[90%]',
+  '100': 'w-full'
+} %}
+
+{% set content_width_class = width_map[content_width|default('70')] %}
+{% set left_content_width = width_map[content_width|default('70')] %}
+
+{% set xl_width = left_content_width|split(' ')|last %} 
+
+{% set remaining_map = {
+  'xl:w-1/2': 'md:w-2/3  xl:w-1/2',
+  'xl:w-3/5': 'md:w-2/3  xl:w-2/5',
+  'xl:w-7/10': 'md:w-2/3  xl:w-3/10',
+  'xl:w-3/4': 'md:w-2/3  xl:w-1/4',
+  'xl:w-[80%]': 'md:w-2/3  xl:w-[20%]',
+  'xl:w-[90%]': 'md:w-2/3  xl:w-[10%]',
+  'w-full': 'md:w-2/3  w-full'
+} %}
+
+
+{% set right_content_width = 'w-full ' ~ (remaining_map[xl_width]|default('w-full')) %}
+{# {% set text_content_width = 'w-full ' ~ (text_width_maping[xl_width]|default('w-full')) %} #}
+
+
+{# ===== CTA LAYOUT ===== #}
+{% if cta_layout == 'horizontal' %}
+  {% set cta_flex = 'flex-row gap-4' %}
+{% elseif cta_layout == 'vertical' %}
+  {% set cta_flex = 'flex-col gap-4' %}
+{% elseif cta_layout == 'stacked' %}
+  {% set cta_flex = 'flex-col sm:flex-row gap-4' %}
+{% else %}
+  {% set cta_flex = 'flex-col sm:flex-row gap-4' %}
+{% endif %}
+
+{# Check if background image or video exists #}
+{% set has_colored_bg = background_type == 'color' %}
+{# has both bg mean there must be image and color both the bg #}
+{% set has_both_bg = background_type == 'both' and bg_image is  defined and bg_image.src is defined and bg_image.src %}
+{% set has_bg_image = background_type == 'image' and bg_image is defined and bg_image.src is defined and bg_image.src %}
+{% set has_bg_video = background_type == 'video' and bg_video is defined and bg_video.src is defined and bg_video.src %}
+{% set video_poster = has_bg_video and bg_video.poster is defined ? bg_video.poster : '' %}
+
+{# Build background style for image #}
+{% if has_bg_image %}
+    {% set bg_style = 'background-image:url(\'' ~ bg_image.src ~ '\');' %}
+{% else %}
+  {% set bg_style = '' %}
+{% endif %}
+
+<section 
+  {{ attributes.addClass(
+    'relative',
+    'w-full', 
+    'bg-center', 
+    'bg-cover', 
+    'bg-no-repeat',
+    'overflow-hidden',
+    'flex',
+    bg_color_class,
+    bg_style ? 'text-primary' : ''
+  ) }}
+  {% if bg_style %}style="{{ bg_style }}"{% endif %}
+>
+
+{% if has_bg_image %}
+    {% if enable_overlay %}
+       <div class="absolute inset-0 {{overlay_bg}} {{opacity_class}}"></div>
+
+    {% endif %}
+{% endif %}
+  
+  {# ===== BACKGROUND VIDEO ===== #}
+     {% if show_overlay %}
+    {% if enable_overlay %}
+       <div class="absolute inset-0 {{overlay_bg}} {{opacity_class}}"></div>
+    {% endif %}
+    {% endif %}
+  {% if has_bg_video %}
+    <video 
+      class="absolute inset-0 w-full h-full object-cover z-0"
+      {% if video_autoplay %}autoplay{% endif %}
+      {% if video_loop %}loop{% endif %}
+      {% if video_muted %}muted{% endif %}
+      playsinline
+      {% if video_poster %}poster="{{ video_poster }}"{% endif %}>
+      <source src="{{ bg_video.src }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+    
+    {# Video Overlay #}
+  <div class="absolute inset-0 {{overlay_bg}} {{opacity_class}}"></div>
+  {% endif %}
+
+  {# ===== MAIN CONTENT CONTAINER ===== #}
+  <div class="relative z-10 {{pt_mobile_class}} {{pt_md_class}} {{pt_xl_class}} {{pb_mobile_class}} {{pb_md_class}} {{pb_xl_class}} container mx-auto  font-archivo  flex flex-col xl:flex-row {{ justify_class }}  {{ items_class }} {{ pt_class }} {{ pb_class }} {{ text_class }}">
+    
+    <div class="flex flex-col {{direction_class}} {{ (direction_class == 'xl:flex-row' ) ? 'w-full' : content_width_class }}  {{gap_variants[gap]|default(gap_variants["2"])}} ">
+      
+      {# ===== LEFT: HEADING ===== #}
+      {% if show_heading %}
+        {% set heading_content %}
+          {% block heading %}{% endblock %}
+        {% endset %}
+        {% if heading_content|trim is not empty %}
+          {# <div class="heading min-h-fit min-w-50 {{ left_max_width }}"> #}
+          <div class="heading min-h-fit min-w-50 {{ (direction_class == 'xl:flex-row' ) ? left_content_width : "w-full" }}  ">
+              {{ heading_content }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {# ===== RIGHT: DESCRIPTION & CTAs ===== #}
+      
+      {# <div class="flex flex-col  pt-0 {{ right_max_width }} {{ alignment_map[content_alignment] ?? 'text-left' }} w-auto"> #}
+      <div class="flex flex-col  pt-0 {{justify_class}}  {{ (direction_class == 'xl:flex-row' ) ? right_content_width : "w-full" }}  {{ alignment_map[content_alignment] ?? 'text-left' }} w-auto">
+        
+        {# Custom Content (badges, etc.) #}
+
+          {% if show_content_region %}
+            {% set custom %}
+            {% block custom_content %}{% endblock %}
+            {% endset %}
+            {% if custom|trim is not empty %}
+                <div class="custom-content min-h-fit min-w-30">
+                    {{ custom }}
+                </div>
+            {% endif %}
+         {% endif %}
+
+        {# Description #}
+        {% if show_description %}
+          {% set description_content %}
+            {% block description %}{% endblock %}
+          {% endset %}
+          {% if description_content|trim is not empty %}
+            <div class="text-base font-normal  md:text-xl min-h-fit min-w-50 {{ (direction_class == 'xl:flex-row' ) ? 'w-full' : 'xl:w-7/10' }}  {{ text_align }}">
+              {{ description_content }}
+            </div>
+          {% endif %}
+        {% endif %}
+
+        {# CTA Buttons #}
+        {% if show_cta_primary or show_cta_secondary %}
+          <div class="hero_cta flex {{ cta_flex }} {{justify_class}}">
+            
+            {# Primary CTA #}
+            {% if show_cta_primary %}
+              {% set cta_primary_content %}
+                {% block cta_primary %}{% endblock %}
+              {% endset %}
+              {% if cta_primary_content|trim is not empty %}
+                <div class="cta-primary min-h-fit min-w-32 ">
+                  {{ cta_primary_content }}
+                </div>
+              {% endif %}
+            {% endif %}
+
+            {# Secondary CTA #}
+            {% if show_cta_secondary %}
+              {% set cta_secondary_content %}
+                {% block cta_secondary %}{% endblock %}
+              {% endset %}
+              {% if cta_secondary_content|trim is not empty %}
+                <div class="cta-secondary min-h-fit min-w-32">
+                  {{ cta_secondary_content }}
+                </div>
+              {% endif %}
+            {% endif %}
+
+          </div>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </div>
+
+      {# Image Column #}
+    {% if has_both_bg %}
+     <div class="lg:w-full  ">
+        <img
+          {# class="{{ image_position_mode }} object-cover" #}
+          class="object-cover w-full h-full"
+          src="{{ bg_image.src }}"
+          alt="{{ bg_image.alt }}"
+          loading="lazy"/>
+     </div>
+    {% endif %}
+
+</section>
+
+
+          {# style="
+            width: {{ image_width }}px;
+            height: {{ image_height }}px;
+            transform: translate( {{image_translate_x}}px, {{ image_translate_y }}px); "  #}

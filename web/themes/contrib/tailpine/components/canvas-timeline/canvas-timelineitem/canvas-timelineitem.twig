@@ -1,0 +1,43 @@
+{#
+/**
+ * Timeline Item (Canvas) — child
+ *
+ * Variables: date, title, body, icon, image
+ *
+ * Theme tokens: bg-surface, border-primary, text-primary, text-muted, text-heading, text-body
+ */
+#}
+<div
+  class="canvas-timelineitem relative pl-14 pb-12 last:pb-0"
+  {{ attributes }}
+>
+  {# Timeline dot #}
+  <div class="canvas-timelineitem__dot absolute left-0 w-10 h-10 rounded-full bg-surface border-2 border-primary flex items-center justify-center z-10 text-primary text-sm font-bold">
+    {% if icon %}{{ icon|striptags }}{% else %}<span class="w-3 h-3 rounded-full bg-primary block"></span>{% endif %}
+  </div>
+
+  {% if date %}
+    <time class="canvas-timelineitem__date block text-sm text-muted font-medium mb-1">{{ date|striptags }}</time>
+  {% endif %}
+
+  {% if title %}
+    <h3 class="canvas-timelineitem__title text-heading font-semibold text-lg mb-2">{{ title|striptags }}</h3>
+  {% endif %}
+
+  {% if body %}
+    <div class="canvas-timelineitem__body text-body text-sm leading-relaxed">{{ body|raw }}</div>
+  {% endif %}
+
+  {% if image and image.src %}
+    <div class="canvas-timelineitem__image mt-4 rounded-xl overflow-hidden">
+      <img
+        src="{{ image.src|striptags }}"
+        alt="{{ image.alt|default('')|striptags }}"
+        loading="lazy"
+        class="w-full h-auto object-cover"
+        width="{{ image.width|default(600) }}"
+        height="{{ image.height|default(400) }}"
+      >
+    </div>
+  {% endif %}
+</div>

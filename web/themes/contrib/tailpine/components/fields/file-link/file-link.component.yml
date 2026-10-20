@@ -1,0 +1,26 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: FileLink
+description: A component for displaying a link to a file with an icon and file size.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    link:
+      type: [string, 'null']
+      description: A link to the file.
+    icon:
+      type: [string, 'null']
+      description: The icon image representing the file type.
+    file_size:
+      type: [string, 'null']
+      description: The size of the file.
+    file_link_utility_classes:
+      type: array
+      title: File Link Utility Classes
+      description: Additional Tailwind utility classes for the file link wrapper.
+      items:
+        type: string

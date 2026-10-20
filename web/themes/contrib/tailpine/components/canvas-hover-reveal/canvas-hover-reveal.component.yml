@@ -1,0 +1,65 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Hover Reveal (Canvas)
+group: Tailpine
+status: stable
+description: Content card that reveals a secondary layer on hover with five direction options.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    reveal_direction:
+      type: string
+      title: Reveal direction
+      default: up
+      enum: [up, down, left, right, fade]
+      meta:enum:
+        up: Slide up
+        down: Slide down
+        left: Slide left
+        right: Slide right
+        fade: Fade in
+      examples:
+        - up
+
+    show_overlay:
+      type: boolean
+      title: Show overlay
+      description: Darken the front content when the reveal layer is shown.
+      default: true
+      examples:
+        - true
+
+    overlay_opacity:
+      type: string
+      title: Overlay opacity
+      default: '40'
+      enum: ['20', '40', '60', '80']
+      meta:enum:
+        '20': 20%
+        '40': 40%
+        '60': 60%
+        '80': 80%
+      examples:
+        - '40'
+
+    keep_visible_on_mobile:
+      type: boolean
+      title: Always visible on mobile
+      description: Keep the reveal layer always visible on small screens.
+      default: false
+      examples:
+        - false
+
+slots:
+  front:
+    title: Front content
+    description: Content visible by default.
+  reveal:
+    title: Reveal content
+    description: Content shown on hover.

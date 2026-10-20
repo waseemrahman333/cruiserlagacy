@@ -1,0 +1,32 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Image Mosaic Item (Canvas)
+group: Tailpine
+status: stable
+description: A single image inside a canvas-image-mosaic gallery.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+      description: Upload or select the gallery image.
+      examples:
+        - src: 'photo.jpg'
+          alt: 'Photo description'
+          width: 800
+          height: 600
+
+    caption:
+      type: string
+      title: Caption
+      description: Optional caption shown beneath or on hover.
+      examples:
+        - 'Summer 2024'

@@ -1,0 +1,248 @@
+{#
+/**
+ * Base Testimonial Component with Two Design Styles
+ * 
+ * Style One: Quote icon with side profile image
+ * Style Two: Centered layout with decorative top dots
+ */
+#}
+
+{% set author_heading = heading_level|default(2) %}
+{% set author_image = imageurl.src|default('') %}
+{% set author_alt = imageurl.alt|default('') %}
+{% set style = design_style|default('style_one') %}
+
+{# Padding Variants #}
+{% set padding_block_variants = {
+  "0px": "py-0",
+  "8px": "py-1 md:py-1.5 xl:py-2",
+  "10px": "py-1.5 md:py-2 xl:py-2.5",
+  "16px": "py-2 md:py-3 xl:py-4",
+  "18px": "py-2.5 md:py-3.5 xl:py-4.5",
+  "20px": "py-2.5 md:py-4 xl:py-5",
+  "24px": "py-3 md:py-4.5 xl:py-6",
+  "28px": "py-3.5 md:py-5 xl:py-7",
+  "32px": "py-4 md:py-6 xl:py-8",
+  "36px": "py-4.5 md:py-7 xl:py-9",
+  "40px": "py-5 md:py-8 xl:py-10",
+  "44px": "py-5.5 md:py-9 xl:py-11",
+  "48px": "py-6 md:py-10 xl:py-12",
+  "52px": "py-6.5 md:py-11 xl:py-13",
+  "56px": "py-7 md:py-12 xl:py-14",
+  "64px": "py-8 md:py-12 xl:py-16",
+  "70px": "py-9 md:py-13 xl:py-[4.375rem]",
+  "74px": "py-9 md:py-14 xl:py-[4.625rem]",
+  "80px": "py-10 md:py-14 xl:py-20",
+  "84px": "py-10.5 md:py-15 xl:py-21",
+  "92px": "py-11.5 md:py-16 xl:py-23",
+  "96px": "py-12 md:py-16 xl:py-24",
+  "100px": "py-12.5 md:py-18 xl:py-25",
+  "112px": "py-14 md:py-20 xl:py-28",
+  "120px": "py-15 md:py-22 xl:py-30",
+  "128px": "py-16 md:py-24 xl:py-32",
+  "140px": "py-17.5 md:py-26 xl:py-35",
+  "156px": "py-19.5 md:py-30 xl:py-39",
+  "160px": "py-20 md:py-32 xl:py-40",
+  "192px": "py-24 md:py-40 xl:py-48",
+  "224px": "py-28 md:py-48 xl:py-56"
+} %}
+
+{% set padding_inline_variants = {
+  "0px": "px-0",
+  "8px": "px-1 md:px-1.5 xl:px-2",
+  "10px": "px-1.5 md:px-2 xl:px-2.5",
+  "16px": "px-2 md:px-3 xl:px-4",
+  "18px": "px-2.5 md:px-3.5 xl:px-4.5",
+  "20px": "px-2.5 md:px-4 xl:px-5",
+  "24px": "px-3 md:px-4.5 xl:px-6",
+  "28px": "px-3.5 md:px-5 xl:px-7",
+  "32px": "px-4 md:px-6 xl:px-8",
+  "36px": "px-4.5 md:px-7 xl:px-9",
+  "40px": "px-5 md:px-8 xl:px-10",
+  "44px": "px-5.5 md:px-9 xl:px-11",
+  "48px": "px-6 md:px-10 xl:px-12",
+  "52px": "px-6.5 md:px-11 xl:px-13",
+  "56px": "px-7 md:px-12 xl:px-14",
+  "64px": "px-8 md:px-12 xl:px-16",
+  "70px": "px-9 md:px-13 xl:px-[4.375rem]",
+  "74px": "px-9 md:px-14 xl:px-[4.625rem]",
+  "80px": "px-10 md:px-14 xl:px-20",
+  "84px": "px-10.5 md:px-15 xl:px-21",
+  "92px": "px-11.5 md:px-16 xl:px-23",
+  "96px": "px-12 md:px-16 xl:px-24",
+  "100px": "px-12.5 md:px-18 xl:px-25",
+  "112px": "px-14 md:px-20 xl:px-28",
+  "120px": "px-15 md:px-22 xl:px-30",
+  "128px": "px-16 md:px-24 xl:px-32",
+  "140px": "px-17.5 md:px-26 xl:px-35",
+  "156px": "px-19.5 md:px-30 xl:px-39",
+  "160px": "px-20 md:px-32 xl:px-40",
+  "192px": "px-24 md:px-40 xl:px-48",
+  "224px": "px-28 md:px-48 xl:px-56"
+} %}
+
+{% set gap_variants = {
+  "0": "gap-0",
+  "4": "gap-1",
+  "8": "gap-2",
+  "12": "gap-3",
+  "16": "gap-4",
+  "20": "gap-5",
+  "24": "gap-5 xl:gap-6",
+  "32": "gap-6 xl:gap-8",
+  "40": "gap-6 md:gap-8 xl:gap-10",
+  "48": "gap-8 md:gap-10 xl:gap-12"
+} %}
+
+{% set border_variants = {
+  'primary': 'border-primary',
+  'secondary': 'border-secondary',
+  'tertiary': 'border-tertiary',
+  'light': 'border-border',
+  'medium': 'border-border',
+  'dark': 'border-body',
+  'black': 'border-black',
+  'white': 'border-border'
+} %}
+
+{% set bg_variants = {
+  'primary': 'bg-primary text-body-bg',
+  'secondary': 'bg-secondary text-on-primary',
+  'tertiary': 'bg-tertiary text-body-bg',
+  'light': 'bg-surface text-body',
+  'medium': 'bg-surface-alt text-body',
+  'dark': 'bg-body text-body-bg',
+  'transparent': 'bg-transparent',
+  'gradient_bg': 'bg-gradient-to-r from-primary to-secondary text-body-bg'
+} %}
+
+{% set card_padding_inline_class = padding_inline_variants[card_padding_inline]|default('px-0') %}
+{% set card_padding_block_class = padding_block_variants[card_padding_block]|default('py-0') %}
+{% set content_padding_inline_class = padding_inline_variants[content_padding_inline]|default('px-0') %}
+{% set content_padding_block_class = padding_block_variants[content_padding_block]|default('py-0') %}
+
+{# ========== STYLE ONE: Quote with Side Profile ========== #}
+{% if style == 'style_one' %}
+
+<figure class="{{ card_padding_inline_class }} {{ card_padding_block_class }} {{ bg_variants[bg_color]|default('primary') }} flex flex-col {{ gap_variants[gap]|default('gap-2') }}  {{ enable_border ? "border-3" : "" }} {{ border_variants[border_color]|default('primary') }} rounded-{{ border_radius }}">
+  
+  {# Testimonial Card #}
+  <blockquote class="relative flex flex-col justify-between bg-surface text-body {{ content_padding_inline_class }} {{ content_padding_block_class }} w-full flex-grow">
+    
+    <div class="flex gap-5 h-full">
+      {# Decorative Quote Icon #}
+      <div class="w-fit h-10 pt-2 flex-shrink-0" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="currentColor" class="text-muted">
+          <path d="M14.1614 30.6289H0.608784V20.6792C0.608784 10.0761 4.60791 3.39272 12.6061 0.628906L15.2722 6.43293C10.2363 8.14147 7.69365 11.6088 7.64427 16.8349H14.1614V30.6289ZM36.9712 30.6289H23.4186V20.6792C23.4186 10.0259 27.4424 3.34247 35.49 0.628906L38.082 6.43293C33.0955 8.09122 30.5528 11.5586 30.4541 16.8349H36.9712V30.6289Z"/>
+        </svg>
+      </div>
+      
+      {# Testimonial Text #}
+      <div class="flex h-full flex-col justify-between {{ gap_variants[content_gap]|default('gap-2') }}">
+        {% if description %}
+          <div class="text-sm leading-7">
+            {{ description }}
+          </div>
+        {% endif %}
+
+        {# Rating Stars #}
+        {% if show_rating %}
+          {% set rating_stars %}
+            {% block rating %}{% endblock %}
+          {% endset %}
+          {% if rating_stars|trim is not empty %}
+            <div class="flex gap-1">
+              <div class="h-fit min-w-20">
+                {{ rating_stars }}
+              </div>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    
+  </blockquote>
+  
+  {# Author Profile #}
+  <figcaption class="profile flex items-center gap-5">
+    {% if author_image %}
+      <div class="image w-16 rounded-full h-16 border-2 border-primary overflow-hidden flex-shrink-0">
+        <img 
+          src="{{ author_image }}" 
+          alt="{{ author_alt }}" 
+          class="w-full h-full object-cover"
+          loading="lazy"
+        >
+      </div>
+    {% endif %}
+    
+    <div class="info">
+      {% if name %}
+        <h{{ author_heading }} class="text-xl font-bold leading-tight">
+          {{ name }}
+        </h{{ author_heading }}>
+      {% endif %}
+      
+      {% if subtitle %}
+        <div class="text-sm leading-relaxed">
+          {{ subtitle }}
+        </div>
+      {% endif %}
+    </div>
+  </figcaption>
+</figure>
+
+{# ========== STYLE TWO: Centered with Top Dots ========== #}
+{% else %}
+
+
+{# ========== STYLE TWO: Centered with Top Dots ========== #}
+
+  <div class="card {{ card_padding_inline_class }} {{ bg_variants[bg_color]|default('primary') }} {{ card_padding_block_class }} relative  {{ enable_border ? "border-3" : "" }} {{ border_variants[border_color]|default('primary') }} rounded-{{ border_radius }} w-full {{ content_padding_inline_class }} {{ content_padding_block_class }} flex flex-col justify-center items-center {{ gap_variants[gap]|default('gap-7.5') }} 
+    before:content-['']  before:w-4 before:rounded-full before:h-4 before:bg-primary before:absolute before:-top-2.5 before:left-[40%] before:z-30 
+    after:content-[''] after:rounded-full after:w-4 after:h-4 after:bg-primary after:absolute after:-top-2.5 after:right-[40%] after:z-30">
+    
+    {# Spacer that inherits parent background - hides border between dots #}
+    <div class="absolute -top-[3px] left-1/2 transform -translate-x-1/2 w-[20%] h-[4px] bg-inherit z-20"></div>
+    
+    {# Profile Image #}
+    <div class="image border-3 rounded-full w-25 h-25 border-primary overflow-clip flex-shrink-0">
+      {% if author_image %}
+        <img class="h-full w-full object-cover" src="{{ author_image }}" alt="{{ author_alt }}" loading="lazy"/>
+      {% endif %}
+    </div>
+    
+    {# Content Info #}
+    <div class="info flex flex-col {{ gap_variants[content_gap]|default('gap-5') }} w-full">
+      
+      {# Description #}
+      {% if description %}
+        <div class="text-center text-sm md:text-base leading-relaxed">
+          {{ description }}
+        </div>
+      {% endif %}
+      
+      {# Author Info #}
+      {% if name or subtitle %}
+        <div class="flex flex-col gap-1">
+          {% if name %}
+            <h{{ author_heading }} class="text-center font-bold text-xl md:text-2xl">
+              {{ name }}
+            </h{{ author_heading }}>
+          {% endif %}
+          
+          {% if subtitle %}
+            <div class="text-center font-medium text-base md:text-lg">
+              {{ subtitle }}
+            </div>
+          {% endif %}
+        </div>
+      {% endif %}
+      
+
+      
+    </div>
+    
+  </div>
+
+{% endif %}

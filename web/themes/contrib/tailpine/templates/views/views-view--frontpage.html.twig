@@ -1,0 +1,189 @@
+{#
+/**
+ * @file
+ * Theme override for the frontpage view template.
+ *
+ * Available variables:
+ * - attributes: Remaining HTML attributes for the element.
+ * - css_name: A CSS-safe version of the view name.
+ * - css_class: The user-specified classes names, if any.
+ * - header: The optional header.
+ * - footer: The optional footer.
+ * - rows: The results of the view query, if any.
+ * - empty: The content to display if there are no rows.
+ * - pager: The optional pager next/prev links to display.
+ * - exposed: Exposed widget form/info to display.
+ * - feed_icons: Optional feed icons to display.
+ * - more: An optional link to the next page of results.
+ * - title: Title of the view, only used when displaying in the admin preview.
+ * - title_prefix: Additional output populated by modules, intended to be
+ *   displayed in front of the view title.
+ * - title_suffix: Additional output populated by modules, intended to be
+ *   displayed after the view title.
+ * - attachment_before: An optional attachment view to be displayed before the
+ *   view content.
+ * - attachment_after: An optional attachment view to be displayed after the
+ *   view content.
+ * - dom_id: Unique id for every view being printed to give unique class for
+ *   Javascript.
+ *
+ * @see template_preprocess_views_view()
+ *
+ * @ingroup themeable
+ */
+#}
+
+
+{# ── HERO ── #}
+<section class="relative w-full  bg-secondary text-secondary-content  py-24 md:py-32 lg:py-40">
+
+  <div class="pointer-events-none absolute inset-0 opacity-[0.04]"></div>
+
+  <div class="relative max-w-5xl mx-auto  text-center">
+
+    <div class="inline-flex items-center gap-2 border border-primary/40 text-primary text-xs font-semibold tracking-widest uppercase px-4 py-1.5 rounded-full mb-8">
+      <span class="w-1.5 h-1.5 rounded-full bg-primary inline-block"></span>
+      Powered by Drupal Canvas
+    </div>
+
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight mb-6">
+      Welcome to <span class="text-primary">Tailpine</span>
+    </h1>
+
+    <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto mb-10 leading-relaxed">
+      Build modern Drupal websites faster with Tailpine + Canvas.
+      A powerful theme built on Tailwind CSS and Alpine.js — ready for you to make it yours.
+    </p>
+
+    <div class="flex flex-wrap items-center justify-center gap-4">
+      <a href="/canvas" class="bg-primary text-primary-content tp-btn-md px-8 py-3 rounded-xl text-sm font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-200">
+        Start with Canvas
+      </a>
+      <a href="/node/add" class="bg-primary text-primary-content  tp-btn-outline tp-btn-md px-8 py-3 rounded-xl text-sm font-semibold border-body-bg/30 hover:border-body-bg/60 transition-all duration-200">
+        Create First Content
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<section class="w-full bg-body-bg py-20 md:py-24">
+  <div class="container mx-auto px-6">
+
+    <div class="text-center mb-14">
+      <p class="text-primary text-xs font-bold tracking-widest uppercase mb-3">Why Tailpine</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Everything you need to launch</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div class="group p-8 rounded-2xl bg-surface border border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-5">⚡</div>
+        <h3 class="text-lg font-semibold mb-2">Fast Development</h3>
+        <p class="text-sm opacity-60 leading-relaxed">Tailpine uses Tailwind CSS for rapid, consistent UI building without writing custom CSS from scratch.</p>
+      </div>
+
+      <div class="relative group p-8 rounded-2xl bg-surface border border-primary/40 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+        <div class="w-12 h-12 rounded-xl bg-primary/20 text-primary flex items-center justify-center text-2xl mb-5">🧩</div>
+        <h3 class="text-lg font-semibold mb-2">Canvas Ready</h3>
+        <p class="text-sm opacity-60 leading-relaxed">Fully integrated with Drupal Canvas. Design pages visually using SDC components built specifically for Tailpine.</p>
+        <div class="absolute top-4 right-4 text-[10px] font-bold tracking-widest uppercase text-primary border border-primary/30 px-2 py-0.5 rounded-full">Recommended</div>
+      </div>
+
+      <div class="group p-8 rounded-2xl bg-surface border border-border hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 transition-all duration-300">
+        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl mb-5">🎨</div>
+        <h3 class="text-lg font-semibold mb-2">Fully Customisable</h3>
+        <p class="text-sm opacity-60 leading-relaxed">Adjust colors, typography, spacing, and layouts through CSS custom properties — no deep CSS knowledge needed.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+<section class="w-full bg-surface py-20 md:py-24">
+  <div class="container mx-auto px-6">
+
+    <div class="text-center mb-14">
+      <p class="text-primary text-xs font-bold tracking-widest uppercase mb-3">Quick Start</p>
+      <h2 class="text-3xl md:text-4xl font-bold tracking-tight">Get Started with Tailpine</h2>
+      <p class="mt-4 opacity-60 max-w-xl mx-auto text-sm leading-relaxed">Start creating pages using Canvas or add content manually. Three steps to your first page.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+
+      <div class="flex flex-col items-center text-center">
+        <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/30 mb-4">1</div>
+        <h3 class="font-semibold text-base mb-1">Enable Canvas</h3>
+        <p class="text-xs opacity-60 leading-relaxed">Go to Appearance → Tailpine Settings and enable Canvas page templates.</p>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/30 mb-4">2</div>
+        <h3 class="font-semibold text-base mb-1">Build with Canvas</h3>
+        <p class="text-xs opacity-60 leading-relaxed">Use the visual Canvas editor to drag and drop SDC components onto your pages.</p>
+      </div>
+
+      <div class="flex flex-col items-center text-center">
+        <div class="w-14 h-14 rounded-full bg-primary text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/30 mb-4">3</div>
+        <h3 class="font-semibold text-base mb-1">Publish & Customise</h3>
+        <p class="text-xs opacity-60 leading-relaxed">Publish your content and fine-tune colors, fonts and layout in theme settings.</p>
+      </div>
+
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="/canvas" class="tp-btn tp-btn-primary tp-btn-sm rounded-lg px-5">Open Canvas Editor</a>
+      <a href="/admin/content" class="tp-btn tp-btn-outline tp-btn-sm rounded-lg px-5">Manage Content</a>
+      <a href="/admin/structure/block" class="tp-btn tp-btn-outline tp-btn-sm rounded-lg px-5">Manage Blocks</a>
+      <a href="/admin/appearance" class="tp-btn tp-btn-outline tp-btn-sm rounded-lg px-5">Customise Theme</a>
+    </div>
+
+  </div>
+</section>
+
+
+
+<section class="w-full  text-body py-20 md:py-24 relative overflow-hidden">
+
+  <div class="pointer-events-none absolute -top-24 -right-24 w-96 h-96 rounded-full bg-primary/5 blur-3xl"></div>
+  <div class="pointer-events-none absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-primary/5 blur-3xl"></div>
+
+  <div class="relative max-w-3xl mx-auto px-6 text-center">
+
+    <p class="text-primary text-xs font-bold tracking-widest uppercase mb-4">Open Source</p>
+
+    <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+      Join the Drupal Community 🌍
+    </h2>
+
+    <p class="opacity-70 mb-8 leading-relaxed">
+      Learn, build, and grow with thousands of developers worldwide.
+      Tailpine is built on Drupal — an open source platform trusted by millions.
+    </p>
+
+    <div class="grid grid-cols-3 gap-6 mb-10 border-y border-body-bg/10 py-8">
+      <div>
+        <div class="text-2xl font-bold text-primary">50k+</div>
+        <div class="text-xs opacity-50 mt-1 uppercase tracking-wide">Modules</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-primary">1M+</div>
+        <div class="text-xs opacity-50 mt-1 uppercase tracking-wide">Websites</div>
+      </div>
+      <div>
+        <div class="text-2xl font-bold text-primary">100k+</div>
+        <div class="text-xs opacity-50 mt-1 uppercase tracking-wide">Contributors</div>
+      </div>
+    </div>
+
+    <a href="https://www.drupal.org/community"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="tp-btn  bg-primary text-primary-content tp-btn-md px-10 py-3 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-200">
+      Explore Community
+    </a>
+
+  </div>
+</section> 

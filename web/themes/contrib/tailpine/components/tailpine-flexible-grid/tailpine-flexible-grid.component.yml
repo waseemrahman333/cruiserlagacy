@@ -1,0 +1,103 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Flexible Grid (Canvas)
+status: stable
+group: Tailpine
+description: "A flexible grid container. Choose how many columns the grid should have on each screen size, then drop Flexible Grid Item components inside. Defaults to 12 columns on desktop for maximum flexibility — Flexible Grid Items can then claim any fraction (half, third, quarter, etc.) of that width."
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    columns_mobile:
+      type: integer
+      title: "Columns on mobile."
+      description: "Number of equal-width column tracks on mobile (no breakpoint). Range: 1–12."
+      default: 1
+      minimum: 1
+      maximum: 12
+      examples:
+        - 1
+
+    columns_tablet:
+      type: integer
+      title: "Columns on tablet."
+      description: "Column tracks at the md: breakpoint (≥ 768px). Range: 1–12."
+      default: 6
+      minimum: 1
+      maximum: 12
+      examples:
+        - 6
+
+    columns_desktop:
+      type: integer
+      title: "Columns on desktop."
+      description: "Column tracks at the lg: breakpoint (≥ 1024px). Recommended: keep at 12 so Flexible Grid Items can claim exact fractions."
+      default: 12
+      minimum: 1
+      maximum: 12
+      examples:
+        - 12
+
+    columns_wide:
+      type: integer
+      title: "Columns on wide screens."
+      description: "Column tracks at the xl: breakpoint (≥ 1280px). Range: 1–12."
+      default: 12
+      minimum: 1
+      maximum: 12
+      examples:
+        - 12
+
+    gap:
+      type: string
+      title: Gap
+      description: "Space between grid cells."
+      default: medium
+      enum:
+        - none
+        - small
+        - medium
+        - large
+        - xlarge
+      "meta:enum":
+        none: "None"
+        small: "Small (0.5rem)"
+        medium: "Medium (1rem)"
+        large: "Large (1.5rem)"
+        xlarge: "Extra large (2rem)"
+      examples:
+        - medium
+
+    align_items:
+      type: string
+      title: "Align items"
+      description: "Vertical alignment of all cells in each row."
+      default: stretch
+      enum:
+        - top
+        - center
+        - bottom
+        - stretch
+      "meta:enum":
+        top: "Top"
+        center: "Center"
+        bottom: "Bottom"
+        stretch: "Stretch (fill row height)"
+      examples:
+        - stretch
+
+    extra_classes:
+      type: string
+      title: "Extra CSS classes"
+      description: "Additional CSS classes appended to the grid wrapper."
+      examples:
+        - 'mx-auto max-w-screen-xl'
+
+slots:
+  content:
+    title: "Grid Items"
+    description: "Drop Flexible Grid Item components here. Add as many as needed — they will flow left-to-right and wrap to a new row automatically."

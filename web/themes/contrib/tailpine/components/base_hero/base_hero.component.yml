@@ -1,0 +1,445 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: Hero Section (base)
+description: 'A powerful hero component with background color, image, or video support with overlay controls'
+group: Sections
+status: stable
+props:
+  type: object
+  properties:
+    # Background Type Selection
+    background_type:
+      type: string
+      title: Background Type
+      description: Choose between solid color, image, or video background
+      enum:
+        - color
+        - both
+        - image
+        - video
+      meta:enum:
+        color: Colored Bg
+        both: Both Image/Color Bg
+        image: Image Bg
+        video: Video Bg
+      default: image
+      examples:
+        - 'image'
+    
+    # Background Color (when type = color)
+    bg_color:
+      type: string
+      title: Set Hero Background
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+    # Background Image
+    bg_image:
+      title: Background Image
+      type: object 
+      $ref: json-schema-definitions://canvas.module/image
+      description:  Background Image of the Hero
+      examples:
+        - src: https://placehold.co/1900x999
+          alt: 'Background Image'
+          width: 1900
+          height: 999
+    # Background Video - UPDATED TO USE CANVAS VIDEO REFERENCE
+    bg_video:
+      $ref: json-schema-definitions://canvas.module/video
+      title: Background Video
+      description: Upload or select background video (used when Background Type is "video")
+      type: object
+      examples:
+        - src: https://media.istockphoto.com/id/1340051874/video/aerial-top-down-view-of-a-container-cargo-ship.mp4?s=mp4-640x640-is&k=20&c=5qPpYI7TOJiOYzKq9V2myBvUno6Fq2XM3ITPGFE8Cd8=
+          poster: https://example.com/600x400.png
+    
+    # Overlay Controls
+    enable_overlay:
+      type: boolean
+      title: Enable Overlay
+      description: (image/video)
+      default: true
+      examples:
+        - true
+    
+    overlay_color:
+      type: string
+      title: Overlay Color
+      description: Choose overlay color (image/video)
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+    
+    overlay_opacity:
+      type: string
+      title: Overlay Opacity
+      description: Control how dark/light the overlay is
+      enum:
+        - "10"
+        - "20"
+        - "30"
+        - "40"
+        - "50"
+        - "60"
+        - "70"
+        - "80"
+      meta:enum:
+        "10": 10% (Very Light)
+        "20": 20% (Light)
+        "30": 30%
+        "40": 40%
+        "50": 50% (Medium)
+        "60": 60%
+        "70": 70% (Dark)
+        "80": 80% (Very Dark)
+      default: "50"
+    
+    # Content Settings
+
+        # Content Settingspadding_top_m:
+    padding_top_m:
+      type: string
+      title: Section Padding Top — Mobile
+      description: Select the vertical spacing above the section content on mobile devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+    padding_top_t:
+      type: string
+      title: Section Padding Top — Tablet
+      description: Select the vertical spacing above the section content on tablet devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+    padding_top_d:
+      type: string
+      title: Section Padding Top — Desktop
+      description: Select the vertical spacing above the section content on desktop devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+    padding_bottom_m:
+      type: string
+      title: Section Padding Bottom — Mobile
+      description: Select the vertical spacing below the section content on mobile devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+    padding_bottom_t:
+      type: string
+      title: Section Padding Bottom — Tablet
+      description: Select the vertical spacing below the section content on tablet devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+    padding_bottom_d:
+      type: string
+      title: Section Padding Bottom — Desktop
+      description: Select the vertical spacing below the section content on desktop devices.
+      enum: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl", "4xl", "5xl", "6xl", "7xl", "8xl"]
+      meta:enum:
+        "none": "None"
+        "xs": "Extra Small"
+        "sm": "Small"
+        "md": "Medium"
+        "lg": "Large"
+        "xl": "Extra Large"
+        "2xl": "2X Large"
+        "3xl": "3X Large"
+        "4xl": "4X Large"
+        "5xl": "5X Large"
+        "6xl": "6X Large"
+        "7xl": "Large Hero"
+        "8xl":
+      default: "md"
+      examples: ["md"]
+
+
+
+    content_alignment:
+      type: string
+      title: Content Horizontal Alignment
+      description: Horizontal alignment of content
+      enum:
+        - left
+        - center
+        - right
+      meta:enum:
+        left: Left Aligned
+        center: Center Aligned
+        right: Right Aligned
+      default: center
+    
+    vertical_alignment:
+      type: string
+      title: Vertical Alignment
+      description: Vertical position of content
+      enum:
+        - top
+        - center
+        - bottom
+      meta:enum:
+        top: Top
+        center: Center
+        bottom: Bottom
+      default: center
+    content_direction:
+      title: Content Direction
+      type: string
+      enum:
+        - row
+        - column
+        - reverse
+      meta:enum:
+        row: Row (Horizontal)
+        column: Column (Vertical)
+        reverse: Row reverse (Horizontal)
+      default: medium
+      examples:
+        - "column"
+
+    gap:
+      title: "Content gap"
+      type: string
+      enum:
+        - "0"
+        - "4"
+        - "8"
+        - "12"
+        - "16"
+        - "20"
+        - "24"
+        - "32"
+      default: "16"
+
+    content_width:
+      type: string
+      title: Content Width
+      default: "70"
+      enum:
+        - "50"
+        - "60"
+        - "70"
+        - "75"
+        - "80"
+        - "90"
+        - "100"
+      meta:enum:
+        "50": "(half)"
+        "60": "60%"
+        "70": "70%" 
+        "75": "75%"
+        "80": "80%"
+        "90": "90%"
+        "100": "(Full)"
+      examples:
+        - "80"
+
+    
+    # CTA Layout
+    cta_layout:
+      type: string
+      title: CTA Button Layout
+      enum:
+        - horizontal
+        - vertical
+        - stacked
+      meta:enum:
+        horizontal: Side by Side
+        vertical: Stacked (One Below Other)
+        stacked: Stacked Mobile, Horizontal Desktop
+      default: stacked
+    
+    # Animation
+    enable_animation:
+      type: boolean
+      title: Enable Entrance Animation
+      description: Animate content when it appears
+      default: true
+    
+    # Video Settings
+    video_autoplay:
+      type: boolean
+      title: Autoplay Video
+      description: Automatically play background video
+      default: true
+    
+    video_loop:
+      type: boolean
+      title: Loop Video
+      description: Repeat video continuously
+      default: true
+    
+    video_muted:
+      type: boolean
+      title: Mute Video
+      description: Play video without sound (required for autoplay)
+      default: true
+    
+    # Display Controls
+    show_content_region:
+      type: boolean
+      title: Show custom content region
+      default: true
+
+    show_heading:
+      type: boolean
+      title: Show Heading
+      default: true
+      examples:
+        - true
+    
+    show_description:
+      type: boolean
+      title: Show Description
+      default: true
+      examples:
+        - true
+    
+    show_cta_primary:
+      type: boolean
+      title: Show Primary CTA
+      default: true
+      examples:
+        - true
+    
+    show_cta_secondary:
+      type: boolean
+      title: Show Secondary CTA
+      default: false
+
+slots:
+  heading:
+    title: Heading
+    description: Main hero heading text
+  
+  description:
+    title: Description
+    description: Supporting text/description
+  
+  cta_primary:
+    title: Primary CTA
+    description: Main call-to-action button
+  
+  cta_secondary:
+    title: Secondary CTA
+    description: Optional secondary button
+  
+  custom_content:
+    title: Custom Content
+    description: Additional custom content (badges, icons, etc.)

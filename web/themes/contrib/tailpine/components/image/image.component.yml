@@ -1,0 +1,141 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Image (canvas)
+description: 'Responsive image component with aspect ratio, border radius, and optional link'
+group: Media
+status: stable
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    media:
+      type: object
+      title: Image
+      $ref: json-schema-definitions://canvas.module/image
+      description: "Upload or select an image"
+      examples:
+        - src: 'https://example.com/image.jpg'
+          alt: 'Description of image'
+          width: 1200
+          height: 800
+    
+    aspect_ratio:
+      type: string
+      title: Aspect Ratio
+      description: Control the image aspect ratio
+      enum:
+        - "2:1"
+        - "16:9"
+        - "3:2"
+        - "4:3"
+        - "1:1"
+        - "2:3"
+        - "9:16"
+        - "21:9"
+        - "auto"
+      meta:enum:
+        "2:1": 2:1 (Wide)
+        "16:9": 16:9 (Video)
+        "3:2": 3:2 (Photo)
+        "4:3": 4:3 (Standard)
+        "1:1": 1:1 (Square)
+        "2:3": 2:3 (Portrait)
+        "9:16": 9:16 (Vertical Video)
+        "21:9": 21:9 (Ultrawide)
+        "auto": Auto (Original)
+      default: "3:2"
+    
+    radius:
+      type: string
+      title: Border Radius
+      description: Rounded corners for the image
+      enum:
+        - none
+        - small
+        - medium
+        - large
+        - extra-large
+        - full
+      meta:enum:
+        none: None (Sharp Corners)
+        small: Small
+        medium: Medium
+        large: Large
+        extra-large: Extra Large
+        full: Full (Circle/Pill)
+      default: none
+    
+    object_fit:
+      type: string
+      title: Object Fit
+      description: How the image should fit within its container
+      enum:
+        - cover
+        - contain
+        - fill
+        - none
+      meta:enum:
+        cover: Cover (Crop to Fill)
+        contain: Contain (Fit Inside)
+        fill: Fill (Stretch)
+        none: None (Original Size)
+      default: cover
+    
+    url:
+      type: string
+      title: Link URL
+      description: Make the image clickable with a link
+      examples:
+        - "https://example.com"
+        - "/about-us"
+    
+    caption:
+      type: string
+      title: Caption
+      description: Optional caption text below the image
+
+    enable_hover_zoom:
+      type: boolean
+      title: Enable Hover Zoom for (linked image)
+      default: false
+    
+    image_width:
+      type: string
+      title: Image Width
+      description: Control the width of the image container
+      enum:
+        - full
+        - "90%"
+        - "80%"
+        - "75%"
+        - "66%"
+        - "50%"
+        - "33%"
+        - "25%"
+      meta:enum:
+        full: Full Width (100%)
+        "90%": 90% Width
+        "80%": 80% Width
+        "75%": 75% Width (3/4)
+        "66%": 66% Width (2/3)
+        "50%": 50% Width (1/2)
+        "33%": 33% Width (1/3)
+        "25%": 25% Width (1/4)
+      default: full
+    
+    image_alignment:
+      type: string
+      title: Image Alignment
+      description: Horizontal alignment when width is less than 100%
+      enum:
+        - left
+        - center
+        - right
+      meta:enum:
+        left: Left
+        center: Center
+        right: Right
+      default: center

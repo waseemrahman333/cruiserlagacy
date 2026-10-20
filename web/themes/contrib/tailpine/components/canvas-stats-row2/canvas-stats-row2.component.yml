@@ -1,0 +1,106 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Stats Row (Canvas) 2
+status: stable
+group: Tailpine
+description: Displays up to 4 statistics side by side with animated count-up on scroll. Each stat shows a number and a label.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    bg_color:
+      type: string
+      title: Background Color
+      description: Section background color variant.
+      default: default
+      enum:
+        - default
+        - primary
+        - dark
+      meta:enum:
+        default: Default (page background)
+        primary: Primary brand color
+        dark: Dark section
+      examples:
+        - default
+
+    stat_1_number:
+      type: string
+      title: Stat 1 — Number
+      description: The statistic value to display and animate (e.g. '10,000+').
+      examples:
+        - '10,000+'
+
+    stat_1_label:
+      type: string
+      title: Stat 1 — Label
+      description: Short descriptor beneath the number (e.g. 'Happy clients').
+      examples:
+        - 'Happy clients'
+
+    stat_2_number:
+      type: string
+      title: Stat 2 — Number
+      description: The statistic value to display and animate.
+      examples:
+        - '250+'
+
+    stat_2_label:
+      type: string
+      title: Stat 2 — Label
+      description: Short descriptor beneath the number.
+      examples:
+        - 'Projects delivered'
+
+    stat_3_number:
+      type: string
+      title: Stat 3 — Number
+      description: The statistic value to display and animate.
+      examples:
+        - '15'
+
+    stat_3_label:
+      type: string
+      title: Stat 3 — Label
+      description: Short descriptor beneath the number.
+      examples:
+        - 'Years of experience'
+
+    stat_4_number:
+      type: string
+      title: Stat 4 — Number
+      description: The statistic value to display and animate. Leave blank to show only 3 stats.
+      examples:
+        - '99%'
+
+    stat_4_label:
+      type: string
+      title: Stat 4 — Label
+      description: Short descriptor beneath the number.
+      examples:
+        - 'Client satisfaction'
+
+    count_duration:
+      type: string
+      title: Count-up Duration (ms)
+      description: How long the count-up animation runs in milliseconds.
+      default: '2000'
+      enum:
+        - '1000'
+        - '1500'
+        - '2000'
+        - '2500'
+        - '3000'
+      meta:enum:
+        '1000': Fast (1 s)
+        '1500': Normal (1.5 s)
+        '2000': Smooth (2 s)
+        '2500': Slow (2.5 s)
+        '3000': Very slow (3 s)
+      examples:
+        - '2000'

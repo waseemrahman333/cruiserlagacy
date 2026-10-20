@@ -1,0 +1,115 @@
+{#
+/**
+ * Testimonial Style One Component
+ * 
+ * Customer testimonial card with quote, star rating, and author information.
+ * Features decorative quote mark icon.
+ *
+ * Available variables:
+ * - name: (string) Testimonial author's name. Required.
+ * - subtitle: (string) Author's title or company. Required.
+ * - description: (string|markup) Testimonial quote text. Required.
+ * - imageurl: (string) Author's photo URL. Use square images (200x200px+).
+ * - rating: (number) Star rating out of 5. Default: 4
+ * - heading_level: (number) HTML heading level for name (1-6). Default: 2
+ *
+ * Accessibility:
+ * - Uses <figure> and <blockquote> semantic elements
+ * - aria-label on star rating for screen readers
+ * - Decorative quote icon has aria-hidden
+ * - Proper heading hierarchy
+ * - Sufficient color contrast
+ *
+ * Theme Variables Used:
+ * - bg-surface: Card background
+ * - text-body: Body text color
+ * - border-primary: Profile image border
+ * - text-[#FDCC0D]: Star rating color (yellow)
+ *
+ * Examples:
+ * {% include 'tailpine:testimonialstyleone' with {
+ *   name: 'John Smith',
+ *   subtitle: 'CEO, TechCorp',
+ *   description: 'This platform transformed our workflow...',
+ *   imageurl: 'https://cdn.pixabay.com/photo/...jpg',
+ *   rating: 5,
+ * } %}
+ */
+#}
+
+{% set author_heading = heading_level|default(2) %}
+{% set author_image = imageurl.src|default('') %}
+{% set author_alt = imageurl.alt|default('') %}
+
+<figure class="pb-12 xl:pt-12 flex flex-col">
+  <!-- Testimonial Card -->
+  <blockquote class="relative flex flex-col justify-between bg-surface text-body px-6 pt-7 w-full flex-grow">
+    <!-- Quote and Text -->
+    <div class="flex gap-5 h-full">
+      <!-- Decorative Quote Icon -->
+      <div class="w-fit h-10 pt-2 flex-shrink-0" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="39" height="31" viewBox="0 0 39 31" fill="currentColor" class="text-muted">
+          <path d="M14.1614 30.6289H0.608784V20.6792C0.608784 10.0761 4.60791 3.39272 12.6061 0.628906L15.2722 6.43293C10.2363 8.14147 7.69365 11.6088 7.64427 16.8349H14.1614V30.6289ZM36.9712 30.6289H23.4186V20.6792C23.4186 10.0259 27.4424 3.34247 35.49 0.628906L38.082 6.43293C33.0955 8.09122 30.5528 11.5586 30.4541 16.8349H36.9712V30.6289Z"/>
+        </svg>
+      </div>
+      
+      <!-- Testimonial Text -->
+
+
+         <div class="flex h-full flex-col justify-between  ">
+              {% if description %}
+                <div class="text-sm leading-7 ">
+                  {{ description }}
+                </div>
+              {% endif %}
+
+                  <div class="flex gap-1 ">
+                    {% if show_rating %}
+                      {% set rating_stars %}
+                        {% block rating %}
+
+                        {% endblock %}
+                      {% endset %}
+                      {% if rating_stars|trim is not empty %}
+                      <div class="h-fit min-w-20 ">
+                          {{ rating_stars }}
+                          </div>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+         </div>
+    </div>
+    
+    <!-- Star Rating -->
+
+  </blockquote>
+  
+  <!-- Author Profile -->
+  <figcaption class="profile flex items-center gap-5 pt-10">
+    {% if author_image %}
+    <div class="image w-16 rounded-full h-16 border-2 border-primary overflow-hidden flex-shrink-0">
+      <img 
+        src="{{ author_image }}" 
+        alt="{{ author_alt }}" 
+        class="w-full  h-full object-cover"
+        loading="lazy"
+      >
+    </div>
+    {% endif %}
+    
+    <div class="info">
+    {% if name %}
+    
+      <h{{ author_heading }} class="text-xl font-bold leading-tight">
+        {{ name }}
+      </h{{ author_heading }}>
+      
+    {% endif %}
+      {% if subtitle %}
+      <div class="text-sm leading-relaxed">
+        {{ subtitle }}
+      </div>
+      {% endif %}
+    </div>
+  </figcaption>
+</figure>

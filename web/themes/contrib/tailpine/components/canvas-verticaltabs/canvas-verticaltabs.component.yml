@@ -1,0 +1,25 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: verticaltabs (Canvas)
+description: Component for displaying vertical tabs with side navigation.
+status: stable
+group: Navigation
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    children:
+      type: string
+      title: Children
+      description: The HTML content to be displayed inside the vertical tab panes (details elements).
+      default: ''
+    layout:
+      type: string
+      title: Layout Direction
+      description: Position of the navigation (left or right).
+      enum:
+        - left
+        - right
+      default: left

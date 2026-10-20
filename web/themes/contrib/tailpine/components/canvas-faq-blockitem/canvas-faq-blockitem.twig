@@ -1,0 +1,55 @@
+{#
+/**
+ * FAQ Item (Canvas) — child
+ *
+ * Variables: question, answer, category
+ *
+ * Theme tokens: text-heading, text-primary, text-muted, text-body, border-border, focus:ring-focus
+ */
+#}
+<div
+  class="canvas-faq-blockitem"
+  x-data="{ open: false }"
+  {{ attributes }}
+>
+  {% if category %}
+    <span class="canvas-faq-blockitem__category block text-xs font-semibold text-primary uppercase tracking-wide pt-5 pb-1">
+      {{ category|striptags }}
+    </span>
+  {% endif %}
+
+  <button
+    type="button"
+    class="canvas-faq-blockitem__question w-full flex items-center justify-between gap-4 py-5 text-left font-semibold text-heading hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-focus rounded"
+    x-on:click="open = !open"
+    x-bind:aria-expanded="open ? 'true' : 'false'"
+  >
+    <span>{% if question %}{{ question|striptags }}{% else %}{{ 'Question text'|t }}{% endif %}</span>
+    <svg
+      class="canvas-faq-blockitem__chevron w-5 h-5 flex-shrink-0 transition-transform duration-200 text-muted"
+      x-bind:class="open ? 'rotate-180' : ''"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </button>
+
+  <div
+    class="canvas-faq-blockitem__answer overflow-hidden"
+    x-show="open"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 -translate-y-2"
+    x-transition:enter-end="opacity-100 translate-y-0"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 translate-y-0"
+    x-transition:leave-end="opacity-0 -translate-y-2"
+  >
+    <div class="pb-5 text-body leading-relaxed">
+      {% if answer %}{{ answer|raw }}{% else %}<p>{{ 'Answer text goes here.'|t }}</p>{% endif %}
+    </div>
+  </div>
+
+</div>

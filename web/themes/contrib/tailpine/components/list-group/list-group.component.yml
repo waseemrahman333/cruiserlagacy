@@ -1,0 +1,31 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: List Group
+status: stable
+description: Flexible list component for displaying series of content.
+group: Content
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    items:
+      type: array
+      title: Items
+      description: Array of list items.
+      default: []
+      items:
+        type: object
+        properties:
+          link:
+            type: string
+            description: Optional URL. If provided, the item renders as a link.
+          content:
+            type: string
+            description: Item display content.
+    flush:
+      type: boolean
+      title: Flush
+      description: Remove borders and rounded corners.
+      default: false

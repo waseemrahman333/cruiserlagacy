@@ -1,0 +1,30 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Sidebar Links (Canvas)
+description: Sidebar Links
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    icons:
+      title: Icons
+      type: object
+      $ref: json-schema-definitions://canvas.module/image
+      examples:
+        - src: 'icon.svg'
+          alt: 'Icons Image'
+          width: 50
+          height: 50
+      description: Icons description
+    list:
+      title: List
+      type: string
+      description: List description
+      examples: ['Sidebar Links']
+    page_url:
+      type: string
+      title: Page URL
+      description: The current page URL for active link detection.

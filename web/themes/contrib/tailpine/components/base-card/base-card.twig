@@ -1,0 +1,228 @@
+
+
+{#
+/**
+ * Base Card Component
+ * 
+ * Flexible card with image slot, background options, and customizable content.
+ * Supports solid color or image backgrounds with overlay controls.
+ *
+ * Slots:
+ * - image: Add image component here
+ * - heading: Card title
+ * - subtitle: Meta information or category
+ * - text: Description or body text
+ * - cta: Call-to-action button
+ */
+#}
+
+{# Check background type and image availability #}
+{% set has_bg_image = background_type == 'image' and background_image is defined and background_image.src is defined and background_image.src %}
+
+{# Background Color Variants #}
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+  'success': 'bg-success text-success-content',
+  'warning': 'bg-warning text-warning-content',
+  'error': 'bg-error text-error-content',
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+{% set bg_color_variant = bg_variants[bg_color]|default('bg-white text-body') %}
+
+{# Overlay Color Variants #}
+{% set overlay_variants = {
+  'primary': 'bg-primary',
+  'secondary': 'bg-secondary',
+  'tertiary': 'bg-tertiary',
+  'success': 'bg-success',
+  'warning': 'bg-warning',
+  'error': 'bg-error',
+  'white': 'bg-white',
+  'light': 'bg-gray-100',
+  'medium': 'bg-gray-500',
+  'dark': 'bg-gray-900',
+  'black': 'bg-black',
+  'transparent': 'bg-transparent'
+} %}
+
+{% set overlay_bg = overlay_variants[overlay_color]|default('bg-gray-900') %}
+
+{# Overlay Opacity Mapping #}
+{% set overlay_opacity_map = {
+  '10': 'opacity-10',
+  '20': 'opacity-20',
+  '30': 'opacity-30',
+  '40': 'opacity-40',
+  '50': 'opacity-50',
+  '60': 'opacity-60',
+  '70': 'opacity-70',
+  '80': 'opacity-80'
+} %}
+
+{% set opacity_class = overlay_opacity_map[overlay_opacity]|default('opacity-50') %}
+
+{# Padding Variants block and inline #}
+
+{% set padding_variants = {
+  none: { block: 'py-0', inline: 'px-0' },
+  xs: { block: 'py-1 md:py-1.5 xl:py-2', inline: 'px-1 md:px-1.5 xl:px-2' },
+  sm: { block: 'py-2 md:py-3 xl:py-4', inline: 'px-2 md:px-3 xl:px-4' },
+  md: { block: 'py-3 md:py-4 xl:py-5', inline: 'px-3 md:px-4 xl:px-5' },
+  lg: { block: 'py-3 md:py-4.5 xl:py-6', inline: 'px-3 md:px-4.5 xl:px-6' },
+  xl: { block: 'py-4 md:py-6 xl:py-8', inline: 'px-4 md:px-6 xl:px-8' },
+  '2xl': { block: 'py-5 md:py-8 xl:py-10', inline: 'px-5 md:px-8 xl:px-10' },
+  '3xl': { block: 'py-6 md:py-10 xl:py-12', inline: 'px-6 md:px-10 xl:px-12' },
+  huge: { block: 'py-8 md:py-12 xl:py-16', inline: 'px-8 md:px-12 xl:px-16' }
+} %}
+
+
+{# Apply Padding Classes #}
+{% set card_padding_inline_class = padding_variants[card_padding_inline].inline ?? '' %}
+{% set card_padding_block_class =  padding_variants[card_padding_block].block ?? ''  %}
+{% set content_padding_inline_class = padding_variants[content_padding_inline].inline ?? ''  %}
+{% set content_padding_block_class = padding_variants[content_padding_block].block ?? ''  %}
+
+
+
+{# Gap Variants #}
+
+{% set gap_variants = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+  xxl:  "gap-8 md:gap-10 xl:gap-12"
+
+} %}
+
+
+{# Corner Radius Mapping #}
+{% set radius_map = {
+  'square': 'rounded-none',
+  'sm': 'rounded-sm',
+  'md': 'rounded-md',
+  'lg': 'rounded-lg',
+  'xl': 'rounded-xl'
+} %}
+
+{% set corner_rounded_class = radius_map[corner_style]|default('rounded-none') %}
+
+{# Content Alignment - Extract for easier use #}
+{% set alignment_classes = content_alignment|default('justify-start items-start') %}
+{% set is_centered = content_alignment == 'justify-center items-center' %}
+
+
+
+
+{# ==================================Card Container====================================================.. #}
+{# Card Container #}
+<article class="base-card flex w-full h-full shadow-xl min-h-100 relative overflow-hidden {{ corner_rounded_class }} {{ card_padding_inline_class }} {{ card_padding_block_class }} flex-col transition-shadow hover:shadow-xl
+  {% if background_type == 'color' %}
+    {{ bg_color_variant }}
+  {% elseif background_type == 'without_background' %}
+    bg-transparent
+  {% endif %}
+  "
+  {% if has_bg_image %}
+    style="background-image: url('{{ background_image.src }}'); background-size: cover; background-position: center;"
+    {% if background_image.alt %}aria-label="{{ background_image.alt }}"{% endif %}
+  {% endif %}
+>
+
+{# done #}
+
+  {# Background Overlay (for background images) #}
+  {% if enable_overlay %}
+    <div class="absolute inset-0 {{ overlay_color }} {{ opacity_class }} z-0"></div>
+  {% endif %}
+
+  {# Image Slot #}
+{% if show_image %}
+  {% set image_content %}
+    {% block image %}{% endblock %}
+  {% endset %}
+
+  {% set has_image = image_content|trim is not empty %}
+
+  <div class="card-image w-full min-h-16">
+    
+    {{ image_content }}
+    
+  </div>
+{% endif %}
+
+  {# Content Container #}
+  <div class="card-content flex flex-col {{ gap_variants[gap]|default('gap-4') }} {{has_bg_image and not show_image ? 'text-white h-full'  : 'h-fit' }}  {{ content_padding_inline_class }} {{ content_padding_block_class }} {{ alignment_classes }} {{ is_centered ? 'text-center' : '' }} relative z-10
+">
+
+    {# Heading/Subtitle Wrapper #}
+    <div class="card-header flex  w-full {{ subtitle_alignment ? 'flex-col-reverse' : 'flex-col' }} {{ gap_variants[gap]|default('gap-2') }}">
+      
+      {# Heading #}
+      {% if show_heading %}
+        {% set heading_text %}
+          {% block heading %}{% endblock %}
+        {% endset %}
+        {% if heading_text|trim is not empty %}
+          <div class="card-heading min-h-4 w-full">
+            {{ heading_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {# Subtitle #}
+      {% if show_subtitle %}
+        {% set subtitle_text %}
+          {% block subtitle %}{% endblock %}
+        {% endset %}
+        {% if subtitle_text|trim is not empty %}
+          <div class="card-subtitle flex gap-2 min-h-fit min-w-5  items-center {{ is_centered ? 'justify-center' : '' }}">
+            {{ subtitle_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+    </div>
+
+    {# Description #}
+    {% if show_description %}
+      {% set description_text %}
+        {% block text %}{% endblock %}
+      {% endset %}
+      {% if description_text|trim is not empty %}
+        <div class="card-description min-h-10 w-full">
+          {{ description_text }}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    {# CTA Button #}
+    {% if show_cta %}
+      {% set cta_content %}
+        {% block cta %}{% endblock %}
+      {% endset %}
+      {% if cta_content|trim is not empty %}
+        <div class="card-cta min-h-10 w-full {{ cta_alignment }} flex gap-2 {{ is_centered ? 'justify-center' : '' }}">
+          {{ cta_content }}
+        </div>
+      {% endif %}
+    {% endif %}
+
+  </div>
+
+</article>

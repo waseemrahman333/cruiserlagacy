@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Contact Us (Canvas)
+description: Contact Us
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['Welcome to our Website']          
+    subtitle:
+      title: Subtitle
+      type: string
+      description: Subtitle
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> Subtitle</p>']    
+slots:
+  cta:
+    title: Add CTA
+    description: Add CTA

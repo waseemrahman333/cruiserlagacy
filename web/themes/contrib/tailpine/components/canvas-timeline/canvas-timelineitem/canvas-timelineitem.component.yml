@@ -1,0 +1,55 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Timeline Item (Canvas)
+group: Tailpine
+status: stable
+description: A single entry inside a canvas-timeline.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    date:
+      type: string
+      title: Date
+      description: Date or time label for this entry.
+      examples:
+        - 'January 2024'
+
+    title:
+      type: string
+      title: Title
+      description: Heading for this timeline entry.
+      examples:
+        - 'Company founded'
+
+    body:
+      type: string
+      title: Body
+      description: Description of this event. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>We launched with a small but passionate team of five.</p>'
+
+    icon:
+      type: string
+      title: Icon
+      description: Short icon text or character shown in the timeline dot.
+      examples:
+        - '★'
+
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+      description: Optional image for this timeline entry.
+      examples:
+        - src: 'event.jpg'
+          alt: 'Team at launch event'
+          width: 600
+          height: 400

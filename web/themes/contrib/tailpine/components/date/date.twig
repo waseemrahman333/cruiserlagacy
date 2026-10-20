@@ -1,0 +1,53 @@
+{% set start = props.start_date|default(props.static_date) %}
+{% set end = props.end_date|default('') %}
+{% set format = props.format|default('d M Y') %}
+{% set badge = props.show_badge|default(false) %}
+
+
+
+  {% if badge %}
+    <div class="inline-flex border px-2 py-1 text-center rounded bg-surface">
+
+      {% if end %}
+        {% if start|date('m') == end|date('m') and start|date('Y') == end|date('Y') %}
+          <div class="text-lg font-bold">
+            {{ start|date('d') }}–{{ end|date('d') }}
+          </div>
+          <div class="text-sm uppercase">
+            {{ start|date('M') }}
+          </div>
+          <div class="text-xs">
+            {{ start|date('Y') }}
+          </div>
+        {% else %}
+          <div class="text-lg font-bold">
+            {{ start|date('d M') }} – {{ end|date('d M') }}
+          </div>
+          <div class="text-xs">
+            {{ start|date('Y') }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="text-lg font-bold">{{ start|date('d') }}</div>
+        <div class="text-sm uppercase">{{ start|date('M') }}</div>
+        <div class="text-xs">{{ start|date('Y') }}</div>
+      {% endif %}
+
+    </div>
+  {% else %}
+
+    {% if end %}
+      {% if start|date('m') == end|date('m') and start|date('Y') == end|date('Y') %}
+        <span class="min-w-20">
+          {{ start|date('d') }}–{{ end|date('d') }} {{ start|date('M Y') }}
+        </span>
+      {% else %}
+        <span>
+          {{ start|date('d M Y') }} – {{ end|date('d M Y') }}
+        </span>
+      {% endif %}
+    {% else %}
+      <span>{{ start|date(format) }}</span>
+    {% endif %}
+
+  {% endif %}

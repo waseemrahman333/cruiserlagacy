@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: ImageStyle
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image:
+      title: Image
+      description: 'The image to style.'
+      type: [string, 'null']
+    style_name:
+      title: Style name
+      description: 'The name of the image style to apply.'
+      type: [string, 'null']
+    image_style_utility_classes:
+      type: array
+      title: Image Style Utility Classes
+      description: Additional Tailwind utility classes for the image style wrapper.
+      items:
+        type: string

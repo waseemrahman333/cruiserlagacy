@@ -1,0 +1,62 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Feature Grid (Canvas)
+group: Tailpine
+status: stable
+description: Grid of feature cards with icon, title, and body. Four layout styles and 2/3/4 column options.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    layout:
+      type: string
+      title: Card layout
+      default: icon-top
+      enum: [icon-top, icon-left, icon-card, bento]
+      meta:enum:
+        icon-top: Icon above text
+        icon-left: Icon left of text
+        icon-card: Icon card with surface
+        bento: Bento box
+      examples:
+        - icon-top
+
+    columns:
+      type: string
+      title: Columns
+      default: '3'
+      enum: ['2', '3', '4']
+      meta:enum:
+        '2': 2 columns
+        '3': 3 columns
+        '4': 4 columns
+      examples:
+        - '3'
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: default
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - default
+
+slots:
+  items:
+    title: Feature items
+    description: Add canvas-feature-griditem components here.

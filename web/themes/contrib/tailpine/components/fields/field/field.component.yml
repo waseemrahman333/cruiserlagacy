@@ -1,0 +1,76 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: Field
+description: A reusable field component for Storybook.
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    field_name:
+      type: string
+      title: Field Name
+      description: The machine name of the field.
+    field_type:
+      type: string
+      title: Field Type
+      description: The type of field (e.g., text, image).ddev
+    label:
+      type: string
+      title: Label
+      description: The field label.
+    label_hidden:
+      type: boolean
+      title: Label Hidden
+      description: Hide or show the label.
+    label_display:
+      type: string
+      title: Label Display Mode
+      description: Controls how the field label is displayed.
+      enum:
+        - inline
+        - above
+        - visually_hidden
+        - hidden
+    items:
+      type: array
+      title: Field Items
+      description: The content inside the field.
+      items:
+        type: object
+        properties:
+          content:
+            type:
+              - string
+              - object
+            title: Item Content
+    multiple:
+      type: boolean
+      title: Multiple Values
+      description: Whether this field can contain multiple values.
+      default: false
+    title_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Title HTML attributes
+      description: HTML attributes for the field label element.
+    field_utility_classes:
+      type: array
+      title: Field Utility Classes
+      description: Additional Tailwind utility classes for the field wrapper.
+      items:
+        type: string
+    field_title_utility_classes:
+      type: array
+      title: Field Title Utility Classes
+      description: Additional Tailwind utility classes for the field label.
+      items:
+        type: string
+    field_item_utility_classes:
+      type: array
+      title: Field Item Utility Classes
+      description: Additional Tailwind utility classes for each field item.
+      items:
+        type: string

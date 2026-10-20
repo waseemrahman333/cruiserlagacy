@@ -1,0 +1,41 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: breadcrumb (Canvas)
+description: Component for displaying a breadcrumb trail.
+status: stable
+group: Navigation
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    breadcrumb_style:
+      type: string
+      description: "Breadcumb style (visual treatment of the Breadcumb)."
+      enum:
+        - default
+        - primary
+        - secondary
+        - tertiary
+      meta:
+        enum:
+          default: "default"
+          primary: "Primary"
+          secondary: "Secondary"
+          tertiary: "Tertiary"
+    breadcrumb:
+      type: array
+      title: Breadcrumb Items
+      description: An array of breadcrumb trail items.
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+            title: Breadcrumb Text
+            description: The display text of the breadcrumb item.
+          url:
+            type: string
+            title: Breadcrumb URL
+            description: The URL of the breadcrumb item.

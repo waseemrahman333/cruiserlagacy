@@ -1,0 +1,82 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Timeline (Canvas)
+group: Tailpine
+status: stable
+description: Vertical or horizontal event timeline. Add canvas-timelineitem children for each entry.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    orientation:
+      type: string
+      title: Orientation
+      default: vertical
+      enum: [vertical, horizontal]
+      meta:enum:
+        vertical: Vertical
+        horizontal: Horizontal
+      examples:
+        - vertical
+
+    connector_style:
+      type: string
+      title: Connector style
+      default: line
+      enum: [line, dashed, dots]
+      meta:enum:
+        line: Solid line
+        dashed: Dashed line
+        dots: Dotted line
+      examples:
+        - line
+
+    show_dates:
+      type: boolean
+      title: Show dates
+      default: true
+      examples:
+        - true
+
+    show_icons:
+      type: boolean
+      title: Show icons
+      default: false
+      examples:
+        - false
+
+    alternate_sides:
+      type: boolean
+      title: Alternate sides
+      description: Alternate items left and right (vertical orientation only).
+      default: false
+      examples:
+        - false
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: default
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - default
+
+slots:
+  items:
+    title: Timeline items
+    description: Add canvas-timelineitem components here.

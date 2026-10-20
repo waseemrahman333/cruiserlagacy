@@ -1,0 +1,218 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Base Testimonial (Canvas)
+status: stable
+description: "Testimonial component with two switchable design styles"
+group: Teams & Testimonials
+
+slots:
+  rating:
+    title: Rating Stars
+    description: "Show the rating region"
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    # Design Style Selector
+    design_style:
+      type: string
+      title: Design Style
+      description: Choose between two testimonial card designs
+      enum:
+        - style_one
+        - style_two
+      meta:enum:
+        style_one: Style One (Quote & Side Image)
+        style_two: Style Two (Centered with Top Dots)
+      default: style_one
+    
+    imageurl:
+      type: object
+      title: Image URL
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The testimonial author image"
+      examples:
+        - src: 'member.png'
+          alt: 'Team Image'
+          width: 320
+          height: 400
+
+    gap:
+      title: "Card Gap"
+      description: "Responsive gap between items"
+      type: string
+      enum:
+        - "0"
+        - "4"
+        - "8"
+        - "12"
+        - "16"
+        - "20"
+        - "24"
+        - "32"
+        - "40"
+        - "48"
+      default: "8"
+      examples: ["16"]
+
+    content_gap:
+      title: "Content Gap"
+      description: "Responsive gap between content items"
+      type: string
+      enum:
+        - "0"
+        - "4"
+        - "8"
+        - "12"
+        - "16"
+        - "20"
+        - "24"
+        - "32"
+        - "40"
+        - "48"
+      default: "8"
+      examples: ["16"]
+
+    card_padding_inline:
+      type: string
+      title: Card Inline Padding (TOP/BOTTOM)
+      enum: ["0px","16px","18px","20px","24px","28px","32px","36px","40px","44px","48px","52px","56px","60px","64px","70px","80px","84px","96px","100px","112px","120px","128px","140px","156px","160px","192px","224px"]
+      default: "0px"
+      examples: ["0px"]
+
+    card_padding_block:
+      type: string
+      title: Card Block Padding (LEFT/RIGHT)
+      enum: ["0px","16px","18px","20px","24px","28px","32px","36px","40px","44px","48px","52px","56px","60px","64px","70px","80px","84px","96px","100px","112px","120px","128px","140px","156px","160px","192px","224px","240px","256px","288px","320px","384px"]
+      default: "0px"
+      examples: ["16px"]
+    
+    content_padding_inline:
+      type: string
+      title: Content Inline Padding (TOP/BOTTOM)
+      enum: ["0px","16px","18px","20px","24px","28px","32px","36px","40px","44px","48px","52px","56px","60px","64px","70px","80px","84px","96px","100px","112px","120px","128px","140px","156px","160px","192px","224px"]
+      default: "0px"
+      examples: ["32px"]
+
+    content_padding_block:
+      type: string
+      title: Content Block Padding (LEFT/RIGHT)
+      enum: ["0px","16px","18px","20px","24px","28px","32px","36px","40px","44px","48px","52px","56px","60px","64px","70px","80px","84px","96px","100px","112px","120px","128px","140px","156px","160px","192px","224px","240px","256px","288px","320px","384px"]
+      default: "0px"
+      examples: ["32px"]
+
+    enable_border:
+      type: boolean
+      title: Enable Border
+      examples:
+        - true
+      default:
+        - true
+
+    border_color:
+      type: string
+      title: Card Border Color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - light
+        - medium
+        - dark
+        - transparent
+        - gradient_bg
+      meta:enum:
+        primary: Primary Color
+        secondary: Secondary Color
+        tertiary: Tertiary Color
+        light: Light Color
+        medium: Medium Color
+        dark: Dark Color
+        transparent: Transparent Color
+        gradient_bg: Gradient Background
+      examples: ['transparent']
+
+    border_radius:
+      type: string
+      title: Card Border Radius
+      enum:
+        - none
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+      meta:enum:
+        none: SQUARE
+        sm: SMALL 
+        md: MEDIUM 
+        lg: LARGE 
+        xl: EXTRA LARGE 
+        2xl: 2X LARGE
+      examples: ['md']
+
+    bg_color:
+      type: string
+      title: Testimonial Background Color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - light
+        - medium
+        - dark
+        - transparent
+        - gradient_bg
+      meta:enum:
+        primary: Primary Color
+        secondary: Secondary Color
+        tertiary: Tertiary Color
+        light: Light Color
+        medium: Medium Color
+        dark: Dark Color
+        transparent: Transparent Color
+        gradient_bg: Gradient Background
+      examples: ['transparent']
+
+    name:
+      title: Name
+      type: string
+      description: "Name of the testimonial author"
+      examples: 
+        - 'John Doe'
+    
+    description:
+      title: Description
+      type: string
+      description: Testimonial quote text
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: 
+        - '<p>This is <strong>formatted</strong> description</p>'
+    
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Job title or company of the author"
+      examples: 
+        - 'CEO, Tech Company'
+    
+    show_rating:
+      title: Show Rating Region
+      type: boolean
+      default: false
+    
+    heading_level:
+      type: integer
+      title: Heading Level
+      description: "HTML heading level for name (1-6)"
+      enum:
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      default: 2

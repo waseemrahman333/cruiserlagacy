@@ -1,0 +1,56 @@
+{#
+/**
+ * @file
+ * Theme override for a node edit form.
+ *
+ * Two-column layout for the node add/edit form.
+ *
+ * Available variables:
+ * - form: The node add/edit form.
+ */
+#}
+<div class="node-edit-form">
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    {# Left column: main content fields #}
+    <div class="lg:col-span-2">
+      {{ form|without('revision_information', 'author', 'options', 'actions', 'footer') }}
+    </div>
+
+    {# Right column: meta panels #}
+    <div class="lg:col-span-1 space-y-4">
+      {% if form.revision_information is defined and form.revision_information %}
+        <details class="border border-border bg-surface" open>
+          <summary class="px-4 py-3 font-medium text-body text-sm cursor-pointer hover:bg-surface list-none">{{ 'Revision information'|t }}</summary>
+          <div class="px-4 py-3">
+            {{ form.revision_information }}
+          </div>
+        </details>
+      {% endif %}
+
+      {% if form.author is defined and form.author %}
+        <details class="border border-border bg-surface" open>
+          <summary class="px-4 py-3 font-medium text-body text-sm cursor-pointer hover:bg-surface list-none">{{ 'Authoring information'|t }}</summary>
+          <div class="px-4 py-3">
+            {{ form.author }}
+          </div>
+        </details>
+      {% endif %}
+
+      {% if form.options is defined and form.options %}
+        <details class="border border-border bg-surface" open>
+          <summary class="px-4 py-3 font-medium text-body text-sm cursor-pointer hover:bg-surface list-none">{{ 'Promotion options'|t }}</summary>
+          <div class="px-4 py-3">
+            {{ form.options }}
+          </div>
+        </details>
+      {% endif %}
+    </div>
+  </div>
+
+  {# Actions row #}
+  <div class="mt-6 flex items-center gap-4 border-t border-border pt-4">
+    {{ form.actions }}
+  </div>
+
+  {{ form.footer }}
+</div>

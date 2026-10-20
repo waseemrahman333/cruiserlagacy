@@ -1,0 +1,36 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: FAQ Item (Canvas)
+group: Tailpine
+status: stable
+description: A single question-answer pair inside a canvas-faq-block.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    question:
+      type: string
+      title: Question
+      examples:
+        - 'How do I get started?'
+
+    answer:
+      type: string
+      title: Answer
+      description: Answer text. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Getting started is easy. Simply sign up and follow the onboarding steps.</p>'
+
+    category:
+      type: string
+      title: Category
+      description: Optional category label for grouping.
+      examples:
+        - 'Billing'

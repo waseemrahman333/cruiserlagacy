@@ -1,0 +1,84 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Rating (Canvas)
+description: Responsive stars component
+status: stable
+
+
+slots:
+  text:
+    title: "text"
+    descriptoin: "text of the main sectoin." 
+props:
+  type: object
+
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    rating:
+      type: number
+      title: "Rating Value"
+      description: "Current rating (example: 4.5)"
+      minimum: 0
+      maximum: 5
+      default: 5
+
+    max_stars:
+      type: number
+      title: "Maximum Stars"
+      default: 5
+
+    size:
+      type: string
+      title: "Size"
+      enum:
+        - sm
+        - md
+        - lg
+      default: md
+      "meta:enum":
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+
+    color:
+      type: string
+      title: Stars Color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - success
+        - warning
+        - error
+        - white
+        - light
+        - medium
+        - dark
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        success: Success
+        warning: Warning
+        error: Error
+        white: White
+        light: Light
+        medium: Medium 
+        dark: Dark
+    show_text:
+      type: boolean
+      title: "Show rating text"
+      default: false
+
+    text_position:
+      type: string
+      title: "Text position"
+      enum:
+        - right
+        - left
+      default: right
+      "meta:enum":
+        right: "Right of stars"
+        left: "Left of stars"

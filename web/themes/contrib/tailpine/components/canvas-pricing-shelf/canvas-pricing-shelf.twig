@@ -1,0 +1,75 @@
+{#
+/**
+ * Pricing Shelf (Canvas) — parent
+ *
+ * Variables: columns, show_toggle, bg_color
+ * Slots: items
+ *
+ * Alpine `annual` state is accessible by child items via nested x-data scope.
+ *
+ * Theme tokens: bg-body-bg, bg-primary, bg-surface, bg-surface-alt, bg-dark,
+ *               text-body, text-on-primary, text-body-bg, text-heading, text-muted,
+ *               text-secondary, border-border, focus:ring-focus
+ */
+#}
+{% set safe_columns = columns|default('3')|striptags %}
+{% set safe_bg      = bg_color|default('default')|striptags %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-body-bg text-body') %}
+
+{% set col_map = {
+  '2': 'md:grid-cols-2',
+  '3': 'md:grid-cols-3',
+  '4': 'md:grid-cols-2 lg:grid-cols-4',
+} %}
+{% set col_class = col_map[safe_columns]|default('md:grid-cols-3') %}
+
+<div
+  class="canvas-pricing-shelf w-full {{ bg_class }}"
+  x-data="{ annual: false }"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16">
+
+    {% if show_toggle|default(true) %}
+      <div class="canvas-pricing-shelf__toggle flex items-center justify-center gap-4 mb-10">
+        <span class="text-sm font-medium" x-bind:class="!annual ? 'text-heading' : 'text-muted'">{{ 'Monthly'|t }}</span>
+        <button
+          type="button"
+          role="switch"
+          class="relative w-12 h-6 rounded-full bg-surface-alt border border-border transition-colors focus:outline-none focus:ring-2 focus:ring-focus"
+          x-bind:class="annual ? 'bg-primary border-primary' : ''"
+          x-on:click="annual = !annual"
+          x-bind:aria-checked="annual ? 'true' : 'false'"
+          aria-label="{{ 'Toggle annual billing'|t }}"
+        >
+          <span
+            class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-body-bg shadow transition-transform duration-200"
+            x-bind:class="annual ? 'translate-x-6' : 'translate-x-0'"
+          ></span>
+        </button>
+        <span class="text-sm font-medium" x-bind:class="annual ? 'text-heading' : 'text-muted'">
+          {{ 'Annual'|t }} <span class="text-secondary text-xs font-semibold ml-1">{{ 'Save 20%'|t }}</span>
+        </span>
+      </div>
+    {% endif %}
+
+    <div class="canvas-pricing-shelf__plans grid grid-cols-1 {{ col_class }} gap-6 md:gap-8 items-stretch">
+      {% block items %}
+        <div class="text-muted text-sm col-span-full text-center">{{ 'Add canvas-pricing-shelfitem components here.'|t }}</div>
+      {% endblock %}
+    </div>
+
+  </div>
+</div>

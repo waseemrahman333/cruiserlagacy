@@ -1,0 +1,77 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Map Embed (Canvas)
+group: Tailpine
+status: stable
+description: Responsive embedded map with optional info card overlay. Supports Google Maps, OpenStreetMap, and Mapbox.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    embed_url:
+      type: string
+      title: Embed URL
+      description: Full iframe src URL from Google Maps, OpenStreetMap, or your map provider.
+      examples:
+        - 'https://www.openstreetmap.org/export/embed.html?bbox=-0.1277%2C51.5074%2C-0.1000%2C51.5200&layer=mapnik'
+
+    provider:
+      type: string
+      title: Provider
+      default: google
+      enum: [google, openstreetmap, mapbox]
+      meta:enum:
+        google: Google Maps
+        openstreetmap: OpenStreetMap
+        mapbox: Mapbox
+      examples:
+        - google
+
+    height:
+      type: string
+      title: Height
+      default: lg
+      enum: [sm, md, lg, xl]
+      meta:enum:
+        sm: Small (200px)
+        md: Medium (300px)
+        lg: Large (400px)
+        xl: Extra large (500px)
+      examples:
+        - lg
+
+    show_info_card:
+      type: boolean
+      title: Show info card
+      description: Overlay an address card on the map.
+      default: false
+      examples:
+        - false
+
+    address:
+      type: string
+      title: Address
+      description: Address text shown in the info card.
+      examples:
+        - '123 Main Street, London, UK'
+
+    show_directions_link:
+      type: boolean
+      title: Show directions link
+      description: Add a "Get directions" link in the info card.
+      default: false
+      examples:
+        - false
+
+    show_fullscreen:
+      type: boolean
+      title: Allow fullscreen
+      description: Allow the iframe to go fullscreen.
+      default: true
+      examples:
+        - true

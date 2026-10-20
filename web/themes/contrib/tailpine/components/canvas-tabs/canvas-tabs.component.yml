@@ -1,0 +1,181 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Tabs (Canvas)
+status: stable
+description: "Interactive tabs component with multiple content panels. Click tabs to switch between content sections."
+group: Navigation & UI
+
+slots:
+  tab_1_content:
+    title: "Tab 1 Content"
+    description: "Content for the first tab panel"
+  
+  tab_2_content:
+    title: "Tab 2 Content"
+    description: "Content for the second tab panel"
+  
+  tab_3_content:
+    title: "Tab 3 Content"
+    description: "Content for the third tab panel"
+  
+  tab_4_content:
+    title: "Tab 4 Content"
+    description: "Content for the fourth tab panel"
+  
+  tab_5_content:
+    title: "Tab 5 Content"
+    description: "Content for the fifth tab panel"
+  
+  tab_6_content:
+    title: "Tab 6 Content"
+    description: "Content for the sixth tab panel"
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    # Number of Tabs
+    number_of_tabs:
+      type: integer
+      title: Number of Tabs
+      description: How many tabs to display
+      enum:
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      default: 3
+    
+    # Tab Labels
+    tab_1_label:
+      type: string
+      title: Tab 1 Label
+      default: "Tab 1"
+      examples:
+        - "Overview"
+    
+    tab_2_label:
+      type: string
+      title: Tab 2 Label
+      default: "Tab 2"
+      examples:
+        - "Features"
+    
+    tab_3_label:
+      type: string
+      title: Tab 3 Label
+      default: "Tab 3"
+      examples:
+        - "Pricing"
+    
+    tab_4_label:
+      type: string
+      title: Tab 4 Label
+      default: "Tab 4"
+      examples:
+        - "Support"
+    
+    tab_5_label:
+      type: string
+      title: Tab 5 Label
+      default: "Tab 5"
+      examples:
+        - "Contact"
+    
+    tab_6_label:
+      type: string
+      title: Tab 6 Label
+      default: "Tab 6"
+      examples:
+        - "About"
+    
+    # Default Active Tab
+    default_active_tab:
+      type: integer
+      title: Default Active Tab
+      description: Which tab should be active on page load
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+      default: 1
+    
+    # Tab Style
+    tab_style:
+      type: string
+      title: Tab Style
+      description: Visual style of the tabs
+      enum:
+        - underline
+        - pills
+        - bordered
+        - minimal
+      meta:enum:
+        underline: Underline (Modern)
+        pills: Pills (Rounded)
+        bordered: Bordered (Classic)
+        minimal: Minimal (Simple)
+      default: underline
+    
+    # Tab Alignment
+    tab_alignment:
+      type: string
+      title: Tab Alignment
+      enum:
+        - left
+        - center
+        - right
+        - full
+      meta:enum:
+        left: Left Aligned
+        center: Center Aligned
+        right: Right Aligned
+        full: Full Width
+      default: left
+    
+    # Color Theme
+    active_tab_color:
+      type: string
+      title: Active Tab Color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - success
+        - dark
+      meta:enum:
+        primary: Primary Color
+        secondary: Secondary Color
+        tertiary: Tertiary Color
+        success: Success Color
+        dark: Dark
+      default: primary
+    
+    # Content Padding
+    content_padding:
+      type: string
+      title: Content Padding
+      enum:
+        - none
+        - small
+        - medium
+        - large
+      meta:enum:
+        none: No Padding
+        small: Small (16px)
+        medium: Medium (24px)
+        large: Large (32px)
+      default: medium
+    
+    # Enable Animation
+    enable_animation:
+      type: boolean
+      title: Enable Fade Animation
+      description: Fade in/out when switching tabs
+      default: true

@@ -1,0 +1,89 @@
+{#
+/**
+ * Image Mosaic (Canvas) — parent
+ *
+ * Variables: layout, columns, show_lightbox, show_captions, hover_effect, bg_color
+ * Slots: items
+ *
+ * Theme tokens: bg-body-bg, bg-primary, bg-surface, bg-surface-alt, bg-dark,
+ *               text-body, text-on-primary, text-body-bg, text-muted, focus:ring-focus
+ */
+#}
+{% set safe_layout    = layout|default('grid')|striptags %}
+{% set safe_columns   = columns|default('3')|striptags %}
+{% set safe_bg        = bg_color|default('default')|striptags %}
+{% set lightbox_on    = show_lightbox|default(true) %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-body-bg text-body') %}
+
+{% set col_map = {
+  '2': 'md:grid-cols-2',
+  '3': 'md:grid-cols-3',
+  '4': 'md:grid-cols-4',
+} %}
+{% set col_class = col_map[safe_columns]|default('md:grid-cols-3') %}
+
+<div
+  class="canvas-image-mosaic canvas-image-mosaic--{{ safe_layout }} w-full {{ bg_class }}"
+  x-data="imageMosaic()"
+  x-on:keydown.window="handleKeydown($event)"
+  data-layout="{{ safe_layout }}"
+  data-hover="{{ hover_effect|default('zoom')|striptags }}"
+  data-captions="{{ show_captions|default(false) ? '1' : '0' }}"
+  data-lightbox="{{ lightbox_on ? '1' : '0' }}"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16">
+
+    <div class="canvas-image-mosaic__gallery {{ safe_layout == 'grid' ? 'grid grid-cols-1 ' ~ col_class ~ ' gap-4' : '' }} {{ safe_layout == 'masonry' ? 'columns-1 ' ~ col_class|replace({'md:grid-cols-': 'md:columns-'}) ~ ' gap-4 space-y-4' : '' }} {{ safe_layout == 'bento' ? 'grid grid-cols-4 auto-rows-auto gap-4' : '' }} {{ safe_layout == 'justified' ? 'flex flex-wrap gap-2' : '' }}">
+      {% block items %}
+        <div class="text-muted text-sm col-span-full text-center">{{ 'Add canvas-image-mosaicitem components here.'|t }}</div>
+      {% endblock %}
+    </div>
+
+    {# Lightbox overlay — always rendered, controlled by Alpine state #}
+    <div
+      class="canvas-image-mosaic__lightbox fixed inset-0 z-50 flex items-center justify-center bg-dark/90 p-4"
+      x-show="lightboxOpen && {{ lightbox_on ? 'true' : 'false' }}"
+      x-cloak
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0"
+      x-transition:enter-end="opacity-100"
+      x-transition:leave="transition ease-in duration-150"
+      x-transition:leave-start="opacity-100"
+      x-transition:leave-end="opacity-0"
+      x-on:click.self="closeLightbox()"
+      role="dialog"
+      aria-modal="true"
+      x-bind:aria-label="activeImage.alt"
+    >
+      <button
+        type="button"
+        class="canvas-image-mosaic__lightbox-close absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-body-bg/20 text-body-bg hover:bg-body-bg/30 focus:outline-none focus:ring-2 focus:ring-focus"
+        x-on:click="closeLightbox()"
+        aria-label="{{ 'Close lightbox'|t }}"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      </button>
+      <img
+        x-bind:src="activeImage.src"
+        x-bind:alt="activeImage.alt"
+        class="max-w-full max-h-[90vh] object-contain rounded-xl"
+      >
+    </div>
+
+  </div>
+</div>

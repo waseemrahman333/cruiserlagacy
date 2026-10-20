@@ -1,0 +1,43 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Modal (Canvas)
+description: This is the modal that should open to show content
+status: stable
+variants:
+  Start:
+    title: Start
+  Center:
+    title: Center
+  End:
+    title: End
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    content:
+      type: string
+      title: Content
+      description: This is used for the content
+      examples: ['This is the modal content Animo contemnentes nostri disputatione affirmatis turbent ipsam quippiam quas. Eorum enim iudicium de finibus bonorum et malorum, quoniam hanc copiosiorem esse naturam quam ceteras, quoniamque in iis utilitas maxime conspicua est, non modo philosophorum, verum etiam oratorum atque poëtarum amplissime laudata est.']
+    top_title:
+      type: string
+      title: Top Title
+      description: This is used for the top_title
+      examples: ['Modal Title']
+    alignment:
+      type: string
+      title: Alignment
+      description: This is used for the alignment of the modal
+      default: Center
+      enum:
+        - Start
+        - Center
+        - End
+      examples: ['Center']
+    button_text:
+      type: string
+      title: Button Text
+      description: This is used for the button_text
+      examples: ['Close']

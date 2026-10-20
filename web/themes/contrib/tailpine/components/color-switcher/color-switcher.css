@@ -1,0 +1,93 @@
+/**
+ * @file
+ * Styles for the Color Theme Switcher component.
+ *
+ * Swatch colors are set via CSS custom properties (--swatch-primary,
+ * --swatch-secondary, --swatch-bg) applied inline on each <button> by the
+ * Twig template. This avoids dynamic Tailwind class generation issues.
+ */
+
+.color-switcher__swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.color-switcher__swatch {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  padding: 2px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.color-switcher__swatch:hover,
+.color-switcher__swatch:focus-visible {
+  transform: scale(1.2);
+  border-color: var(--swatch-primary);
+  outline: none;
+}
+
+.color-switcher__swatch--active {
+  border-color: var(--swatch-primary);
+  box-shadow: 0 0 0 2px var(--swatch-secondary);
+  transform: scale(1.15);
+}
+
+/* The swatch circle uses background-color for primary and an inset
+   box-shadow to show the secondary color as an inner ring. */
+.color-switcher__swatch-circle {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 9999px;
+  background-color: var(--swatch-primary);
+  box-shadow: inset 0 0 0 3px var(--swatch-secondary);
+}
+
+.color-switcher__swatch-label {
+  font-size: 0.55rem;
+  line-height: 1;
+  color: var(--t-muted, #6B7280);
+  text-transform: capitalize;
+  white-space: nowrap;
+}
+
+.color-switcher__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  padding: 3px;
+  cursor: pointer;
+  color: var(--t-muted, #6B7280);
+  transition: color 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+}
+
+.color-switcher__reset svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  display: block;
+}
+
+.color-switcher__reset:hover,
+.color-switcher__reset:focus-visible {
+  color: var(--t-primary, #10B981);
+  border-color: var(--t-primary, #10B981);
+  transform: scale(1.2);
+  outline: none;
+}
+
+.color-switcher__reset--active {
+  color: var(--t-primary, #10B981);
+  border-color: var(--t-primary, #10B981);
+}

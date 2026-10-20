@@ -1,0 +1,282 @@
+{#
+/**
+ * Tabs Component - Alpine.js with Embed Workaround
+ */
+#}
+
+{# Build tabs data array #}
+{% set tabs_data = [] %}
+{% for i in 1..number_of_tabs %}
+  {% set tab_label_var = 'tab_' ~ i ~ '_label' %}
+  {% set tabs_data = tabs_data|merge([{
+    'number': i,
+    'label': attribute(_context, tab_label_var)|default('Tab ' ~ i)
+  }]) %}
+{% endfor %}
+
+{# Tab Alignment Classes #}
+{% set alignment_map = {
+  'left': 'justify-start',
+  'center': 'justify-center',
+  'right': 'justify-end',
+  'full': 'justify-between'
+} %}
+
+{# Content Padding Classes #}
+{% set padding_map = {
+  'none': 'p-0',
+  'small': 'p-4',
+  'medium': 'p-6',
+  'large': 'p-8'
+} %}
+
+{# Static 2D maps — full class strings required for Tailwind JIT scanning.
+   All combinations of active_tab_color × tab_style are explicit below. #}
+
+{% set alignment = alignment_map[tab_alignment]|default('justify-start') %}
+{% set content_padding = padding_map[content_padding]|default('p-6') %}
+
+{% set tab_base_map = {
+  'underline': 'border-b-2 transition-colors',
+  'pills': 'rounded-full',
+  'bordered': 'border-2 rounded-lg',
+  'minimal': ''
+} %}
+
+{# Active tab classes — keyed by active_tab_color, then tab_style. #}
+{% set tab_active_by_color = {
+  'primary': {
+    'underline': 'text-primary border-b-2 border-primary',
+    'pills': 'bg-primary text-on-primary',
+    'bordered': 'bg-primary text-on-primary',
+    'minimal': 'text-primary font-semibold',
+  },
+  'secondary': {
+    'underline': 'text-secondary border-b-2 border-secondary',
+    'pills': 'bg-secondary text-on-primary',
+    'bordered': 'bg-secondary text-on-primary',
+    'minimal': 'text-secondary font-semibold',
+  },
+  'tertiary': {
+    'underline': 'text-tertiary border-b-2 border-tertiary',
+    'pills': 'bg-tertiary text-on-primary',
+    'bordered': 'bg-tertiary text-on-primary',
+    'minimal': 'text-tertiary font-semibold',
+  },
+  'success': {
+    'underline': 'text-success border-b-2 border-success',
+    'pills': 'bg-success text-body-bg',
+    'bordered': 'bg-success text-body-bg',
+    'minimal': 'text-success font-semibold',
+  },
+  'dark': {
+    'underline': 'text-body border-b-2 border-border',
+    'pills': 'bg-dark text-body-bg',
+    'bordered': 'bg-dark text-body-bg',
+    'minimal': 'text-body font-semibold',
+  },
+} %}
+
+{# Inactive tab classes — keyed by active_tab_color, then tab_style. #}
+{% set tab_inactive_by_color = {
+  'primary': {
+    'underline': 'border-transparent hover:border-border text-muted hover:text-body',
+    'pills': 'text-muted hover:bg-surface hover:text-body',
+    'bordered': 'border-border text-muted hover:border-border hover:text-body',
+    'minimal': 'text-muted hover:text-primary',
+  },
+  'secondary': {
+    'underline': 'border-transparent hover:border-border text-muted hover:text-body',
+    'pills': 'text-muted hover:bg-surface hover:text-body',
+    'bordered': 'border-border text-muted hover:border-border hover:text-body',
+    'minimal': 'text-muted hover:text-secondary',
+  },
+  'tertiary': {
+    'underline': 'border-transparent hover:border-border text-muted hover:text-body',
+    'pills': 'text-muted hover:bg-surface hover:text-body',
+    'bordered': 'border-border text-muted hover:border-border hover:text-body',
+    'minimal': 'text-muted hover:text-tertiary',
+  },
+  'success': {
+    'underline': 'border-transparent hover:border-border text-muted hover:text-body',
+    'pills': 'text-muted hover:bg-surface hover:text-body',
+    'bordered': 'border-border text-muted hover:border-border hover:text-body',
+    'minimal': 'text-muted hover:text-success',
+  },
+  'dark': {
+    'underline': 'border-transparent hover:border-border text-muted hover:text-body',
+    'pills': 'text-muted hover:bg-surface hover:text-body',
+    'bordered': 'border-border text-muted hover:border-border hover:text-body',
+    'minimal': 'text-muted hover:text-body',
+  },
+} %}
+
+{# Focus ring classes — keyed by active_tab_color. #}
+{% set focus_ring_map = {
+  'primary': 'focus:ring-primary',
+  'secondary': 'focus:ring-secondary',
+  'tertiary': 'focus:ring-tertiary',
+  'success': 'focus:ring-success',
+  'dark': 'focus:ring-border',
+} %}
+
+{% set active_tab_color_key = active_tab_color|default('primary') %}
+{% set tab_base = tab_base_map[tab_style]|default(tab_base_map['underline']) %}
+{% set tab_active = tab_active_by_color[active_tab_color_key][tab_style]|default(tab_active_by_color['primary']['underline']) %}
+{% set tab_inactive = tab_inactive_by_color[active_tab_color_key][tab_style]|default(tab_inactive_by_color['primary']['underline']) %}
+{% set focus_ring_class = focus_ring_map[active_tab_color_key]|default('focus:ring-primary') %}
+
+<div 
+  class="tabs-component w-full"
+  x-data="{ activeTab: {{ default_active_tab }} }"
+>
+  
+  {# Tab Navigation #}
+  <div class="tabs-navigation border-b border-border mb-6" role="tablist">
+    <div class="flex {{ alignment }} gap-2 flex-wrap">
+      
+     {% for tab in tabs_data %}
+  <button
+    type="button"
+    role="tab"
+    :aria-selected="activeTab === {{ tab.number }}"
+    aria-controls="tab-panel-{{ tab.number }}"
+    @click="activeTab = {{ tab.number }}"
+    class="tab-button !focus:ring-0 px-4 py-2 text-sm md:text-base font-medium transition-all duration-200 focus:outline-none focus:ring-2 {{ focus_ring_class }} focus:ring-offset-2 {{ tab_base }}"
+    :class="{
+      '{{ tab_active }}': activeTab === {{ tab.number }},
+      '{{ tab_inactive }}': activeTab !== {{ tab.number }}
+    }"
+  >
+    {{ tab.label }}
+  </button>
+{% endfor %}
+
+    </div>
+  </div>
+
+  {# Tab Panels - Must use explicit blocks due to Twig limitation #}
+  <div class="tabs-panels relative">
+    
+    {# Panel 1 #}
+    {% if number_of_tabs >= 1 %}
+      <div 
+        id="tab-panel-1"
+        role="tabpanel"
+        x-show="activeTab === 1"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+        {% block tab_1_content %}
+          <p class="text-muted">{{ 'Add content to Tab 1'|t }}</p>
+        {% endblock %}
+      </div>
+    {% endif %}
+
+    {# Panel 2 #}
+    {% if number_of_tabs >= 2 %}
+      <div 
+        id="tab-panel-2"
+        role="tabpanel"
+        x-show="activeTab === 2"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+        {% block tab_2_content %}
+          <p class="text-muted">{{ 'Add content to Tab 2'|t }}</p>
+        {% endblock %}
+      </div>
+    {% endif %}
+
+    {# Panel 3 #}
+    {% if number_of_tabs >= 3 %}
+
+      <div 
+        id="tab-panel-3"
+        role="tabpanel"
+        x-show="activeTab === 3"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+         {% set tab3_content %}
+          {% block tab_3_content %}{% endblock %}
+        {% endset %}
+        {% if tab3_content|trim %}
+           {{ tab3_content }}
+        {% endif %}
+     
+      </div>
+    {% endif %}
+
+    {# Panel 4 #}
+    {% if number_of_tabs >= 4 %}
+      <div 
+        id="tab-panel-4"
+        role="tabpanel"
+        x-show="activeTab === 4"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+        {% block tab_4_content %}
+          <p class="text-muted">{{ 'Add content to Tab 4'|t }}</p>
+        {% endblock %}
+      </div>
+    {% endif %}
+
+    {# Panel 5 #}
+    {% if number_of_tabs >= 5 %}
+      <div 
+        id="tab-panel-5"
+        role="tabpanel"
+        x-show="activeTab === 5"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+        {% block tab_5_content %}
+          <p class="text-muted">Add content to Tab 5</p>
+        {% endblock %}
+      </div>
+    {% endif %}
+
+    {# Panel 6 #}
+    {% if number_of_tabs >= 6 %}
+      <div 
+        id="tab-panel-6"
+        role="tabpanel"
+        x-show="activeTab === 6"
+        {% if enable_animation %}
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-y-2"
+        x-transition:enter-end="opacity-100 transform translate-y-0"
+        {% endif %}
+        class="tab-panel {{ content_padding }}"
+      >
+        {% block tab_6_content %}
+          <p class="text-muted">Add content to Tab 6</p>
+        {% endblock %}
+      </div>
+    {% endif %}
+
+  </div>
+
+</div>

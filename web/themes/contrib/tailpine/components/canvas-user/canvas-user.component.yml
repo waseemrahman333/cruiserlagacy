@@ -1,0 +1,15 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: User Profile (Canvas)
+description: 'A user profile component styled with Tailwind CSS.'
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+slots:
+  content:
+    title: 'Content'
+    description: 'The renderable content arrays for the user profile.'

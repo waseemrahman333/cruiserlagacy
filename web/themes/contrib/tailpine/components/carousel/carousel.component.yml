@@ -1,0 +1,25 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Carousel
+status: stable
+description: A carousel/slider component powered by Swiper.js.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes for the carousel wrapper.
+    autoplay:
+      type: boolean
+      title: Autoplay
+      description: Whether to enable autoplay.
+      default: false
+    loop:
+      type: boolean
+      title: Loop
+      description: Whether to loop slides.
+      default: true
+slots:
+  slides:
+    title: Slides
+    description: Carousel slide items.

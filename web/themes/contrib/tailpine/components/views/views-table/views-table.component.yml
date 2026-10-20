@@ -1,0 +1,59 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: "Views Table"
+status: stable
+group: "Views"
+description: "Styled table for Views table-style displays. Uses Views-specific column structure."
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: "HTML attributes"
+      description: "Additional HTML attributes for the table element."
+
+    caption:
+      type: ["string", "null"]
+      title: "Caption"
+      description: "Optional table caption."
+      default: ""
+
+    caption_needed:
+      type: boolean
+      title: "Caption needed"
+      description: "Whether to render the caption element."
+      default: false
+
+    sticky:
+      type: boolean
+      title: "Sticky header"
+      description: "Make the header sticky on scroll."
+      default: false
+
+    responsive:
+      type: boolean
+      title: "Responsive"
+      description: "Wrap in a horizontally scrollable container on small screens."
+      default: true
+
+    header:
+      type: array
+      title: "Header columns"
+      description: "Views-style header columns with url/sort_indicator support."
+      default: []
+      items:
+        type: object
+
+    rows:
+      type: array
+      title: "Table rows"
+      description: "Views-style rows with columns array."
+      default: []
+      items:
+        type: object
+
+    empty:
+      type: ["string", "null"]
+      title: "Empty message"
+      description: "Message shown when there are no rows."
+      default: ""

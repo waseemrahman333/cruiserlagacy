@@ -1,0 +1,71 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Pricing Shelf Item (Canvas)
+group: Tailpine
+status: stable
+description: A single pricing plan card inside a canvas-pricing-shelf.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    plan_name:
+      type: string
+      title: Plan name
+      examples:
+        - 'Pro'
+
+    price_monthly:
+      type: string
+      title: Monthly price
+      description: Price string shown in monthly mode (e.g. "$29/mo").
+      examples:
+        - '$29/mo'
+
+    price_annual:
+      type: string
+      title: Annual price
+      description: Price string shown in annual mode (e.g. "$23/mo").
+      examples:
+        - '$23/mo'
+
+    description:
+      type: string
+      title: Description
+      description: Short plan description. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Perfect for growing teams.</p>'
+
+    show_badge:
+      type: boolean
+      title: Show badge
+      default: false
+      examples:
+        - false
+
+    badge_text:
+      type: string
+      title: Badge text
+      examples:
+        - 'Most popular'
+
+    show_cta:
+      type: boolean
+      title: Show CTA button
+      default: true
+      examples:
+        - true
+
+slots:
+  features:
+    title: Feature list
+    description: List of features included in this plan.
+  cta:
+    title: CTA button
+    description: Call-to-action button for this plan.

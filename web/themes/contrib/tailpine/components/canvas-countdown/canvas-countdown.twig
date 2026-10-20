@@ -1,0 +1,77 @@
+{#
+/**
+ * Countdown (Canvas)
+ *
+ * Variables: target_date, style, show_days, show_hours, show_minutes,
+ *            show_seconds, bg_color
+ * Slots: expired
+ *
+ * Theme tokens: bg-dark, bg-primary, bg-body-bg, text-body-bg, text-body, text-muted
+ */
+#}
+{% set safe_style = style|default('boxed')|striptags %}
+{% set safe_date  = target_date|default('2027-12-31T23:59:59')|striptags %}
+{% set safe_bg    = bg_color|default('dark')|striptags %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-dark text-body-bg') %}
+
+<div
+  class="canvas-countdown canvas-countdown--{{ safe_style }} w-full {{ bg_class }}"
+  x-data="countdownTimer('{{ safe_date }}')"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16 flex flex-col items-center gap-6">
+
+    {# Expired state #}
+    <div class="canvas-countdown__expired" x-show="expired" x-cloak>
+      {% block expired %}
+        <p class="text-lg font-semibold">{{ 'The countdown has ended.'|t }}</p>
+      {% endblock %}
+    </div>
+
+    {# Timer units #}
+    <div class="canvas-countdown__units flex items-center gap-4 md:gap-8" x-show="!expired">
+
+      {% if show_days|default(true) %}
+        <div class="canvas-countdown__unit flex flex-col items-center {{ (safe_style == 'boxed' or safe_style == 'flip') ? 'bg-body-bg/10 rounded-xl px-6 py-4 min-w-[80px]' : '' }}">
+          <span class="canvas-countdown__number text-4xl md:text-6xl font-bold tabular-nums leading-none" x-text="pad(days)">00</span>
+          <span class="canvas-countdown__label text-xs md:text-sm font-medium uppercase tracking-wider mt-1 opacity-70">{{ 'Days'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if show_hours|default(true) %}
+        <div class="canvas-countdown__unit flex flex-col items-center {{ (safe_style == 'boxed' or safe_style == 'flip') ? 'bg-body-bg/10 rounded-xl px-6 py-4 min-w-[80px]' : '' }}">
+          <span class="canvas-countdown__number text-4xl md:text-6xl font-bold tabular-nums leading-none" x-text="pad(hours)">00</span>
+          <span class="canvas-countdown__label text-xs md:text-sm font-medium uppercase tracking-wider mt-1 opacity-70">{{ 'Hours'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if show_minutes|default(true) %}
+        <div class="canvas-countdown__unit flex flex-col items-center {{ (safe_style == 'boxed' or safe_style == 'flip') ? 'bg-body-bg/10 rounded-xl px-6 py-4 min-w-[80px]' : '' }}">
+          <span class="canvas-countdown__number text-4xl md:text-6xl font-bold tabular-nums leading-none" x-text="pad(minutes)">00</span>
+          <span class="canvas-countdown__label text-xs md:text-sm font-medium uppercase tracking-wider mt-1 opacity-70">{{ 'Minutes'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if show_seconds|default(true) %}
+        <div class="canvas-countdown__unit flex flex-col items-center {{ (safe_style == 'boxed' or safe_style == 'flip') ? 'bg-body-bg/10 rounded-xl px-6 py-4 min-w-[80px]' : '' }}">
+          <span class="canvas-countdown__number text-4xl md:text-6xl font-bold tabular-nums leading-none" x-text="pad(seconds)">00</span>
+          <span class="canvas-countdown__label text-xs md:text-sm font-medium uppercase tracking-wider mt-1 opacity-70">{{ 'Seconds'|t }}</span>
+        </div>
+      {% endif %}
+
+    </div>
+
+  </div>
+</div>

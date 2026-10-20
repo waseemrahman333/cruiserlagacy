@@ -1,0 +1,368 @@
+"$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
+name: Section (Tailpine)
+description: 'A flexible section component with customizable layout and styling options.'
+group: Layout
+status: stable
+props:
+  type: object
+  properties:
+
+    background_type:
+      type: string
+      title: Background Type
+      description: Choose between solid color, image, or video background
+      enum:
+        - color
+        - image
+        - both
+      meta:enum:
+        color: Colored (Bg)
+        image: Image (bg)
+        both: Both(Image and Color)
+      default: image
+      examples:
+        - 'image'
+
+    bg_media:
+      $ref: json-schema-definitions://canvas.module/image
+      title: Background image
+      type: object  
+
+
+    image_width:
+      type: string
+      title: BG Image Width
+      description: Set bg image width for (both) background type
+      default: "70"
+      enum:
+        - "20"
+        - "30"
+        - "40"
+        - "50"
+        - "60"
+        - "70"
+        - "75"
+        - "80"
+        - "90"
+        - "100"
+      meta:enum:
+        "20": "20% — Extra Small"
+        "30": "30% — Small"
+        "40": "40% — Medium Small"
+        "50": "50% — Half Width"
+        "60": "60% — Medium Large"
+        "70": "70% — Large"
+        "75": "75% — Three Quarters"
+        "80": "80% — Extra Large"
+        "90": "90% — Almost Full"
+        "100": "100% — Full Width"
+      examples:
+        - "50"
+
+    bg_color:
+      type: string
+      title: Set Hero Background
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['transparent']
+ 
+    grid_layout:
+      title: "Content Region Layout"
+      description: A responsive grid layout for the content region.
+      type: integer
+      enum: [1, 2, 3, 4, 5, 6]
+      "meta:enum":
+        1: "1 Column"
+        2: "2 Columns"
+        3: "3 Columns"
+        4: "4 Columns"
+        5: "5 Columns"
+        6: "6 Columns"
+      default: 1
+      examples: [1]
+
+    gap:
+      title: "Gap"
+      type: string
+      description: "Responsive gap between content region layout"
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        xxl: "2x Large"
+      examples: [sm]
+    
+    padding_block:
+      title: "Padding Block (Top & Bottom)"
+      type: string
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+    # Overlay Controls
+    enable_overlay:
+      type: boolean
+      title: Enable Overlay
+      description: (image/video)
+      default: true
+      examples:
+        - false
+    
+    overlay_color:
+      type: string
+      title: Overlay Color
+      description: Choose overlay color (image/video)
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - success
+        - warning
+        - error
+        - white
+        - light
+        - medium
+        - dark
+        - black
+        - transparent
+      meta:enum:
+        primary: Primary Color
+        secondary: Secondary Color
+        tertiary: Tertiary Color
+        success: Success Color
+        warning: Warning Color
+        error: Error Color
+        white: White Color 
+        light: Light Color
+        medium: Medium Color
+        dark: Dark Color
+        black: Black
+        transparent: Transparent Color
+      examples: ['dark']
+    
+    overlay_opacity:
+      type: string
+      title: Overlay Opacity
+      description: Control how dark/light the overlay is
+      enum:
+        - "10"
+        - "20"
+        - "30"
+        - "40"
+        - "50"
+        - "60"
+        - "70"
+        - "80"
+      meta:enum:
+        "10": 10% (Very Light)
+        "20": 20% (Light)
+        "30": 30%
+        "40": 40%
+        "50": 50% (Medium)
+        "60": 60%
+        "70": 70% (Dark)
+        "80": 80% (Very Dark)
+      default: "50"
+
+
+    reverse_top_content:
+      type: boolean
+      title: Reverse Top Content
+      examples:
+        - false
+      default:
+        - false
+
+    show_top_region:
+      type: boolean
+      title: Show Top Region
+      examples:
+        - true
+      default:
+        - true
+
+    show_content_region:
+      type: boolean
+      title: Show Content Region
+      examples:
+        - true
+      default:
+        - true
+
+    show_bottom_region:
+      type: boolean
+      title: Show Bottom Region
+      examples:
+        - true
+      default:
+        - true
+    show_cta:
+      type: boolean
+      title: Show Cta Region
+      examples:
+        - true
+      default:
+        - true
+    enable_container:
+      type: boolean
+      title: Enable Container Class
+      examples:
+        - true
+      default:
+        - true
+    show_heading:
+      type: boolean
+      title: Show Heading Slot 
+      examples:
+        - true
+      default:
+        - true
+    padding_t:
+      type: string
+      title: Content Region Padding Top 
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+    padding_b:
+      type: string
+      title: Content Region Padding Bottom
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+    content_alignment:
+      type: string
+      title: Text Alignment
+      description: Controls horizontal alignment of the section title and description
+      enum:
+        - left
+        - center
+        - right
+      meta:enum:
+        left: Left
+        center: Centered
+        right: Right
+      examples: [center]
+    cta_alignment:
+      type: string
+      title: Cta Alignment
+      description: Controls horizontal alignment of the cta on mobile
+      enum:
+        - self-start
+        - self-center
+        - self-end
+      meta:enum:
+        self-start: Left
+        self-center: Centered
+        self-end: Right
+    show_description:
+      type: boolean
+      title: Show Description Text
+      examples:
+        - false
+      default:
+        - false
+
+slots:
+  heading:
+    title: "heading"
+    descriptoin: "heading of the main sectoin."
+  text:
+    title: "text"
+    descriptoin: "text of the main sectoin."
+  cta:
+    title: "cta"
+  content:
+    title: Content
+    description: "Content slot you can insert any component here."
+  bottom_slot:
+    title: "Bottom"

@@ -1,0 +1,33 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Link node
+description: Drupal node links component for tailpine theme.
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    links:
+      type: array
+      title: Links
+      description: Array of link items passed from Drupal node links.
+      items:
+        type: object
+      default: []
+    heading:
+      type: object
+      title: Heading
+      description: Optional heading object with text, level, and attributes.
+      default: null
+      properties:
+        text:
+          type: string
+          description: The heading text.
+        level:
+          type: string
+          description: The heading level (h2, h3, etc.)
+        attributes:
+          type: object
+          description: HTML attributes for the heading element.

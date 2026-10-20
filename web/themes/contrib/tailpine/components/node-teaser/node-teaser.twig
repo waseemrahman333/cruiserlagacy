@@ -1,0 +1,68 @@
+<article{{ (attributes|default(create_attribute())).addClass(node_classes|default([])).addClass([
+  'bg-surface',
+  'shadow-theme',
+  'overflow-hidden',
+  'flex',
+  'flex-col',
+  'h-full',
+]) }}>
+
+  {{ title_prefix }}
+
+  {# ── Featured image ───────────────────────────────────────────────────── #}
+  {% if image %}
+    <div class="node-teaser__image overflow-hidden aspect-video bg-surface-alt flex-shrink-0 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block">
+      {{ image }}
+    </div>
+  {% endif %}
+
+  {# ── Card content ─────────────────────────────────────────────────────── #}
+  <div class="node-teaser__content p-5 flex flex-col gap-3 flex-1">
+
+    {# Title #}
+    <h2{{ (title_attributes|default(create_attribute())).addClass(['node-teaser__title', 'text-xl', 'font-bold', 'leading-snug', 'mb-0']) }}>
+      <a href="{{ url|default('/') }}" rel="bookmark" class="text-heading hover:text-primary transition-colors">
+        {{ label }}
+      </a>
+    </h2>
+
+    {# Author / Date meta #}
+    {% if display_submitted %}
+      <div class="node-teaser__meta flex items-center gap-2">
+        {% if author_picture %}
+          <span class="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-surface-alt">
+            {{ author_picture }}
+          </span>
+        {% endif %}
+        <span{{ (author_attributes|default(create_attribute())).addClass(['node-teaser__submitted', 'text-xs', 'text-muted']) }}>
+          {% trans %}By {{ author_name }} · {{ date }}{% endtrans %}
+        </span>
+      </div>
+    {% endif %}
+
+    {# Body excerpt #}
+    {% if body %}
+      <div{{ (content_attributes|default(create_attribute())).addClass(['node-teaser__body', 'text-body', 'text-sm', 'leading-relaxed']) }}>
+        {{ body }}
+      </div>
+    {% endif %}
+
+    {# Tags #}
+    {% if tags %}
+      <div class="node-teaser__tags mt-auto pt-2">
+        {{ tags }}
+      </div>
+    {% endif %}
+
+    {# Node action links (read more, etc.) #}
+    {% if links %}
+      <div class="node-teaser__links">
+        {{ links }}
+      </div>
+    {% endif %}
+
+  </div>
+
+  {{ title_suffix }}
+
+</article>

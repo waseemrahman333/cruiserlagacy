@@ -1,0 +1,58 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Step Trail (Canvas)
+group: Tailpine
+status: stable
+description: Multi-step progress indicator. Add canvas-step-trailitem children for each step.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    orientation:
+      type: string
+      title: Orientation
+      default: vertical
+      enum: [vertical, horizontal]
+      meta:enum:
+        vertical: Vertical
+        horizontal: Horizontal
+      examples:
+        - vertical
+
+    style:
+      type: string
+      title: Marker style
+      default: numbered
+      enum: [numbered, icon, dot]
+      meta:enum:
+        numbered: Numbered
+        icon: Icon
+        dot: Dot
+      examples:
+        - numbered
+
+    show_descriptions:
+      type: boolean
+      title: Show descriptions
+      description: Render description text beneath each step label.
+      default: true
+      examples:
+        - true
+
+    current_step:
+      type: integer
+      title: Current step
+      description: 1-based index of the active step (for styling purposes).
+      default: 1
+      examples:
+        - 1
+
+slots:
+  items:
+    title: Step items
+    description: Add canvas-step-trailitem components here.

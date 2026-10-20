@@ -1,0 +1,44 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: Item List
+description: 'A simple list of items, with optional title and empty message.'
+title: 'Item List'
+defaults:
+  items: []
+  title: ''
+  list_type: 'ul'
+  empty: ''
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    wrapper_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Wrapper HTML attributes
+      description: HTML attributes for the outer wrapper div.
+    items:
+      type: array
+      title: Items
+      item:
+        type: string
+      default: []
+      description: 'An array of list items.'
+    title:
+      type: [string, 'null']
+      description: The title of the list.
+    list_type:
+      type: [string, 'null']
+      description: The tag for the list element ("ul" or "ol").
+    empty:
+      type: [string, 'null']
+      description: Message displayed when there are no items.
+    context:
+      type: object
+      description: Contextual data for the list.
+      properties:
+        list_style:
+          type: string
+          description: Optional CSS modifier suffix for the list style class.

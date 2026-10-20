@@ -1,0 +1,27 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Filter Tips
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    tips:
+      type: array
+      title: Tips
+      description: Descriptions and a CSS ID in the form of 'module-name/filter-id'
+      items:
+        type: string
+      default: []
+    long:
+      type: ["array", "string", 'boolean', "object" , "null"]
+      title: Long
+      description: Boolean indicating whether the fieldset element is required.
+      default: false
+    multiple:
+      title: Multiple
+      type: ["array", "string", 'boolean', "object" , "null"]
+      description: A flag indicating there is more than one filter tip.
+      default: false

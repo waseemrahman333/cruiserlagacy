@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - block_content
+  theme:
+    - tailpine
+id: tailpine_develope_by
+theme: tailpine
+region: footer_bottom
+weight: 0
+provider: null
+plugin: 'block_content:ff6f6920-12a0-4b67-a41a-b39fb6747b90'
+settings:
+  id: tailpine_develope_by
+  label: "Develop By"
+  label_display: '0'
+  provider: tailpine_tools
+visibility: {}

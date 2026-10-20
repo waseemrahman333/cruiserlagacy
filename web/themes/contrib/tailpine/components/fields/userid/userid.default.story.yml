@@ -1,0 +1,11 @@
+name: User ID - Author Info
+description: Display user/author information
+
+slots:
+  children: |
+    <div class="inline-flex items-center gap-2">
+      <div class="w-8 h-8 bg-primary text-on-primary flex items-center justify-center font-semibold text-sm">
+        JD
+      </div>
+      <span class="text-sm text-body font-medium">John Doe</span>
+    </div>

@@ -1,0 +1,53 @@
+{#
+/**
+ * Timeline (Canvas) — parent
+ *
+ * Variables: orientation, connector_style, show_dates, show_icons, alternate_sides, bg_color
+ * Slots: items
+ *
+ * Theme tokens: bg-body-bg, bg-primary, bg-secondary, bg-tertiary, bg-surface, bg-surface-alt,
+ *               bg-dark, text-body, text-on-primary, text-body-bg, border-border, text-muted
+ */
+#}
+{% set safe_orientation = orientation|default('vertical')|striptags %}
+{% set safe_connector   = connector_style|default('line')|striptags %}
+{% set safe_bg          = bg_color|default('default')|striptags %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-body-bg text-body') %}
+
+{% set connector_map = {
+  'line':   'border-l-2 border-border',
+  'dashed': 'border-l-2 border-dashed border-border',
+  'dots':   'border-l-2 border-dotted border-border',
+} %}
+
+<div
+  class="canvas-timeline canvas-timeline--{{ safe_orientation }} w-full {{ bg_class }}"
+  data-connector="{{ safe_connector }}"
+  data-show-dates="{{ show_dates|default(true) ? '1' : '0' }}"
+  data-show-icons="{{ show_icons|default(false) ? '1' : '0' }}"
+  data-alternate="{{ alternate_sides|default(false) ? '1' : '0' }}"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16">
+    <div class="canvas-timeline__items {{ safe_orientation == 'horizontal' ? 'flex flex-row overflow-x-auto gap-8' : 'relative flex flex-col' }}">
+      {% if safe_orientation == 'vertical' %}
+        <div class="canvas-timeline__connector absolute left-5 top-0 bottom-0 {{ connector_map[safe_connector]|default('border-l-2 border-border') }}"></div>
+      {% endif %}
+      {% block items %}
+        <div class="text-muted text-sm pl-14">{{ 'Add canvas-timelineitem components here.'|t }}</div>
+      {% endblock %}
+    </div>
+  </div>
+</div>

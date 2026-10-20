@@ -1,0 +1,76 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Notice Banner (Canvas)
+group: Tailpine
+status: stable
+description: Alert-style banner with icon, dismiss button, and optional action. Supports info, success, warning, and danger types.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    type:
+      type: string
+      title: Type
+      description: Visual style and semantic meaning of the banner.
+      default: info
+      enum: [info, success, warning, danger]
+      meta:enum:
+        info: Info
+        success: Success
+        warning: Warning
+        danger: Danger
+      examples:
+        - info
+
+    dismissible:
+      type: boolean
+      title: Dismissible
+      description: Show a close button that hides the banner.
+      default: false
+      examples:
+        - false
+
+    show_icon:
+      type: boolean
+      title: Show icon
+      description: Display a status icon matching the banner type.
+      default: true
+      examples:
+        - true
+
+    show_action:
+      type: boolean
+      title: Show action button
+      description: Display a call-to-action button inside the banner.
+      default: false
+      examples:
+        - false
+
+    sticky:
+      type: boolean
+      title: Sticky
+      description: Pin the banner to the top of the viewport.
+      default: false
+      examples:
+        - false
+
+    message:
+      type: string
+      title: Message
+      description: Banner message text. Supports HTML.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>Your changes have been saved successfully.</p>'
+
+    action_label:
+      type: string
+      title: Action label
+      description: Text for the optional action button.
+      examples:
+        - 'Learn more'

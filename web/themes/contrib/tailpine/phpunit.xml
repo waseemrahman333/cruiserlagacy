@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="../../../core/tests/bootstrap.php"
+         colors="true"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         beStrictAboutOutputDuringTests="true"
+         failOnRisky="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd">
+  <php>
+    <ini name="error_reporting" value="32767"/>
+    <ini name="memory_limit" value="-1"/>
+    <env name="SIMPLETEST_BASE_URL" value="https://tailpinecanvas2.ddev.site"/>
+    <env name="SIMPLETEST_DB" value="mysql://db:db@db/db"/>
+    <env name="BROWSERTEST_OUTPUT_DIRECTORY" value="../../../sites/default/files/simpletest"/>
+    <env name="BROWSERTEST_OUTPUT_BASE_URL" value="https://tailpinecanvas2.ddev.site"/>
+  </php>
+  <testsuites>
+    <testsuite name="tailpine-unit">
+      <directory>tests/src/Unit</directory>
+    </testsuite>
+    <testsuite name="tailpine-kernel">
+      <directory>tests/src/Kernel</directory>
+    </testsuite>
+    <testsuite name="tailpine-functional">
+      <directory>tests/src/Functional</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>

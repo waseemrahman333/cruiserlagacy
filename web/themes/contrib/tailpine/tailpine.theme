@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Tailpine theme file.
+ */
+
+/**
+ * Load include files which contain additional theming logic.
+ */
+_tailpine_include_theme_includes();
+
+/**
+ * Includes all *.theme files in includes/ for hook registration.
+ */
+function _tailpine_include_theme_includes(): void {
+  static $included;
+  if (!isset($included)) {
+    $included = TRUE;
+    foreach (glob(__DIR__ . '/includes/*.theme') as $file) {
+      include_once $file;
+    }
+  }
+}

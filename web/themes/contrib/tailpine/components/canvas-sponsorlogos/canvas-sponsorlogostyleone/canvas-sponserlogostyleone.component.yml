@@ -1,0 +1,40 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Sponsor Logo Style One (Canvas)
+status: stable
+group: Sponsors / Logos
+description: 'A Sponsor style with a header.'
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    website_url:
+      type: string
+      title: Website URL
+      description: The destination URL when clicking the sponsor logo.
+      examples:
+        - https://example.com
+
+      # sponsor_logo:
+      #   $ref: json-schema-definitions://canvas.module/image
+      #   type: object
+      #   title: Sponsor Logo
+      #   description: The sponsor logo image.
+      #   examples:
+      #     - src: 'bg.jpg'
+      #       alt: 'Sponsor Logo'
+      #       width: 200
+      #       height: 80
+    sponsor_logo:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Sponsor Logo
+      description: The sponsor logo image.
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Sponsor Logo'
+          width: 200
+          height: 80

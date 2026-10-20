@@ -1,0 +1,485 @@
+/* ==========================================================================
+   TAILPINE BASE STYLES
+   Defines the default container, typography, and layout behavior.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE TYPOGRAPHY: LINE HEIGHTS
+   Defines the vertical spacing of heading text at different viewport sizes.
+   The clamp() function allows values to scale fluidly between minimum and
+   maximum sizes without exceeding the specified limits.
+   -------------------------------------------------------------------------- */
+
+:root {
+    /* Mobile: Fluid line heights that scale from 320px to 768px. */
+    --h1-line-height: clamp(48px, calc(48px + 10 * ((100vw - 320px) / 448)), 58px);
+    --h2-line-height: clamp(40px, calc(40px + 4 * ((100vw - 320px) / 448)), 45px);
+    --h3-line-height: clamp(32px, calc(32px + 3 * ((100vw - 320px) / 448)), 35px);
+    --h4-line-height: clamp(30px, calc(30px + 2 * ((100vw - 320px) / 448)), 32px);
+
+    /* Fixed line heights for smaller headings on mobile. */
+    --h5-line-height: 28px;
+    --h6-line-height: 24px;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE TYPOGRAPHY: TABLET AND LARGER
+   At 768px and above, update line-height values to scale toward desktop sizes.
+   These values apply until another rule overrides them at a larger viewport.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+    :root {
+        /* Fluid heading line heights for tablet-to-desktop viewports. */
+        --h1-line-height: clamp(58px, calc(58px + 8 * ((100vw - 768px) / 512)), 68px);
+        --h2-line-height: clamp(45px, calc(44px + 8 * ((100vw - 768px) / 512)), 52px);
+        --h3-line-height: clamp(35px, calc(35px + 5 * ((100vw - 768px) / 512)), 45px);
+        --h4-line-height: clamp(32px, calc(32px + 3 * ((100vw - 768px) / 512)), 34px);
+        --h5-line-height: clamp(28px, calc(28px + 4 * ((100vw - 768px) / 512)), 30px);
+        --h6-line-height: clamp(24px, calc(24px + 6 * ((100vw - 768px) / 512)), 26px);
+
+        /* Default body text line height for tablet and larger screens. */
+        --body-text-line-height: 28px;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   CONTAINER
+   Uses the configured maximum width and responsive horizontal padding.
+   Auto margins center the container within its parent.
+   -------------------------------------------------------------------------- */
+
+.container {
+    max-width: var(--container-max-width);
+    padding-inline: var(--t-container-padding-inline);
+    margin-inline: auto;
+}
+
+/* --------------------------------------------------------------------------
+   BODY
+   Applies the theme's default body font, font size, text color, and background.
+   These values are supplied by the Tailpine theme tokens.
+   -------------------------------------------------------------------------- */
+
+body {
+    font-family: var(--font-body);
+    font-size: var(--base-font-size);
+    color: var(--color-body);
+    background-color: var(--color-body-bg);
+    font-weight:400;
+}
+
+/* --------------------------------------------------------------------------
+   HEADING DEFAULTS
+   Shares the heading font family and color across all six heading levels.
+   Individual rules below define each heading's size, weight, and line height.
+   -------------------------------------------------------------------------- */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+}
+
+/* H1: Primary page heading. */
+h1 {
+    font-size: var(--h1-size);
+    font-weight: 600;
+    line-height: var(--h1-line-height);
+}
+
+/* H2: Main section heading. */
+h2 {
+    font-size: var(--h2-size);
+    font-weight: 600;
+    line-height: var(--h2-line-height);
+}
+
+/* H3: Subsection heading. */
+h3 {
+    font-size: var(--h3-size);
+    font-weight: 600;
+    line-height: var(--h3-line-height);
+}
+
+/* H4: Lower-level section or component heading. */
+h4 {
+    font-size: var(--h4-size);
+    font-weight: 600;
+    line-height: var(--h4-line-height);
+}
+
+/* H5: Small heading. */
+h5 {
+    font-size: var(--h5-size);
+    font-weight: 600;
+    line-height: var(--h5-line-height);
+}
+
+/* H6: Lowest-level heading. */
+h6 {
+    font-size: var(--h6-size);
+    font-weight: 600;
+    line-height: var(--h6-line-height);
+}
+
+/* --------------------------------------------------------------------------
+   ALPINE.JS
+   Hides elements using x-cloak until Alpine.js has initialized them.
+   The !important declaration prevents other display rules from revealing
+   these elements prematurely.
+   -------------------------------------------------------------------------- */
+
+[x-cloak] {
+    display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   DRUPAL LAYOUT BUILDER
+   Adds a dashed outline to editable regions to make them easier to identify
+   while building and editing page layouts.
+   -------------------------------------------------------------------------- */
+
+.layout-builder__region {
+    outline: 2px dashed #2f91da;
+    position: relative !important;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY PLUGIN OVERRIDES
+   Customizes Tailwind Typography (prose) colors to follow Tailpine's theme.
+   This keeps formatted content consistent with the active color theme.
+   ========================================================================== */
+
+.prose {
+    /* Main text and heading colors. */
+    --tw-prose-body: var(--color-body);
+    --tw-prose-headings: var(--color-heading);
+
+    /* Link and emphasis colors. */
+    --tw-prose-links: var(--color-primary);
+    --tw-prose-bold: var(--color-heading);
+
+    /* List markers and counters. */
+    --tw-prose-counters: var(--color-muted);
+    --tw-prose-bullets: var(--color-muted);
+
+    /* Horizontal rules, quotations, and quotation borders. */
+    --tw-prose-hr: var(--color-border);
+    --tw-prose-quotes: var(--color-body);
+    --tw-prose-quote-borders: var(--color-primary);
+
+    /* Captions and inline code. */
+    --tw-prose-captions: var(--color-muted);
+    --tw-prose-code: var(--color-body);
+
+    /* Code blocks and their backgrounds. */
+    --tw-prose-pre-code: var(--color-body);
+    --tw-prose-pre-bg: var(--color-surface-alt);
+
+    /* Table borders. */
+    --tw-prose-th-borders: var(--color-border);
+    --tw-prose-td-borders: var(--color-surface-alt);
+}
+
+/* Removes rounded corners from selected formatted content elements. */
+.prose pre,
+.prose code,
+.prose blockquote,
+.prose img {
+    border-radius: 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE SITE LOGO
+   Uses the logo width configured in Tailpine theme settings.
+   The image or SVG fills its parent width while preserving its aspect ratio.
+   ========================================================================== */
+
+.site-logo {
+    width: var(--t-logo-width);
+}
+
+.site-logo img,
+.site-logo svg {
+    width: 100%;
+    height: auto;
+}
+
+
+
+
+/**
+ * Tailpine – responsive theme settings tabs.
+ *
+ * Colours, shadow and focus ring come only from the theme's own @theme
+ * variables (--color-*, --shadow-theme). Fallbacks are CSS system colours,
+ * so the tabs still read correctly where those variables are not loaded.
+ * Only spacing, radius and gap are defined here.
+ *
+ * Mobile (< 768px): swipeable horizontal tab strip above the panel.
+ * Tablet / desktop (>= 768px): side-by-side tabs with a fluid menu width.
+ */
+ 
+.tailpine-settings {
+  --tp-gap: clamp(0.5rem, 0.35rem + 0.6vw, 1rem);
+  --tp-pad: clamp(1rem, 0.75rem + 1vw, 1.5rem);
+  --tp-radius: 0.5rem;
+}
+ 
+/* ---------- Base (mobile first) ---------- */
+ 
+.tailpine-settings .vertical-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-pad);
+  margin: 0;
+  border: 0;
+  background: none;
+}
+ 
+.tailpine-settings .vertical-tabs__menu {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--tp-gap);
+  width: 100%;
+  margin: 0;
+  padding: 0 0 var(--tp-gap);
+  list-style: none;
+  border: 0;
+  border-bottom: 1px solid var(--color-border, GrayText);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item {
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--color-border, GrayText);
+  border-radius: var(--tp-radius);
+  background: var(--color-surface-200, Canvas);
+  color: var(--color-body, CanvasText);
+  scroll-snap-align: start;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item a {
+  display: block;
+  min-height: 2.75rem; /* comfortable touch target */
+  padding: 0.75rem 1rem;
+  color: inherit;
+  white-space: nowrap;
+  text-decoration: none;
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item:hover {
+  border-color: var(--color-primary, Highlight);
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item.is-selected {
+  border-color: var(--color-primary, Highlight);
+  background: var(--color-primary, Highlight);
+  color: var(--color-primary-content, HighlightText);
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item.is-selected a {
+  font-weight: 600;
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item a:focus-visible {
+  outline: 2px solid var(--color-focus, Highlight);
+  outline-offset: 2px;
+  border-radius: var(--tp-radius);
+}
+ 
+.tailpine-settings .vertical-tabs__menu-item-summary {
+  display: none;
+}
+ 
+/* Panel – min-width: 0 stops flex children from overflowing/squeezing */
+.tailpine-settings .vertical-tabs__items {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border: 1px solid var(--color-border, GrayText);
+  border-radius: var(--tp-radius);
+  background: var(--color-surface-100, Canvas);
+  color: var(--color-body, CanvasText);
+  box-shadow: var(--shadow-theme, none);
+}
+ 
+.tailpine-settings .vertical-tabs__pane {
+  margin: 0;
+  padding: var(--tp-pad);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+ 
+.tailpine-settings .vertical-tabs__pane label,
+.tailpine-settings .vertical-tabs__pane legend,
+.tailpine-settings .vertical-tabs__pane summary {
+  color: var(--color-heading, CanvasText);
+}
+ 
+/* Fields never exceed the panel width */
+.tailpine-settings .vertical-tabs__pane .form-item,
+.tailpine-settings .vertical-tabs__pane .form-text,
+.tailpine-settings .vertical-tabs__pane .form-number,
+.tailpine-settings .vertical-tabs__pane .form-select,
+.tailpine-settings .vertical-tabs__pane textarea {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+ 
+.tailpine-settings .vertical-tabs__pane .form-select,
+.tailpine-settings .vertical-tabs__pane .form-text {
+  width: 100%;
+}
+ 
+/* Nested colour groups (details inside the pane) */
+.tailpine-settings .vertical-tabs__pane details {
+  margin-inline: 0;
+  border-color: var(--color-border, GrayText);
+  border-radius: var(--tp-radius);
+}
+ 
+/* ---------- Tablet and up: side-by-side ---------- */
+ 
+@media (min-width: 48em) {
+  .tailpine-settings .vertical-tabs {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+ 
+  .tailpine-settings .vertical-tabs__menu {
+    flex: 0 0 clamp(11rem, 24%, 16rem);
+    flex-direction: column;
+    width: auto;
+    padding: 0;
+    border-bottom: 0;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+ 
+  .tailpine-settings .vertical-tabs__menu-item {
+    width: 100%;
+  }
+ 
+  .tailpine-settings .vertical-tabs__menu-item a {
+    white-space: normal;
+  }
+ 
+  .tailpine-settings .vertical-tabs__menu-item-summary {
+    display: block;
+    font-size: 0.8125rem;
+    opacity: 0.75;
+  }
+ 
+  .tailpine-settings .vertical-tabs__items {
+    width: auto;
+  }
+}
+ 
+/* ---------- Typography size rows: 1 col → 2 cols (tablet) → 4 cols (desktop) ---------- */
+
+.tailpine-typography-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+ 
+@media (min-width: 48em) {
+  .tailpine-typography-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+ 
+@media (min-width: 64em) {
+  .tailpine-typography-row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.tailpine-typography-grid__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.5rem;
+  row-gap: 0.25rem;
+  margin: 0;
+}
+
+.tailpine-typography-grid__item .form-item__label,
+.tailpine-typography-grid__item .form-item__description {
+  grid-column: 1 / -1;
+}
+
+
+@media screen and (max-width: 37.5rem) {
+
+.tailpine-typography-grid__item > input.tailpine-typography-grid__field {
+  grid-column: 1;
+  width: fit-content !important;
+  min-width: 0;
+  max-width: 100%;
+}
+}
+
+
+@media screen and (max-width: 37.5rem) {
+    .form-element {
+        float: none;
+        width: 100%;
+        margin-block-start: 0.75rem;
+        margin-inline: 0;
+    }
+}
+
+.tailpine-typography-grid__item .form-item__suffix {
+  grid-column: 2;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* Each number input in the typography grid */
+.tailpine-typography-row .tailpine-typography-grid__field.form-element--type-number {
+  width: auto;
+  min-width: 0;
+  max-width: 100%;
+  inline-size: 7ch;        /* fits values up to 300 + arrows */
+  field-sizing: content;   /* grows with the value in modern browsers */
+}
+
+/* Keep the input and "px" suffix side by side, sized to content */
+.tailpine-typography-row .tailpine-typography-grid__item {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  width: fit-content;
+}
+
+/* Label and description on their own lines */
+.tailpine-typography-row .tailpine-typography-grid__item .form-item__label,
+.tailpine-typography-row .tailpine-typography-grid__item .form-item__description {
+  flex-basis: 100%;
+}
+
+
+@media screen and (max-width: 37.5rem) {
+  .tailpine-typography-grid__item .tailpine-typography-grid__field.form-element {
+    float: none;
+    width: fit-content !important;
+    inline-size: 7ch; 
+    max-width: 100%;
+    margin-inline: 0;
+  }
+}

@@ -1,0 +1,31 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Local Tasks
+label: 'Local Tasks'
+description: 'Component for rendering tabs navigation with content.'
+category: 'Navigation'
+status: stable
+group: Blocks
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    configuration:
+      type: object
+      properties:
+        label:
+          type: string
+          description: 'The configured label for the navigation block.'
+          default: 'Local Tasks'
+        provider:
+          type: string
+          description: 'The module or provider of the block.'
+          default: 'system'
+slots:
+  content:
+    title: Content Slot
+    description: 'The content to be rendered inside the tabs.'
+    default: ''

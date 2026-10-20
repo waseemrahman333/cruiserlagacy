@@ -1,0 +1,202 @@
+{#
+/**
+ * @file
+ * Main menu navigation component with Alpine.js
+ *
+ * Available variables:
+ * - nested: Array of menu items with children
+ * - account_menu: Array of account menu items
+ * - selected__header_template: Selected header template style
+ */
+#}
+
+{% set nested = nested|default([]) %}
+{% set account_menu = account_menu|default([]) %}
+{% set selected__header_template = selected__header_template|default('') %}
+
+<menu
+  class="font-semibold"
+  x-data="{ mobOpen: false }"
+>
+  <!-- Main Menu -->
+  <ul
+    class="absolute container xl:!px-0 top-full  bg-body-bg border-t-2 xl:border-none border-border xl:border-0 pb-10 xl:pb-0 xl:bg-transparent w-full xl:w-auto xl:!flex xl:static left-0 right-0 text-start  xl:m-0 flex-col items-start flex xl:flex-row xl:items-center xl:gap-4 z-40 transition-all duration-300 [&[x-cloak]]:!hidden"
+    x-bind:class="{ 'hidden': !mobOpen, 'flex': mobOpen }"
+    x-show="true"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 scale-95"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-200"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-95"
+    x-cloak
+  >
+    {% for item in nested %}
+      {% set submenuId = 'submenu-' ~ loop.index ~ '-' ~ item.title|clean_id %}
+      <li
+        class="relative my-1 lg:m-0 w-full lg:w-fit inline-block"
+        x-data="{ open: false }"
+        x-on:mouseenter="window.innerWidth >= 1024 ? open = true : null"
+        x-on:mouseleave="window.innerWidth >= 1024 ? open = false : null"
+        x-on:click="window.innerWidth < 1024 ? open = !open : null"
+        x-on:focusin="window.innerWidth >= 1024 ? open = true : null"
+        x-on:focusout="window.innerWidth >= 1024 ? open = false : null"
+        x-on:click.away="open = false"
+        x-on:keydown.escape="open = false"
+      >
+        <!-- Main menu item -->
+        <div class="menu_with_icon  flex items-center w-full justify-between  transition-all duration-500 cursor-pointer {{ item.class }}">
+          {# Check if item is a nolink #}
+          {% if item.url is empty or item.url.toString() == '<nolink>' %}
+            <span class="block w-full pl-5 py-2">
+              {{ item.title }}
+            </span>
+          {% else %}
+            <a href="{{ item.url }}" target="{{ item.target|default('_self') }}" class="block w-full  py-2 hover:underline hover:decoration-3 hover:underline-offset-6 hover:decoration-primary {{ item.class ? 'underline decoration-3 underline-offset-6 decoration-primary ' : '' }}">
+              {{ item.title }}
+            </a>
+          {% endif %}
+
+          {% if item.children is not empty %}
+            <button
+              x-on:click.stop="open = !open"
+              class="whitespace-nowrap w-full rounded flex items-center justify-end cursor-pointer"
+              x-bind:aria-expanded="open.toString()"
+              aria-haspopup="true"
+              aria-controls="{{ submenuId }}"
+              aria-label="Toggle submenu for {{ item.title }}"
+              tabindex="0"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 ml-4 transform transition-transform duration-300  lg:bg-transparent"
+                x-bind:class="open ? 'rotate-180' : 'rotate-0'"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+          {% endif %}
+        </div>
+
+        <!-- Submenu -->
+        {% if item.children is not empty %}
+          <ul
+            id="{{ submenuId }}"
+            x-show="open"
+            x-transition
+            class="left-0 top-full mt-1 w-9/10 mx-5 lg:mx-0 lg:w-48 relative lg:absolute bg-surface-alt text-body shadow-lg z-40 border border-border"
+          >
+            {{ _self.render_submenu(item.children, loop.index) }}
+          </ul>
+        {% endif %}
+      </li>
+    {% endfor %}
+
+    <!-- Mobile Account Menu -->
+
+    <li class="md:hidden  mt-2 list-none relative">
+      {% if not canvas_enabled %}
+          {% if selected__header_template in ['style2', 'style3', 'style4'] %}
+            {{ include('@tailpine/components/navigation/account-menu/account-menu.twig', { items: account_menu }, ignore_missing = true) }}
+          {% endif %}
+      {% endif %}
+    </li>
+  </ul>
+
+  <!-- Mobile Menu Toggle Button -->
+  <div class="flex items-center xl:!hidden">
+    <button
+      class="mobile-menu-toggle h-6 flex items-center justify-between flex-col gap-0.5 cursor-pointer"
+      x-on:click="mobOpen = !mobOpen"
+      aria-label="Toggle mobile menu"
+      x-bind:aria-expanded="mobOpen.toString()"
+    >
+      <div
+        class="topLine w-8 h-1 bg-body transition-transform duration-300"
+        x-bind:class="{ 'rotate-45 translate-y-2': mobOpen }"
+      ></div>
+      <div
+        class="midLine w-8 h-1 bg-body transition-opacity duration-300"
+        x-bind:class="{ 'opacity-0': mobOpen }"
+      ></div>
+      <div
+        class="bottomLine w-8 h-1 bg-body transition-transform duration-300"
+        x-bind:class="{ '-rotate-45 -translate-y-3': mobOpen }"
+      ></div>
+    </button>
+  </div>
+</menu>
+
+{#
+/**
+ * Macro to render submenu items recursively
+ *
+ * @param array children - Array of child menu items
+ * @param int parent_index - Parent menu item index for unique IDs
+ */
+#}
+{% macro render_submenu(children, parent_index) %}
+  {% import _self as menus %}
+  {% for child in children %}
+    {% set childSubmenuId = 'submenu-' ~ parent_index ~ '-' ~ loop.index ~ '-' ~ child.title|clean_id %}
+    <li
+      class="relative border-body font-medium"
+      x-data="{ open: false }"
+      x-on:mouseenter="window.innerWidth >= 1024 ? open = true : null"
+      x-on:mouseleave="window.innerWidth >= 1024 ? open = false : null"
+      x-on:focusin="window.innerWidth >= 1024 ? open = true : null"
+      x-on:focusout="window.innerWidth >= 1024 ? open = false : null"
+      x-on:click.away="open = false"
+      x-on:click="window.innerWidth < 1024 ? open = !open : null"
+      x-on:keydown.escape="open = false"
+    >
+      <div class="pr-3 flex justify-between items-center hover:bg-primary hover:text-body-bg rounded cursor-pointer {{ child.class }}">
+        {# Check if child is a nolink #}
+        {% if child.url is empty or child.url.toString() == '<nolink>' %}
+          <span class="block w-full px-4 py-2">{{ child.title }}</span>
+        {% else %}
+          <a href="{{ child.url }}" target="{{ child.target|default('_self') }}" class="block w-full px-4 py-2">
+            {{ child.title }}
+          </a>
+        {% endif %}
+
+        {% if child.children is not empty %}
+          <button
+            x-on:click.stop="open = !open"
+            class="whitespace-nowrap w-full rounded flex items-center justify-end cursor-pointer"
+            x-bind:aria-expanded="open.toString()"
+            aria-haspopup="true"
+            aria-controls="{{ childSubmenuId }}"
+            aria-label="Toggle submenu for {{ child.title }}"
+            tabindex="0"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4 transform transition-transform duration-300 bg-muted lg:bg-transparent"
+              x-bind:class="open ? 'rotate-90' : 'rotate-0'"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        {% endif %}
+      </div>
+
+      {% if child.children is not empty %}
+        <ul
+          id="{{ childSubmenuId }}"
+          x-show="open"
+          x-transition
+          class="left-full top-0 lg:w-48 w-9/10 mx-5 lg:mx-0 lg:absolute bg-surface-alt text-body shadow-lg z-40 my-2 pb-1 lg:pb-0 lg:my-0"
+        >
+          {{ menus.render_submenu(child.children, parent_index ~ '-' ~ loop.index) }}
+        </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+{% endmacro %}

@@ -1,0 +1,287 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Base Media And Text (Canvas)
+description: Media and Text
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Media And Text Image
+      description: >
+        Media and Text Component  Image
+      examples:
+        - src: https://placehold.co/600x700
+          alt: 'Background Image'
+          width: 600
+          height: 700
+
+
+    layout_direction:
+      title: Layout Direction
+      description: Controls the orientation of media and content.
+      type: string
+      default: row
+      enum:
+        - 'row'
+        - 'row-reverse'
+        - 'column'
+        - 'column-reverse'
+      meta:enum:
+        row: 'Text Right / Image Left'
+        row-reverse: 'Text Left / Image Right'
+        column: 'Image Top / text Bottom'
+        column-reverse: 'Image Bottom / text Top'
+      examples:
+        - 'row'
+    bg_color:
+      type: string
+      title: Background color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+
+    enable_container:
+      type: boolean
+      title: Enable container class
+      examples:
+        - false
+      default:
+        - false
+
+    show_description:
+      type: boolean
+      title: Show description text
+      examples:
+        - true
+      default:
+        - true
+    show_heading:
+      type: boolean
+      title: show heading slot 
+      examples:
+        - true
+      default:
+        - true
+
+    # image_width:
+    #   title: Image Width
+    #   type: integer
+    #   minimum: 0
+    #   maximum: 1000
+    #   default: 400
+
+    # image_height:
+    #   title: Image height
+    #   type: integer
+    #   minimum: 0
+    #   maximum: 1000
+    #   default: 400
+
+    # image_position_mode:
+    #   title: Image Position Mode
+    #   type: string
+    #   enum: ['static', 'relative', 'absolute']
+    #   default: 'static'
+    # image_translate_x:
+    #   title: Image move X axis
+    #   type: integer
+    #   minimum: -1000
+    #   maximum: 1000
+    #   default: 1
+
+    # image_translate_y:
+    #   title: Image  move y axis
+    #   type: integer
+    #   minimum: -500
+    #   maximum: 500
+    #   default: 1
+
+    gap:
+      title: "Content Gap"
+      description: "Gap between card elements"
+      type: string
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        xxl: "2x Large"
+      examples: [sm]
+    
+      
+    content_horizontal_alignment:
+      type: string
+      title: Content Horizontal Alignment
+      enum:
+        - left
+        - center
+        - right
+      meta:enum:
+        left: Left
+        center: Centered
+        right: Right
+      default: left
+
+    content_vertical_alignment:
+      type: string
+      title: Content Vertcal Alignment
+      enum:
+        - top
+        - center
+        - bottom
+      meta:enum:
+        top: Top
+        center: Centered
+        bottom: bottom
+      default: top
+
+    section_padding_inline:
+      type: string
+      title:  Sectoin Padding inline (Left / Right)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [none]
+
+    section_padding_block:
+      type: string
+      title: Section Padding Block (Top / Bottom)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [none]
+
+    content_padding_inline:
+      type: string
+      title:  Content Padding inline (Left / Right)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+    content_padding_block:
+      type: string
+      title: Content Padding Block (Top / Bottom)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+slots:
+  heading:
+    title: "heading"
+    descriptoin: "heading of the main sectoin."
+  text:
+    title: "text"
+    descriptoin: "text of the main sectoin."
+  cta:
+    title: Add  CTA
+    description: Add CTA

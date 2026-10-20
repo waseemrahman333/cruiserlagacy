@@ -1,0 +1,52 @@
+{# {{ include('tailpine:mainblock')}}
+ #}
+
+{%
+  set classes = [
+    'block',
+    'block-' ~ configuration.provider|clean_class,
+    'block-' ~ plugin_id|clean_class,
+  ]
+%}
+<div{{ attributes.addClass(classes) }}>
+  {{ title_prefix }}
+  {% if label %}
+    <h2{{ title_attributes }} class="font-medium text-lg md:text-xl  tracking-[3%] leading-5.5 mb-[10px] ">{{ label }}</h2>
+      <div class="{{ divider_classes }} w-full h-[0.5px] bg-body-bg"></div>
+  {% endif %}
+  {{ title_suffix }}
+  <div class="flex flex-col gap-2.5 pt-6">
+  {% block content %}
+    {{ content }}
+  {% endblock %}
+  </div>
+</div>
+
+
+
+{# <div class="footer-menu-list">
+  
+
+  {% if title %}
+    <h3 class="{{ title_classes }} font-medium text-lg md:text-xl  tracking-[3%] leading-5.5 mb-[10px] ">
+      {{ title }}
+    </h3>
+    
+ 
+
+      <div class="{{ divider_classes }} w-full h-[0.5px] bg-body-bg"></div>
+  {% endif %}
+  
+  {% if items %}
+    <ul class="{{ list_classes }} flex flex-col gap-2.5 pt-6">
+      {% for item in items %}
+        <li class=" ">
+          <a href="{{ item.url }}" class="{{ link_classes }} text-sm sm:text-base md:text-lg font-normal">
+            {{ item.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  
+</div> #}

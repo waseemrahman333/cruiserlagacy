@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Button Group (Tailpine)
+status: stable
+description: Group series of buttons together on a single line.
+group: Forms
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    layout:
+      title: "Layout"
+      type: string
+      description: "Controls how the buttons are arranged."
+      enum:
+        - horizontal
+        - vertical
+      "meta:enum":
+        horizontal: "Horizontal"
+        vertical: "Vertical"
+      default: horizontal
+      examples:
+        - horizontal
+    gap:
+      title: "Gap"
+      type: string
+      description: "Responsive gap between content region layout"
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        xxl: "2x Large"
+      examples: [md]
+
+slots:
+  buttons:
+    title: Buttons
+    description: Button components to group.

@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Post Syle One Wrapper (Canvas)
+status: stable
+description: "Post Syle One wrapper  are used to group and display content in a way that is easily readable."
+group: Cards & Posts
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      title: Title
+      type: string
+      description: Title of the Post Syle One Wrapper
+      examples: ['This is Post Syle One Wrapper']
+slots:
+  content:
+    title: Content
+    description: Add the Post View in the Content region 
+  cta:
+    title: CTA
+    description: "Call to Action."

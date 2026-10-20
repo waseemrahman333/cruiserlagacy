@@ -1,0 +1,59 @@
+<?php
+
+/**
+ * @file
+ * Global page attachment logic (libraries, inline scripts/styles).
+ */
+
+use Drupal\Core\Render\Markup;
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function tailpine_page_attachments_alter(array &$attachments): void {
+  // Always attach the main compiled Tailwind CSS.
+  $attachments['#attached']['library'][] = 'tailpine/main';
+
+  $variables_css = tailpine_get_variables_css_uri();
+
+  // Attach Tailpine runtime variables CSS.
+  if ($variables_css) {
+    $theme_path = \Drupal::service('extension.list.theme')
+      ->getPath('tailpine');
+
+    $css_url = base_path() . $theme_path . '/css/theme-variables.css';
+
+    $attachments['#attached']['html_head_link'][] = [
+      [
+        'rel' => 'stylesheet',
+        'href' => $css_url,
+      ],
+      'tailpine_runtime_variables',
+    ];
+  }
+
+  // Attach admin styles when on admin routes.
+  $admin_context = \Drupal::service('router.admin_context');
+  if ($admin_context->isAdminRoute()) {
+    $attachments['#attached']['library'][] = 'tailpine/admin';
+  }
+
+  // Inject a synchronous inline <script> into <head> that restores the
+  // user's locally-stored color theme choice before Alpine.js (deferred)
+  // loads. Running synchronously in <head> means the browser applies the
+  // correct [data-theme] CSS rules on first paint, preventing a flash of
+  // the server-configured theme color.
+  // "custom" is excluded as it requires server-injected CSS variables.
+  $inline_script = '(function(){try{var t=localStorage.getItem(\'tailpine_color_theme\');'
+    . 'if(t&&t!==\'custom\'){document.documentElement.setAttribute(\'data-theme\',t);}'
+    . '}catch(e){}})();';
+  $attachments['#attached']['html_head'][] = [
+    [
+      '#type' => 'html_tag',
+      '#tag' => 'script',
+      '#value' => Markup::create($inline_script),
+      '#weight' => -1000,
+    ],
+    'tailpine_color_theme_restore',
+  ];
+}

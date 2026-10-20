@@ -1,0 +1,52 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Media and Text (Canvas)
+description: Media and Text
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Media And Text Image
+      description: >
+        Media and Text Component  Image
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Media and Text Image'
+          width: 600
+          height: 700
+    position:
+      title: Position
+      description: Position of Image and Text (Row & Row-Reverse )
+      type: string
+      enum:
+        - row
+        - row-reverse
+      metaenum:
+        - title: Row
+          value: row
+        - title: Row Reverse
+          value: row-reverse
+      default: row
+      examples: ['row', 'row-reverse']
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['Welcome to our Website']          
+    description:
+      title: Description
+      type: string
+      description: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>']  
+slots:
+  cta:
+    title: Add  CTA
+    description: Add CTA

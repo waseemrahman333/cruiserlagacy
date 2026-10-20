@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Installation lifecycle hooks.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function tailpine_install(): void {
+  \Drupal::service('cache.render')->invalidateAll();
+  \Drupal::service('router.builder')->rebuild();
+  \Drupal::service('theme.manager')->resetThemeData();
+  drupal_flush_all_caches();
+}

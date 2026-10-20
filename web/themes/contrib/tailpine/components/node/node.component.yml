@@ -1,0 +1,73 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Node
+status: stable
+description: "Base node component. Handles full and teaser view modes."
+group: Content
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    node_classes:
+      type: array
+      title: "Node Classes"
+      description: "Classes built in node.html.twig passed into the component."
+      items:
+        type: string
+
+    label:
+      type: string
+      title: "Label"
+      description: "The node title. Empty on full view mode."
+
+    url:
+      type: string
+      title: "URL"
+      description: "Canonical URL of the node."
+
+    display_submitted:
+      type: boolean
+      title: "Display Submitted"
+      description: "Show author name and submission date."
+      default: false
+
+    view_mode:
+      type: string
+      title: "View Mode"
+      description: "Current view mode e.g. full, teaser."
+      default: full
+
+    title_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Title HTML attributes
+      description: HTML attributes for the title element.
+
+    content_attributes:
+      type: Drupal\Core\Template\Attribute
+      title: Content HTML attributes
+      description: HTML attributes for the content wrapper element.
+
+slots:
+  title_prefix:
+    title: "Title Prefix"
+    description: "Drupal title prefix output — required for contextual links."
+
+  title_suffix:
+    title: "Title Suffix"
+    description: "Drupal title suffix output — required for contextual links."
+
+  author_picture:
+    title: "Author Picture"
+    description: "Rendered author picture image."
+
+  author_info:
+    title: "Author Info"
+    description: "Submitted by line with date and metadata."
+
+  content:
+    title: "Content"
+    description: "The main rendered node content."

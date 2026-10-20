@@ -1,0 +1,60 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Post Style Three (Canvas)
+description: 'A post style with a three column layout.'
+status: stable
+group: Cards & Posts
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  imageurl
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: 'card.jpg'
+          alt: 'card Image'  
+    show_heading:
+      type: boolean
+      title: show heading slot 
+      examples:
+        - true
+      default:
+        - true
+    show_description:
+      type: boolean
+      title: Show description text
+      examples:
+        - true
+      default:
+        - true
+
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle of the card. Plain text."
+      examples: ['Example subtitle']
+    description:
+      title: Description
+      type: string
+      description: "Description of the card. Plain text." 
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>'] 
+    date:
+      title: Date
+      type: string
+      description: "Date of the card. Plain text."
+      examples: ['June 20, 2024']
+
+slots:
+  heading:
+    title: "heading"
+    description: "heading of the post style three section."
+  text:
+    title: "text"
+    description: "text of the main section."

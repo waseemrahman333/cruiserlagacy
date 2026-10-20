@@ -1,0 +1,118 @@
+/**
+ * @file
+ * Styles for system status messages.
+ * Uses var(--color-*) semantic tokens — works across all 25 themes.
+ */
+
+.messages {
+  padding: 1rem 1.25rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  border-left: 4px solid transparent;
+}
+
+[dir="rtl"] .messages {
+  border-left: none;
+  border-right: 4px solid transparent;
+  text-align: right;
+}
+
+.messages + .messages {
+  margin-top: 1rem;
+}
+
+.messages__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.messages__item + .messages__item {
+  margin-top: 0.5rem;
+}
+
+/* Status */
+.messages--status {
+  background-color: var(--color-success);
+  color: var(--color-body-bg);
+  border-left-color: color-mix(in srgb, var(--color-success) 60%, black);
+}
+
+[dir="rtl"] .messages--status {
+  border-right-color: color-mix(in srgb, var(--color-success) 60%, black);
+}
+
+/* Warning */
+.messages--warning {
+  background-color: var(--color-warning);
+  color: var(--color-body-bg);
+  border-left-color: color-mix(in srgb, var(--color-warning) 60%, black);
+}
+
+[dir="rtl"] .messages--warning {
+  border-right-color: color-mix(in srgb, var(--color-warning) 60%, black);
+}
+
+/* Error */
+.messages--error {
+  background-color: var(--color-error);
+  color: var(--color-body-bg);
+  border-left-color: color-mix(in srgb, var(--color-error) 60%, black);
+}
+
+[dir="rtl"] .messages--error {
+  border-right-color: color-mix(in srgb, var(--color-error) 60%, black);
+}
+
+.messages--error p.error {
+  color: var(--color-body-bg);
+}
+
+/* Links inside messages */
+.messages--status a,
+.messages--warning a,
+.messages--error a {
+  color: var(--color-body-bg);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  opacity: 0.9;
+}
+
+.messages--status a:hover,
+.messages--warning a:hover,
+.messages--error a:hover {
+  opacity: 1;
+}
+
+/* Tailpine alert utilities */
+.tp-alert {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.tp-alert-success {
+  background-color: color-mix(in srgb, var(--color-success) 15%, var(--color-body-bg));
+  color: var(--color-success);
+  border-color: color-mix(in srgb, var(--color-success) 40%, transparent);
+}
+
+.tp-alert-error {
+  background-color: color-mix(in srgb, var(--color-error) 15%, var(--color-body-bg));
+  color: var(--color-error);
+  border-color: color-mix(in srgb, var(--color-error) 40%, transparent);
+}
+
+.tp-alert-warning {
+  background-color: color-mix(in srgb, var(--color-warning) 15%, var(--color-body-bg));
+  color: var(--color-warning);
+  border-color: color-mix(in srgb, var(--color-warning) 40%, transparent);
+}
+
+.tp-alert-info {
+  background-color: color-mix(in srgb, var(--color-info) 15%, var(--color-body-bg));
+  color: var(--color-info);
+  border-color: color-mix(in srgb, var(--color-info) 40%, transparent);
+}

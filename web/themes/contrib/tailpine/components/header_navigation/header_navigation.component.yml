@@ -1,0 +1,119 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Header Navigation (Tailpine)
+status: stable
+description: "A responsive, slot-based header with full control over menu position, background, padding, search visibility, and sticky behavior."
+group: Header
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    variant:
+      type: string
+      title: Layout Variant
+      description: "Controls where the menu sits relative to branding and actions on desktop."
+      enum:
+        - menu-right
+        - menu-center
+        # - menu-left
+      default: menu-right
+      meta:enum:
+        menu-right: "Branding left — Menu + Actions right"
+        menu-center: "Branding left — Menu centered — Actions right"
+        # menu-left: "Branding + Menu grouped left — Actions right"
+      examples: ["menu-right"]
+
+    background_color:
+      type: string
+      title: "Header Background"
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      default: body-bg
+      examples: ["body-bg"]
+
+    padding_block:
+      type: string
+      title: "Padding Block (Top/Bottom)"
+      enum: [none, xs, sm, md, lg]
+      meta:enum:
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+      default: sm
+      examples: ["sm"]
+
+    column_gap:
+      type: string
+      title: "Gap Between Menu/Actions Items"
+      enum: [none, xs, sm, md, lg, xl]
+      default: md
+      examples: ["md"]
+
+    show_search:
+      type: boolean
+      title: "Show search Form Slot"
+      description: "Displays a search form slot alongside the actions slot on desktop."
+      default: true
+
+    header_behavior:
+      type: string
+      title: "Header Behavior"
+      enum: [relative, sticky, fixed]
+      meta:enum:
+        relative: 'Static'
+        sticky: "Sticky"
+        fixed: "Fixed"
+      default: sticky
+      examples: ["relative"]
+
+    header_shadow:
+      type: boolean
+      title: "Enable Header Shadow"
+      description: "Display a shadow beneath the header."
+      default: true
+
+    show_border:
+      type: boolean
+      title: "Show bottom border"
+      description: "Adds a subtle bottom border/shadow separating the header from content."
+      default: true
+
+slots:
+  branding:
+    title: Branding
+    description: "Call to action buttons or links for the hero section."
+  menu:
+    title: Menu
+    description: "Call to action buttons or links for the hero section."
+  actions:
+    title: Actions
+    description: "Call to action buttons or links for the hero section."
+  search:
+    title: Search
+    description: "Call to action buttons or links for the hero section."

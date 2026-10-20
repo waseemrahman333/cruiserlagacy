@@ -1,0 +1,52 @@
+{#
+/**
+ * @file
+ * Video Component — displays HTML5 video with source support.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the video element.
+ * - files: Array of video file sources (each has source_attributes).
+ * - controls: Show video controls (default: true).
+ * - autoplay: Autoplay video (default: false).
+ * - loop: Loop video (default: false).
+ * - muted: Mute video (default: false).
+ * - poster: Poster image URL.
+ * - video_utility_classes: Additional Tailwind classes.
+ */
+#}
+{{ attach_library('tailpine/file') }}
+
+{% set video_attributes = attributes|default(create_attribute()) %}
+{% set video_attributes = video_attributes
+  .setAttribute('controls', controls|default(true) ? 'controls' : false)
+  .setAttribute('autoplay', autoplay|default(false) ? 'autoplay' : false)
+  .setAttribute('loop', loop|default(false) ? 'loop' : false)
+  .setAttribute('muted', muted|default(false) ? 'muted' : false)
+%}
+{% if poster %}
+  {% set video_attributes = video_attributes.setAttribute('poster', poster) %}
+{% endif %}
+
+{%
+  set video_classes = [
+    'w-full',
+    'max-w-4xl',
+    'mx-auto',
+    'rounded-2xl',
+    'bg-surface-alt',
+    'shadow-md',
+    'border',
+    'border-secondary/30',
+    'hover:border-primary',
+    'transition-all',
+    'duration-500',
+    'cursor-pointer',
+  ]|merge(video_utility_classes|default([]))
+%}
+
+<video{{ video_attributes.addClass(video_classes) }}>
+  {% for file in files %}
+    <source{{ file.source_attributes }}>
+  {% endfor %}
+  <p class="text-sm text-body">{{ 'Your browser does not support the video element.'|t }}</p>
+</video>

@@ -1,0 +1,72 @@
+{# ---------------------------------------------------------------------------
+ # Team Card Component
+ # --------------------------------------------------------------------------- #}
+
+{% set image_src = imageurl.src|default('') %}
+{% set image_alt = imageurl.alt|default(title|default('Profile')) %}
+
+<div
+  {{ attributes.addClass(
+    'team-card',
+    'flex',
+    'flex-col',
+    'bg-bg-50',
+    'transition-all',
+    'duration-200',
+    'ease-in',
+    'px-5',
+    'py-12',
+    'h-full',
+    'xl:py-12',
+    'shadow-xl',
+    'hover:bg-primary',
+    'group'
+  ) }}
+>
+  <!-- Avatar -->
+  {% if image_src %}
+    <div class="avatar mx-auto w-30 h-30">
+      <img
+        class="rounded-full border-4 border-border shadow-md w-full h-full object-cover"
+        src="{{ image_src }}"
+        alt="{{ image_alt }}"
+        loading="lazy"
+      />
+    </div>
+  {% endif %}
+
+  <!-- Content -->
+  <div class="flex flex-col items-center text-tertiary-base mt-10 group-hover:text-body-bg">
+
+    {% if title %}
+      <h3 class="card-title font-bold uppercase text-heading-h6 group-hover:text-body-bg">
+        {{ title }}
+      </h3>
+    {% endif %}
+
+    {% if subtitle %}
+      <div class="text-sm sm:text-base font-medium group-hover:text-body-bg">
+        {{ subtitle }}
+      </div>
+    {% endif %}
+
+    {% if description or icons %}
+      <div class="flex flex-col justify-between">
+
+        {% if description %}
+          <div class="text-body font-normal text-sm md:text-base text-center mt-5 group-hover:text-body-bg lg:px-5">
+            {{ description }}
+          </div>
+        {% endif %}
+
+        {% if icons %}
+          <div class="mt-4 flex gap-5 justify-center">
+            {{ icons }}
+          </div>
+        {% endif %}
+
+      </div>
+    {% endif %}
+
+  </div>
+</div>

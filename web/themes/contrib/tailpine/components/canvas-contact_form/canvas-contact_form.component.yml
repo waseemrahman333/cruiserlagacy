@@ -1,0 +1,22 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Contact Form (Canvas)
+description: Contact Form
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: Form Title
+      description: The title of the contact form.
+      default: "Contact Us"
+      example: "Get in Touch"
+
+slots:
+  content:
+    title: Content
+    description: Content

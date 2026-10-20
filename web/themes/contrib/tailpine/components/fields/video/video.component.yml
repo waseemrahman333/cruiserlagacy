@@ -1,0 +1,48 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+name: Video
+description: A component for displaying video files using the <video> tag.
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    files:
+      type: array
+      title: Files
+      items:
+        type: string
+      default: []
+      description: Array of file objects with source attributes.
+    controls:
+      type: boolean
+      title: Controls
+      description: Display video controls.
+      default: true
+    autoplay:
+      type: boolean
+      title: Autoplay
+      description: Autoplay the video on load.
+      default: false
+    loop:
+      type: boolean
+      title: Loop
+      description: Loop video playback.
+      default: false
+    muted:
+      type: boolean
+      title: Muted
+      description: Mute the video.
+      default: false
+    poster:
+      type: ['string', 'null']
+      title: Poster
+      description: URL of the poster image shown before video playback.
+    video_utility_classes:
+      type: array
+      title: Video Utility Classes
+      description: Additional Tailwind utility classes for the video element.
+      items:
+        type: string

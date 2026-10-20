@@ -1,0 +1,609 @@
+{#
+/**
+ * @file
+ * tailpine-grids.twig
+ *
+ * Drupal SDC — Tailpine Grids (Canvas)
+ * Zero external CSS. All styles via Tailwind utility classes.
+ * All classes written in full — no dynamic concatenation.
+ */
+#}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   1. DEFAULTS
+═══════════════════════════════════════════════════════════════════════════ #}
+{% set layout_preset = enable_preset_layout 
+  ? layout_preset_value|default('custom') 
+  : 'custom' 
+%}
+
+{% set background_color    = background_color|default('transparent') %}
+{% set background_image    = background_image|default(null) %}
+
+{% set padding_block  = padding_block|default('lg') %}
+{% set min_height     = min_height|default('') %}
+
+{% set grid_cols     = grid_cols|default(1) %}
+{% set grid_cols_md  = grid_cols_md|default(2) %}
+{% set grid_cols_lg  = grid_cols_lg|default(3) %}
+{% set grid_cols_xl  = grid_cols_xl|default(4) %}
+
+
+{% set grid_rows    = grid_rows|default(0) %}
+
+{# {% set gap   = gap|default('md') %} #}
+{% set gap_x = gap_x|default('') %}
+{% set gap_y = gap_y|default('') %}
+
+{% set align_items     = align_items|default('items-stretch') %}
+{% set justify_items   = justify_items|default('justify-items-stretch') %}
+{% set justify_content = justify_content|default('') %}
+{% set align_content   = align_content|default('') %}
+
+{% set extra_classes = extra_classes|default('') %}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   2. VARIANT MAPS
+═══════════════════════════════════════════════════════════════════════════ #}
+
+{% set map_bg = {
+  transparent: 'bg-transparent',
+  white:       'bg-white',
+  light:       'bg-gray-50',
+  gray:        'bg-gray-100',
+  dark:        'bg-body',
+  black:       'bg-black',
+  primary:     'bg-primary',
+  secondary:   'bg-secondary',
+  tertiary:    'bg-tertiary',
+} %}
+
+{% set map_py = {
+  none:  "py-0",
+  xs:    "py-1 md:py-1.5 xl:py-2",
+  sm:    "py-2 md:py-3 xl:py-4",
+  md:    "py-3 md:py-4.5 xl:py-6",
+  lg:    "py-4 md:py-6 xl:py-8",
+  xl:    "py-5 md:py-8 xl:py-10",
+  '2xl': "py-7 md:py-12 xl:py-14",
+  '3xl': "py-8 md:py-12 xl:py-16",
+  huge:  "py-10 md:py-14 xl:py-20",
+} %}
+
+{% set map_gap = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+
+} %}
+
+{% set map_gap_x = {
+  none:  'gap-x-0',
+  xs:    'gap-x-2 md:gap-x-3 lg:gap-x-4',
+  sm:    'gap-x-3 md:gap-x-4 lg:gap-x-6',
+  md:    'gap-x-4 md:gap-x-6 lg:gap-x-8',
+  lg:    'gap-x-6 md:gap-x-8 lg:gap-x-10',
+  xl:    'gap-x-6 md:gap-x-10 lg:gap-x-12',
+  '2xl': 'gap-x-8 md:gap-x-12 lg:gap-x-16',
+  '3xl': 'gap-x-10 md:gap-x-16 lg:gap-x-20',
+} %}
+
+{% set map_gap_y = {
+  none:  'gap-y-0',
+  xs:    'gap-y-2 md:gap-y-3 lg:gap-y-4',
+  sm:    'gap-y-3 md:gap-y-4 lg:gap-y-6',
+  md:    'gap-y-4 md:gap-y-6 lg:gap-y-8',
+  lg:    'gap-y-6 md:gap-y-8 lg:gap-y-10',
+  xl:    'gap-y-6 md:gap-y-10 lg:gap-y-12',
+  '2xl': 'gap-y-8 md:gap-y-12 lg:gap-y-16',
+  '3xl': 'gap-y-10 md:gap-y-16 lg:gap-y-20',
+} %}
+
+{% set map_grid_cols = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-2',
+  3: 'grid-cols-3',
+  4: 'grid-cols-4',
+} %}
+
+
+{% set map_grid_cols_md = {
+  1: 'md:grid-cols-1',
+  2: 'md:grid-cols-2',
+  3: 'md:grid-cols-3',
+  4: 'md:grid-cols-4',
+  5: 'md:grid-cols-5',
+  6: 'md:grid-cols-6',
+} %}
+
+{% set map_grid_cols_lg = {
+  1: 'lg:grid-cols-1',
+  2: 'lg:grid-cols-2',
+  3: 'lg:grid-cols-3',
+  4: 'lg:grid-cols-4',
+  5: 'lg:grid-cols-5',
+  6: 'lg:grid-cols-6',
+  7: 'lg:grid-cols-7',
+  8: 'lg:grid-cols-8',
+} %}
+
+{% set map_grid_cols_xl = {
+  1:  'xl:grid-cols-1',
+  2:  'xl:grid-cols-2',
+  3:  'xl:grid-cols-3',
+  4:  'xl:grid-cols-4',
+  5:  'xl:grid-cols-5',
+  6:  'xl:grid-cols-6',
+  7:  'xl:grid-cols-7',
+  8:  'xl:grid-cols-8',
+  9:  'xl:grid-cols-9',
+  10: 'xl:grid-cols-10',
+  11: 'xl:grid-cols-11',
+  12: 'xl:grid-cols-12',
+} %}
+
+{% set cells_count = grid_cols_xl * grid_rows %}
+
+{% set map_grid_rows = {
+  1: 'grid-rows-1',
+  2: 'grid-rows-2',
+  3: 'grid-rows-3',
+  4: 'grid-rows-4',
+  5: 'grid-rows-5',
+  6: 'grid-rows-6',
+} %}
+
+
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   3. PRESET LAYOUT DEFINITIONS
+═══════════════════════════════════════════════════════════════════════════ #}
+
+{% if layout_preset == '1col' %}
+  {% set preset_grid  = 'grid-cols-1' %}
+  {% set preset_count = 1 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+  ] %}
+
+{% elseif layout_preset == '2col' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-2' %}
+  {% set preset_count = 2 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+    { span: 'col-span-1', label: 'Cell 2' },
+  ] %}
+
+{% elseif layout_preset == '3col' %}
+  {% set preset_grid  = 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3' %}
+  {% set preset_count = 3 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+    { span: 'col-span-1', label: 'Cell 2' },
+    { span: 'col-span-1', label: 'Cell 3' },
+  ] %}
+
+{% elseif layout_preset == '4col' %}
+  {% set preset_grid  = 'grid-cols-1 sm:grid-cols-2 xl:grid-cols-4' %}
+  {% set preset_count = 4 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+    { span: 'col-span-1', label: 'Cell 2' },
+    { span: 'col-span-1', label: 'Cell 3' },
+    { span: 'col-span-1', label: 'Cell 4' },
+  ] %}
+
+{% elseif layout_preset == '5col' %}
+  {% set preset_grid  = 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5' %}
+  {% set preset_count = 5 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+    { span: 'col-span-1', label: 'Cell 2' },
+    { span: 'col-span-1', label: 'Cell 3' },
+    { span: 'col-span-1', label: 'Cell 4' },
+    { span: 'col-span-1', label: 'Cell 5' },
+  ] %}
+
+{% elseif layout_preset == '6col' %}
+  {% set preset_grid  = 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6' %}
+  {% set preset_count = 6 %}
+  {% set preset_cells = [
+    { span: 'col-span-1', label: 'Cell 1' },
+    { span: 'col-span-1', label: 'Cell 2' },
+    { span: 'col-span-1', label: 'Cell 3' },
+    { span: 'col-span-1', label: 'Cell 4' },
+    { span: 'col-span-1', label: 'Cell 5' },
+    { span: 'col-span-1', label: 'Cell 6' },
+  ] %}
+
+{% elseif layout_preset == 'preset_hero_3col' %}
+  {% set preset_grid  = 'grid-cols-3 grid-rows-1' %}
+  {% set preset_count = 3 %}
+  {% set preset_cells = [
+    { span: 'col-span-1 row-span-1', label: 'Cell 1' },
+    { span: 'col-span-1 row-span-1', label: 'Cell 2' },
+    { span: 'col-span-1 row-span-1', label: 'Cell 3' },
+  ] %}
+
+{% elseif layout_preset == 'preset_featured_left' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3  auto-rows-fr' %}
+  {% set preset_count = 3 %}
+  {% set preset_cells = [
+    { span: 'md:col-span-2 md:row-span-2', label: 'Cell 1 — Featured' },
+    { span: 'md:col-span-1 md:row-span-1', label: 'Cell 2' },
+    { span: 'md:col-span-1 md:row-span-1', label: 'Cell 3' },
+  ] %}
+
+{% elseif layout_preset == 'preset_mosaic_6' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' %}
+  {% set preset_count = 6 %}
+  {% set preset_cells = [
+    { span: '', label: 'Cell 1' },
+    { span: '', label: 'Cell 2' },
+    { span: '', label: 'Cell 3' },
+    { span: '', label: 'Cell 4' },
+    { span: '', label: 'Cell 5' },
+    { span: '', label: 'Cell 6' },
+  ] %}
+
+{% elseif layout_preset == 'preset_sidebar_left' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-3 auto-rows-fr' %}
+  {% set preset_count = 3 %}
+  {% set preset_cells = [
+    { span: 'md:col-span-1 md:row-span-2', label: 'Cell 1 — Sidebar' },
+    { span: 'md:col-span-2', label: 'Cell 2' },
+    { span: 'md:col-span-2', label: 'Cell 3' },
+  ] %}
+
+{% elseif layout_preset == 'preset_2top_3bottom' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-6 auto-rows-fr' %}
+  {% set preset_count = 5 %}
+  {% set preset_cells = [
+    { span: 'xl:col-span-3', label: 'Cell 1' },
+    { span: 'xl:col-span-3', label: 'Cell 2' },
+    { span: 'xl:col-span-2', label: 'Cell 3' },
+    { span: 'xl:col-span-2', label: 'Cell 4' },
+    { span: 'xl:col-span-2', label: 'Cell 5' },
+  ] %}
+
+{% elseif layout_preset == 'preset_featured_right' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3 auto-rows-fr' %}
+  {% set preset_count = 3 %}
+  {% set preset_cells = [
+    { span: 'col-span-1  md:col-span-1 row-span-1', label: 'Cell 1' },
+    { span: 'col-span-1 xl:col-start-1 xl:row-start-2 row-span-1', label: 'Cell 2' },
+    { span: 'col-span-1 row-span-1 md:col-span-2 md:col-start-1 md:row-span-2 xl:row-start-1 xl:col-span-2 xl:col-start-2', label: 'Cell 3 — Featured' },
+  ] %}
+
+{% elseif layout_preset == 'preset_3top_2bottom' %}
+  {% set preset_grid  = ' grid-cols-1 md:grid-cols-6 xl:grid-cols-6 auto-rows-fr' %}
+  {% set preset_count = 4 %}
+  {% set preset_cells = [
+    { span: 'col-span-2 row-span-2', label: 'Cell 1 — Sidebar' },
+    { span: 'col-span-2 row-span-1', label: 'Cell 2' },
+    { span: 'col-span-2 row-span-1', label: 'Cell 3' },
+    { span: 'col-span-4 row-span-1', label: 'Cell 4' },
+  ] %}
+
+{% elseif layout_preset == 'preset_sidebar_right' %}
+  {% set preset_grid  = 'grid-cols-1 md:grid-cols-3 auto-rows-fr' %}
+  {% set preset_count = 4 %}
+  {% set preset_cells = [
+    { span: 'md:col-span-2 md:row-span-3', label: 'Cell 1 — Wide' },
+    { span: 'row-span-1 md:row-span-2', label: 'Cell 2' },
+    { span: '', label: 'Cell 3' },
+    { span: '', label: 'Cell 4' },
+  ] %}
+
+{% elseif layout_preset == 'preset_magazine' %}
+
+  {# Mobile → 1 col
+     Tablet → 2 col
+     Desktop → 6 col (actual magazine layout) #}
+  {% set preset_grid  = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 auto-rows-[minmax(120px,auto)]' %}
+  {% set preset_count = 8 %}
+  {% set preset_cells = [
+    { span: 'col-span-1 md:col-span-1 lg:col-span-2', label: 'Cell 1' },
+    { span: 'col-span-1 md:col-span-1 lg:col-span-2', label: 'Cell 2' },
+    { span: 'col-span-1 md:col-span-2 lg:col-span-2', label: 'Cell 3' },
+    { span: 'col-span-1 md:col-span-2 lg:col-span-3', label: 'Cell 4' },
+    { span: 'col-span-1 md:col-span-2 lg:col-span-3', label: 'Cell 5' },
+    { span: 'col-span-1 md:col-span-1 lg:col-span-2', label: 'Cell 6' },
+    { span: 'col-span-1 md:col-span-1 lg:col-span-2', label: 'Cell 7' },
+    { span: 'col-span-1 md:col-span-2 lg:col-span-2', label: 'Cell 8' },
+  ] %}
+   
+{% else %}
+  {% set preset_grid  = null %}
+  {% set preset_count = null %}
+  {% set preset_cells = null %}
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   4. RESOLVE CLASSES FROM MAPS
+═══════════════════════════════════════════════════════════════════════════ #}
+
+{% set class_bg          = map_bg[background_color] ?? '' %}
+{% set class_bg_size     = (background_image and background_image.src) ? (map_bg_size[background_size] ?? '') : '' %}
+
+{% set class_py         = map_py[padding_block]      ?? '' %}
+
+{% set class_gap   = (gap_x is empty and gap_y is empty) ? (map_gap[gap]   ?? '') : '' %}
+{% set class_gap_x = gap_x is not empty ? (map_gap_x[gap_x] ?? '') : '' %}
+{% set class_gap_y = gap_y is not empty ? (map_gap_y[gap_y] ?? '') : '' %}
+
+{% set class_cols     = layout_preset == 'custom' ? (map_grid_cols[grid_cols]         ?? '') : '' %}
+{% set class_cols_md  = layout_preset == 'custom' ? (map_grid_cols_md[grid_cols_md]   ?? '') : '' %}
+{% set class_cols_lg  = layout_preset == 'custom' ? (map_grid_cols_lg[grid_cols_lg]   ?? '') : '' %}
+{% set class_cols_xl  = layout_preset == 'custom' ? (map_grid_cols_xl[grid_cols_xl]   ?? '') : '' %}
+{% set class_cols_2xl = layout_preset == 'custom' ? (map_grid_cols_2xl[grid_cols_2xl] ?? '') : '' %}
+
+{% set class_rows    = (layout_preset == 'custom' and grid_rows    > 0) ? (map_grid_rows[grid_rows]       ?? '') : '' %}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   5. BUILD CLASS LISTS
+═══════════════════════════════════════════════════════════════════════════ #}
+
+{% set section_classes = [
+  'tg-section',
+  'relative',
+  'bg-cover',
+  class_bg,
+  class_py,
+  (background_image and background_image.src) ? 'overflow-hidden' : '',
+]|filter(v => v is not empty) %}
+
+{% set grid_classes = [
+  'tg-grid',
+  'grid',
+  'w-full',
+  'relative',
+  'z-10',
+  preset_grid is not empty ? preset_grid : '',
+  class_cols,
+  class_cols_sm,
+  class_cols_md,
+  class_cols_lg,
+  class_cols_xl,
+  class_cols_2xl,
+  class_rows,
+  class_rows_md,
+  class_rows_lg,
+  class_gap,
+  class_gap_x,
+  class_gap_y,
+  enable_container ? 'container' : '',
+  extra_classes,
+]|filter(v => v is not empty) %}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   6. BACKGROUND IMAGE INLINE STYLE
+═══════════════════════════════════════════════════════════════════════════ #}
+
+{% if background_image and background_image.src %}
+  {% set bg_style = 'background-image:url(' ~ background_image.src|e ~ ');' %}
+{% else %}
+  {% set bg_style = null %}
+{% endif %}
+
+{# ═══════════════════════════════════════════════════════════════════════════
+   7. MARKUP
+═══════════════════════════════════════════════════════════════════════════ #}
+
+<section{{ attributes.addClass(section_classes).setAttribute('style', bg_style ?? '') }}>
+
+  {# Background image layer #}
+  {% if background_image and background_image.src %}
+    <span
+      role="img"
+      aria-label="{{ background_image.alt|default('')|e }}"
+      aria-hidden="{{ background_image.alt ? 'false' : 'true' }}"
+      class="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+    ></span>
+  {% endif %}
+
+  <div class="{{ grid_classes|join(' ') }}">
+
+    {# ══════════════════════════════════════════════════════════════════════
+       PATH A — PRESET LAYOUT
+       Cells are driven by preset_cells array (col-span / row-span defined).
+       Each slot is rendered directly inside its column div — no wrappers,
+       no conditionals — exactly like the footer pattern.
+    ══════════════════════════════════════════════════════════════════════ #}
+    {% if preset_cells %}
+
+      {# Cell 1 #}
+      {% if preset_count >= 1 %}
+        <div class="tg-grid__col-1 w-full  {{ preset_cells[0].span }}">
+          {{ cell_1 }}
+        </div>
+      {% endif %}
+
+      {# Cell 2 #}
+      {% if preset_count >= 2 %}
+        <div class="tg-grid__col-2 w-full  {{ preset_cells[1].span }}">
+          {{ cell_2 }}
+        </div>
+      {% endif %}
+
+      {# Cell 3 #}
+      {% if preset_count >= 3 %}
+        <div class="tg-grid__col-3 w-full  {{ preset_cells[2].span }}">
+          {{ cell_3 }}
+        </div>
+      {% endif %}
+
+      {# Cell 4 #}
+      {% if preset_count >= 4 %}
+        <div class="tg-grid__col-4 w-full  {{ preset_cells[3].span }}">
+          {{ cell_4 }}
+        </div>
+      {% endif %}
+
+      {# Cell 5 #}
+      {% if preset_count >= 5 %}
+        <div class="tg-grid__col-5 w-full  {{ preset_cells[4].span }}">
+          {{ cell_5 }}
+        </div>
+      {% endif %}
+
+      {# Cell 6 #}
+      {% if preset_count >= 6 %}
+        <div class="tg-grid__col-6 w-full  {{ preset_cells[5].span }}">
+          {{ cell_6 }}
+        </div>
+      {% endif %}
+
+      {# Cell 7 #}
+      {% if preset_count >= 7 %}
+        <div class="tg-grid__col-7 w-full  {{ preset_cells[6].span }}">
+          {{ cell_7 }}
+        </div>
+      {% endif %}
+
+      {# Cell 8 #}
+      {% if preset_count >= 8 %}
+        <div class="tg-grid__col-8 w-full  {{ preset_cells[7].span }}">
+          {{ cell_8 }}
+        </div>
+      {% endif %}
+
+    {# ══════════════════════════════════════════════════════════════════════
+       PATH B — CUSTOM LAYOUT
+       Each slot rendered directly — no wrappers, no conditionals.
+    ══════════════════════════════════════════════════════════════════════ #}
+    {% else %}
+
+      {# Cell 1 #}
+      {% if cells_count >= 1 %}
+        <div class="tg-grid__col-1 w-full">
+          {{ cell_1 }}
+        </div>
+      {% endif %}
+
+      {# Cell 2 #}
+      {% if cells_count >= 2 %}
+        <div class="tg-grid__col-2 w-full">
+          {{ cell_2 }}
+        </div>
+      {% endif %}
+
+      {# Cell 3 #}
+      {% if cells_count >= 3 %}
+        <div class="tg-grid__col-3 w-full">
+          {{ cell_3 }}
+        </div>
+      {% endif %}
+
+      {# Cell 4 #}
+      {% if cells_count >= 4 %}
+        <div class="tg-grid__col-4 w-full">
+          {{ cell_4 }}
+        </div>
+      {% endif %}
+
+      {# Cell 5 #}
+      {% if cells_count >= 5 %}
+        <div class="tg-grid__col-5 w-full">
+          {{ cell_5 }}
+        </div>
+      {% endif %}
+
+      {# Cell 6 #}
+      {% if cells_count >= 6 %}
+        <div class="tg-grid__col-6 w-full">
+          {{ cell_6 }}
+        </div>
+      {% endif %}
+
+      {# Cell 7 #}
+      {% if cells_count >= 7 %}
+        <div class="tg-grid__col-7 w-full">
+          {{ cell_7 }}
+        </div>
+      {% endif %}
+
+      {# Cell 8 #}
+      {% if cells_count >= 8 %}
+        <div class="tg-grid__col-8 w-full">
+          {{ cell_8 }}
+        </div>
+      {% endif %}
+
+      {# Cell 9 #}
+      {% if cells_count >= 9 %}
+        <div class="tg-grid__col-9 w-full">
+          {{ cell_9 }}
+        </div>
+      {% endif %}
+
+      {# Cell 10 #}
+      {% if cells_count >= 10 %}
+        <div class="tg-grid__col-10 w-full">
+          {{ cell_10 }}
+        </div>
+      {% endif %}
+
+      {# Cell 11 #}
+      {% if cells_count >= 11 %}
+        <div class="tg-grid__col-11 w-full">
+          {{ cell_11 }}
+        </div>
+      {% endif %}
+
+      {# Cell 12 #}
+      {% if cells_count >= 12 %}
+        <div class="tg-grid__col-12 w-full">
+          {{ cell_12 }}
+        </div>
+      {% endif %}
+            
+      {# Cell 13 #}
+      {% if cells_count >= 13 %}
+        <div class="tg-grid__col-13 w-full">
+          {{ cell_13 }}
+        </div>
+      {% endif %}
+
+      {# Cell 14 #}
+      {% if cells_count >= 14 %}
+        <div class="tg-grid__col-14 w-full">
+          {{ cell_14 }}
+        </div>
+      {% endif %}
+
+      {# Cell 15 #}
+      {% if cells_count >= 15 %}
+        <div class="tg-grid__col-15 w-full">
+          {{ cell_15 }}
+        </div>
+      {% endif %}
+
+      {# Cell 16 #}
+      {% if cells_count >= 16 %}
+        <div class="tg-grid__col-16 w-full">
+          {{ cell_16 }}
+        </div>
+      {% endif %}
+
+      {# Cell 17 #}
+      {% if cells_count >= 17 %}
+        <div class="tg-grid__col-17 w-full">
+          {{ cell_17 }}
+        </div>
+      {% endif %}
+
+      {# Cell 18 #}
+      {% if cells_count == 18 %}
+        <div class="tg-grid__col-18 w-full">
+          {{ cell_18 }}
+        </div>
+      {% endif %}
+    {% endif %}
+
+  </div>{# /.tg-grid #}
+
+</section>{# /.tg-section #}

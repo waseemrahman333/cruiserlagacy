@@ -1,0 +1,57 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+status: stable
+title: 'Node Title'
+name: Node Title
+description: 'A simple node title field to display node created date.'
+defaults:
+  attributes: {}
+  items: []
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    items:
+      type: array
+      title: Items
+      item:
+        type: string
+      default: []
+      description: List of all field items.
+    heading_level:
+      type: string
+      title: Heading Level
+      description: HTML heading tag to use (h1–h6).
+      default: h1
+      enum:
+        - h1
+        - h2
+        - h3
+        - h4
+        - h5
+        - h6
+    field_name:
+      type: string
+      title: Field Name
+      description: Machine name of the field.
+    field_type:
+      type: string
+      title: Field Type
+      description: Type of the field (e.g. string).
+    label_display:
+      type: string
+      title: Label Display
+      description: How the label is displayed (above, inline, hidden, visually_hidden).
+    is_inline:
+      type: boolean
+      title: Inline Display
+      description: Whether to render the title inline (span) rather than as a heading element.
+      default: false
+    title_utility_classes:
+      type: array
+      title: Title Utility Classes
+      description: Additional Tailwind utility classes for the title element.
+      items:
+        type: string

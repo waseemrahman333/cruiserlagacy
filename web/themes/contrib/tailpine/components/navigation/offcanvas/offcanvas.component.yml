@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Offcanvas
+status: stable
+description: Off-canvas sidebar panel with overlay.
+group: Navigation
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      type: string
+      title: Title
+      description: Offcanvas panel title.
+    position:
+      type: string
+      title: Position
+      description: Panel position.
+      default: 'right'
+      enum:
+        - left
+        - right
+slots:
+  content:
+    title: Content
+    description: Offcanvas content.

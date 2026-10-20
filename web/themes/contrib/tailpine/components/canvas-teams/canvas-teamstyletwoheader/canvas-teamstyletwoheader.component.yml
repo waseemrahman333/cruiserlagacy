@@ -1,0 +1,33 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Team Style Two Header (Canvas)
+status: stable
+description: "Team Wrapper are used to group and display content in a way that is easily readable."
+group: Teams & Testimonials
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    columns:
+      type: string
+      title: Columns
+      description:  "No Of Columns of the Wrapper"
+      examples: ['grid-cols-3']
+      enum:
+        - grid-cols-1
+        - grid-cols-2
+        - grid-cols-3
+        - grid-cols-4
+        - grid-cols-5
+        - grid-cols-6
+    title:
+      title: Title
+      type: string
+      description: Title
+      examples: ['This is Team Style Two Header']
+slots:
+  content:
+    title: Content
+    description: "Content of the Wrapper. Plain text."

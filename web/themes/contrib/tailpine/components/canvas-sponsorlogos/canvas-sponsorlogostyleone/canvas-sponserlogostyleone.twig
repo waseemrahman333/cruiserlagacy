@@ -1,0 +1,66 @@
+<div
+  class="
+    rounded-lg shadow-sm bg-body-bg
+    grid
+    bg-secondary
+    hover:bg-secondary/90
+    justify-center
+    items-center
+    border
+    border-secondary
+    px-[clamp(6.25px,0.5vw+5.5px,7.5px)]
+    w-full
+    min-w-40
+    md:min-w-44
+    xl:min-w-50
+    rounded-xs
+  "
+>
+  {% if sponsor_logo %}
+    {% if website_url %}
+      <a
+        href="{{ website_url }}"
+        class="
+          max-w-[clamp(140px,4.5vw+100px,320px)]
+          w-fit
+          h-[clamp(60px,5vw+35px,80px)]
+          flex
+          items-center
+          justify-center
+          px-4
+        "
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src="{{ sponsor_logo.src }}"
+          alt="{{ sponsor_logo.alt|default('Sponsor logo') }}"
+          width="{{ sponsor_logo.width|default }}"
+          height="{{ sponsor_logo.height|default }}"
+          loading="lazy"
+          class="w-full object-contain"
+        >
+      </a>
+    {% else %}
+      <div
+        class="
+          w-[clamp(140px,4.5vw+100px,320px)]
+          h-[clamp(60px,5vw+35px,80px)]
+          flex
+          items-center
+          justify-center
+          px-4
+        "
+      >
+        <img
+          src="{{ sponsor_logo.src }}"
+          alt="{{ sponsor_logo.alt|default('Sponsor logo') }}"
+          width="{{ sponsor_logo.width|default }}"
+          height="{{ sponsor_logo.height|default }}"
+          loading="lazy"
+          class="w-full object-contain"
+        >
+      </div>
+    {% endif %}
+  {% endif %}
+</div>

@@ -1,0 +1,124 @@
+<?php
+
+/**
+ * @file
+ * Preprocess logic and helpers for menu templates.
+ */
+
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Url;
+use Drupal\user\Entity\User;
+
+/**
+ * Implements hook_preprocess_menu() for the main menu.
+ */
+function tailpine_preprocess_menu__main(array &$variables): void {
+  $items = $variables['items'];
+  $variables['array_for_sdc'] = tailpine_process_nested_array($items);
+}
+
+/**
+ * Processes a nested menu array structure recursively.
+ *
+ * @param array $items
+ *   The input menu items array to process.
+ *
+ * @return array
+ *   The processed items array with url, title, class, and children keys.
+ */
+function tailpine_process_nested_array(array $items): array {
+  $result = [];
+
+  if (PHP_SAPI === 'cli') {
+    $current_path = '/';
+    $front_page = '/';
+  }
+  else {
+    $current_path = \Drupal::service('path.current')->getPath();
+    $front_page = \Drupal::config('system.site')->get('page.front');
+  }
+
+  foreach ($items as $item) {
+    $new_item = [
+      'title' => $item['title'] ?? '',
+      'url' => $item['url']?->toString() ?? '#',
+      'class' => '',
+    ];
+
+    if (!empty($item['in_active_trail'])) {
+      $new_item['class'] = 'active';
+    }
+
+    if (!empty($item['url']) && $item['url']->toString() === $current_path) {
+      $new_item['class'] = 'active';
+    }
+
+    if (
+      ($current_path === '/' || $current_path === $front_page) &&
+      ($item['url']?->toString() === '/' || $item['url']?->toString() === $front_page)
+    ) {
+      $new_item['class'] = 'active';
+    }
+
+    if (!empty($item['below']) && is_array($item['below'])) {
+      $new_item['children'] = tailpine_process_nested_array($item['below']);
+    }
+
+    $result[] = $new_item;
+  }
+
+  return $result;
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function tailpine_preprocess_menu(array &$variables): void {
+
+  $variables['canvas_enabled'] = tailpine_canvas_enabled();
+  $account_menu_name = 'account';
+  $parameters = new MenuTreeParameters();
+  $menu_tree = \Drupal::menuTree()->load($account_menu_name, $parameters);
+  $manipulated = \Drupal::menuTree()->build($menu_tree);
+  $variables['account_menu'] = $manipulated['#items'] ?? [];
+
+  $header_style = theme_get_setting('header_class');
+  $variables['selected__header_template'] = $header_style;
+
+  $current_user = \Drupal::currentUser();
+  if (!$current_user->isAuthenticated()) {
+    foreach ($variables['account_menu'] as $key => $item) {
+      if (
+        isset($item['url']) &&
+        $item['url'] instanceof Url &&
+        $item['url']->isRouted() &&
+        $item['url']->getRouteName() === 'user.page'
+      ) {
+        unset($variables['account_menu'][$key]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu__account().
+ */
+function tailpine_preprocess_menu__account(&$variables) {
+  $current_user = \Drupal::currentUser();
+  $variables['logged_in'] = $current_user->isAuthenticated();
+  $variables['display_name'] = $current_user->getDisplayName();
+
+  $variables['picture'] = NULL;
+  if ($current_user->isAuthenticated()) {
+    $account = User::load($current_user->id());
+    if ($account && $account->hasField('user_picture') && !$account->get('user_picture')->isEmpty()) {
+      $file = $account->get('user_picture')->entity;
+      if ($file) {
+        $variables['picture'] = \Drupal::service('file_url_generator')
+          ->generateAbsoluteString($file->getFileUri());
+      }
+    }
+  }
+
+  $variables['use_avatar_image'] = TRUE;
+}

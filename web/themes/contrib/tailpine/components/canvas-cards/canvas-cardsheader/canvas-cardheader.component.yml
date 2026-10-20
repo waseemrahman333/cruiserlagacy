@@ -1,0 +1,84 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Cards Header (Canvas)
+status: stable
+description: "Wrappers are used to group and display content in a way that is easily readable."
+group: Cards & Posts
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    columns:
+      type: integer
+      description: "Number of columns on large screens."
+      title: "Columns"
+      enum:
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+      default: 3
+    bg_color:
+      type: string
+      title: Background Color
+      description: "Background color of the Wrapper."
+      default: secondary
+      enum:
+        - transparent
+        - light
+        - dark
+        - primary
+        - secondary
+      meta:enum:
+        transparent: Transparent
+        light: Light
+        dark: Dark
+        primary: Primary
+        secondary: Secondary
+      examples: ['primary', 'secondary']
+
+    text_color: &color_field
+      type: string
+      title: Title color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - white
+        - light gray
+        - dark gray
+        - black
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        white: White
+        light gray: Light Gray
+        dark gray: Dark Gray
+        black: Black
+        transparent: Transparent
+      examples:
+        - black
+    description_text_color:
+      <<: *color_field  
+      title: Description Color
+    title:
+      title: Title
+      type: string
+      description: "Title of the card. Plain text."
+      examples: ['Example Title']
+    description:
+      title: Description
+      type: string
+      description: "Description of the card. Plain text." 
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>This is <strong>formatted</strong> description</p>']   
+slots:
+  content:
+    title: Content
+    description: "Content of the wrapper."

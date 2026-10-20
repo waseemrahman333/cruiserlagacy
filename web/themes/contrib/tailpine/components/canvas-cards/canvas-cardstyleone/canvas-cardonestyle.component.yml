@@ -1,0 +1,59 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Card Style One (Canvas)
+status: stable
+description: "Cards are used to group and display content in a way that is easily readable."
+group: Cards & Posts
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    imageurl:
+      type: object
+      title:  imageurl
+      $ref: json-schema-definitions://canvas.module/image
+      description: "The image overlay URL."
+      examples:
+        - src: https://placehold.co/450x800
+          alt: 'Background Image'
+          width: 450
+          height: 800   
+    title:
+      title: Name
+      type: string
+      description: "Name of the card. Plain text."
+      examples: ['Example Name']
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle of the card. Plain text."
+      examples: ['Example subtitle']
+
+    text_color: &color_field
+      type: string
+      title: Title color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - white
+        - light gray
+        - dark gray
+        - black
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        white: White
+        light gray: Light Gray
+        dark gray: Dark Gray
+        black: Black
+        transparent: Transparent
+      examples:
+        - black
+    subtitle_color:
+      <<: *color_field  
+      title: Subtitle Color

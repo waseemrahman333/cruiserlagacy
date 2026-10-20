@@ -1,0 +1,65 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+name: Footer Menu List
+status: stable
+description: "Simple footer menu list with title and links"
+group: Navigation
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    items:
+      type: array
+      title: Menu Items
+      description: Array of menu link items.
+      default: []
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            description: The link URL.
+          title:
+            type: string
+            description: The link display text.
+          target:
+            type: string
+            description: Link target attribute (_blank, _self, etc.)
+
+    title:
+      type: string
+      title: Menu Title
+      description: Title shown above menu (e.g., "QUICK LINKS")
+      
+      
+    title_classes:
+      type: array
+      items:
+        type: string
+      title: Title Classes
+      default: ["text-white text-lg font-bold mb-4 uppercase tracking-wide"]
+
+    divider_classes:
+      type: array
+      items:
+        type: string
+      title: Divider Classes
+      default: ["border-t border-white/30 mb-6"]
+
+    link_classes:
+      type: array
+      items:
+        type: string
+      title: Link Classes
+      default: ["text-white/90 hover:text-white transition-colors text-base block py-2"]
+
+    list_classes:
+      type: array
+      items:
+        type: string
+      title: List Container Classes
+      default: ["space-y-1"]

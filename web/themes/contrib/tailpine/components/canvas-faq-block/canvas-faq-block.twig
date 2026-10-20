@@ -1,0 +1,57 @@
+{#
+/**
+ * FAQ Block (Canvas) — parent
+ *
+ * Variables: style, heading, show_search, bg_color
+ * Slots: items
+ *
+ * Theme tokens: bg-body-bg, bg-primary, bg-secondary, bg-tertiary, bg-surface, bg-surface-alt,
+ *               bg-dark, text-body, text-on-primary, text-body-bg, border-border, text-heading, text-muted
+ */
+#}
+{% set safe_style = style|default('accordion')|striptags %}
+{% set safe_bg    = bg_color|default('default')|striptags %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-body-bg text-body') %}
+
+<div
+  class="canvas-faq-block canvas-faq-block--{{ safe_style }} w-full {{ bg_class }}"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16">
+
+    {% if heading %}
+      <h2 class="text-3xl font-bold text-heading mb-8 text-center">{{ heading|striptags }}</h2>
+    {% endif %}
+
+    {% if show_search|default(false) %}
+      <div class="mb-8 max-w-md mx-auto">
+        <label class="sr-only" for="faq-search">{{ 'Search FAQ'|t }}</label>
+        <input
+          id="faq-search"
+          type="search"
+          placeholder="{{ 'Search FAQ…'|t }}"
+          class="border border-border bg-surface text-body rounded-lg px-4 py-2.5 w-full focus:ring-2 focus:ring-focus focus:outline-none"
+        >
+      </div>
+    {% endif %}
+
+    <div class="canvas-faq-block__items {{ safe_style == 'two-col-grid' ? 'grid md:grid-cols-2 gap-6' : 'flex flex-col' }} {{ safe_style == 'accordion' ? 'divide-y divide-border' : 'gap-6' }}">
+      {% block items %}
+        <div class="text-muted text-sm">{{ 'Add canvas-faq-blockitem components here.'|t }}</div>
+      {% endblock %}
+    </div>
+
+  </div>
+</div>

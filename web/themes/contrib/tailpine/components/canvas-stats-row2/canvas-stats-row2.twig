@@ -1,0 +1,122 @@
+{#
+/**
+ * Stats Row Component
+ *
+ * Displays up to 4 statistics side by side with an Alpine.js count-up
+ * animation that fires once when the section enters the viewport via
+ * IntersectionObserver.
+ *
+ * Available variables:
+ * - bg_color: (string) 'default' | 'primary' | 'dark'. Section background.
+ * - stat_1_number: (string) First statistic value, e.g. '10,000+'.
+ * - stat_1_label:  (string) First statistic label, e.g. 'Happy clients'.
+ * - stat_2_number: (string) Second statistic value.
+ * - stat_2_label:  (string) Second statistic label.
+ * - stat_3_number: (string) Third statistic value.
+ * - stat_3_label:  (string) Third statistic label.
+ * - stat_4_number: (string) Fourth statistic value. Optional — omit to show 3.
+ * - stat_4_label:  (string) Fourth statistic label.
+ * - count_duration: (string) Animation duration in ms. Default '2000'.
+ *
+ * Accessibility:
+ * - <section> landmark with aria-label.
+ * - Individual stat regions use <dl>/<dt>/<dd> semantics.
+ * - aria-live="polite" on animated numbers so screen readers announce the
+ *   final value after the count-up completes.
+ *
+ * Theme tokens used:
+ * - bg-body-bg, bg-primary, bg-dark — section backgrounds
+ * - text-body, text-on-primary, text-body-bg — body text
+ * - text-heading, border-border — dividers and headings
+ */
+#}
+
+{# === Sanitise inputs === #}
+{% set safe_bg = bg_color|default('default')|striptags %}
+{% set safe_duration = count_duration|default('2000')|striptags %}
+
+{# === Section background / text colour map === #}
+{% set bg_map = {
+  'default': 'bg-body-bg text-body',
+  'primary': 'bg-primary text-on-primary',
+  'dark':    'bg-dark text-body-bg',
+} %}
+{% set section_classes = bg_map[safe_bg]|default('bg-body-bg text-body') %}
+
+{# === Heading and label colour per variant === #}
+{% set heading_class_map = {
+  'default': 'text-heading',
+  'primary': 'text-on-primary',
+  'dark':    'text-body-bg',
+} %}
+{% set number_class = heading_class_map[safe_bg]|default('text-heading') %}
+
+{% set label_class_map = {
+  'default': 'text-muted',
+  'primary': 'text-on-primary',
+  'dark':    'text-body-bg',
+} %}
+{% set label_class = label_class_map[safe_bg]|default('text-muted') %}
+
+{% set divider_class_map = {
+  'default': 'border-border',
+  'primary': 'border-on-primary',
+  'dark':    'border-body-bg',
+} %}
+{% set divider_class = divider_class_map[safe_bg]|default('border-border') %}
+
+{# === Build stats array — only include entries that have a number === #}
+{% set stats = [] %}
+{% if stat_1_number %}
+  {% set stats = stats|merge([{ number: stat_1_number|striptags, label: stat_1_label|default('')|striptags }]) %}
+{% endif %}
+{% if stat_2_number %}
+  {% set stats = stats|merge([{ number: stat_2_number|striptags, label: stat_2_label|default('')|striptags }]) %}
+{% endif %}
+{% if stat_3_number %}
+  {% set stats = stats|merge([{ number: stat_3_number|striptags, label: stat_3_label|default('')|striptags }]) %}
+{% endif %}
+{% if stat_4_number %}
+  {% set stats = stats|merge([{ number: stat_4_number|striptags, label: stat_4_label|default('')|striptags }]) %}
+{% endif %}
+
+{# === Responsive grid: 1 col → 2 col → up to 4 col === #}
+{% set count = stats|length %}
+{% set grid_class = 'grid grid-cols-1 sm:grid-cols-2' %}
+{% if count == 3 %}
+  {% set grid_class = 'grid grid-cols-1 sm:grid-cols-3' %}
+{% elseif count == 4 %}
+  {% set grid_class = 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4' %}
+{% endif %}
+
+<section
+  class="w-full max-w-[1920px] mx-auto py-16 px-5 md:px-12 xl:px-24 {{ section_classes }}"
+  aria-label="{{ 'Statistics'|t }}"
+  {{ attributes }}
+  x-data="statsRow({ duration: {{ safe_duration }} })"
+  x-init="init()"
+>
+  {% if stats %}
+    <dl class="{{ grid_class }} gap-0">
+      {% for stat in stats %}
+        {% set is_last = loop.last %}
+        <div
+          class="flex flex-col items-center justify-center text-center py-10 px-6{% if not is_last %} border-b sm:border-b-0 sm:border-r {{ divider_class }}{% endif %}"
+          data-stat-number="{{ stat.number }}"
+        >
+          <dd
+            class="text-[clamp(2.5rem,6vw,4rem)] font-extrabold leading-none {{ number_class }}"
+            aria-live="polite"
+            x-text="displayed[{{ loop.index0 }}]"
+          >{{ stat.number }}</dd>
+          {% if stat.label %}
+            <dt class="mt-3 text-sm font-semibold uppercase tracking-widest {{ label_class }}">
+              {{ stat.label }}
+            </dt>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </dl>
+  {% endif %}
+</section>
+

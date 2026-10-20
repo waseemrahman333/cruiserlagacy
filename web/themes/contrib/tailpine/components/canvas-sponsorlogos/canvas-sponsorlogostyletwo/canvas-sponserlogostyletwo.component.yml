@@ -1,0 +1,44 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+name: Sponsor Logo Style Two (Canvas)
+status: stable
+group: Sponsors / Logos
+description: 'A sponsor logo component with optional column positioning.'
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    website_url:
+      type: string
+      title: Website URL
+      description: The destination URL when clicking the sponsor logo.
+      examples:
+        - https://example.com
+
+    sponsor_logo:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Sponsor Logo
+      description: The sponsor logo image.
+      examples:
+        - src: 'bg.jpg'
+          alt: 'Sponsor Logo'
+          width: 200
+          height: 80
+
+    column_start:
+      type: string
+      title: Column Start
+      description: Tailwind grid column start class for layout positioning.
+      enum:
+        - col-start-1
+        - col-start-2
+        - col-start-3
+        - col-start-4
+        - col-start-5
+        - col-start-6
+      default: col-start-1

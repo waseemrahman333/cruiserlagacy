@@ -1,0 +1,55 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Progress Bar (Canvas)
+status: stable
+description: Progress bar component for showing task completion.
+group: UI
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    value:
+      type: number
+      title: Progress Value
+      description: Current progress value (0-100).
+      default: 0
+      examples: [0, 25, 50, 75, 100]
+    max:
+      type: number
+      title: Maximum Value
+      description: Maximum progress value.
+      default: 100
+      examples: [100]
+    label:
+      type: string
+      title: Progress Label
+      description: Accessible label for progress bar.
+      default: Progress
+      examples: ['Loading', 'Uploading']
+    show_percentage:
+      type: boolean
+      title: Show Percentage
+      description: Display percentage text.
+      default: true
+    color:
+      type: string
+      title: Color
+      description: Progress bar color.
+      default: primary
+      enum:
+        - primary
+        - secondary
+        - success
+        - warning
+        - error
+    height:
+      type: string
+      title: Height
+      description: Progress bar height.
+      default: md
+      enum:
+        - sm
+        - md
+        - lg

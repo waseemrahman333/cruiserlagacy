@@ -1,0 +1,68 @@
+
+{% set border_radius = rounded|striptags %}
+
+{% set base_classes = 'inline-flex w-fit items-center justify-between  font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
+
+
+{% set variant_key = style_variant|default('solid') %}
+{% set color = color_varient|default('primary') %}
+
+{% set text_color_map = {
+  'body-bg': 'text-body',
+  'body': 'text-body-bg',
+  'dark': 'text-white',
+  'surface-100': 'text-body',
+  'surface-200': 'text-body',
+  'surface-300': 'text-body'
+} %}
+
+{% set text_color = text_color_map[color]|default('text-' ~ color ~ '-content') %}
+{% set hover_text_color = text_color_map[color]|default('text-' ~ color ~ '-content') %}
+
+{% set color_class = {
+  'solid':
+    'bg-' ~ color ~
+    ' ' ~ text_color ~
+    (add_border ? ' border border-' ~ color ~ '-content' : '') ~
+    ' hover:bg-' ~ color ~ '/80 focus:ring-' ~ color,
+
+  'outline':
+    'bg-transparent border border-' ~ color ~
+    ' text-' ~ color ~
+    ' hover:bg-' ~ color ~
+    ' hover:' ~ hover_text_color ~
+    ' focus:ring-' ~ color
+}[variant_key]|default(
+  'bg-primary text-primary-content hover:bg-primary/80 focus:ring-primary'
+) %}
+
+
+
+{% set sizeMap = {
+  'sm': 'text-sm md:text-base xl:text-base  py-2.5 px-5 gap-2',
+  'md': 'text-base md:text-base xl:text-lg  py-3 px-8 gap-4',
+  'lg': ' text-base md:text-base xl:text-lg py-4 px-10 gap-8'
+} %}
+
+{% set size_key = button_size|default('md') %}
+{% set size_class = sizeMap[size_key]|default(sizeMap['md']) %}
+
+{# CTA Button #}
+<a
+  href="{{ link }}"
+  aria-label="{{ title }}"
+  title="{{ title }}"
+  {% if open_new_tab %} target="_blank" rel="noopener noreferrer"{% endif %}
+  {{ attributes.addClass(' ' ~ base_classes ~ ' ' ~ size_class  ~ ' '  ~ color_class  ~ ' ' ~ border_radius ) }}
+>
+  {{ title }}
+
+  {# Optional Arrow Icon for 'with_arrow' variant #}
+  {% if show_arrow %}
+    <svg class="w-4 h-4   transition-transform duration-500 group-hover:translate-x-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+  {% endif %}
+</a>
+
+

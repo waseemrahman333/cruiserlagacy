@@ -1,0 +1,67 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: date (Canvas)
+description: Responsive date component
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    date_source:
+      title: Date Source
+      type: string
+      enum:
+        - static
+        - field_reference
+      default: field_reference
+      examples:
+        - 'static'
+
+    static_date:
+      title: Static Date
+      type: string
+      value: ""
+      source_type: static:field_item:string
+      visible: 'date_source == "static"'
+      examples:
+        - '24,5,2026'
+    field_reference:
+      title: Drupal Field Reference
+      type: string
+      source_type: entity:field_reference
+      visible: 'date_source == "field_reference"'
+
+    start_date:
+      title: Start Date
+      type: string
+      value: "24,5,2026"
+      source_type: static:field_item:string
+      examples:
+        - '23,05,2026'
+
+    end_date:
+      title: End Date
+      type: string
+      value: "24,5,2026"
+      source_type: static:field_item:string
+      visible: 'start_date != ""'
+
+    format:
+      title: Display Format
+      type: string
+      enum:
+        - "d M Y"       
+        - "M d, Y"    
+        - "D, M d, Y"  
+        - "custom"
+      default: "d M Y"
+      examples:
+        - "d M Y"
+
+    show_badge:
+      title: Use Badge Style
+      type: boolean
+      default: false

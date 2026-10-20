@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * Theme override for displaying a single search result.
+ *
+ * Available variables:
+ * - url: URL of the result.
+ * - title: Title of the result.
+ * - snippet: A small preview of the result.
+ * - info: String of all the meta information ready for print.
+ * - plugin_id: The machine-readable name of the plugin being executed.
+ * - title_prefix, title_suffix: Additional output around the title.
+ * - info_split: Split meta information.
+ * - title_attributes, content_attributes: HTML attributes.
+ *
+ * @see \Drupal\search\Hook\SearchThemeHooks::preprocessSearchResult()
+ */
+#}
+{{ title_prefix }}
+<h3{{ title_attributes.addClass('search-result__title') }}>
+  <a href="{{ url }}" class="text-primary font-semibold text-base hover:underline">{{ title }}</a>
+</h3>
+{{ title_suffix }}
+<div class="search-result__snippet-info mt-1">
+  {% if snippet %}
+    <p{{ content_attributes.addClass('search-result__snippet text-body text-sm mt-1') }}>{{ snippet }}</p>
+  {% endif %}
+  {% if info %}
+    <p class="search-result__info text-muted text-sm mt-1">{{ info }}</p>
+  {% endif %}
+</div>

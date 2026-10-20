@@ -1,0 +1,27 @@
+{#
+/**
+ * @file
+ * Theme override for an image field widget.
+ *
+ * Available variables:
+ * - attributes: HTML attributes for the containing element.
+ * - data: Render elements of the image widget.
+ */
+#}
+<div{{ (attributes|default(create_attribute())).addClass(' text-body p-4 rounded-2xl shadow-lg border border-border') }}>
+  {% if data.preview %}
+    <div class="image-preview mb-4 overflow-hidden rounded-xl border border-border shadow-md hover:shadow-xl transition-all duration-300">
+      {{ data.preview|raw }}
+    </div>
+  {% endif %}
+  
+  <div class="image-widget-data grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {% for key, item in data %}
+      {% if key != 'preview' %}
+        <div class="flex flex-col items-start bg-dark/70 p-3 rounded-xl hover:bg-dark/70 transition duration-300 ease-in-out border border-border">
+          {{ item|raw }}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>

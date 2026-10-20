@@ -1,0 +1,89 @@
+{#
+/**
+ * Signup Strip (Canvas)
+ *
+ * Variables: layout, heading, subheading, show_social_proof, subscriber_count,
+ *            show_privacy_note, bg_color
+ *
+ * Theme tokens: bg-primary, bg-secondary, bg-tertiary, bg-surface, bg-surface-alt,
+ *               bg-dark, bg-body-bg, text-on-primary, text-body, text-body-bg, text-muted
+ */
+#}
+{% set safe_layout  = layout|default('inline')|striptags %}
+{% set safe_bg      = bg_color|default('primary')|striptags %}
+{% set safe_action  = form_action|default('#')|striptags %}
+{% set safe_method  = form_method|default('post')|striptags in ['post', 'get'] ? form_method|default('post')|striptags : 'post' %}
+
+{% set bg_map = {
+  'default':     'bg-body-bg text-body',
+  'primary':     'bg-primary text-on-primary',
+  'secondary':   'bg-secondary text-on-primary',
+  'tertiary':    'bg-tertiary text-body-bg',
+  'light':       'bg-surface text-body',
+  'alt':         'bg-surface-alt text-body',
+  'dark':        'bg-dark text-body-bg',
+  'gradient':    'bg-gradient-to-r from-primary to-secondary text-on-primary',
+  'transparent': 'bg-transparent text-body',
+} %}
+{% set bg_class = bg_map[safe_bg]|default('bg-primary text-on-primary') %}
+
+<div
+  class="canvas-signup-strip w-full {{ bg_class }}"
+  {{ attributes }}
+>
+  <div class="w-full max-w-[1920px] mx-auto px-5 md:px-12 xl:px-24 py-16 {{ safe_layout == 'split' ? 'grid md:grid-cols-2 gap-8 items-center' : '' }} {{ safe_layout == 'stacked' ? 'text-center' : '' }}">
+
+    <div class="canvas-signup-strip__text {{ safe_layout == 'inline' ? 'flex flex-col sm:flex-row sm:items-center gap-6' : 'mb-6' }}">
+      <div class="{{ safe_layout == 'inline' ? 'flex-1' : '' }}">
+        {% if show_social_proof|default(false) and subscriber_count %}
+          <p class="canvas-signup-strip__proof text-sm font-medium opacity-75 mb-2">
+            {{ subscriber_count|striptags }}
+          </p>
+        {% endif %}
+        {% if heading %}
+          <h2 class="canvas-signup-strip__heading text-2xl md:text-3xl font-bold leading-tight">
+            {{ heading|striptags }}
+          </h2>
+        {% endif %}
+        {% if subheading %}
+          <div class="canvas-signup-strip__subheading mt-2 opacity-80">{{ subheading|raw }}</div>
+        {% endif %}
+      </div>
+
+      {% if safe_layout == 'inline' %}
+        <div class="canvas-signup-strip__form flex-shrink-0">
+          <form class="flex gap-3 flex-col sm:flex-row" action="{{ safe_action }}" method="{{ safe_method }}">
+            <label class="sr-only" for="signup-strip-email-inline">{{ 'Email address'|t }}</label>
+            <input id="signup-strip-email-inline" type="email" placeholder="{{ 'Enter your email'|t }}" required
+              class="border border-current/20 bg-body-bg/10 text-current placeholder:text-current/50 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-focus w-full sm:w-64">
+            <button type="submit"
+              class="bg-body-bg text-body hover:bg-body-bg/90 font-semibold px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">
+              {{ 'Subscribe'|t }}
+            </button>
+          </form>
+          {% if show_privacy_note|default(true) %}
+            <p class="canvas-signup-strip__privacy text-xs opacity-60 mt-2">{{ 'No spam, unsubscribe anytime.'|t }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    {% if safe_layout != 'inline' %}
+      <div class="canvas-signup-strip__form {{ safe_layout == 'stacked' ? 'max-w-md mx-auto' : '' }}">
+        <form class="flex gap-3 flex-col sm:flex-row" action="{{ safe_action }}" method="{{ safe_method }}">
+          <label class="sr-only" for="signup-strip-email">{{ 'Email address'|t }}</label>
+          <input id="signup-strip-email" type="email" placeholder="{{ 'Enter your email'|t }}" required
+            class="border border-current/20 bg-body-bg/10 text-current placeholder:text-current/50 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-focus w-full">
+          <button type="submit"
+            class="bg-body-bg text-body hover:bg-body-bg/90 font-semibold px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">
+            {{ 'Subscribe'|t }}
+          </button>
+        </form>
+        {% if show_privacy_note|default(true) %}
+          <p class="canvas-signup-strip__privacy text-xs opacity-60 mt-2 {{ safe_layout == 'stacked' ? 'text-center' : '' }}">{{ 'No spam, unsubscribe anytime.'|t }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>

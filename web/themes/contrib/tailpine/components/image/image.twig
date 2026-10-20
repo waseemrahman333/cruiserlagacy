@@ -1,0 +1,107 @@
+{#
+/**
+ * Image Component
+ * 
+ * Responsive image with aspect ratio, border radius, and optional link
+ */
+#}
+
+{# Aspect Ratio Mapping #}
+{% set aspect_class_map = {
+  '2:1': 'aspect-[2/1]',
+  '16:9': 'aspect-video',
+  '3:2': 'aspect-[3/2]',
+  '4:3': 'aspect-[4/3]',
+  '1:1': 'aspect-square',
+  '2:3': 'aspect-[2/3]',
+  '9:16': 'aspect-[9/16]',
+  '21:9': 'aspect-[21/9]',
+  'auto': 'aspect-auto'
+} %}
+
+{# Border Radius Mapping #}
+{% set radius_class_map = {
+  'none': 'rounded-none',
+  'small': 'rounded-sm',
+  'medium': 'rounded-md',
+  'large': 'rounded-xl md:rounded-2xl',
+  'extra-large': 'rounded-[24px] md:rounded-[32px]',
+  'full': 'rounded-full'
+} %}
+
+{# Object Fit Mapping #}
+{% set object_fit_map = {
+  'cover': 'object-cover',
+  'contain': 'object-contain',
+  'fill': 'object-fill',
+  'none': 'object-none'
+} %}
+
+{# Image Width Mapping #}
+{% set width_class_map = {
+  'full': 'w-full',
+  '90%': 'w-[90%]',
+  '80%': 'w-4/5',
+  '75%': 'w-3/4',
+  '66%': 'w-2/3',
+  '50%': 'w-1/2',
+  '33%': 'w-1/3',
+  '25%': 'w-1/4'
+} %}
+
+{# Image Alignment Mapping #}
+{% set alignment_class_map = {
+  'left': 'mx-0',
+  'center': 'mx-auto',
+  'right': 'ml-auto mr-0'
+} %}
+
+{# Apply Mappings #}
+{% set aspect_class = aspect_class_map[aspect_ratio|default('3/2')] %}
+{% set rounded_class = radius_class_map[radius|default('none')] %}
+{% set object_fit_class = object_fit_map[object_fit|default('cover')] %}
+{% set width_class = width_class_map[image_width|default('full')] %}
+{% set alignment_class = alignment_class_map[image_alignment|default('center')] %}
+
+{# Check if image exists #}
+{% set has_image = media is defined and media.src is defined and media.src %}
+{% set has_url = url is defined and url is not empty %}
+
+{% if has_image %}
+<figure class="w-full h-full">
+  <div class="{{ width_class }} h-full {{ alignment_class }} {{ aspect_class }} {{ rounded_class }} overflow-hidden">
+    
+    {% if has_url %}
+      {# Linked Image with Optional Hover Zoom #}
+      <a href="{{ url }}" class="block w-full h-full {{ enable_hover_zoom ? 'group' : '' }}">
+        <img 
+          src="{{ media.src }}" 
+          alt="{{ media.alt|default('') }}" 
+          class="{{ rounded_class }} h-full w-full {{ object_fit_class }} {{ enable_hover_zoom ? 'transition-transform duration-300 ease-in-out group-hover:scale-105' : '' }}"
+          {% if media.width %}width="{{ media.width }}"{% endif %}
+          {% if media.height %}height="{{ media.height }}"{% endif %}
+          loading="lazy"
+        >
+      </a>
+    {% else %}
+      {# Static Image #}
+      <img 
+        src="{{ media.src }}" 
+        alt="{{ media.alt|default('') }}" 
+        class="{{ rounded_class }} h-full w-full {{ object_fit_class }}"
+        {% if media.width %}width="{{ media.width }}"{% endif %}
+        {% if media.height %}height="{{ media.height }}"{% endif %}
+        loading="lazy"
+      >
+    {% endif %}
+    
+  </div>
+  
+  {# Optional Caption #}
+  {% if caption %}
+    <figcaption class="block py-1 text-sm lg:py-2 lg:text-base text-muted {{ alignment_class }}">
+      {{ caption }}
+    </figcaption>
+  {% endif %}
+</figure>
+{% endif %}

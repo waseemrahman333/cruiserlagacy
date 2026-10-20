@@ -1,0 +1,21 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Error 404 (Canvas)
+status: stable
+description: "Cards are used to group and display content in a way that is easily readable."
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    title:
+      title: Title
+      type: string
+      description: "Name of the 404. Plain text."
+      examples: ['404']
+    subtitle:
+      title: Subtitle
+      type: string
+      description: "Subtitle of the 404. Plain text."
+      examples: ['The page you are looking for does not exist.']

@@ -1,0 +1,383 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Base Card (Tailpine)
+status: stable
+description: "Flexible card component with customizable layout, background, and content slots"
+group: Cards & Posts
+
+slots:
+  image:
+    title: Image
+    description: "Image slot - add image component here"
+  
+  cta:
+    title: CTA
+    description: "Call-to-action button or link"
+  
+  heading:
+    title: "Heading"
+    description: "Card heading/title"
+  
+  subtitle:
+    title: "Subtitle"
+    description: "Card subtitle or meta information"
+  
+  text:
+    title: "Description"
+    description: "Card body text or description"
+
+props:
+  type: object
+  properties:
+    # Display Controls
+    show_image:
+      type: boolean
+      title: Show Image Slot
+      default: true
+      examples:
+        - true
+    
+    show_heading:
+      type: boolean
+      title: Show Heading
+      default: true
+      examples:
+        - true
+    
+    show_subtitle:
+      type: boolean
+      title: Show Subtitle
+      default: false
+      examples:
+        - false
+    
+    subtitle_alignment:
+      type: boolean
+      title: Show Subtitle Before Title
+      default: true
+      examples:
+        - true
+    
+    show_description:
+      type: boolean
+      title: Show Description
+      default: true
+      examples:
+        - true
+    
+    show_cta:
+      type: boolean
+      title: Show CTA
+      default: false
+      examples:
+        - false
+    
+    show_secondary_image:
+      type: boolean
+      title: Enable Secondary Image
+      default: false
+      examples:
+        - false
+
+    # Background Type
+    background_type:
+      type: string
+      title: Background Type
+      description: Choose card background style
+      enum:
+        - color
+        - image
+        - without_background
+      meta:enum:
+        color: Solid Color
+        image: Background Image
+        without_background: Transparent/None
+      default: color
+      examples:
+        - 'color'
+    
+    # Background Image (for background_type = image)
+    background_image:
+      title: Background Image
+      description: "Background image for the card"
+      $ref: json-schema-definitions://canvas.module/image
+      examples:
+        - src: https://placehold.co/400x300
+          alt: Card image
+          width: 400
+          height: 300
+    
+    # Background Color (when background_type = color)
+    bg_color:
+      type: string
+      title: Set Hero Background
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+    
+    # Overlay Controls (for background images)
+    enable_overlay:
+      type: boolean
+      title: Enable Overlay
+      description: Add color overlay on background image
+      default: true
+      examples:
+        - false
+    
+    overlay_color:
+      type: string
+      title: Overlay Color
+      description: Choose overlay color for background image
+      enum:
+        - bg-primary
+        - bg-secondary
+        - bg-tertiary
+        - bg-body
+        - bg-body-bg
+        - bg-surface-100
+        - bg-surface-200
+        - bg-surface-300
+        - bg-dark
+        - bg-transparent
+      "meta:enum":
+        bg-primary: Primary
+        bg-secondary: Secondary
+        bg-tertiary: Tertiary
+        bg-body: Body
+        bg-body-bg: Body Background
+        bg-surface-100: Light Surface
+        bg-surface-200: Medium Surface
+        bg-surface-300: Strong Surface
+        bg-dark: Dark Color
+        bg-transparent: Transparent
+      examples: ['bg-primary']
+    
+    overlay_opacity:
+      type: string
+      title: Overlay Opacity
+      description: Control overlay transparency
+      enum:
+        - "10"
+        - "20"
+        - "30"
+        - "40"
+        - "50"
+        - "60"
+        - "70"
+        - "80"
+      meta:enum:
+        "10": 10% (Very Light)
+        "20": 20% (Light)
+        "30": 30%
+        "40": 40%
+        "50": 50% (Medium)
+        "60": 60%
+        "70": 70% (Dark)
+        "80": 80% (Very Dark)
+      default: "50"
+    
+    # Card Styling
+    corner_style:
+      type: string
+      title: "Corner Style"
+      description: "Card corner roundness"
+      enum:
+        - square
+        - sm
+        - md
+        - lg
+        - xl
+      meta:enum:
+        square: Square (No Rounding)
+        sm: Small Roundness
+        md: Medium Rounded
+        lg: Large Rounded
+        xl: Extra Large Rounded
+      default: square
+      examples:
+        - 'square'
+    
+    # Card Padding
+    card_padding_inline:
+      type: string
+      title: Card Padding Inline (Left/Right)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+
+    card_padding_block:
+      type: string
+      title: Card Padding Block (Top/Bottom)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+    
+    # Content Padding
+    content_padding_inline:
+      type: string
+      title: Content Padding Inline (Left/Right)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+    content_padding_block:
+      type: string
+      title: Content Padding Block (Top/Bottom)
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - 2xl
+        - 3xl
+        - huge
+      "meta:enum":
+        none: "No Padding"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        2xl: "2X Large"
+        3xl: "3X Large"
+        huge: "Huge"
+      default: lg
+      examples: [md]
+    
+    # Spacing
+    gap:
+      title: "Content Gap"
+      description: "Gap between card elements"
+      type: string
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        xxl: "2x Large"
+      examples: [sm]
+    
+    # Alignment
+    content_alignment:
+      type: string
+      title: Content Alignment
+      description: Vertical and horizontal alignment of card content
+      enum:
+        - "justify-start items-start"
+        - "justify-end items-start"
+        - "justify-start items-end"
+        - "justify-end items-end"
+        - "justify-center items-center"
+      meta:enum:
+        "justify-start items-start": Top Left
+        "justify-end items-start": Bottom Left
+        "justify-start items-end": Top Right
+        "justify-end items-end": Bottom Right
+        "justify-center items-center": Centered
+      default: "justify-start items-start"
+      examples:
+        - "justify-start items-start"
+    
+    cta_alignment:
+      type: string
+      title: CTA Alignment
+      description: Horizontal alignment of CTA button
+      enum:
+        - self-start
+        - self-center
+        - self-end
+      meta:enum:
+        self-start: Left
+        self-center: Center
+        self-end: Right
+      default: self-start
+      examples:
+        - self-start

@@ -1,0 +1,74 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Split Panel (Canvas)
+group: Tailpine
+status: stable
+description: Two-column layout with configurable ratio, optional sticky side, and left/right content slots.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    ratio:
+      type: string
+      title: Column ratio
+      default: 50-50
+      enum: ['50-50', '40-60', '33-67']
+      meta:enum:
+        '50-50': '50 / 50'
+        '40-60': '40 / 60'
+        '33-67': '33 / 67'
+      examples:
+        - '50-50'
+
+    reverse:
+      type: boolean
+      title: Reverse on desktop
+      description: Swap left and right columns on medium+ screens.
+      default: false
+      examples:
+        - false
+
+    sticky_side:
+      type: string
+      title: Sticky side
+      default: none
+      enum: [left, right, none]
+      meta:enum:
+        left: Left column sticky
+        right: Right column sticky
+        none: No sticky column
+      examples:
+        - none
+
+    show_divider:
+      type: boolean
+      title: Show divider
+      description: Display a vertical divider between columns on desktop.
+      default: false
+      examples:
+        - false
+
+    vertical_align:
+      type: string
+      title: Vertical alignment
+      default: top
+      enum: [top, center, bottom]
+      meta:enum:
+        top: Top
+        center: Center
+        bottom: Bottom
+      examples:
+        - top
+
+slots:
+  left:
+    title: Left column
+    description: Content for the left panel.
+  right:
+    title: Right column
+    description: Content for the right panel.

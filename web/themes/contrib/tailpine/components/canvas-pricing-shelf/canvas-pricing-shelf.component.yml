@@ -1,0 +1,56 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Pricing Shelf (Canvas)
+group: Tailpine
+status: stable
+description: Pricing table with monthly/annual toggle. Add canvas-pricing-shelfitem children for each plan.
+
+props:
+  type: object
+  properties:
+
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    columns:
+      type: string
+      title: Columns
+      default: '3'
+      enum: ['2', '3', '4']
+      meta:enum:
+        '2': 2 plans
+        '3': 3 plans
+        '4': 4 plans
+      examples:
+        - '3'
+
+    show_toggle:
+      type: boolean
+      title: Show monthly/annual toggle
+      default: true
+      examples:
+        - true
+
+    bg_color:
+      type: string
+      title: Background colour
+      default: default
+      enum: [default, primary, secondary, tertiary, light, alt, dark, gradient, transparent]
+      meta:enum:
+        default: Default
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        light: Light surface
+        alt: Alt surface
+        dark: Dark
+        gradient: Gradient
+        transparent: Transparent
+      examples:
+        - default
+
+slots:
+  items:
+    title: Pricing plans
+    description: Add canvas-pricing-shelfitem components here.
