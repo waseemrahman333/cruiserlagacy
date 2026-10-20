@@ -14,11 +14,13 @@ export {
   type AstroDraftContext,
 } from './adapter';
 export {
+  fetchEntity,
   fetchPage,
   getClient,
   getDraftConfig,
   getDraftData,
   getDraftServer,
+  getJsonApiRuntimeConfig,
   isDraftModeEnabled,
   isDraftSessionExpired,
 } from './server';
@@ -31,15 +33,18 @@ export {
   type AccessToken,
   type CanvasComponentTreeElement,
   type CanvasComponentTreeSlot,
+  type CanvasContext,
   type DrupalRoute,
   type DrupalRouteEntity,
   type DraftData,
+  type EntityResult,
   type Page,
   type PageHead,
   type PageRedirect,
   type PageResult,
 } from '@drupal-canvas/headless';
 export type { DraftConfig, DraftServer } from '@drupal-canvas/headless/server';
+export type { JsonApiRuntimeConfig } from 'drupal-canvas/jsonapi-client';
 export type {
   ComponentMetadataEntry,
   ComponentMetadataPayload,

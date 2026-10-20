@@ -14,6 +14,9 @@ use Drupal\custom_elements\RenderConverter\CanvasRenderConverter;
  */
 final class JsComponentCanvasRenderConverter extends CanvasRenderConverter {
 
+  // Render-array flag for the page content region inside page chrome.
+  public const string PREVIEW_CONTENT_REGION = '#canvas_headless_preview_content_region';
+
   /**
    * Props used only by Drupal's Astro island renderer.
    *
@@ -28,7 +31,27 @@ final class JsComponentCanvasRenderConverter extends CanvasRenderConverter {
   /**
    * {@inheritdoc}
    */
+  // @phpstan-ignore shipmonk.deadMethod (Called by the parent converter.)
+  protected function isBlockRenderArray(array $render_array): bool {
+    // Let Drupal resolve ordered theme suggestions through normal rendering.
+    return !\is_array($render_array['#theme'] ?? NULL) && parent::isBlockRenderArray($render_array);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function convertRenderArray(array $render_array): CustomElement {
+    if (($render_array[self::PREVIEW_CONTENT_REGION] ?? FALSE) === TRUE) {
+      // Tell the headless SDK where to place editor markers in page chrome.
+      $element = CustomElement::create('canvas-preview-content-region');
+      $content = $render_array['content'] ?? [];
+      if (\is_array($content)) {
+        $element->setSlotFromCustomElement('default', $this->convertRenderArray($content));
+      }
+      $element->addCacheableDependency(BubbleableMetadata::createFromRenderArray($render_array));
+      return $element;
+    }
+
     $metadata = self::getComponentMetadata($render_array);
     if ($metadata === NULL) {
       return parent::convertRenderArray($render_array);

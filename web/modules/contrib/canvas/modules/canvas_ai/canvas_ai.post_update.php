@@ -15,6 +15,8 @@ use Drupal\Component\Serialization\Yaml;
 use Drupal\Component\Utility\Crypt;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\StorageCacheInterface;
+use Drupal\Core\Config\StorageInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Routing\RouteBuilderInterface;
 
@@ -229,4 +231,159 @@ function canvas_ai_post_update_0008_reimport_component_agent(): void {
     $message = 'The Canvas component agent system prompt has been updated. If you had customized it directly, those changes have been overwritten. The recommended way to extend or alter agent behavior is through the Context Control Center or custom event subscribers.';
     \Drupal::logger('canvas_ai')->warning($message);
   }
+}
+
+/**
+ * Remove the obsolete theme-region-keyed AI descriptions.
+ *
+ * Page variants replaced theme regions, so the settings form now stores
+ * page-variant descriptions under `variant_descriptions`. The old
+ * `region_descriptions` key is no longer read or written; drop it so active
+ * configuration matches the schema. The old region descriptions described theme
+ * regions that no longer drive rendering, so they are discarded rather than
+ * migrated.
+ */
+function canvas_ai_post_update_0009_remove_region_descriptions(): void {
+  $config = \Drupal::configFactory()->getEditable('canvas_ai.theme_region.settings');
+  if (!$config->isNew() && $config->get('region_descriptions') !== NULL) {
+    $config->clear('region_descriptions')->save(TRUE);
+  }
+}
+
+/**
+ * Rename the AI page-variant settings object off its theme-region-era name.
+ *
+ * The settings stored under `canvas_ai.theme_region.settings` have described
+ * page variants (not theme regions) since page variants replaced regions;
+ * only the config name lagged behind. Move the object (and its translation
+ * overrides in every language collection) to `canvas_ai.page_variant.settings`
+ * so the name matches what it holds.
+ */
+function canvas_ai_post_update_0010_rename_page_variant_settings(): void {
+  $storage = \Drupal::service(StorageCacheInterface::class);
+  \assert($storage instanceof StorageInterface);
+  foreach (['', ...$storage->getAllCollectionNames()] as $collection) {
+    $collection_storage = $collection === '' ? $storage : $storage->createCollection($collection);
+    $data = $collection_storage->read('canvas_ai.theme_region.settings');
+    if (\is_array($data)) {
+      $collection_storage->write('canvas_ai.page_variant.settings', $data);
+      $collection_storage->delete('canvas_ai.theme_region.settings');
+    }
+  }
+}
+
+/**
+ * Reimport default agents to pick up the latest ai_agents schema.
+ *
+ * A drupal/ai_agents upgrade added new per-tool settings
+ * (restrict_multiple_calls, multiple_call_error_message) to every agent's
+ * existing tools, a new guardrail_set key, and a simplified tool_usage_limits
+ * shape. It also carries system prompt refinements for each default agent.
+ * Update only these known keys, leaving the rest of each record (including
+ * uuid and _core) untouched.
+ */
+function canvas_ai_post_update_0011_reimport_default_agents(): void {
+  $module_path = \Drupal::service(ModuleExtensionList::class)->getPath('canvas_ai');
+  $source = new FileStorage($module_path . '/config/install');
+  $config_factory = \Drupal::configFactory();
+
+  $agent_ids = [
+    'canvas_ai_orchestrator',
+    'canvas_metadata_generation_agent',
+    'canvas_page_builder_agent',
+    'canvas_template_builder_agent',
+    'canvas_title_generation_agent',
+    'canvas_component_agent',
+  ];
+
+  foreach ($agent_ids as $agent_id) {
+    $name = "ai_agents.ai_agent.$agent_id";
+    $data = $source->read($name);
+    $config = $config_factory->getEditable($name);
+    if (!$data || $config->isNew()) {
+      continue;
+    }
+
+    $config->set('system_prompt', $data['system_prompt']);
+    $config->set('tool_usage_limits', $data['tool_usage_limits']);
+    $config->set('guardrail_set', $data['guardrail_set'] ?? '');
+
+    foreach (array_keys($config->get('tools') ?? []) as $tool_id) {
+      $config->set("tool_settings.$tool_id.restrict_multiple_calls", $data['tool_settings'][$tool_id]['restrict_multiple_calls'] ?? 0);
+      $config->set("tool_settings.$tool_id.multiple_call_error_message", $data['tool_settings'][$tool_id]['multiple_call_error_message'] ?? '');
+    }
+
+    $config->save(TRUE);
+  }
+
+  $message = 'The Canvas AI default agents have been updated to match latest AI Agent schema updates. If you had customized them directly, those changes have been overwritten. The recommended way to extend or alter agent behavior is through the Context Control Center or custom event subscribers.';
+  \Drupal::logger('canvas_ai')->warning($message);
+}
+
+/**
+ * Reimport the page and template builder agents as their prompts changed.
+ *
+ * Both prompts now state that the content region is the only region where
+ * components can be placed; the template builder adds header, navigation,
+ * footer or sidebar sections only when the user explicitly asks for them,
+ * still in the content region. The region-specific instructions and the
+ * [canvas_ai:available_regions] token were removed from both system prompts,
+ * and the template builder's description no longer mentions regions.
+ *
+ * Sites that update after this change already get the new prompts from 0011,
+ * which re-imports every agent's system prompt but not the template builder's
+ * description. Sites that ran 0011 before the prompts changed get both here.
+ *
+ * @see https://git.drupalcode.org/project/canvas/-/work_items/3592030
+ */
+function canvas_ai_post_update_0012_reimport_region_free_builder_agents(): void {
+  $module_path = \Drupal::service(ModuleExtensionList::class)->getPath('canvas_ai');
+  $source = new FileStorage($module_path . '/config/install');
+  $changed_keys = [
+    'ai_agents.ai_agent.canvas_page_builder_agent' => ['system_prompt'],
+    'ai_agents.ai_agent.canvas_template_builder_agent' => ['system_prompt', 'description'],
+  ];
+  $updated = FALSE;
+  foreach ($changed_keys as $name => $keys) {
+    $data = $source->read($name);
+    $config = \Drupal::configFactory()->getEditable($name);
+    if (!$data || $config->isNew()) {
+      continue;
+    }
+    // Set only the changed keys so the per-site uuid, _core hash, and any
+    // other fields stay intact.
+    foreach ($keys as $key) {
+      $config->set($key, $data[$key]);
+    }
+    $config->save(TRUE);
+    $updated = TRUE;
+  }
+  if ($updated) {
+    $message = 'The Canvas AI page builder and template builder agent system prompts have been updated. If you had customized them directly, those changes have been overwritten. The recommended way to extend or alter agent behavior is through the Context Control Center or custom event subscribers.';
+    \Drupal::logger('canvas_ai')->warning($message);
+  }
+}
+
+/**
+ * Delete the unused AI page variant descriptions.
+ *
+ * No agent reads canvas_ai.page_variant.settings anymore: the descriptions
+ * only fed the removed [canvas_ai:available_regions] token, and the settings
+ * form that wrote them is gone. Drop the object (and its translation overrides
+ * in every language collection) and rebuild the router, as the form's route
+ * and local task were removed too.
+ *
+ * @see https://git.drupalcode.org/project/canvas/-/work_items/3592030
+ */
+function canvas_ai_post_update_0013_delete_page_variant_settings(): void {
+  $storage = \Drupal::service(StorageCacheInterface::class);
+  \assert($storage instanceof StorageInterface);
+  foreach (['', ...$storage->getAllCollectionNames()] as $collection) {
+    $collection_storage = $collection === '' ? $storage : $storage->createCollection($collection);
+    if ($collection_storage->exists('canvas_ai.page_variant.settings')) {
+      $collection_storage->delete('canvas_ai.page_variant.settings');
+    }
+  }
+  \Drupal::configFactory()->reset('canvas_ai.page_variant.settings');
+  \Drupal::service(RouteBuilderInterface::class)->rebuild();
 }

@@ -11,7 +11,7 @@
 /web/sites/*/private
 
 # Ignore SimpleTest multi-site environment.
-<!-- /web/sites/simpletest -->
+/web/sites/simpletest
 
 
 # Ignore custom modules managed by Composer.
@@ -62,9 +62,9 @@
 # that core/assets/vendor and any other vendor directories within contrib or
 # custom module, theme, etc., are not ignored unless you purposely do so.
 /vendor/
-/web/themes/custom/cruiserclassic/node_modules
-/web/themes/custom/cruiserclassic/node_modules/**
-/web/themes/custom/cruiserclassic/node_modules/*
+
+# Node dependencies (any theme or module)
+node_modules/
 
 # Ignore other scaffold filesx
 #
@@ -94,3 +94,26 @@
 # Ignore .env files as they are personal
 #/.env
 
+
+# Environment-specific Drupal settings
+/web/sites/*/settings.ddev.php
+/web/sites/*/services.local.yml
+
+# Database dumps and backups (contain site data and user info)
+/*.sql
+/*.sql.gz
+/templete.backup/
+*.bak
+
+# DDEV local data
+/.ddev/db_snapshots/
+/.ddev/.importdb*
+
+# Editor and OS files
+/.vscode/
+Thumbs.db
+
+# Logs and caches
+*.log
+!/web/core/**/*.log
+.phpunit.result.cache

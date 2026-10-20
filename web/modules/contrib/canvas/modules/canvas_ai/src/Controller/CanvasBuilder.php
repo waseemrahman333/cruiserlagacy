@@ -235,7 +235,6 @@ final class CanvasBuilder extends ControllerBase {
       'page_description' => $prompt['page_description'] ?? NULL,
       'active_component_uuid' => $prompt['active_component_uuid'] ?? 'None',
       'component_agent_dynamic_state' => $component_agent_dynamic_state,
-      'available_regions' => Json::encode($this->canvasAiPageBuilderHelper->getAvailableRegions(Json::encode($prompt['current_layout']))) ?? NULL,
       // JSON-encode so the libraries render as readable data in the system
       // prompt token rather than the string "Array".
       'custom_libraries' => Json::encode($this->getSupportedLibraries()),
@@ -254,6 +253,12 @@ final class CanvasBuilder extends ControllerBase {
     $response = [];
     if ($solvability == AiAgentInterface::JOB_NOT_SOLVABLE) {
       $message = 'Something went wrong';
+      if (method_exists($agent, 'getLastError')) {
+        $error = $agent->getLastError();
+        if (!empty($error)) {
+          $message = $error;
+        }
+      }
     }
     elseif ($solvability == AiAgentInterface::JOB_SHOULD_ANSWER_QUESTION) {
       $message = $agent->answerQuestion();

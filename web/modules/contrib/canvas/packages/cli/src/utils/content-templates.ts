@@ -1,6 +1,8 @@
 import { componentTreeToAuthoredElementMap } from './authored-elements';
+import { collapseColorPropsInElements } from './prop-transforms';
 import { isRecord } from './utils';
 
+import type { ComponentMetadata } from '@drupal-canvas/discovery';
 import type { AuthoredSpecElementMap } from 'drupal-canvas/json-render-utils';
 import type { ContentTemplate } from '../types/ContentTemplate';
 
@@ -23,7 +25,7 @@ function sourceTypePrefix(value: unknown): string | null {
 /**
  * Convert a single server prop value into the authored format. Content
  * templates are the only authored shape that carries prop expressions —
- * pages and regions don't support `sourceType`, so they skip this step.
+ * pages and page templates don't support `sourceType`, so they skip this step.
  *
  * - Static prop sources (`{sourceType: "static:...", value: X}`) unwrap to
  *   their inner literal — in authored files, plain values without a
@@ -63,6 +65,11 @@ export interface AuthoredContentTemplateFile {
   entityType: string;
   bundle: string;
   viewMode: string;
+  /**
+   * Machine name of the page variant ("page template" in the UI) rendering
+   * content that uses this template. Omitted means the site default.
+   */
+  pageVariant?: string;
   elements: AuthoredSpecElementMap;
 }
 
@@ -71,16 +78,22 @@ export interface AuthoredContentTemplateFile {
  */
 export function contentTemplateToAuthored(
   template: ContentTemplate,
+  componentMetadata: ComponentMetadata[] = [],
 ): AuthoredContentTemplateFile {
-  const elements = componentTreeToAuthoredElementMap(
+  const baseElements = componentTreeToAuthoredElementMap(
     template.component_tree ?? [],
     translateInputsFromServer,
   );
+  const elements =
+    componentMetadata.length > 0
+      ? collapseColorPropsInElements(baseElements, componentMetadata)
+      : baseElements;
   return {
     label: template.label,
     entityType: template.entityType,
     bundle: template.bundle,
     viewMode: template.viewMode,
+    ...(template.pageVariant ? { pageVariant: template.pageVariant } : {}),
     elements,
   };
 }

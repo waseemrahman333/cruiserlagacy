@@ -10,6 +10,7 @@ import { processInPool } from './request-pool';
 import { isRecord } from './utils';
 
 import type {
+  BrandKitColorEntry,
   DiscoveredContentTemplate,
   DiscoveryResult,
 } from '@drupal-canvas/discovery';
@@ -41,6 +42,7 @@ export interface PreparedContentTemplate {
   entityTypeId: string;
   bundle: string;
   viewMode: string;
+  pageVariant: string | null;
   components: CanvasComponentTree;
   filePath: string;
 }
@@ -85,6 +87,7 @@ export async function prepareContentTemplates(
   discovered: DiscoveredContentTemplate[],
   componentVersions: Map<string, string>,
   discoveryResult: DiscoveryResult,
+  remoteBrandKitColors: BrandKitColorEntry[] = [],
 ): Promise<{
   valid: Array<{ index: number; result: PreparedContentTemplate }>;
   failed: Array<{ index: number; error: Error }>;
@@ -98,6 +101,7 @@ export async function prepareContentTemplates(
       entityType: string;
       bundle: string;
       viewMode: string;
+      pageVariant?: unknown;
       elements: AuthoredSpecElementMap;
     };
 
@@ -122,6 +126,7 @@ export async function prepareContentTemplates(
     const serializedElements = serializeElementMapForServer(
       spec.elements ?? {},
       componentMetadata,
+      remoteBrandKitColors,
     );
     const tree = authoredElementMapToComponentTree(
       serializedElements,
@@ -133,6 +138,12 @@ export async function prepareContentTemplates(
       label: spec.label,
       entityTypeId: spec.entityType,
       bundle: spec.bundle,
+      // Anything that is not a non-empty string means "no selection" (the
+      // site default).
+      pageVariant:
+        typeof spec.pageVariant === 'string' && spec.pageVariant !== ''
+          ? spec.pageVariant
+          : null,
       viewMode: spec.viewMode,
       components: tree,
       filePath: localTemplate.path,
@@ -160,6 +171,7 @@ export async function pushContentTemplates(
     ApiService,
     'createContentTemplate' | 'updateContentTemplate'
   >,
+  includePageVariant: boolean = true,
 ): Promise<ContentTemplatePushOperationResult[]> {
   const results = await processInPool(prepared, async (entry) => {
     const template = entry.result;
@@ -172,6 +184,7 @@ export async function pushContentTemplates(
     if (remote) {
       await apiService.updateContentTemplate(template.id, {
         status: true,
+        ...(includePageVariant ? { pageVariant: template.pageVariant } : {}),
         component_tree,
       });
       return {
@@ -185,6 +198,7 @@ export async function pushContentTemplates(
       entityType: template.entityTypeId,
       bundle: template.bundle,
       viewMode: template.viewMode,
+      ...(includePageVariant ? { pageVariant: template.pageVariant } : {}),
       status: true,
       component_tree,
     });

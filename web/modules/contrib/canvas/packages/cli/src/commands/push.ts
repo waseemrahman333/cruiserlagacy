@@ -3,14 +3,32 @@ import path from 'path';
 import chalk from 'chalk';
 import { Option } from 'commander';
 import * as p from '@clack/prompts';
-import { discoverCanvasProject } from '@drupal-canvas/discovery';
+import {
+  detectHeadlessSdk,
+  discoverCanvasProject,
+  loadComponentsMetadata,
+} from '@drupal-canvas/discovery';
 
-import { ensureConfig, getConfig, parseBooleanSetting } from '../config.js';
+import {
+  ensureBrandKitFileReadable,
+  ensureConfig,
+  getConfig,
+  parseBooleanSetting,
+} from '../config.js';
+import {
+  buildColorPushPlannedResults,
+  pushColors,
+} from '../lib/colors/color-push.js';
+import { validateColorsConfig } from '../lib/colors/color-validate.js';
 import {
   buildFontPushPlannedResults,
   pushFonts,
 } from '../lib/fonts/font-push.js';
-import { createApiService, ensureAuthConfig } from '../services/api.js';
+import {
+  createApiService,
+  ensureAuthConfig,
+  supportsPageVariants,
+} from '../services/api.js';
 import { buildCanvasProject } from '../utils/build-project';
 import {
   applySyncOptionAliasesAndWarnings,
@@ -20,14 +38,19 @@ import {
   updateConfigFromOptions,
 } from '../utils/command-helpers';
 import { printCommandIntro } from '../utils/command-intro';
-import { detectHeadlessSdk } from '../utils/detect-headless-sdk';
 import {
   collectContentTemplateResults,
   prepareContentTemplates,
   pushContentTemplates,
 } from '../utils/prepare-content-templates-push';
 import {
+  collectPageVariantResults,
+  preparePageVariants,
+  pushPageVariants,
+} from '../utils/prepare-page-variants-push';
+import {
   collectPageResults,
+  entitiesHaveColorProps,
   preparePages,
   pushPages,
 } from '../utils/prepare-pages-push';
@@ -35,11 +58,6 @@ import {
   prepareGlobalAssetLibraryUpdate,
   pushBuiltComponents,
 } from '../utils/prepare-push';
-import {
-  collectRegionResults,
-  prepareRegions,
-  pushRegions,
-} from '../utils/prepare-regions-push';
 import {
   formatErrorMessage,
   PushPhaseError,
@@ -51,16 +69,19 @@ import {
   splitFailedResultsByFile,
 } from '../utils/report-results';
 import { createProgressCallback, processInPool } from '../utils/request-pool';
+import { preflightCodeComponentPayloads } from '../utils/target-component-metadata';
 import { formatFilePathForOutput } from '../utils/utils';
 import { validateContentTemplates } from '../utils/validate-content-template';
 import { validatePages } from '../utils/validate-page';
-import { validateRegions } from '../utils/validate-region';
+import { validatePageTemplates } from '../utils/validate-page-variant';
 
 import type { DiscoveryWarning } from '@drupal-canvas/discovery';
 import type { Command } from 'commander';
+import type { ColorPushOutcome } from '../lib/colors/color-push.js';
 import type { ApiService } from '../services/api.js';
 import type {
   AssetLibrary,
+  BrandKitColorEntry,
   BrandKitFontEntry,
   BuildManifest,
   UploadedArtifact,
@@ -78,11 +99,11 @@ interface PushOptions {
   scope?: string;
   includePages?: boolean;
   includeContentTemplates?: boolean;
-  includeRegions?: boolean;
   pages?: boolean;
   contentTemplates?: boolean;
-  regions?: boolean;
+  pageTemplates?: boolean;
   includeBrandKit?: boolean;
+  pruneColors?: boolean;
   dir?: string;
   yes?: boolean;
 }
@@ -91,8 +112,9 @@ type PlannedPushResourceKey =
   | 'components'
   | 'pages'
   | 'content-templates'
-  | 'global-regions'
-  | 'brand-kit';
+  | 'page-templates'
+  | 'brand-kit'
+  | 'brand-kit-colors';
 
 interface NotStartedPushResource {
   key: PlannedPushResourceKey;
@@ -165,11 +187,16 @@ function buildNotStartedResources(
       itemType: 'Content template',
     },
     {
-      key: 'global-regions',
-      label: 'Global regions',
-      itemType: 'Global region',
+      key: 'page-templates',
+      label: 'Page templates',
+      itemType: 'Page template',
     },
     { key: 'brand-kit', label: 'brand kit', itemType: 'Font variant' },
+    {
+      key: 'brand-kit-colors',
+      label: 'brand kit colors',
+      itemType: 'Color',
+    },
   ];
 
   return resourceDefinitions
@@ -302,8 +329,10 @@ export type SyncExclusionSource = 'flag' | 'deprecated-flag' | 'env' | 'config';
 
 export interface SyncExclusionMessageOptions {
   noFlag: string;
-  includeFlag: string;
-  envName: string;
+  // Only categories with a shipped deprecated `--include-*` flag or
+  // `CANVAS_INCLUDE_*` environment variable carry these.
+  includeFlag?: string;
+  envName?: string;
   configPath: string;
 }
 
@@ -693,29 +722,31 @@ export function pushCommand(program: Command): void {
         .argParser(parseBooleanOption)
         .default(undefined),
     )
-    .addOption(
-      new Option(
-        '--include-regions [enabled]',
-        'Include global regions in the push operation',
-      )
-        .preset('true')
-        .argParser(parseBooleanOption)
-        .default(undefined),
-    )
     .option('--no-pages', 'Exclude pages from the push operation')
     .option(
       '--no-content-templates',
       'Exclude content templates from the push operation',
     )
-    .option('--no-regions', 'Exclude global regions from the push operation')
+    .option(
+      '--no-page-templates',
+      'Exclude page templates from the push operation',
+    )
     .addOption(
       new Option(
         '--include-brand-kit [enabled]',
-        'Include brand kit (fonts) in the push operation',
+        'Include brand kit (fonts and colors) in the push operation',
       )
         .preset('true')
         .argParser(parseBooleanOption)
         .default(undefined),
+    )
+    .option(
+      '--no-include-brand-kit',
+      'Exclude brand kit (fonts and colors) from the push operation',
+    )
+    .option(
+      '--prune-colors',
+      'Delete colors from the site that are absent from canvas.brand-kit.json',
     )
     .option('-d, --dir <directory>', 'Component directory')
     .option('-y, --yes', 'Skip confirmation prompts')
@@ -729,27 +760,46 @@ export function pushCommand(program: Command): void {
         applySyncOptionAliasesAndWarnings(options);
         updateConfigFromOptions(options);
 
+        // Validate the brand kit file upfront. Doing this before authentication
+        // and discovery ensures a malformed file won't cause a partial push.
+        {
+          const earlyConfig = getConfig();
+          if (earlyConfig.includeBrandKit) {
+            ensureBrandKitFileReadable();
+            if (earlyConfig.colors !== undefined) {
+              validateColorsConfig(earlyConfig.colors);
+            }
+          }
+        }
+
         await ensureAuthConfig();
         await ensureConfig(['componentDir']);
         const config = getConfig();
+        const pageVariantsSupported = await supportsPageVariants(
+          config.siteUrl,
+        );
         const { componentDir, aliasBaseDir, outputDir } = config;
         const includesPages = config.includePages;
         const includesContentTemplates = config.includeContentTemplates;
-        const includesRegions = config.includeRegions;
+        const includesPageTemplates = config.includePageTemplates;
         const includesBrandKit = config.includeBrandKit;
         const hasBrandKitFontsConfig = config.fonts !== undefined;
+        const hasBrandKitColorsConfig = config.colors !== undefined;
+        const hasBrandKitConfig =
+          hasBrandKitFontsConfig || hasBrandKitColorsConfig;
         // When the Canvas Headless SDK is installed, components are pushed as
         // external components (metadata only): the headless app renders them.
         // The app's entries may be framework single-file components (.vue,
         // .astro, .svelte) that the Canvas build pipeline cannot compile, so
         // discovery must not require a JavaScript entry in this mode.
-        const headlessSdkDetected = await detectHeadlessSdk(process.cwd());
-        // Step 1. Discover all components, pages, content templates and regions.
+        const headlessSdkDetected = detectHeadlessSdk(process.cwd());
+        // Step 1. Discover all components, pages, content templates and page
+        // templates.
         const discoveryResult = await discoverCanvasProject({
           componentRoot: componentDir,
           pagesRoot: config.pagesDir,
           contentTemplatesRoot: config.contentTemplatesDir,
-          regionsRoot: config.regionsDir,
+          pageTemplatesRoot: config.pageTemplatesDir,
           projectRoot: process.cwd(),
           requireJsEntry: !headlessSdkDetected,
         });
@@ -757,7 +807,7 @@ export function pushCommand(program: Command): void {
           components,
           pages: allDiscoveredPages,
           contentTemplates: allDiscoveredContentTemplates,
-          regions: allDiscoveredRegions,
+          pageTemplates: allDiscoveredPageTemplates,
           warnings,
         } = discoveryResult;
         const discoveredPages = includesPages ? allDiscoveredPages : [];
@@ -767,9 +817,11 @@ export function pushCommand(program: Command): void {
           : [];
         const hasIgnoredContentTemplates =
           !includesContentTemplates && allDiscoveredContentTemplates.length > 0;
-        const discoveredRegions = includesRegions ? allDiscoveredRegions : [];
-        const hasIgnoredRegions =
-          !includesRegions && allDiscoveredRegions.length > 0;
+        const discoveredPageTemplates = includesPageTemplates
+          ? allDiscoveredPageTemplates
+          : [];
+        const hasIgnoredPageTemplates =
+          !includesPageTemplates && allDiscoveredPageTemplates.length > 0;
         const componentDiscoveryWarnings =
           components.length > 0 ? warnings : [];
         const immediateDiscoveryWarnings =
@@ -811,20 +863,18 @@ export function pushCommand(program: Command): void {
               ),
             );
           }
-          if (hasIgnoredRegions) {
+          if (hasIgnoredPageTemplates) {
             p.log.info(
               getSyncExclusionMessage(
-                'global regions',
+                'page templates',
                 getSyncExclusionSource(
-                  options.regions,
-                  options.includeRegions,
-                  process.env.CANVAS_INCLUDE_REGIONS,
+                  options.pageTemplates,
+                  undefined,
+                  undefined,
                 ),
                 {
-                  noFlag: '--no-regions',
-                  includeFlag: '--include-regions',
-                  envName: 'CANVAS_INCLUDE_REGIONS',
-                  configPath: 'sync.regions',
+                  noFlag: '--no-page-templates',
+                  configPath: 'sync.pageTemplates',
                 },
               ),
             );
@@ -835,12 +885,12 @@ export function pushCommand(program: Command): void {
           components.length === 0 &&
           discoveredPages.length === 0 &&
           discoveredContentTemplates.length === 0 &&
-          discoveredRegions.length === 0 &&
-          !(includesBrandKit && hasBrandKitFontsConfig)
+          discoveredPageTemplates.length === 0 &&
+          !(includesBrandKit && hasBrandKitConfig)
         ) {
           logIgnoredLocalResources();
           p.log.warn(
-            'No components, pages, content templates, or global regions found for the enabled sync settings.',
+            'No components, pages, content templates, or page templates found for the enabled sync settings.',
           );
           p.outro('Nothing to push');
           return;
@@ -850,12 +900,12 @@ export function pushCommand(program: Command): void {
           components.length === 0 &&
           discoveredPages.length === 0 &&
           discoveredContentTemplates.length === 0 &&
-          discoveredRegions.length === 0 &&
+          discoveredPageTemplates.length === 0 &&
           includesBrandKit &&
-          hasBrandKitFontsConfig
+          hasBrandKitConfig
         ) {
           p.log.info(
-            'No components, pages, content templates, or global regions found; syncing brand kit fonts from canvas.brand-kit.json.',
+            'No components, pages, content templates, or page templates found; syncing brand kit from canvas.brand-kit.json.',
           );
         }
 
@@ -875,12 +925,49 @@ export function pushCommand(program: Command): void {
         const localNames = new Set(components.map((c) => c.name));
 
         let remoteBrandKitFonts: BrandKitFontEntry[] = [];
-        if (includesBrandKit && config.fonts !== undefined) {
+        let remoteBrandKitColors: BrandKitColorEntry[] = [];
+        if (includesBrandKit && hasBrandKitConfig) {
           try {
             const brandKit = await apiService.getBrandKit();
             remoteBrandKitFonts = brandKit.fonts ?? [];
+            remoteBrandKitColors = brandKit.colors ?? [];
           } catch {
             remoteBrandKitFonts = [];
+            remoteBrandKitColors = [];
+          }
+        }
+
+        const allDiscoveredEntities = [
+          ...discoveredPages,
+          ...discoveredContentTemplates,
+          ...discoveredPageTemplates,
+        ];
+
+        // Fetch remote brand kit colors for page/template color-prop reconciliation
+        // when the primary brand-kit fetch was skipped or returned nothing. Skip
+        // when includesBrandKit && hasBrandKitConfig because the fetch was already
+        // attempted above (even if it returned an empty colors array).
+        if (
+          allDiscoveredEntities.length > 0 &&
+          remoteBrandKitColors.length === 0 &&
+          !(includesBrandKit && hasBrandKitConfig)
+        ) {
+          const componentMetadata =
+            await loadComponentsMetadata(discoveryResult);
+          const requiresRemoteColors = await entitiesHaveColorProps(
+            allDiscoveredEntities,
+            componentMetadata,
+          );
+          // If the push payload needs to reference remote colors, fetch them
+          // before the push so colors can be matched with their uuids for
+          // updating.
+          if (requiresRemoteColors) {
+            try {
+              const brandKit = await apiService.getBrandKit();
+              remoteBrandKitColors = brandKit.colors ?? [];
+            } catch {
+              remoteBrandKitColors = [];
+            }
           }
         }
 
@@ -907,30 +994,43 @@ export function pushCommand(program: Command): void {
           remoteContentTemplateById.set(remote.id, remote);
         }
 
-        // Fetch remote page regions early for the planned operations summary.
-        const remoteRegions = includesRegions
-          ? await apiService.listRegions()
-          : {};
-        // Map each remote region's name to its full `{theme}.{region}` id so
-        // the push step can resolve the PATCH/DELETE target without needing
-        // the theme in the local file.
-        const remoteRegionIdsByName = new Map(
-          Object.values(remoteRegions).map(
-            (r) => [r.region, `${r.theme}.${r.region}`] as const,
-          ),
+        // Fetch remote page variants (and the site default) early for the
+        // planned operations summary.
+        const remotePageVariants =
+          includesPageTemplates ||
+          (pageVariantsSupported && (includesPages || includesContentTemplates))
+            ? await apiService.listPageVariants()
+            : {};
+        const currentDefaultPageVariant = includesPageTemplates
+          ? (await apiService.getDefaultPageVariant()).default_page_variant
+          : null;
+        const remotePageVariantIds = new Set(Object.keys(remotePageVariants));
+        const localPageTemplateIds = new Set(
+          discoveredPageTemplates.map((t) => t.id),
         );
-        const localRegionNames = new Set(
-          discoveredRegions.map((r) => r.region),
-        );
-        // Remote regions absent locally are deleted on push.
-        const remoteRegionNamesToDelete = Array.from(
-          remoteRegionIdsByName.keys(),
-        ).filter((name) => !localRegionNames.has(name));
+        // When page templates are synchronized, only locally authored IDs
+        // remain after the replacement-style sync. Otherwise, dependents may
+        // reference any existing remote variant.
+        const availablePageVariantIds = pageVariantsSupported
+          ? includesPageTemplates
+            ? localPageTemplateIds
+            : remotePageVariantIds
+          : undefined;
+        // When page templates are synchronized, remote variants absent locally
+        // are candidates for deletion. The push step changes the site default
+        // before deleting its previous variant, or keeps that variant when no
+        // replacement becomes default.
+        const remotePageVariantIdsToDelete = includesPageTemplates
+          ? Array.from(remotePageVariantIds).filter(
+              (id) => !localPageTemplateIds.has(id),
+            )
+          : [];
 
         // Build a preview of planned operations.
         const operationLabels: Record<string, string> = {
           create: 'create',
           update: 'update',
+          unchanged: 'unchanged',
           delete: 'delete',
         };
         const plannedResults: Result[] = [
@@ -987,21 +1087,21 @@ export function pushCommand(program: Command): void {
               ],
             };
           }),
-          ...discoveredRegions.map((region) => ({
-            itemName: region.region,
-            itemType: 'Global region',
+          ...discoveredPageTemplates.map((pageTemplate) => ({
+            itemName: pageTemplate.id,
+            itemType: 'Page template',
             success: true,
             details: [
               {
-                content: remoteRegionIdsByName.has(region.region)
+                content: remotePageVariantIds.has(pageTemplate.id)
                   ? operationLabels.update
                   : operationLabels.create,
               },
             ],
           })),
-          ...remoteRegionNamesToDelete.map((name) => ({
-            itemName: name,
-            itemType: 'Global region',
+          ...remotePageVariantIdsToDelete.map((id) => ({
+            itemName: id,
+            itemType: 'Page template',
             success: true,
             details: [{ content: operationLabels.delete }],
           })),
@@ -1011,6 +1111,19 @@ export function pushCommand(program: Command): void {
                 update: operationLabels.update,
                 delete: operationLabels.delete,
               })
+            : []),
+          ...(includesBrandKit && config.colors !== undefined
+            ? buildColorPushPlannedResults(
+                config.colors,
+                remoteBrandKitColors,
+                {
+                  create: operationLabels.create,
+                  update: operationLabels.update,
+                  unchanged: operationLabels.unchanged,
+                  delete: operationLabels.delete,
+                },
+                options.pruneColors ?? false,
+              )
             : []),
         ];
         if (plannedResults.length > 0) {
@@ -1042,13 +1155,19 @@ export function pushCommand(program: Command): void {
               `${discoveredPages.length} ${pluralize(discoveredPages.length, 'page')}`,
             );
           }
-          if (discoveredRegions.length > 0) {
+          if (discoveredPageTemplates.length > 0) {
             parts.push(
-              `${discoveredRegions.length} global ${pluralize(discoveredRegions.length, 'region')}`,
+              `${discoveredPageTemplates.length} page ${pluralize(discoveredPageTemplates.length, 'template')}`,
             );
           }
-          if (includesBrandKit && hasBrandKitFontsConfig) {
-            parts.push('brand kit fonts (canvas.brand-kit.json)');
+          if (includesBrandKit && hasBrandKitConfig) {
+            const brandKitParts = [
+              ...(hasBrandKitFontsConfig ? ['fonts'] : []),
+              ...(hasBrandKitColorsConfig ? ['colors'] : []),
+            ];
+            parts.push(
+              `brand kit ${brandKitParts.join(' and ')} (canvas.brand-kit.json)`,
+            );
           }
           const confirmed = await p.confirm({
             message: `Push these changes to ${config.siteUrl}?`,
@@ -1066,6 +1185,7 @@ export function pushCommand(program: Command): void {
         let globalCssResult: Result | undefined;
         let globalAssetLibraryUpdate: Partial<AssetLibrary> | undefined;
         let fontCount = 0;
+        let colorPruneFailures: ColorPushOutcome[] = [];
 
         if (components.length > 0) {
           removeNotStartedResource(notStartedResources, 'components');
@@ -1144,6 +1264,28 @@ export function pushCommand(program: Command): void {
             );
           }
 
+          const preflight = await preflightCodeComponentPayloads(
+            canvasBuild.builtComponents,
+            componentPushApiService,
+          );
+          for (const warning of preflight.warnings) {
+            p.log.warn(warning);
+          }
+          if (preflight.results.some((result) => !result.success)) {
+            componentSpinner.stop('Validation failed', 2);
+            reportResults(
+              preflight.results.filter((result) => !result.success),
+              'Component validation failed',
+              'Component',
+              PUSH_REPORT_OPTIONS,
+            );
+            reportDiscoveryWarnings(componentDiscoveryWarnings);
+            throw new ReportedPushError(
+              'Component validation failed',
+              'Target validation failed. Nothing was pushed.',
+            );
+          }
+
           // Build and push components.
           try {
             componentResults = await pushBuiltComponents(
@@ -1151,6 +1293,7 @@ export function pushCommand(program: Command): void {
               componentPushApiService,
               'Pushing',
               componentSpinner,
+              remoteBrandKitColors,
             );
           } catch (error) {
             reportDiscoveryWarnings(componentDiscoveryWarnings);
@@ -1276,6 +1419,94 @@ export function pushCommand(program: Command): void {
           }
         }
 
+        // Step 4c: Push colors from canvas.brand-kit.json (when the file has
+        // a colors key; an absent key leaves the site's colors unmanaged).
+        if (includesBrandKit && config.colors !== undefined) {
+          removeNotStartedResource(notStartedResources, 'brand-kit-colors');
+          const colorOutcomeLabels: Record<string, string> = {
+            create: chalk.green('Created'),
+            update: chalk.cyan('Updated'),
+            delete: chalk.red('Deleted'),
+            unchanged: chalk.dim('Unchanged'),
+          };
+          const colorSpinner = p.spinner();
+          colorSpinner.start('Pushing brand kit colors');
+          try {
+            const result = await pushColors(config.colors, apiService, {
+              pruneColors: options.pruneColors ?? false,
+            });
+            if (result !== null) {
+              const changedCount =
+                result.created + result.updated + result.deleted;
+              colorSpinner.stop(
+                changedCount > 0
+                  ? 'Pushed brand kit colors'
+                  : 'No brand kit colors to update',
+                0,
+              );
+              if (result.outcomes.length > 0) {
+                reportResults(
+                  result.outcomes.map((outcome) => ({
+                    itemName: outcome.itemName,
+                    success: outcome.success,
+                    details: [
+                      {
+                        content: outcome.success
+                          ? colorOutcomeLabels[outcome.operation]
+                          : (outcome.detail ?? 'Failed'),
+                      },
+                    ],
+                  })),
+                  'Pushed brand kit colors',
+                  'Color',
+                  PUSH_REPORT_OPTIONS,
+                );
+              }
+              if (result.serverOnly.length > 0) {
+                const count = result.serverOnly.length;
+                p.log.info(
+                  [
+                    `${count} ${pluralize(count, 'color')} on the site ${count === 1 ? 'is' : 'are'} not in canvas.brand-kit.json and ${count === 1 ? 'was' : 'were'} left unchanged:`,
+                    ...result.serverOnly.map((name) => `  ${name}`),
+                    'Run `canvas pull` to add them to the file, or `canvas push --prune-colors` to delete them from the site.',
+                  ].join('\n'),
+                );
+              }
+              const pushedCount = changedCount + result.unchanged;
+              if (pushedCount > 0) {
+                completedResources.push({
+                  label: 'brand kit colors',
+                  count: pushedCount,
+                  unit: 'color',
+                  action: 'pushed',
+                });
+              }
+              // Refused prune deletions must fail the command at the end,
+              // after the remaining resources have pushed.
+              colorPruneFailures = result.outcomes.filter(
+                (outcome) => !outcome.success,
+              );
+              // Re-fetch if new colors were created so page serialization can
+              // resolve their UUIDs — the pre-push snapshot doesn't include them.
+              if (result.created > 0) {
+                try {
+                  const refreshed = await apiService.getBrandKit();
+                  remoteBrandKitColors = refreshed.colors ?? [];
+                } catch {
+                  // Non-fatal: pages that reference newly created colors will
+                  // fail validation, which is the same outcome as before this fix.
+                }
+              }
+            }
+          } catch (err) {
+            colorSpinner.stop('Brand kit colors push failed', 2);
+            throw new PushPhaseError(
+              'Brand kit colors push failed',
+              formatErrorMessage(err),
+            );
+          }
+        }
+
         if (components.length > 0) {
           // Upload component dependencies and prepare the dependency map.
           const manifestSyncResult = await uploadManifestArtifacts(outputDir, {
@@ -1334,6 +1565,82 @@ export function pushCommand(program: Command): void {
           });
         }
 
+        // Validate and push page templates before pages and content templates,
+        // because both can reference a newly created page template.
+        if (
+          discoveredPageTemplates.length > 0 ||
+          remotePageVariantIdsToDelete.length > 0
+        ) {
+          const hasLocalPageTemplates = discoveredPageTemplates.length > 0;
+          const pageTemplateSummary = await runPushResourcePipeline({
+            labels: {
+              start: 'Pushing page templates',
+              validating: 'Validating page templates',
+              preparing: 'Preparing page templates',
+              pushing: 'Pushing page templates',
+              done: 'Pushed page templates',
+            },
+            phases: {
+              validation: 'Page template validation failed',
+              preparation: 'Page template preparation failed',
+              push: 'Page template push failed',
+            },
+            messages: {
+              validation: 'Page template validation failed.',
+              preparation: 'Page template preparation failed.',
+              noValidItems: 'No valid page templates to push.',
+              push: 'Some page templates failed to push.',
+            },
+            itemLabel: 'Page template',
+            validate: hasLocalPageTemplates
+              ? async () =>
+                  (await validatePageTemplates(discoveryResult)).results
+              : undefined,
+            markStarted: () =>
+              removeNotStartedResource(notStartedResources, 'page-templates'),
+            prepare: hasLocalPageTemplates
+              ? async () => {
+                  const componentVersions =
+                    await pushApiService.listComponentVersions();
+                  return preparePageVariants(
+                    discoveredPageTemplates,
+                    componentVersions,
+                    discoveryResult,
+                    remoteBrandKitColors,
+                  );
+                }
+              : undefined,
+            failOnPreparationFailures: true,
+            hasPushWork: (validPageTemplates) =>
+              validPageTemplates.length > 0 ||
+              remotePageVariantIdsToDelete.length > 0,
+            push: (validPageTemplates) =>
+              pushPageVariants(
+                validPageTemplates,
+                remotePageVariantIds,
+                pushApiService,
+                {
+                  remoteIdsToDelete: remotePageVariantIdsToDelete,
+                  currentDefault: currentDefaultPageVariant,
+                },
+              ),
+            collectResults: (pushResults, failedPreps) =>
+              collectPageVariantResults(
+                pushResults,
+                failedPreps,
+                discoveredPageTemplates,
+              ),
+            reportOptions: PUSH_REPORT_OPTIONS,
+            summary: {
+              label: 'Page templates',
+              unit: 'page template',
+            },
+          });
+          if (pageTemplateSummary) {
+            completedResources.push(pageTemplateSummary);
+          }
+        }
+
         // Validate and push pages.
         if (discoveredPages.length > 0) {
           const pageSummary = await runPushResourcePipeline({
@@ -1356,8 +1663,13 @@ export function pushCommand(program: Command): void {
             },
             itemLabel: 'Page',
             validate: async () =>
-              (await validatePages(discoveryResult, { remotePageByUuid }))
-                .results,
+              (
+                await validatePages(discoveryResult, {
+                  remotePageByUuid,
+                  availablePageVariantIds,
+                  remoteBrandKitColors,
+                })
+              ).results,
             markStarted: () =>
               removeNotStartedResource(notStartedResources, 'pages'),
             prepare: async () => {
@@ -1367,10 +1679,16 @@ export function pushCommand(program: Command): void {
                 discoveredPages,
                 componentVersions,
                 discoveryResult,
+                remoteBrandKitColors,
               );
             },
             push: (validPages) =>
-              pushPages(validPages, remotePageByUuid, pushApiService),
+              pushPages(
+                validPages,
+                remotePageByUuid,
+                pushApiService,
+                pageVariantsSupported,
+              ),
             collectResults: (pushResults, failedPreps) =>
               collectPageResults(pushResults, failedPreps, discoveredPages),
             reportOptions: PUSH_REPORT_OPTIONS,
@@ -1410,6 +1728,7 @@ export function pushCommand(program: Command): void {
               (
                 await validateContentTemplates(discoveryResult, {
                   apiService: pushApiService,
+                  availablePageVariantIds,
                 })
               ).results,
             markStarted: () =>
@@ -1424,6 +1743,7 @@ export function pushCommand(program: Command): void {
                 discoveredContentTemplates,
                 componentVersions,
                 discoveryResult,
+                remoteBrandKitColors,
               );
             },
             push: (validTemplates) =>
@@ -1431,6 +1751,7 @@ export function pushCommand(program: Command): void {
                 validTemplates,
                 remoteContentTemplateById,
                 pushApiService,
+                pageVariantsSupported,
               ),
             collectResults: (pushResults, failedPreps) =>
               collectContentTemplateResults(
@@ -1449,69 +1770,17 @@ export function pushCommand(program: Command): void {
           }
         }
 
-        // Validate and push global regions.
-        if (
-          discoveredRegions.length > 0 ||
-          remoteRegionNamesToDelete.length > 0
-        ) {
-          const hasLocalRegions = discoveredRegions.length > 0;
-          const regionSummary = await runPushResourcePipeline({
-            labels: {
-              start: 'Pushing global regions',
-              validating: 'Validating global regions',
-              preparing: 'Preparing global regions',
-              pushing: 'Pushing global regions',
-              done: 'Pushed global regions',
-            },
-            phases: {
-              validation: 'Global region validation failed',
-              preparation: 'Global region preparation failed',
-              push: 'Global region push failed',
-            },
-            messages: {
-              validation: 'Global region validation failed.',
-              preparation: 'Global region preparation failed.',
-              noValidItems: 'No valid global regions to push.',
-              push: 'Some global regions failed to push.',
-            },
-            itemLabel: 'Global region',
-            validate: hasLocalRegions
-              ? async () => (await validateRegions(discoveryResult)).results
-              : undefined,
-            markStarted: () =>
-              removeNotStartedResource(notStartedResources, 'global-regions'),
-            prepare: hasLocalRegions
-              ? async () => {
-                  const componentVersions =
-                    await pushApiService.listComponentVersions();
-                  return prepareRegions(
-                    discoveredRegions,
-                    componentVersions,
-                    discoveryResult,
-                  );
-                }
-              : undefined,
-            failOnPreparationFailures: true,
-            hasPushWork: (validRegions) =>
-              validRegions.length > 0 || remoteRegionNamesToDelete.length > 0,
-            push: (validRegions) =>
-              pushRegions(
-                validRegions,
-                remoteRegionIdsByName,
-                pushApiService,
-                remoteRegionNamesToDelete,
+        if (colorPruneFailures.length > 0) {
+          throw new PushPhaseError(
+            'Brand kit color prune incomplete',
+            [
+              `${colorPruneFailures.length} ${pluralize(colorPruneFailures.length, 'color')} could not be deleted:`,
+              ...colorPruneFailures.map(
+                (outcome) =>
+                  `  ${outcome.itemName}: ${outcome.detail ?? 'deletion refused'}`,
               ),
-            collectResults: (pushResults, failedPreps) =>
-              collectRegionResults(pushResults, failedPreps, discoveredRegions),
-            reportOptions: PUSH_REPORT_OPTIONS,
-            summary: {
-              label: 'Global regions',
-              unit: 'global region',
-            },
-          });
-          if (regionSummary) {
-            completedResources.push(regionSummary);
-          }
+            ].join('\n'),
+          );
         }
 
         await apiService.signalPushComplete();

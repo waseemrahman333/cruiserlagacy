@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { canvasTreeToSpec } from 'drupal-canvas/json-render-utils';
+import { CircleAlertIcon } from 'lucide-react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import { toast } from 'sonner';
 import { PreviewEntityPicker } from '@wb/client/components/preview-entity-picker';
+import { PreviewErrorAlert } from '@wb/client/components/preview-error-alert';
 import { ThemeMenu } from '@wb/client/components/theme-menu';
 import { Badge } from '@wb/client/components/ui/badge';
 import { Separator } from '@wb/client/components/ui/separator';
@@ -22,11 +24,12 @@ import {
 } from '@wb/client/components/ui/sidebar';
 import { Tabs, TabsList, TabsTrigger } from '@wb/client/components/ui/tabs';
 import { fetchDiscoveryResult } from '@wb/lib/discovery-client';
+import { selectPageTemplate } from '@wb/lib/page-template-selection';
 import {
   fetchPreviewContentTemplateSpec,
   fetchPreviewManifest,
   fetchPreviewPageSpec,
-  fetchPreviewRegionSpec,
+  fetchPreviewPageTemplateSpec,
   fetchWorkbenchConfig,
 } from '@wb/lib/preview-client';
 import {
@@ -50,6 +53,7 @@ import { getServerComponentRegistry } from '@wb/lib/server-component-registry';
 import { WORKBENCH_PREVIEW_HTML_PATH } from '@wb/lib/workbench-preview-constants';
 import {
   computeWorkbenchStructuralFingerprint,
+  shouldHideComponentPreviewFrame,
   shouldSkipWorkbenchIframeRemount,
 } from '@wb/lib/workbench-preview-iframe-remount';
 
@@ -58,7 +62,7 @@ import type {
   DiscoveredComponent,
   DiscoveredContentTemplate,
   DiscoveredPage,
-  DiscoveredRegion,
+  DiscoveredPageTemplate,
   EnrichedDiscoveryResult,
 } from '@wb/lib/discovery-client';
 import type { WorkbenchConfig } from '@wb/lib/preview-client';
@@ -75,6 +79,18 @@ import type { WorkbenchHotPayload } from '@wb/lib/workbench-preview-iframe-remou
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const DEFAULT_COMPONENT_VARIANT_ID = '__default__';
 
+/** Build cssUrls array from manifest and component CSS. */
+const mkCssUrls = (
+  m: PreviewManifest,
+  comps: DiscoveredComponent[],
+): string[] => [
+  ...(m.brandKitCssUrl ? [m.brandKitCssUrl] : []),
+  ...(m.globalCssUrl ? [m.globalCssUrl] : []),
+  ...comps
+    .filter((c) => c.cssEntryPath !== null)
+    .map((c) => toViteFsUrl(c.cssEntryPath!)),
+];
+
 interface ComponentPreviewVariant {
   id: string;
   label: string;
@@ -83,9 +99,36 @@ interface ComponentPreviewVariant {
   mock: PreviewManifestComponentMock | null;
 }
 
-function formatRegionLabel(region: string): string {
-  const spaced = region.replace(/_/g, ' ');
+function formatPageTemplateLabel(id: string): string {
+  const spaced = id.replace(/_/g, ' ');
   return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+}
+
+function formatComponentMetadataErrors(
+  component: PreviewManifestComponent,
+): string {
+  const errorsBySource = new Map<
+    string,
+    PreviewManifestComponent['metadataErrors']
+  >();
+  for (const error of component.metadataErrors) {
+    const errors = errorsBySource.get(error.sourcePath) ?? [];
+    errors.push(error);
+    errorsBySource.set(error.sourcePath, errors);
+  }
+  return [...errorsBySource.entries()]
+    .map(([sourcePath, errors]) => {
+      const diagnostics = errors
+        .map((error) => {
+          const location = error.line
+            ? `Line ${error.line}, Column ${error.column}: `
+            : '';
+          return `${location}${error.path} ${error.message}`;
+        })
+        .join('\n');
+      return `${sourcePath}\n${diagnostics}`;
+    })
+    .join('\n\n');
 }
 
 function toComponentRoute(
@@ -167,7 +210,7 @@ export function App() {
     templateSlug?: string;
     componentId?: string;
     mockIndex?: string;
-    regionId?: string;
+    pageTemplateId?: string;
   }>();
   const [discoveryResult, setDiscoveryResult] =
     useState<EnrichedDiscoveryResult | null>(null);
@@ -181,8 +224,18 @@ export function App() {
   >({});
   const [error, setError] = useState<string | null>(null);
   const [isFrameReady, setIsFrameReady] = useState(false);
+  const [settledPreviewRenderId, setSettledPreviewRenderId] = useState<
+    string | null
+  >(null);
   const [iframeKey, setIframeKey] = useState(0);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const setIframeElement = useCallback((iframe: HTMLIFrameElement | null) => {
+    if (iframeRef.current !== iframe) {
+      iframeRef.current = iframe;
+      setIsFrameReady(false);
+      setSettledPreviewRenderId(null);
+    }
+  }, []);
   const lastStructuralFingerprintRef = useRef<string | null>(null);
   const warningToastIdsRef = useRef<Set<string>>(new Set());
   const [sidebarDefaultOpen] = useState(getSidebarDefaultOpen);
@@ -202,7 +255,7 @@ export function App() {
   }, [params.mockIndex]);
   const selectedPageSlug = params.slug ?? null;
   const selectedTemplateSlug = params.templateSlug ?? null;
-  const selectedRegionId = params.regionId ?? null;
+  const selectedPageTemplateId = params.pageTemplateId ?? null;
   const isComponentRoute =
     location.pathname === '/component' ||
     location.pathname.startsWith('/component/');
@@ -211,8 +264,9 @@ export function App() {
   const isContentTemplateRoute =
     location.pathname === '/content-template' ||
     location.pathname.startsWith('/content-template/');
-  const isRegionRoute =
-    location.pathname === '/region' || location.pathname.startsWith('/region/');
+  const isPageTemplateRoute =
+    location.pathname === '/page-template' ||
+    location.pathname.startsWith('/page-template/');
 
   const loadWorkbenchData = useCallback(async (): Promise<{
     discovery: EnrichedDiscoveryResult;
@@ -286,13 +340,13 @@ export function App() {
     );
   }, [discoveryResult]);
 
-  const sortedRegions = useMemo<DiscoveredRegion[]>(() => {
+  const sortedPageTemplates = useMemo<DiscoveredPageTemplate[]>(() => {
     if (!discoveryResult) {
       return [];
     }
 
-    return [...discoveryResult.regions].sort((a, b) =>
-      a.region.localeCompare(b.region),
+    return [...discoveryResult.pageTemplates].sort((a, b) =>
+      a.id.localeCompare(b.id),
     );
   }, [discoveryResult]);
 
@@ -351,14 +405,16 @@ export function App() {
       );
     }, [isContentTemplateRoute, selectedTemplateSlug, sortedContentTemplates]);
 
-  const selectedRegion = useMemo<DiscoveredRegion | null>(() => {
-    if (!isRegionRoute || !selectedRegionId) {
+  const selectedPageTemplate = useMemo<DiscoveredPageTemplate | null>(() => {
+    if (!isPageTemplateRoute || !selectedPageTemplateId) {
       return null;
     }
     return (
-      sortedRegions.find((region) => region.region === selectedRegionId) ?? null
+      sortedPageTemplates.find(
+        (pageTemplate) => pageTemplate.id === selectedPageTemplateId,
+      ) ?? null
     );
-  }, [isRegionRoute, selectedRegionId, sortedRegions]);
+  }, [isPageTemplateRoute, selectedPageTemplateId, sortedPageTemplates]);
 
   const componentPreviewVariants = useMemo<ComponentPreviewVariant[]>(() => {
     if (!selectedComponent) {
@@ -401,6 +457,11 @@ export function App() {
     }, [componentPreviewVariants, selectedComponent, selectedMockIndex]);
 
   const selectedComponentMock = selectedComponentVariant?.mock ?? null;
+  const selectedComponentRenderId = selectedComponent
+    ? selectedComponentMock
+      ? `${selectedComponent.id}:${selectedComponentMock.id}`
+      : `${selectedComponent.id}:${JSON.stringify(selectedComponentEntityIds)}`
+    : null;
 
   useEffect(() => {
     let isMounted = true;
@@ -413,6 +474,7 @@ export function App() {
 
         setDiscoveryResult(discovery);
         setPreviewManifest(manifest);
+        setError(null);
         lastStructuralFingerprintRef.current =
           computeWorkbenchStructuralFingerprint(discovery, manifest);
       })
@@ -455,6 +517,7 @@ export function App() {
 
           setDiscoveryResult(discovery);
           setPreviewManifest(manifest);
+          setError(null);
           lastStructuralFingerprintRef.current = nextFingerprint;
 
           if (
@@ -532,14 +595,16 @@ export function App() {
       return;
     }
 
-    if (isRegionRoute) {
-      if (selectedRegion) {
+    if (isPageTemplateRoute) {
+      if (selectedPageTemplate) {
         return;
       }
 
-      const fallbackRegion = sortedRegions[0];
-      if (fallbackRegion) {
-        navigate(`/region/${fallbackRegion.region}`, { replace: true });
+      const fallbackPageTemplate = sortedPageTemplates[0];
+      if (fallbackPageTemplate) {
+        navigate(`/page-template/${fallbackPageTemplate.id}`, {
+          replace: true,
+        });
         return;
       }
 
@@ -568,16 +633,16 @@ export function App() {
     isComponentRoute,
     isContentTemplateRoute,
     isPageRoute,
-    isRegionRoute,
+    isPageTemplateRoute,
     navigate,
     previewManifest,
     selectedComponentId,
     selectedContentTemplate,
     selectedPage,
     sortedContentTemplates,
-    selectedRegion,
+    selectedPageTemplate,
     sortedPages,
-    sortedRegions,
+    sortedPageTemplates,
   ]);
 
   useEffect(() => {
@@ -652,7 +717,15 @@ export function App() {
       }
 
       if (event.data.type === 'preview:rendered') {
+        setSettledPreviewRenderId(event.data.payload.renderId);
         return;
+      }
+
+      if (
+        event.data.type === 'preview:error' &&
+        event.data.payload.renderId !== null
+      ) {
+        setSettledPreviewRenderId(event.data.payload.renderId);
       }
     };
 
@@ -719,6 +792,10 @@ export function App() {
       selectedComponent.js.url
     ) {
       const selectedComponentJsUrl = selectedComponent.js.url;
+      const renderId = selectedComponentRenderId;
+      if (!renderId) {
+        return;
+      }
       void (async () => {
         const defaultSpec: Spec = canvasTreeToSpec([
           {
@@ -735,11 +812,7 @@ export function App() {
         const entityFields = selectedComponent.dataDependencies.entityFields;
         const entityFieldGroups =
           selectedComponentMock === null
-            ? groupEntityFieldsByProp(
-                entityFields,
-                selectedComponent.props,
-                selectedComponentEntityIds,
-              )
+            ? groupEntityFieldsByProp(entityFields, selectedComponentEntityIds)
             : [];
         if (workbenchConfig?.siteUrl && entityFieldGroups.length > 0) {
           try {
@@ -807,9 +880,6 @@ export function App() {
             });
           }
         }
-        const selectedMockRenderId = selectedComponentMock
-          ? `${selectedComponent.id}:${selectedComponentMock.id}`
-          : `${selectedComponent.id}:${JSON.stringify(selectedComponentEntityIds)}`;
         const registrySources = selectedComponentMock
           ? (discoveryResult?.components
               .filter(
@@ -831,15 +901,11 @@ export function App() {
               },
             ];
         const cssUrls = selectedComponentMock
-          ? [
-              ...(previewManifest.globalCssUrl
-                ? [previewManifest.globalCssUrl]
-                : []),
-              ...(discoveryResult?.components ?? [])
-                .filter((component) => component.cssEntryPath !== null)
-                .map((component) => toViteFsUrl(component.cssEntryPath!)),
-            ]
+          ? mkCssUrls(previewManifest, discoveryResult?.components ?? [])
           : [
+              ...(previewManifest.brandKitCssUrl
+                ? [previewManifest.brandKitCssUrl]
+                : []),
               ...(previewManifest.globalCssUrl
                 ? [previewManifest.globalCssUrl]
                 : []),
@@ -850,7 +916,7 @@ export function App() {
           source: 'canvas-workbench-parent',
           type: 'preview:render',
           payload: {
-            renderId: selectedMockRenderId,
+            renderId,
             renderType: 'component',
             spec: specToRender,
             registrySources,
@@ -866,92 +932,56 @@ export function App() {
     if (isPageRoute && selectedPage && discoveryResult) {
       void (async () => {
         try {
-          // Fetch the page spec and (when a layout component is present) all
-          // discovered region specs in parallel so we can render the page
-          // wrapped in its global chrome.
-          const layoutPath = discoveryResult.layoutPath;
-          const discoveredRegions = layoutPath ? discoveryResult.regions : [];
-
-          const [pageSpec, ...regionSpecs] = await Promise.all([
-            fetchPreviewPageSpec(
-              selectedPage.slug,
-              pageSpecAbortController.signal,
-            ),
-            ...discoveredRegions.map((region) =>
-              fetchPreviewRegionSpec(
-                region.region,
-                pageSpecAbortController.signal,
-              ),
-            ),
-          ]);
+          const pageResponse = await fetchPreviewPageSpec(
+            selectedPage.slug,
+            pageSpecAbortController.signal,
+          );
           if (pageSpecAbortController.signal.aborted) {
             return;
           }
 
-          const layoutPayload =
-            layoutPath && discoveredRegions.length > 0
-              ? {
-                  jsEntryUrl: toViteFsUrl(layoutPath),
-                  regions: Object.fromEntries(
-                    discoveredRegions
-                      .map((region, index) => ({
-                        id: region.region,
-                        regionSpec: regionSpecs[index],
-                      }))
-                      // Don't include disabled regions in page preview.
-                      .filter(({ regionSpec }) => regionSpec.status !== false)
-                      .map(({ id, regionSpec }) => [id, regionSpec.spec]),
-                  ),
-                }
-              : layoutPath
-                ? { jsEntryUrl: toViteFsUrl(layoutPath), regions: {} }
-                : undefined;
+          const pageTemplate = selectPageTemplate(
+            discoveryResult.pageTemplates,
+            pageResponse.pageVariant,
+          );
+          const pageTemplateResponse = pageTemplate
+            ? await fetchPreviewPageTemplateSpec(
+                pageTemplate.id,
+                pageSpecAbortController.signal,
+              )
+            : null;
+          if (pageSpecAbortController.signal.aborted) {
+            return;
+          }
 
-          let resolvedPageSpec = pageSpec;
-          let resolvedRegionSpecs = regionSpecs;
+          let resolvedPageSpec = pageResponse.spec;
+          let resolvedPageTemplateSpec = pageTemplateResponse?.spec ?? null;
           if (workbenchConfig?.siteUrl) {
-            const [pageModel, ...regionModels] = await Promise.all([
+            const [pageModel, pageTemplateModel] = await Promise.all([
               fetchResolvedContentEntityReferenceFieldsForSpec(
-                pageSpec,
+                pageResponse.spec,
                 previewManifest.components,
                 pageSpecAbortController.signal,
               ),
-              ...regionSpecs.map((regionSpec) =>
-                fetchResolvedContentEntityReferenceFieldsForSpec(
-                  regionSpec.spec,
-                  previewManifest.components,
-                  pageSpecAbortController.signal,
-                ),
-              ),
+              pageTemplateResponse
+                ? fetchResolvedContentEntityReferenceFieldsForSpec(
+                    pageTemplateResponse.spec,
+                    previewManifest.components,
+                    pageSpecAbortController.signal,
+                  )
+                : Promise.resolve(null),
             ]);
             if (pageSpecAbortController.signal.aborted) {
               return;
             }
-            resolvedPageSpec = applyResolved(pageSpec, pageModel);
-            resolvedRegionSpecs = regionSpecs.map((regionSpec, index) => ({
-              ...regionSpec,
-              spec: applyResolved(regionSpec.spec, regionModels[index] ?? {}),
-            }));
+            resolvedPageSpec = applyResolved(pageResponse.spec, pageModel);
+            if (pageTemplateResponse && pageTemplateModel) {
+              resolvedPageTemplateSpec = applyResolved(
+                pageTemplateResponse.spec,
+                pageTemplateModel,
+              );
+            }
           }
-
-          const resolvedLayoutPayload = layoutPayload
-            ? {
-                ...layoutPayload,
-                regions: Object.fromEntries(
-                  Object.keys(layoutPayload.regions).map((regionId) => {
-                    const regionIndex = discoveredRegions.findIndex(
-                      (region) => region.region === regionId,
-                    );
-                    return [
-                      regionId,
-                      regionIndex === -1
-                        ? layoutPayload.regions[regionId]
-                        : resolvedRegionSpecs[regionIndex].spec,
-                    ];
-                  }),
-                ),
-              }
-            : undefined;
 
           const pageMessage: PreviewRenderRequest = {
             source: 'canvas-workbench-parent',
@@ -961,8 +991,8 @@ export function App() {
               renderType: 'page',
               spec: resolvedPageSpec,
               shellPath,
-              ...(resolvedLayoutPayload
-                ? { layout: resolvedLayoutPayload }
+              ...(resolvedPageTemplateSpec
+                ? { pageTemplate: { spec: resolvedPageTemplateSpec } }
                 : {}),
               registrySources: discoveryResult.components
                 .filter(
@@ -980,14 +1010,7 @@ export function App() {
                     jsEntryUrl: toViteFsUrl(component.jsEntryPath),
                   }),
                 ),
-              cssUrls: [
-                ...(previewManifest.globalCssUrl
-                  ? [previewManifest.globalCssUrl]
-                  : []),
-                ...discoveryResult.components
-                  .filter((component) => component.cssEntryPath !== null)
-                  .map((component) => toViteFsUrl(component.cssEntryPath!)),
-              ],
+              cssUrls: mkCssUrls(previewManifest, discoveryResult.components),
             },
           };
           frameWindow.postMessage(pageMessage, window.location.origin);
@@ -1010,46 +1033,32 @@ export function App() {
     if (isContentTemplateRoute && selectedContentTemplate && discoveryResult) {
       void (async () => {
         try {
-          const layoutPath = discoveryResult.layoutPath;
-          // Global regions wrap the preview only for the "full" view mode
-          // template; other templates render their body without page chrome.
-          const includeGlobalRegions =
-            selectedContentTemplate.viewMode === 'full';
-          const discoveredRegions =
-            layoutPath && includeGlobalRegions ? discoveryResult.regions : [];
-
-          const [templateResponse, ...regionSpecs] = await Promise.all([
-            fetchPreviewContentTemplateSpec(
-              selectedContentTemplate.slug,
-              pageSpecAbortController.signal,
-            ),
-            ...discoveredRegions.map((region) =>
-              fetchPreviewRegionSpec(
-                region.region,
-                pageSpecAbortController.signal,
-              ),
-            ),
-          ]);
+          const templateResponse = await fetchPreviewContentTemplateSpec(
+            selectedContentTemplate.slug,
+            pageSpecAbortController.signal,
+          );
           if (pageSpecAbortController.signal.aborted) {
             return;
           }
 
-          let layoutPayload =
-            layoutPath && includeGlobalRegions
-              ? {
-                  jsEntryUrl: toViteFsUrl(layoutPath),
-                  regions: Object.fromEntries(
-                    discoveredRegions
-                      .map((region, index) => ({
-                        id: region.region,
-                        regionSpec: regionSpecs[index],
-                      }))
-                      // Don't include disabled regions in content template preview.
-                      .filter(({ regionSpec }) => regionSpec.status !== false)
-                      .map(({ id, regionSpec }) => [id, regionSpec.spec]),
-                  ),
-                }
-              : undefined;
+          // Only full view modes represent a complete route and therefore
+          // render inside the selected page template.
+          const pageTemplate =
+            selectedContentTemplate.viewMode === 'full'
+              ? selectPageTemplate(
+                  discoveryResult.pageTemplates,
+                  templateResponse.metadata.pageVariant,
+                )
+              : null;
+          const pageTemplateResponse = pageTemplate
+            ? await fetchPreviewPageTemplateSpec(
+                pageTemplate.id,
+                pageSpecAbortController.signal,
+              )
+            : null;
+          if (pageSpecAbortController.signal.aborted) {
+            return;
+          }
 
           // Resolve all prop sources (entity-field expressions,
           // host-entity-url, adapters, static, etc.) server-side. Drupal
@@ -1057,6 +1066,7 @@ export function App() {
           // Skipped if no entity is selected — the preview will then show
           // plain literal props only.
           let resolvedSpec: Spec = templateResponse.spec;
+          let resolvedPageTemplateSpec = pageTemplateResponse?.spec ?? null;
           const siteUrl = workbenchConfig?.siteUrl ?? null;
           if (siteUrl && selectedEntityId) {
             try {
@@ -1163,42 +1173,20 @@ export function App() {
             }
           }
 
-          if (workbenchConfig?.siteUrl && layoutPayload) {
-            const currentLayoutPayload = layoutPayload;
-            const regionModels = await Promise.all(
-              regionSpecs.map((regionSpec) =>
-                fetchResolvedContentEntityReferenceFieldsForSpec(
-                  regionSpec.spec,
-                  previewManifest.components,
-                  pageSpecAbortController.signal,
-                ),
-              ),
-            );
+          if (workbenchConfig?.siteUrl && pageTemplateResponse) {
+            const pageTemplateModel =
+              await fetchResolvedContentEntityReferenceFieldsForSpec(
+                pageTemplateResponse.spec,
+                previewManifest.components,
+                pageSpecAbortController.signal,
+              );
             if (pageSpecAbortController.signal.aborted) {
               return;
             }
-            const resolvedRegionSpecs = regionSpecs.map(
-              (regionSpec, index) => ({
-                ...regionSpec,
-                spec: applyResolved(regionSpec.spec, regionModels[index] ?? {}),
-              }),
+            resolvedPageTemplateSpec = applyResolved(
+              pageTemplateResponse.spec,
+              pageTemplateModel,
             );
-            layoutPayload = {
-              ...currentLayoutPayload,
-              regions: Object.fromEntries(
-                Object.keys(currentLayoutPayload.regions).map((regionId) => {
-                  const regionIndex = discoveredRegions.findIndex(
-                    (region) => region.region === regionId,
-                  );
-                  return [
-                    regionId,
-                    regionIndex === -1
-                      ? currentLayoutPayload.regions[regionId]
-                      : resolvedRegionSpecs[regionIndex].spec,
-                  ];
-                }),
-              ),
-            };
           }
 
           const specWithState: Spec = resolvedSpec;
@@ -1212,7 +1200,9 @@ export function App() {
               renderType: 'page',
               spec: specWithState,
               shellPath,
-              ...(layoutPayload ? { layout: layoutPayload } : {}),
+              ...(resolvedPageTemplateSpec
+                ? { pageTemplate: { spec: resolvedPageTemplateSpec } }
+                : {}),
               registrySources: discoveryResult.components
                 .filter(
                   (
@@ -1229,14 +1219,7 @@ export function App() {
                     jsEntryUrl: toViteFsUrl(component.jsEntryPath),
                   }),
                 ),
-              cssUrls: [
-                ...(previewManifest.globalCssUrl
-                  ? [previewManifest.globalCssUrl]
-                  : []),
-                ...discoveryResult.components
-                  .filter((component) => component.cssEntryPath !== null)
-                  .map((component) => toViteFsUrl(component.cssEntryPath!)),
-              ],
+              cssUrls: mkCssUrls(previewManifest, discoveryResult.components),
             },
           };
           frameWindow.postMessage(templateMessage, window.location.origin);
@@ -1256,39 +1239,39 @@ export function App() {
       })();
     }
 
-    if (isRegionRoute && selectedRegion && discoveryResult) {
+    if (isPageTemplateRoute && selectedPageTemplate && discoveryResult) {
       void (async () => {
         try {
-          const regionResponse = await fetchPreviewRegionSpec(
-            selectedRegion.region,
+          const pageTemplateResponse = await fetchPreviewPageTemplateSpec(
+            selectedPageTemplate.id,
             pageSpecAbortController.signal,
           );
           if (pageSpecAbortController.signal.aborted) {
             return;
           }
-          let resolvedRegionSpec = regionResponse.spec;
+          let resolvedPageTemplateSpec = pageTemplateResponse.spec;
           if (workbenchConfig?.siteUrl) {
             const resolvedModel =
               await fetchResolvedContentEntityReferenceFieldsForSpec(
-                regionResponse.spec,
+                pageTemplateResponse.spec,
                 previewManifest.components,
                 pageSpecAbortController.signal,
               );
             if (pageSpecAbortController.signal.aborted) {
               return;
             }
-            resolvedRegionSpec = applyResolved(
-              regionResponse.spec,
+            resolvedPageTemplateSpec = applyResolved(
+              pageTemplateResponse.spec,
               resolvedModel,
             );
           }
-          const regionMessage: PreviewRenderRequest = {
+          const pageTemplateMessage: PreviewRenderRequest = {
             source: 'canvas-workbench-parent',
             type: 'preview:render',
             payload: {
-              renderId: selectedRegion.region,
-              renderType: 'region',
-              spec: resolvedRegionSpec,
+              renderId: selectedPageTemplate.id,
+              renderType: 'page-template',
+              spec: resolvedPageTemplateSpec,
               shellPath,
               registrySources: discoveryResult.components
                 .filter(
@@ -1302,28 +1285,21 @@ export function App() {
                   name: component.name,
                   jsEntryUrl: toViteFsUrl(component.jsEntryPath),
                 })),
-              cssUrls: [
-                ...(previewManifest.globalCssUrl
-                  ? [previewManifest.globalCssUrl]
-                  : []),
-                ...discoveryResult.components
-                  .filter((component) => component.cssEntryPath !== null)
-                  .map((component) => toViteFsUrl(component.cssEntryPath!)),
-              ],
+              cssUrls: mkCssUrls(previewManifest, discoveryResult.components),
             },
           };
-          frameWindow.postMessage(regionMessage, window.location.origin);
-        } catch (regionLoadError: unknown) {
+          frameWindow.postMessage(pageTemplateMessage, window.location.origin);
+        } catch (pageTemplateLoadError: unknown) {
           if (
-            regionLoadError instanceof DOMException &&
-            regionLoadError.name === 'AbortError'
+            pageTemplateLoadError instanceof DOMException &&
+            pageTemplateLoadError.name === 'AbortError'
           ) {
             return;
           }
           setError(
-            regionLoadError instanceof Error
-              ? regionLoadError.message
-              : 'Unknown region loading error.',
+            pageTemplateLoadError instanceof Error
+              ? pageTemplateLoadError.message
+              : 'Unknown page template loading error.',
           );
         }
       })();
@@ -1337,22 +1313,28 @@ export function App() {
     isContentTemplateRoute,
     isFrameReady,
     isPageRoute,
-    isRegionRoute,
+    isPageTemplateRoute,
     location.pathname,
     location.search,
     previewManifest,
     selectedComponent,
     selectedComponentMock,
     selectedComponentEntityIds,
+    selectedComponentRenderId,
     selectedContentTemplate,
     selectedEntityId,
     selectedPage,
-    selectedRegion,
+    selectedPageTemplate,
     workbenchConfig?.siteUrl,
   ]);
 
   if (error) {
-    return <div>Workbench failed: {error}</div>;
+    return (
+      <div>
+        <strong>Workbench failed</strong>
+        <pre>{error}</pre>
+      </div>
+    );
   }
 
   if (!discoveryResult || !previewManifest) {
@@ -1363,8 +1345,8 @@ export function App() {
     ? 'page'
     : selectedContentTemplate
       ? 'content-template'
-      : selectedRegion
-        ? 'region'
+      : selectedPageTemplate
+        ? 'page-template'
         : selectedComponent
           ? 'component'
           : null;
@@ -1372,14 +1354,22 @@ export function App() {
     selectedPage?.name ??
     selectedContentTemplate?.label ??
     selectedContentTemplate?.name ??
-    (selectedRegion ? formatRegionLabel(selectedRegion.region) : null) ??
+    (selectedPageTemplate
+      ? (selectedPageTemplate.label ??
+        formatPageTemplateLabel(selectedPageTemplate.id))
+      : null) ??
     selectedComponent?.label ??
     'No selection';
   const selectedPath =
     selectedPage?.relativePath ??
     selectedContentTemplate?.relativePath ??
-    selectedRegion?.relativePath ??
+    selectedPageTemplate?.relativePath ??
     selectedComponent?.projectRelativeDirectory;
+  const shouldHidePreviewFrame = shouldHideComponentPreviewFrame(
+    selectedKind === 'component' ? selectedComponent : null,
+    selectedComponentRenderId,
+    settledPreviewRenderId,
+  );
 
   return (
     <SidebarProvider defaultOpen={sidebarDefaultOpen}>
@@ -1431,20 +1421,23 @@ export function App() {
             </SidebarGroup>
           ) : null}
 
-          {sortedRegions.length > 0 ? (
+          {sortedPageTemplates.length > 0 ? (
             <SidebarGroup>
-              <SidebarGroupLabel>Global regions</SidebarGroupLabel>
+              <SidebarGroupLabel>Page templates</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {sortedRegions.map((region) => (
-                    <SidebarMenuItem key={region.region}>
+                  {sortedPageTemplates.map((pageTemplate) => (
+                    <SidebarMenuItem key={pageTemplate.id}>
                       <SidebarMenuButton
-                        isActive={region.region === selectedRegion?.region}
+                        isActive={pageTemplate.id === selectedPageTemplate?.id}
                         onClick={() => {
-                          navigate(`/region/${region.region}`);
+                          navigate(`/page-template/${pageTemplate.id}`);
                         }}
                       >
-                        <span>{formatRegionLabel(region.region)}</span>
+                        <span>
+                          {pageTemplate.label ??
+                            formatPageTemplateLabel(pageTemplate.id)}
+                        </span>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
@@ -1466,8 +1459,18 @@ export function App() {
                           navigate(toComponentRoute(component.id, null));
                         }}
                       >
-                        <span>{component.label}</span>
-                        {!component.previewable ? (
+                        <span className="min-w-0 flex-1 truncate">
+                          {component.label}
+                        </span>
+                        {component.metadataErrors.length > 0 ? (
+                          <CircleAlertIcon
+                            className="ml-auto text-destructive"
+                            role="img"
+                            aria-label="Invalid metadata"
+                          >
+                            <title>Invalid metadata</title>
+                          </CircleAlertIcon>
+                        ) : !component.previewable ? (
                           <Badge variant="destructive">No preview</Badge>
                         ) : null}
                       </SidebarMenuButton>
@@ -1572,21 +1575,35 @@ export function App() {
             </div>
           ) : selectedKind === 'component' &&
             selectedComponent &&
-            !selectedComponent.previewable ? (
+            !selectedComponent.previewable &&
+            selectedComponent.metadataErrors.length === 0 ? (
             <div className="flex flex-1 rounded-none border p-4">
               This component is not previewable in strict mode. Reason:{' '}
               {selectedComponent.ineligibilityReason}
             </div>
           ) : (
-            <div className="min-h-0 flex-1 rounded-none border">
+            <div className="relative min-h-0 flex-1 overflow-hidden rounded-none border">
               <iframe
                 key={iframeKey}
-                ref={iframeRef}
+                ref={setIframeElement}
                 title="Canvas component preview"
                 src={WORKBENCH_PREVIEW_HTML_PATH}
-                className="h-full w-full"
+                className={`h-full w-full ${
+                  shouldHidePreviewFrame ? 'invisible' : ''
+                }`}
+                aria-hidden={shouldHidePreviewFrame}
                 sandbox="allow-scripts allow-same-origin allow-popups"
               />
+              {selectedKind === 'component' &&
+              selectedComponent &&
+              selectedComponent.metadataErrors.length > 0 ? (
+                <div className="absolute inset-0 z-10 flex items-start justify-center overflow-auto bg-background p-4">
+                  <PreviewErrorAlert
+                    title="Component metadata is invalid."
+                    message={formatComponentMetadataErrors(selectedComponent)}
+                  />
+                </div>
+              ) : null}
             </div>
           )}
         </section>

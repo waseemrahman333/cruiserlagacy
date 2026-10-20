@@ -28,6 +28,7 @@ use Drupal\canvas\TypedData\BetterEntityDataDefinition;
 use Drupal\canvas_test_code_components\Hook\IslandCastaway;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\Crypt;
+use Drupal\Component\Utility\DeprecationHelper;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\content_translation\BundleTranslationSettingsInterface;
 use Drupal\Core\Access\AccessResultForbidden;
@@ -47,6 +48,7 @@ use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\File\FileUrlGeneratorInterface;
 use Drupal\Core\GeneratedUrl;
+use Drupal\Core\Render\AttachmentsInterface;
 use Drupal\Core\Render\Component\Exception\InvalidComponentException;
 use Drupal\Core\StreamWrapper\StreamWrapperInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
@@ -54,6 +56,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\file\Entity\File;
 use Drupal\file\FileInterface;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\language\Entity\ConfigurableLanguage;
 use Drupal\link\LinkItemInterface;
 use Drupal\link\LinkTitleVisibility;
@@ -65,6 +68,7 @@ use Drupal\Tests\canvas\Kernel\BrokenPluginManagerInterface;
 use Drupal\Tests\canvas\Kernel\Traits\CacheBustingTrait;
 use Drupal\Tests\canvas\Traits\ComponentTreeItemInstantiatorTrait;
 use Drupal\Tests\canvas\Traits\CreateTestJsComponentTrait;
+use Drupal\text\TextProcessed;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Attributes\Group;
@@ -590,6 +594,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
         '@/lib/drupal-utils' => \sprintf('%s/packages/astro-hydration/dist/drupal-utils.js?2.1.0-alpha3', $module_path),
         'swr' => \sprintf('%s/packages/astro-hydration/dist/swr.js?2.1.0-alpha3', $module_path),
         'drupal-canvas' => \sprintf('%s/packages/astro-hydration/dist/drupal-canvas.js?2.1.0-alpha3', $module_path),
+        'drupal-canvas/react' => \sprintf('%s/packages/astro-hydration/dist/drupal-canvas-react.js?2.1.0-alpha3', $module_path),
         '@tailwindcss/typography' => \sprintf('%s/packages/astro-hydration/dist/tailwindcss-typography.js?2.1.0-alpha3', $module_path),
       ],
       ImportMapResponseAttachmentsProcessor::SCOPED_IMPORTS => [],
@@ -968,6 +973,51 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
     }
   }
 
+  /**
+   * A prop's `#attached` assets reach the rendered code component.
+   *
+   * @see \Drupal\filter_test\Plugin\Filter\FilterTestAssets
+   * @legacy-covers ::renderComponent
+   */
+  public function testRenderComponentKeepsPropAttachments(): void {
+    // A text format whose filter attaches an asset library but leaves the text
+    // unchanged; it stands in for a filter that needs assets to render.
+    $this->enableModules(['filter_test']);
+    FilterFormat::create([
+      'format' => 'assets',
+      'name' => 'Assets',
+      'filters' => ['filter_test_assets' => ['status' => TRUE]],
+    ])->save();
+    $this->generateComponentConfig();
+
+    $component = Component::load('js.canvas_test_code_components_interactive');
+    self::assertInstanceOf(ComponentInterface::class, $component);
+    $source = $component->getComponentSource();
+    self::assertInstanceOf(JsComponent::class, $source);
+
+    // The formatted-text value runs through the assets format, so it carries
+    // the filter's library.
+    $name = StaticPropSource::parse([
+      'sourceType' => 'static:field_item:text_long',
+      'expression' => 'ℹ︎text_long␟processed',
+      'value' => ['value' => '<p>Hello, world</p>', 'format' => 'assets'],
+      'sourceTypeSettings' => ['instance' => ['allowed_formats' => ['assets']]],
+    ])->evaluate(NULL, is_required: TRUE);
+    $inputs = [JsComponent::EXPLICIT_INPUT_NAME => ['name' => $name]];
+
+    $island = $source->renderComponent($inputs, $source->getSlotDefinitions(), 'test-uuid');
+    // Core >= 11.4.4 exposes a processed-text property's assets, so the filter's
+    // library reaches the component; older core cannot, so it is absent.
+    // @see \Drupal\text\TextProcessed::getAttachments()
+    // @todo Unconditionally execute the if branch and delete the else branch once Canvas depends on Drupal 11.4.4
+    if (is_a(TextProcessed::class, AttachmentsInterface::class, TRUE)) {
+      self::assertContains('filter/caption', $island['#attached']['library']);
+    }
+    else {
+      self::assertNotContains('filter/caption', $island['#attached']['library'] ?? []);
+    }
+  }
+
   public function testRenderJsComponentPreloadsGlobalFonts(): void {
     $this->generateComponentConfig();
 
@@ -1147,12 +1197,13 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       self::assertSame(Cache::PERMANENT, $g->getCacheMaxAge());
     };
 
-    // Assert that the two example videos Canvas ships with are rewritten to include
+    // Assert that the example assets Canvas ships with are rewritten to include
     // the relative path on the current site.
     $module_path = \Drupal::service(ModuleExtensionList::class)->getPath('canvas');
-    foreach ([JsComponent::EXAMPLE_VIDEO_HORIZONTAL, JsComponent::EXAMPLE_VIDEO_VERTICAL] as $shipped_video_file) {
-      $generated_url = $source->rewriteExampleUrl($shipped_video_file);
-      self::assertSame(\base_path() . $module_path . $shipped_video_file, $generated_url->getGeneratedUrl());
+    self::assertCount(3, JsComponent::EXAMPLE_URL_ALLOW_LIST);
+    foreach (JsComponent::EXAMPLE_URL_ALLOW_LIST as $shipped_example_file) {
+      $generated_url = $source->rewriteExampleUrl($shipped_example_file);
+      self::assertSame(\base_path() . $module_path . $shipped_example_file, $generated_url->getGeneratedUrl());
       $assert_cacheability($generated_url);
     }
 
@@ -1164,18 +1215,21 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
     // Assert that any other `/ui/assets/…` URL is disallowed, not even one to
     // the containing directory.
     // Rationale: avoid security concerns by not relying on file_exists(),
-    // potential bypasses of that, and instead only have 2 allowed examples.
-    try {
-      self::assertSame('/ui/assets/videos', dirname(JsComponent::EXAMPLE_VIDEO_VERTICAL));
-      $source->rewriteExampleUrl('/ui/assets/videos');
-      $this->fail();
-    }
-    catch (\InvalidArgumentException $e) {
-      self::assertSame('Default images for Javascript Components must be a fully-qualified URL with both scheme and host.', $e->getMessage());
+    // potential bypasses of that, and instead only allow the listed examples.
+    self::assertSame('/ui/assets/videos', dirname(JsComponent::EXAMPLE_VIDEO_VERTICAL));
+    self::assertSame('/ui/assets/documents', dirname(JsComponent::EXAMPLE_DOCUMENT));
+    foreach (['/ui/assets/videos', '/ui/assets/documents'] as $example_directory) {
+      try {
+        $source->rewriteExampleUrl($example_directory);
+        $this->fail();
+      }
+      catch (\InvalidArgumentException $e) {
+        self::assertSame('Default images for Javascript Components must be a fully-qualified URL with both scheme and host.', $e->getMessage());
+      }
     }
 
-    // Assert that neither a prefix nor a suffix is tolerated: only these exact
-    // 2 strings are allowed.
+    // Assert that neither a prefix nor a suffix is tolerated: only the exact
+    // allow-listed strings are allowed.
     // Rationale: configuration management DX is degraded if the example is
     // environment-dependent (Drupal served from root vs subdir, Canvas module
     // installation location).
@@ -1764,9 +1818,14 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
    * @see https://git.drupalcode.org/project/canvas/-/merge_requests/1332#note_1424036
    */
   private static function expectImagePropsInExampleOrderOn113(int $width, int $height, string $alt): array {
-    return version_compare(\Drupal::VERSION, '11.4', '>=')
-      ? ['alt' => $alt, 'width' => $width, 'height' => $height]
-      : ['width' => $width, 'height' => $height, 'alt' => $alt];
+    // DeprecationHelper treats `11.4-dev` and `11.4.x-dev` as `11.4.0`, while
+    // plain version_compare() sorts them below `11.4`.
+    return DeprecationHelper::backwardsCompatibleCall(
+      \Drupal::VERSION,
+      '11.4',
+      fn () => ['alt' => $alt, 'width' => $width, 'height' => $height],
+      fn () => ['width' => $width, 'height' => $height, 'alt' => $alt],
+    );
   }
 
   /**
@@ -1777,7 +1836,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_captioned_video' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Captioned video"][props*="bird_vertical"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1869,7 +1928,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_interactive' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Interactive"][props*="name"][props*="Count"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => [
@@ -1901,7 +1960,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_using_drupalsettings_get_site_data' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Using drupalSettings getSiteData"][props="{}"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1911,7 +1970,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_using_drupalsettings_get_theme_assets' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Using drupalSettings getThemeAssets"][props="{}"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1921,7 +1980,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_using_get_page_data' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Using drupalSettings getPageData"][props="{}"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1931,7 +1990,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_using_imports' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="using imports"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1941,7 +2000,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_vanilla_image' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="Vanilla Image"][props*="placehold.co"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -1992,7 +2051,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_array_enums' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With array enums"][props*="sizes"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => [
@@ -2034,7 +2093,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_array_props' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With array props"][props*="tags"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -2171,7 +2230,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_enums' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With enums"][props*="red"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => [
@@ -2236,7 +2295,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_link_prop' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="My Code Component Link"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -2285,7 +2344,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_no_props' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With no props"][props="{}"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -2295,7 +2354,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_props' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With props"][props*="name"][props*="Canvas"][props*="age"][props*="40"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => ['slots' => []],
@@ -2334,7 +2393,7 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       'js.canvas_test_code_components_with_slots' => [
         'expected_output_selectors' => [
           'canvas-island[opts*="With slot"][props*="name"][props*="Name"]',
-          'script[blocking="render"][src*="/packages/astro-hydration/dist/client.js"]',
+          'script[blocking="render"][src*="/packages/astro-hydration/dist/canvas-client.js"]',
         ],
         'source' => 'Code component',
         'metadata' => [
@@ -2906,7 +2965,10 @@ final class JsComponentTest extends JsonSchemaPropsComponentSourceBaseTestBase {
       [
         'image' => [
           'src' => '::SITE_DIR_BASE_URL::/files/image-test.png?alternateWidths=::SITE_DIR_BASE_URL::/files/styles/canvas_parametrized_width--%7Bwidth%7D/public/image-test.png.avif%3Fitok%3DujSynxBM',
-          'alt' => '',
+          // No `alt`: this image has none. The `image` shape requires only
+          // `src`, so it is omitted rather than invented as an empty string.
+          // @see json-schema-definitions://canvas.module/image
+          // @see \Drupal\canvas\PropExpressions\StructuredData\Evaluator::omitEmptyObjectProps()
           'width' => 40,
           'height' => 20,
         ],

@@ -150,6 +150,7 @@ final class BrandKit extends ConfigEntityBase implements CanvasAssetInterface {
           'name' => $c->getName(),
           'cssVariable' => $c->getCssVariable(),
           'value' => $c->getValue(),
+          'displayFormat' => $c->getDisplayFormat(),
           'weight' => $c->getWeight(),
         ],
         $color_entities,
@@ -515,6 +516,9 @@ final class BrandKit extends ConfigEntityBase implements CanvasAssetInterface {
       ),
       \sprintf('  font-weight: %s;', $font['weight']),
       \sprintf('  font-style: %s;', $font['style']),
+      // Avoid invisible text while the web font loads by showing a
+      // fallback font.
+      '  font-display: swap;',
       '}',
     ];
 
@@ -676,6 +680,7 @@ final class BrandKit extends ConfigEntityBase implements CanvasAssetInterface {
       'name' => (string) $color['name'],
       'cssVariable' => (string) $color['cssVariable'],
       'value' => $color['value'],
+      'displayFormat' => $color['displayFormat'] ?? NULL,
       'weight' => (int) ($color['weight'] ?? 0),
     ], $colors));
   }

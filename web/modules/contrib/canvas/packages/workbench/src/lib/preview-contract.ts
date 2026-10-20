@@ -4,8 +4,17 @@ import type { Spec } from '@json-render/core';
 import type { DiscoveryResult, DiscoveryWarning } from './discovery-client';
 
 export type PreviewIneligibilityReason =
+  | 'invalid_metadata'
   | 'missing_js_entry'
   | 'unsupported_js_extension';
+
+export interface PreviewComponentMetadataError {
+  sourcePath: string;
+  path: string;
+  line?: number;
+  column?: number;
+  message: string;
+}
 
 export interface PreviewManifestComponent {
   id: string;
@@ -29,6 +38,7 @@ export interface PreviewManifestComponent {
   dataDependencies: {
     entityFields?: Record<string, string[]>;
   };
+  metadataErrors: PreviewComponentMetadataError[];
   mocks: PreviewManifestComponentMock[];
 }
 
@@ -54,6 +64,7 @@ export interface PreviewManifest {
   components: PreviewManifestComponent[];
   warnings: PreviewWarning[];
   globalCssUrl: string | null;
+  brandKitCssUrl: string | null;
 }
 
 /** Parent tells the preview iframe to refetch discovery/manifest without remounting (e.g. after page JSON save). */
@@ -62,11 +73,9 @@ export interface WorkbenchDiscoveryRefresh {
   type: 'workbench:discovery-refresh';
 }
 
-export interface PreviewRenderLayout {
-  /** Vite `/@fs/` URL for the layout component module (default export). */
-  jsEntryUrl: string;
-  /** Spec for each region rendered into the layout, keyed by region machine name. */
-  regions: Record<string, Spec>;
+export interface PreviewRenderPageTemplate {
+  /** Page template spec whose marker.page_content renders the page spec. */
+  spec: Spec;
 }
 
 export interface PreviewRenderRequest {
@@ -74,19 +83,15 @@ export interface PreviewRenderRequest {
   type: 'preview:render';
   payload: {
     renderId: string;
-    renderType: 'component' | 'page' | 'region';
+    renderType: 'component' | 'page' | 'page-template';
     spec: Spec;
     registrySources: Array<{
       name: string;
       jsEntryUrl: string;
     }>;
     cssUrls: string[];
-    /**
-     * Optional layout payload. When present and `renderType === 'page'`, the
-     * page spec is rendered as `children` inside the layout component, with
-     * region specs exposed via `<RegionsProvider>` from `drupal-canvas`.
-     */
-    layout?: PreviewRenderLayout;
+    /** Optional page template rendered around a page at marker.page_content. */
+    pageTemplate?: PreviewRenderPageTemplate;
     /** Workbench shell path (pathname + search) so the preview iframe MemoryRouter stays aligned. */
     shellPath?: string;
   };
@@ -101,7 +106,7 @@ export interface PreviewFrameRendered {
   source: 'canvas-workbench-frame';
   type: 'preview:rendered';
   payload: {
-    type: 'component' | 'page' | 'region';
+    type: 'component' | 'page' | 'page-template';
     renderId: string;
   };
 }
@@ -160,6 +165,7 @@ export function toPreviewManifestComponent(component: {
       exampleProps: {},
       props: {},
       dataDependencies: {},
+      metadataErrors: [],
       mocks: [],
     };
   }
@@ -185,6 +191,7 @@ export function toPreviewManifestComponent(component: {
       exampleProps: {},
       props: {},
       dataDependencies: {},
+      metadataErrors: [],
       mocks: [],
     };
   }
@@ -209,7 +216,24 @@ export function toPreviewManifestComponent(component: {
     exampleProps: {},
     props: {},
     dataDependencies: {},
+    metadataErrors: [],
     mocks: [],
+  };
+}
+
+export function markPreviewManifestComponentMetadataInvalid(
+  component: PreviewManifestComponent,
+  sourcePath: string,
+  diagnostics: Array<Omit<PreviewComponentMetadataError, 'sourcePath'>>,
+): PreviewManifestComponent {
+  return {
+    ...component,
+    previewable: false,
+    ineligibilityReason: 'invalid_metadata',
+    metadataErrors: diagnostics.map((diagnostic) => ({
+      sourcePath,
+      ...diagnostic,
+    })),
   };
 }
 
@@ -221,6 +245,7 @@ export function buildPreviewManifest(
     components: discoveryResult.components.map(toPreviewManifestComponent),
     warnings: discoveryResult.warnings,
     globalCssUrl: null,
+    brandKitCssUrl: null,
   };
 }
 
@@ -262,7 +287,7 @@ export function isPreviewRenderRequest(
     spec,
     registrySources,
     cssUrls,
-    layout,
+    pageTemplate,
     shellPath,
   } = value.payload;
   if (
@@ -271,29 +296,21 @@ export function isPreviewRenderRequest(
   ) {
     return false;
   }
-  if (layout !== undefined) {
+  if (pageTemplate !== undefined) {
     if (
-      !isRecord(layout) ||
-      typeof layout.jsEntryUrl !== 'string' ||
-      !isRecord(layout.regions)
+      !isRecord(pageTemplate) ||
+      !isRecord(pageTemplate.spec) ||
+      typeof pageTemplate.spec.root !== 'string' ||
+      !isRecord(pageTemplate.spec.elements)
     ) {
       return false;
-    }
-    for (const regionSpec of Object.values(layout.regions)) {
-      if (
-        !isRecord(regionSpec) ||
-        typeof regionSpec.root !== 'string' ||
-        !isRecord(regionSpec.elements)
-      ) {
-        return false;
-      }
     }
   }
   return (
     typeof renderId === 'string' &&
     (renderType === 'component' ||
       renderType === 'page' ||
-      renderType === 'region') &&
+      renderType === 'page-template') &&
     isRecord(spec) &&
     typeof spec.root === 'string' &&
     isRecord(spec.elements) &&
@@ -325,7 +342,7 @@ export function isPreviewFrameEvent(
       isRecord(value.payload) &&
       (value.payload.type === 'component' ||
         value.payload.type === 'page' ||
-        value.payload.type === 'region') &&
+        value.payload.type === 'page-template') &&
       typeof value.payload.renderId === 'string'
     );
   }

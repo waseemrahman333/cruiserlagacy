@@ -31,13 +31,14 @@ export const PrimaryPanel = () => {
   const offLeftClasses = useHidePanelClasses('left');
 
   useEffect(() => {
-    if (activePanel === 'templates' && !hasPermission('contentTemplates')) {
+    if (
+      activePanel === 'templates' &&
+      !hasPermission('contentTemplates') &&
+      !hasPermission('pageVariants')
+    ) {
       dispatch(unsetActivePanel());
     }
-    if (
-      activePanel === 'brandKit' &&
-      (!hasPermission('brandKit') || !getCanvasSettings()?.devMode)
-    ) {
+    if (activePanel === 'brandKit' && !hasPermission('brandKit')) {
       dispatch(unsetActivePanel());
     }
   }, [activePanel, dispatch]);
@@ -96,13 +97,11 @@ export const PrimaryPanel = () => {
                     <Code />
                   </ErrorBoundary>
                 )}
-                {activePanel === 'brandKit' &&
-                  hasPermission('brandKit') &&
-                  getCanvasSettings()?.devMode && (
-                    <ErrorBoundary>
-                      <BrandKitPanel />
-                    </ErrorBoundary>
-                  )}
+                {activePanel === 'brandKit' && hasPermission('brandKit') && (
+                  <ErrorBoundary>
+                    <BrandKitPanel />
+                  </ErrorBoundary>
+                )}
                 {activePanel === 'pages' && (
                   <ErrorBoundary>
                     <Pages />
@@ -123,7 +122,8 @@ export const PrimaryPanel = () => {
                   </ErrorBoundary>
                 )}
                 {activePanel === 'templates' &&
-                  hasPermission('contentTemplates') && (
+                  (hasPermission('contentTemplates') ||
+                    hasPermission('pageVariants')) && (
                     <ErrorBoundary>
                       <Templates />
                     </ErrorBoundary>

@@ -3,11 +3,15 @@ import path from 'path';
 import dotenv from 'dotenv';
 import * as p from '@clack/prompts';
 import {
+  BRAND_KIT_CONFIG_FILENAME,
   DEFAULT_CANVAS_CONFIG,
   resolveCanvasConfig,
 } from '@drupal-canvas/discovery';
 
-import type { CanvasConfigWarning } from '@drupal-canvas/discovery';
+import type {
+  BrandKitColorsFileMap,
+  CanvasConfigWarning,
+} from '@drupal-canvas/discovery';
 
 // Load environment variables.
 export function loadEnvFiles() {
@@ -85,7 +89,7 @@ export interface Config {
   userAgent: string;
   includePages: boolean;
   includeContentTemplates: boolean;
-  includeRegions: boolean;
+  includePageTemplates: boolean;
   includeBrandKit: boolean;
   // The following properties are loaded from canvas.config.json.
   aliasBaseDir: string;
@@ -93,27 +97,43 @@ export interface Config {
   componentDir: string;
   pagesDir: string;
   contentTemplatesDir: string;
-  regionsDir: string;
+  pageTemplatesDir: string;
   globalCssPath: string;
-  layoutPath: string;
   fonts?: FontsConfig;
+  colors?: BrandKitColorsFileMap;
 }
 
-/** Filename for brand kit (font) configuration in the project root. */
-export const BRAND_KIT_CONFIG_FILENAME = 'canvas.brand-kit.json';
+export { BRAND_KIT_CONFIG_FILENAME };
 
-/** Global brand kit id used by the CLI for font sync (single site-wide kit). */
+/** Global brand kit id used by the CLI for brand kit sync (single site-wide kit). */
 export const BRAND_KIT_GLOBAL_ID = 'global';
 
-/** Top-level shape of canvas.brand-kit.json (fonts and future brand kit keys). */
+/** Top-level shape of canvas.brand-kit.json (fonts, colors, and future brand kit keys). */
 export interface BrandKitConfigFile {
   fonts?: FontsConfig;
+  colors?: BrandKitColorsFileMap;
 }
 
-function loadFontsFromBrandKitFile(hostRoot: string): FontsConfig | undefined {
+/** Parse error for canvas.brand-kit.json, reported by the commands that
+ * need the file rather than thrown at module load (which would take down
+ * every command, including `validate`, whose job is reporting it). */
+let brandKitFileError: string | undefined;
+
+/**
+ * Throws the stored canvas.brand-kit.json parse error, if any. Commands
+ * that sync the brand kit call this up front so a broken file fails with
+ * its message instead of being silently treated as unmanaged.
+ */
+export function ensureBrandKitFileReadable(): void {
+  if (brandKitFileError !== undefined) {
+    throw new Error(brandKitFileError);
+  }
+}
+
+function loadBrandKitFile(hostRoot: string): BrandKitConfigFile {
   const configPath = path.resolve(hostRoot, BRAND_KIT_CONFIG_FILENAME);
   if (!fs.existsSync(configPath)) {
-    return undefined;
+    return {};
   }
   const raw = fs.readFileSync(configPath, 'utf-8');
   let parsed: BrandKitConfigFile;
@@ -126,13 +146,22 @@ function loadFontsFromBrandKitFile(hostRoot: string): FontsConfig | undefined {
         : err instanceof Error
           ? err.message
           : String(err);
-    throw new Error(`Invalid JSON in ${BRAND_KIT_CONFIG_FILENAME}: ${message}`);
+    brandKitFileError = `Invalid JSON in ${BRAND_KIT_CONFIG_FILENAME}: ${message}`;
+    return {};
   }
+  const result: BrandKitConfigFile = {};
   const fonts = parsed?.fonts;
   if (fonts && typeof fonts === 'object' && Array.isArray(fonts.families)) {
-    return fonts;
+    result.fonts = fonts;
   }
-  return undefined;
+  // An absent colors key means colors are not managed from this file; an
+  // explicit map (even empty) is an authored palette. Any other present
+  // value is carried through so validation can reject it with a useful
+  // message instead of colors being silently skipped.
+  if (parsed && typeof parsed === 'object' && 'colors' in parsed) {
+    result.colors = parsed.colors as BrandKitConfigFile['colors'];
+  }
+  return result;
 }
 
 const canvasConfigWarnings: CanvasConfigWarning[] = [];
@@ -142,34 +171,34 @@ const {
   componentDir,
   pagesDir,
   contentTemplatesDir,
-  regionsDir,
+  pageTemplatesDir,
   globalCssPath,
-  layoutPath,
   sync,
+  legacy: legacyRegionConfig,
 } = resolveCanvasConfig({
   hostRoot: process.cwd(),
   onWarning: (warning) => canvasConfigWarnings.push(warning),
 });
 
-export const DEFAULT_INCLUDE_BRAND_KIT = false;
+export const DEFAULT_INCLUDE_BRAND_KIT = true;
 
 const DEFAULT_SCOPES =
-  'canvas:js_component canvas:asset_library canvas:media:image:create canvas:media:view';
+  'canvas:js_component canvas:asset_library canvas:media:image:create canvas:media:document:create canvas:media:view';
 const PAGE_SCOPES = 'canvas:page:create canvas:page:read canvas:page:edit';
 const CONTENT_TEMPLATE_SCOPES = 'canvas:content_template';
-const REGION_SCOPES = 'canvas:page_region';
+const PAGE_TEMPLATE_SCOPES = 'canvas:page_variant';
 const BRAND_KIT_SCOPES = 'canvas:brand_kit';
 
 export function getDefaultScope(
   includePages: boolean,
   includeBrandKit: boolean = false,
   includeContentTemplates: boolean = false,
-  includeRegions: boolean = false,
+  includePageTemplates: boolean = false,
 ): string {
   const parts = [DEFAULT_SCOPES];
   if (includePages) parts.push(PAGE_SCOPES);
   if (includeContentTemplates) parts.push(CONTENT_TEMPLATE_SCOPES);
-  if (includeRegions) parts.push(REGION_SCOPES);
+  if (includePageTemplates) parts.push(PAGE_TEMPLATE_SCOPES);
   if (includeBrandKit) parts.push(BRAND_KIT_SCOPES);
   return parts.join(' ');
 }
@@ -181,7 +210,7 @@ export function usesManagedDefaultScope(scope: string): boolean {
   const optionalTokens = new Set(
     [
       PAGE_SCOPES,
-      REGION_SCOPES,
+      PAGE_TEMPLATE_SCOPES,
       BRAND_KIT_SCOPES,
       CONTENT_TEMPLATE_SCOPES,
     ].flatMap((s) => s.split(/\s+/)),
@@ -230,14 +259,17 @@ const includeContentTemplates =
     sync.contentTemplates,
   );
 
-const includeRegions =
-  configuredSync.regions ??
-  getEnvBoolean(process.env.CANVAS_INCLUDE_REGIONS, sync.regions);
+// Page templates are new alongside the flag-and-env-free sync convention:
+// only `sync.pageTemplates` in canvas.config.json and `--no-page-templates`
+// control them (no `CANVAS_INCLUDE_*` environment variable).
+const includePageTemplates = configuredSync.pageTemplates ?? sync.pageTemplates;
 
 const includeBrandKit = getEnvBoolean(
   process.env.CANVAS_INCLUDE_BRAND_KIT,
   DEFAULT_INCLUDE_BRAND_KIT,
 );
+
+const brandKitFile = loadBrandKitFile(process.cwd());
 
 let config: Config = {
   siteUrl: process.env.CANVAS_SITE_URL || '',
@@ -249,22 +281,22 @@ let config: Config = {
       includePages,
       includeBrandKit,
       includeContentTemplates,
-      includeRegions,
+      includePageTemplates,
     ),
   userAgent: process.env.CANVAS_USER_AGENT || '',
   includePages,
   includeContentTemplates,
-  includeRegions,
+  includePageTemplates,
   includeBrandKit,
   aliasBaseDir: aliasBaseDir,
   outputDir: outputDir,
   componentDir: componentDir,
   pagesDir: pagesDir,
   contentTemplatesDir: contentTemplatesDir,
-  regionsDir: regionsDir,
+  pageTemplatesDir: pageTemplatesDir,
   globalCssPath: globalCssPath,
-  layoutPath: layoutPath,
-  fonts: loadFontsFromBrandKitFile(process.cwd()),
+  fonts: brandKitFile.fonts,
+  colors: brandKitFile.colors,
 };
 
 export function getConfig(): Config {
@@ -272,6 +304,44 @@ export function getConfig(): Config {
 }
 
 let emittedCanvasConfigWarnings = false;
+
+/**
+ * Whether this codebase still carries region-era state: region or layout keys
+ * in canvas.config.json, the deprecated CANVAS_INCLUDE_REGIONS environment
+ * variable, or a regions directory holding authored region files.
+ */
+function detectLegacyRegionState(): string[] {
+  const findings: string[] = [];
+  if (legacyRegionConfig?.regionsDir !== undefined) {
+    findings.push('"regionsDir" in canvas.config.json');
+  }
+  if (legacyRegionConfig?.syncRegions !== undefined) {
+    findings.push('"sync.regions" in canvas.config.json');
+  }
+  if (legacyRegionConfig?.layoutPath !== undefined) {
+    findings.push('"layoutPath" in canvas.config.json');
+  }
+  if (process.env.CANVAS_INCLUDE_REGIONS !== undefined) {
+    findings.push('the CANVAS_INCLUDE_REGIONS environment variable');
+  }
+  const regionsDir = path.resolve(
+    process.cwd(),
+    legacyRegionConfig?.regionsDir ?? 'regions',
+  );
+  try {
+    if (
+      fs.existsSync(regionsDir) &&
+      fs.readdirSync(regionsDir).some((entry) => entry.endsWith('.json'))
+    ) {
+      findings.push(
+        `region files in ${legacyRegionConfig?.regionsDir ?? 'regions'}/`,
+      );
+    }
+  } catch {
+    // Unreadable directory: nothing to report.
+  }
+  return findings;
+}
 
 export function emitCanvasConfigWarnings(): boolean {
   if (emittedCanvasConfigWarnings) {
@@ -282,7 +352,24 @@ export function emitCanvasConfigWarnings(): boolean {
   for (const warning of canvasConfigWarnings) {
     p.log.warn(warning.message);
   }
-  return canvasConfigWarnings.length > 0;
+  const legacyFindings = detectLegacyRegionState();
+  if (legacyFindings.length > 0) {
+    // Only the local cleanup is this user's to do. Whether the site itself
+    // still needs its region-to-variant migration is a server-side concern
+    // the CLI user may not even be able to act on, so it is reported where it
+    // is actually knowable: when a page-variant request fails because the
+    // site does not serve them yet.
+    // @see ApiService.rethrowPageVariantsUnsupported()
+    p.log.warn(
+      [
+        `Global regions were replaced by page templates, but this codebase still has ${legacyFindings.join(', ')}.`,
+        'To upgrade: run `canvas pull` to fetch page templates into `page-templates/`,',
+        'then delete the regions directory and remove "regionsDir"/"sync.regions"/"layoutPath" from canvas.config.json (and unset CANVAS_INCLUDE_REGIONS).',
+        'Region files are no longer pushed, pulled, or validated.',
+      ].join('\n'),
+    );
+  }
+  return canvasConfigWarnings.length + legacyFindings.length > 0;
 }
 
 export function setConfig(newConfig: Partial<Config>): void {
@@ -294,13 +381,10 @@ interface LegacyMigrationOptions {
 }
 
 interface LegacySyncEnvSetting {
-  envName:
-    | 'CANVAS_INCLUDE_PAGES'
-    | 'CANVAS_INCLUDE_CONTENT_TEMPLATES'
-    | 'CANVAS_INCLUDE_REGIONS';
-  configKey: 'pages' | 'contentTemplates' | 'regions';
-  configPath: 'sync.pages' | 'sync.contentTemplates' | 'sync.regions';
-  setKey: 'includePages' | 'includeContentTemplates' | 'includeRegions';
+  envName: 'CANVAS_INCLUDE_PAGES' | 'CANVAS_INCLUDE_CONTENT_TEMPLATES';
+  configKey: 'pages' | 'contentTemplates';
+  configPath: 'sync.pages' | 'sync.contentTemplates';
+  setKey: 'includePages' | 'includeContentTemplates';
 }
 
 const LEGACY_SYNC_ENV_SETTINGS: LegacySyncEnvSetting[] = [
@@ -315,12 +399,6 @@ const LEGACY_SYNC_ENV_SETTINGS: LegacySyncEnvSetting[] = [
     configKey: 'contentTemplates',
     configPath: 'sync.contentTemplates',
     setKey: 'includeContentTemplates',
-  },
-  {
-    envName: 'CANVAS_INCLUDE_REGIONS',
-    configKey: 'regions',
-    configPath: 'sync.regions',
-    setKey: 'includeRegions',
   },
 ];
 
@@ -361,7 +439,7 @@ function readCanvasConfigFile(): {
 function readConfiguredSyncSettings(): Partial<{
   pages: boolean;
   contentTemplates: boolean;
-  regions: boolean;
+  pageTemplates: boolean;
 }> {
   const { parsedConfig, configParseError } = readCanvasConfigFile();
   if (configParseError) {
@@ -383,8 +461,10 @@ function readConfiguredSyncSettings(): Partial<{
       typeof syncConfig.contentTemplates === 'boolean'
         ? syncConfig.contentTemplates
         : undefined,
-    regions:
-      typeof syncConfig.regions === 'boolean' ? syncConfig.regions : undefined,
+    pageTemplates:
+      typeof syncConfig.pageTemplates === 'boolean'
+        ? syncConfig.pageTemplates
+        : undefined,
   };
 }
 

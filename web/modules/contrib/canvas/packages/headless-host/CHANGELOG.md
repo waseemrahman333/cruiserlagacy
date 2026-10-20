@@ -1,5 +1,63 @@
 # @drupal-canvas/headless-host
 
+## 0.5.0
+
+### Minor Changes
+
+- aaaa869: Delegate eligible embedded link clicks in draft mode to the host when
+  it advertises navigation support.
+
+### Patch Changes
+
+- Updated dependencies [aaaa869]
+- Updated dependencies [aaaa869]
+  - @drupal-canvas/headless@0.11.0
+
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies [ed541e3]
+  - @drupal-canvas/headless@0.10.0
+
+## 0.4.3
+
+### Patch Changes
+
+- Updated dependencies [e1fae30]
+  - @drupal-canvas/headless@0.9.0
+
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [252aa34]
+  - @drupal-canvas/headless@0.8.0
+
+## 0.4.1
+
+### Patch Changes
+
+- fc2cbd1: Retain the selected read-only preview language when renewing or
+  recovering an embedded draft session.
+- Updated dependencies [98b764a]
+- Updated dependencies [fc2cbd1]
+  - @drupal-canvas/headless@0.7.0
+
+## 0.4.0
+
+### Minor Changes
+
+- e6a9c66: Preserve page variant identity when headless preview sessions renew
+  or recover.
+
+### Patch Changes
+
+- Updated dependencies [24800cb]
+- Updated dependencies [e6a9c66]
+- Updated dependencies [78e3ff2]
+  - @drupal-canvas/headless@0.6.0
+
 ## 0.3.0
 
 ### Minor Changes

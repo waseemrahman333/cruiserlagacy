@@ -1,7 +1,10 @@
 import { Command } from 'commander';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as p from '@clack/prompts';
-import { discoverCanvasProject } from '@drupal-canvas/discovery';
+import {
+  detectHeadlessSdk,
+  discoverCanvasProject,
+} from '@drupal-canvas/discovery';
 
 import { getConfig } from '../config';
 import { buildCanvasProject } from '../utils/build-project';
@@ -38,6 +41,7 @@ vi.mock('@clack/prompts', () => ({
 }));
 
 vi.mock('@drupal-canvas/discovery', () => ({
+  detectHeadlessSdk: vi.fn(),
   discoverCanvasProject: vi.fn(),
 }));
 
@@ -68,6 +72,7 @@ describe('buildCommand', () => {
     vi.clearAllMocks();
     clackMockState.spinners.length = 0;
     process.exitCode = undefined;
+    vi.mocked(detectHeadlessSdk).mockReturnValue(false);
 
     vi.mocked(getConfig).mockReturnValue({
       aliasBaseDir: 'src',
@@ -76,14 +81,13 @@ describe('buildCommand', () => {
       componentDir: 'src/components',
       contentTemplatesDir: 'content-templates',
       globalCssPath: 'src/global.css',
-      includeBrandKit: false,
+      includeBrandKit: true,
       includeContentTemplates: false,
       includePages: false,
-      includeRegions: false,
-      layoutPath: 'src/layout.jsx',
+      includePageTemplates: false,
       outputDir: 'dist',
       pagesDir: 'pages',
-      regionsDir: 'regions',
+      pageTemplatesDir: 'page-templates',
       scope: '',
       siteUrl: '',
       userAgent: '',
@@ -120,12 +124,13 @@ describe('buildCommand', () => {
       ],
       pages: [],
       contentTemplates: [],
-      regions: [],
+      pageTemplates: [],
       warnings: [],
       stats: {
         scannedFiles: 2,
         ignoredFiles: 0,
       },
+      componentSchemas: new Map(),
     } as DiscoveryResult;
     vi.mocked(discoverCanvasProject).mockResolvedValue(discoveryResult);
     vi.mocked(buildCanvasProject).mockResolvedValue({

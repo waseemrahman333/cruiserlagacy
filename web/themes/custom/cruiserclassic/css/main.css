@@ -1,23 +1,73 @@
 @import "tailwindcss";
-@config "../tailwind.config.mjs";
+@plugin "@tailwindcss/typography";
+@import "../../../contrib/tailpine/css/theme-tokens.css";
+@import "../../../contrib/tailpine/css/theme-source.css";
+@import "../../../contrib/tailpine/css/theme.css";
+@source "../../../contrib/tailpine/components/**/*.twig";
+@source "../../../contrib/tailpine/components/**/*.yml";
+@source "../../../contrib/tailpine/components/**/**/*.twig";
+@source "../../../contrib/tailpine/components/**/**/*.yml";
+@source "../../../contrib/tailpine/templates/**/*.twig";
 
-[data-theme="mybrand"] {
-  color-scheme: light; /* or dark, depending on your bg */
-}
-[data-theme="mybrand"] {
-  --t-primary: #991F2A;  --t-on-primary: #FFFFFF;
-  --t-secondary: #A3A39E; --t-on-secondary: #FFFFFF;
-  --t-tertiary: #292A2C;   --t-on-tertiary: #FFFFFF;
-  --t-body: #555555; --t-body-bg: #FFFFFF;
-  --t-heading: #292A2C; --t-border: #D9D9D9; --t-dark: #111827;
-  --t-surface-100: #FFFFFF; --t-surface-200: #F9FAFB; --t-surface-300: #F3F4F6;
-  --t-success: #15803D; --t-on-success: #FFFFFF;
-  --t-warning: #B45309; --t-on-warning: #FFFFFF;
-  --t-error: #B91C1C; --t-on-error: #FFFFFF;
-  --t-info: #0369A1; --t-on-info: #FFFFFF;
-  --t-focus-ring: #984d54; --t-shadow: rgba(0, 0, 0, 0.1);
+@source inline("after:bg-t-surface-200");
+
+@source inline("after:bg-surface-200");
+
+@source inline("after:bg-t-surface-200");
+
+@source inline("after:bg-surface-200");
+
+
+
+
+@font-face {
+  font-family: 'Conthrax';
+  src: url('../fonts/Conthrax/conthrax-sb.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-65-Medium.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Helvetica';
+  src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/*
+ * Custom Theme Fonts
+ *
+ * If "Custom" is selected for the Body or Heading font in the
+ * Tailpine theme settings, define your font family here.
+ *
+ * Add your custom font files to the subtheme's font folder and
+ * update the variables below with the font family name.
+ *
+ * A sample custom font is already included in the font folder
+ * for reference.
+ */
+
+@theme {
+  --font-body: "Helvetica";
+  --font-heading: "Conthrax";
+}
 
 header .search-icon form {
   @apply flex flex-row justify-around w-[300px] sm:w-[400px] items-center bg-white shadow px-4 py-2;
@@ -29,6 +79,7 @@ header .search-icon form {
     @apply  text-white cursor-pointer sm:w-[100px];
   }
 }
+
 
 /* ===== Slick base overrides ===== */
     /* =========================================

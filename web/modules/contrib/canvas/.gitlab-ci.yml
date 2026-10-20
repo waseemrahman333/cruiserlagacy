@@ -69,6 +69,11 @@ variables:
   - "tests/**/*"
   - "!tests/src/Playwright/**/*"
 
+.component-metadata-files: &component-metadata-files
+  - component-metadata.schema.json
+  - "tests/fixtures/component-metadata/**/*"
+  - "packages/json-schema-validation/**/*"
+
 .packages-files: &packages-files
   - "packages/**/*"
   - ".changeset/**/*"
@@ -110,6 +115,7 @@ variables:
   - packages/drupal-canvas/**/*
   - packages/headless/**/*
   - packages/headless-host/**/*
+  - packages/json-schema-validation/**/*
   - packages/types/**/*
 
 .user-docs-files: &user-docs-files
@@ -456,6 +462,10 @@ phpunit (11.3 sqlite):
     - <<: *mr-rule
       changes:
         paths: *backend-files
+        compare_to: 'refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
+    - <<: *mr-rule
+      changes:
+        paths: *component-metadata-files
         compare_to: 'refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
     - <<: *mr-rule
       changes:
@@ -851,6 +861,10 @@ test (packages):
       changes:
         paths: *data-integrity-files
         compare_to: 'refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
+    - <<: *mr-rule
+      changes:
+        paths: *component-metadata-files
+        compare_to: 'refs/heads/$CI_MERGE_REQUEST_TARGET_BRANCH_NAME'
     - *manual-rule
   variables:
     _TARGET_DB_TYPE: sqlite
@@ -1060,12 +1074,15 @@ release:
       npm version $VERSION --allow-same-version --no-git-tag-version
       npm run build
       cd ..
+      npx turbo run build --filter=@drupal-canvas/headless-embedded-preview
     - echo "!/ui/dist" >> .gitignore
     - echo "!/packages/astro-hydration/dist" >> .gitignore
+    - echo "!/packages/headless-embedded-preview/dist" >> .gitignore
     - git add .gitignore
     - git add ui/dist
     - git add ui/package.json
     - git add packages/astro-hydration/dist
+    - git add packages/headless-embedded-preview/dist
     - git commit -m "Add built assets for release ${VERSION}"
     - git tag -f $VERSION
     - git push origin $VERSION

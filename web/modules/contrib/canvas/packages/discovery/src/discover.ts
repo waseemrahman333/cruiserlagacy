@@ -3,15 +3,17 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { glob } from 'glob';
 import ignore from 'ignore';
-import { load as parseYaml } from 'js-yaml';
 
-import { findDuplicateMachineNames, loadComponentsMetadata } from './metadata';
+import { COLOR_PROP_SCHEMA_REF } from './brand-kit-colors';
+import { findDuplicateMachineNames, loadComponentMetadata } from './metadata';
+import { ComponentMetadataValidationError } from './metadata-validation';
 
 import type {
   DiscoveredComponent,
+  DiscoveredComponentSchema,
   DiscoveredContentTemplate,
   DiscoveredPage,
-  DiscoveredRegion,
+  DiscoveredPageTemplate,
   DiscoveryOptions,
   DiscoveryResult,
   DiscoveryWarning,
@@ -66,27 +68,6 @@ function createStableId(metadataPath: string): string {
   return createHash('sha1').update(metadataPath).digest('hex');
 }
 
-// Reads only the component type from a metadata file. External components have
-// no JavaScript entry, so pairing must know the type before deciding whether a
-// missing entry is an error. Full metadata parsing and validation happen later
-// via loadComponentsMetadata; this tolerant read never throws.
-async function readComponentType(
-  metadataPath: string,
-): Promise<DiscoveredComponent['type']> {
-  try {
-    const raw = parseYaml(await fs.readFile(metadataPath, 'utf-8'));
-    if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
-      const type = (raw as Record<string, unknown>).type;
-      if (type === 'react' || type === 'external') {
-        return type;
-      }
-    }
-  } catch {
-    // Unreadable or malformed metadata is reported later by validation.
-  }
-  return undefined;
-}
-
 async function getCandidateMetadataFiles(
   componentRoot: string,
 ): Promise<string[]> {
@@ -131,9 +112,11 @@ async function getCandidateContentTemplateFiles(
   });
 }
 
-async function getCandidateRegionFiles(regionsRoot: string): Promise<string[]> {
+async function getCandidatePageTemplateFiles(
+  pageTemplatesRoot: string,
+): Promise<string[]> {
   return glob('*.json', {
-    cwd: regionsRoot,
+    cwd: pageTemplatesRoot,
     nodir: true,
     dot: true,
     posix: true,
@@ -141,12 +124,12 @@ async function getCandidateRegionFiles(regionsRoot: string): Promise<string[]> {
   });
 }
 
-function parseRegionFilename(filename: string): { region: string } | null {
+function parsePageTemplateFilename(filename: string): { id: string } | null {
   const base = filename.replace(/\.json$/, '');
   if (!/^[a-z0-9_]+$/.test(base) || base.length === 0) {
     return null;
   }
-  return { region: base };
+  return { id: base };
 }
 
 /**
@@ -181,8 +164,8 @@ export async function discoverCanvasProject(
     options.contentTemplatesRoot ??
       path.join(componentRoot, 'content-templates'),
   );
-  const regionsRoot = path.resolve(
-    options.regionsRoot ?? path.join(componentRoot, 'regions'),
+  const pageTemplatesRoot = path.resolve(
+    options.pageTemplatesRoot ?? path.join(componentRoot, 'page-templates'),
   );
   const entryExtensions = options.entryExtensions ?? JS_EXTENSIONS;
   const requireJsEntry = options.requireJsEntry ?? true;
@@ -192,12 +175,13 @@ export async function discoverCanvasProject(
   const pageCandidates = await getCandidatePageFiles(pagesRoot);
   const contentTemplateCandidates =
     await getCandidateContentTemplateFiles(contentTemplatesRoot);
-  const regionCandidates = await getCandidateRegionFiles(regionsRoot);
+  const pageTemplateCandidates =
+    await getCandidatePageTemplateFiles(pageTemplatesRoot);
   const warnings: DiscoveryWarning[] = [];
   const components: DiscoveredComponent[] = [];
   const pages: DiscoveredPage[] = [];
   const contentTemplates: DiscoveredContentTemplate[] = [];
-  const regions: DiscoveredRegion[] = [];
+  const pageTemplates: DiscoveredPageTemplate[] = [];
 
   let ignoredFiles = 0;
 
@@ -321,14 +305,14 @@ export async function discoverCanvasProject(
     });
   }
 
-  for (const regionRelativePath of regionCandidates) {
-    const normalizedRelativePath = toPosixPath(regionRelativePath);
-    const absoluteRegionPath = path.resolve(
-      regionsRoot,
+  for (const pageTemplateRelativePath of pageTemplateCandidates) {
+    const normalizedRelativePath = toPosixPath(pageTemplateRelativePath);
+    const absolutePageTemplatePath = path.resolve(
+      pageTemplatesRoot,
       normalizedRelativePath,
     );
     const projectRelativePath = toPosixPath(
-      path.relative(projectRoot, absoluteRegionPath),
+      path.relative(projectRoot, absolutePageTemplatePath),
     );
 
     if (
@@ -340,13 +324,47 @@ export async function discoverCanvasProject(
     }
 
     const filename = path.posix.basename(normalizedRelativePath);
-    const parsed = parseRegionFilename(filename);
+    const parsed = parsePageTemplateFilename(filename);
     if (!parsed) {
+      // A silently skipped file would look like a sync that "lost" the
+      // template; the filename is the page variant's machine name.
+      warnings.push({
+        code: 'invalid_page_template_filename',
+        message: `Ignoring page template file "${filename}": its name (minus .json) must be a machine name (lowercase letters, digits, underscores).`,
+        path: absolutePageTemplatePath,
+      });
       continue;
     }
-    regions.push({
-      region: parsed.region,
-      path: absoluteRegionPath,
+
+    let label: string | null = null;
+    let status: boolean | null = null;
+    let isDefault = false;
+    try {
+      const authored = JSON.parse(
+        await fs.readFile(absolutePageTemplatePath, 'utf-8'),
+      ) as unknown;
+      if (
+        authored &&
+        typeof authored === 'object' &&
+        !Array.isArray(authored)
+      ) {
+        const values = authored as Record<string, unknown>;
+        label =
+          typeof values.label === 'string' && values.label.trim().length > 0
+            ? values.label
+            : null;
+        status = typeof values.status === 'boolean' ? values.status : null;
+        isDefault = values.default === true;
+      }
+    } catch {
+      // Validation reports unreadable or malformed page template files.
+    }
+    pageTemplates.push({
+      id: parsed.id,
+      label,
+      status,
+      isDefault,
+      path: absolutePageTemplatePath,
       relativePath: projectRelativePath.startsWith('..')
         ? normalizedRelativePath
         : projectRelativePath,
@@ -396,7 +414,6 @@ export async function discoverCanvasProject(
         : path.basename(absoluteDirectory);
 
       const metadataPath = path.resolve(absoluteDirectory, metadataFilename);
-      const componentType = await readComponentType(metadataPath);
 
       const jsCandidates = await Promise.all(
         entryExtensions.map(async (extension) => {
@@ -428,12 +445,9 @@ export async function discoverCanvasProject(
         });
       }
 
-      // External components are implemented by an external (headless)
-      // application, so they need no JavaScript entry: they are pushed as
-      // metadata only. Callers pushing metadata only (requireJsEntry: false)
-      // likewise keep entry-less components. Every other component requires an
-      // entry file.
-      if (!entryCandidate && componentType !== 'external' && requireJsEntry) {
+      // Callers pushing metadata only (requireJsEntry: false) keep entry-less
+      // components. Every other component requires an entry file.
+      if (!entryCandidate && requireJsEntry) {
         warnings.push({
           code: 'missing_js_entry',
           message: `Missing JavaScript entry file for ${metadataFilename}.`,
@@ -460,7 +474,6 @@ export async function discoverCanvasProject(
         metadataPath,
         jsEntryPath: entryCandidate?.candidatePath ?? null,
         cssEntryPath,
-        type: componentType,
       });
     }
   }
@@ -468,7 +481,54 @@ export async function discoverCanvasProject(
   components.sort((a, b) => a.metadataPath.localeCompare(b.metadataPath));
   pages.sort((a, b) => a.path.localeCompare(b.path));
   contentTemplates.sort((a, b) => a.path.localeCompare(b.path));
-  regions.sort((a, b) => a.region.localeCompare(b.region));
+  pageTemplates.sort((a, b) => a.id.localeCompare(b.id));
+
+  // Invalid metadata is reported by consumers when they load it. Discovery
+  // remains available so editors and validation commands can surface those
+  // errors without stopping file watching or skipping the remaining files.
+  const validMetadataEntries = (
+    await Promise.all(
+      components.map(async (component) => {
+        try {
+          return {
+            component,
+            metadata: await loadComponentMetadata(component, projectRoot),
+          };
+        } catch (error) {
+          if (error instanceof ComponentMetadataValidationError) {
+            return null;
+          }
+          throw error;
+        }
+      }),
+    )
+  ).filter((entry) => entry !== null);
+  const duplicateWarnings = findDuplicateMachineNames(
+    validMetadataEntries.map(({ component }) => component),
+    validMetadataEntries.map(({ metadata }) => metadata),
+  );
+  warnings.push(...duplicateWarnings);
+
+  // Build componentSchemas index from loaded metadata.
+  const componentSchemas = new Map<string, DiscoveredComponentSchema>();
+  for (const { component, metadata } of validMetadataEntries) {
+    const colorPropNames = new Set<string>();
+    if (metadata.props?.properties) {
+      for (const [propName, propDef] of Object.entries(
+        metadata.props.properties,
+      )) {
+        if (
+          typeof propDef === 'object' &&
+          propDef !== null &&
+          '$ref' in propDef &&
+          propDef.$ref === COLOR_PROP_SCHEMA_REF
+        ) {
+          colorPropNames.add(propName);
+        }
+      }
+    }
+    componentSchemas.set(component.name, { colorPropNames });
+  }
 
   const result: DiscoveryResult = {
     componentRoot,
@@ -476,22 +536,18 @@ export async function discoverCanvasProject(
     components,
     pages,
     contentTemplates,
-    regions,
+    pageTemplates,
     warnings,
     stats: {
       scannedFiles:
         allCandidates.length +
         pageCandidates.length +
         contentTemplateCandidates.length +
-        regionCandidates.length,
+        pageTemplateCandidates.length,
       ignoredFiles,
     },
+    componentSchemas,
   };
-
-  // Check for duplicate machine names across components.
-  const metadata = await loadComponentsMetadata(result);
-  const duplicateWarnings = findDuplicateMachineNames(components, metadata);
-  warnings.push(...duplicateWarnings);
 
   return result;
 }

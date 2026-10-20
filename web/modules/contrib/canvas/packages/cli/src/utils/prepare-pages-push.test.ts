@@ -5,11 +5,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
   collectPageResults,
+  entitiesHaveColorProps,
   preparePages,
   pushPages,
 } from './prepare-pages-push';
 
-import type { DiscoveredPage, DiscoveryResult } from '@drupal-canvas/discovery';
+import type {
+  ComponentMetadata,
+  DiscoveredPage,
+  DiscoveryResult,
+} from '@drupal-canvas/discovery';
 import type { ApiService } from '../services/api';
 import type { PageListItem } from '../types/Page';
 
@@ -19,9 +24,10 @@ const emptyDiscoveryResult: DiscoveryResult = {
   components: [],
   pages: [],
   contentTemplates: [],
-  regions: [],
+  pageTemplates: [],
   warnings: [],
   stats: { scannedFiles: 0, ignoredFiles: 0 },
+  componentSchemas: new Map(),
 };
 
 function mockDiscoveredPage(
@@ -77,6 +83,7 @@ describe('preparePages', () => {
       JSON.stringify({
         uuid: 'page-uuid-1',
         title: 'Home',
+        pageVariant: 'marketing',
         elements: {
           'comp-1': { type: 'js.hero', props: { heading: 'Welcome' } },
         },
@@ -97,6 +104,7 @@ describe('preparePages', () => {
     expect(valid).toHaveLength(1);
     expect(valid[0].result.title).toBe('Home');
     expect(valid[0].result.uuid).toBe('page-uuid-1');
+    expect(valid[0].result.pageVariant).toBe('marketing');
     expect(valid[0].result.components).toHaveLength(1);
     expect(valid[0].result.components[0].component_id).toBe('js.hero');
     expect(valid[0].result.components[0].component_version).toBe('v1');
@@ -138,6 +146,138 @@ describe('preparePages', () => {
   });
 });
 
+describe('entitiesHaveColorProps', () => {
+  let tmpDir: string;
+
+  beforeEach(async () => {
+    tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'pages-color-check-'));
+  });
+
+  afterEach(async () => {
+    await fs.rm(tmpDir, { recursive: true, force: true });
+  });
+
+  it('returns true when a page uses a component with color props', async () => {
+    const pagePath = path.join(tmpDir, 'home.json');
+    await fs.writeFile(
+      pagePath,
+      JSON.stringify({
+        title: 'Home',
+        elements: {
+          card: {
+            type: 'js.color-card',
+            props: { accent: 'canvas-color:brand-red' },
+          },
+        },
+      }),
+      'utf-8',
+    );
+
+    const pages = [mockDiscoveredPage('home', null, pagePath)];
+    const metadata: ComponentMetadata[] = [
+      {
+        name: 'Color Card',
+        machineName: 'color-card',
+        status: true,
+        required: [],
+        slots: {},
+        props: {
+          properties: {
+            accent: {
+              title: 'Accent',
+              type: 'string',
+              $ref: 'json-schema-definitions://canvas.module/color',
+            },
+          },
+        },
+      },
+    ];
+
+    await expect(entitiesHaveColorProps(pages, metadata)).resolves.toBe(true);
+  });
+
+  it('returns false when no page uses components with color props', async () => {
+    const pagePath = path.join(tmpDir, 'home.json');
+    await fs.writeFile(
+      pagePath,
+      JSON.stringify({
+        title: 'Home',
+        elements: {
+          hero: {
+            type: 'js.hero',
+            props: { heading: 'Hello' },
+          },
+        },
+      }),
+      'utf-8',
+    );
+
+    const pages = [mockDiscoveredPage('home', null, pagePath)];
+    const metadata: ComponentMetadata[] = [
+      {
+        name: 'Hero',
+        machineName: 'hero',
+        status: true,
+        required: [],
+        slots: {},
+        props: {
+          properties: {
+            heading: {
+              title: 'Heading',
+              type: 'string',
+            },
+          },
+        },
+      },
+    ];
+
+    await expect(entitiesHaveColorProps(pages, metadata)).resolves.toBe(false);
+  });
+
+  it('returns true when a content-template-shaped file uses a component with color props', async () => {
+    const templatePath = path.join(tmpDir, 'node.article.full.json');
+    await fs.writeFile(
+      templatePath,
+      JSON.stringify({
+        label: 'Article — Full',
+        entityType: 'node',
+        bundle: 'article',
+        viewMode: 'full',
+        elements: {
+          card: {
+            type: 'js.color-card',
+            props: { accent: 'canvas-color:brand-red' },
+          },
+        },
+      }),
+      'utf-8',
+    );
+
+    const metadata: ComponentMetadata[] = [
+      {
+        name: 'Color Card',
+        machineName: 'color-card',
+        status: true,
+        required: [],
+        slots: {},
+        props: {
+          properties: {
+            accent: {
+              title: 'Accent',
+              type: 'string',
+              $ref: 'json-schema-definitions://canvas.module/color',
+            },
+          },
+        },
+      },
+    ];
+
+    await expect(
+      entitiesHaveColorProps([{ path: templatePath }], metadata),
+    ).resolves.toBe(true);
+  });
+});
+
 describe('pushPages', () => {
   let tmpDir: string;
 
@@ -164,6 +304,7 @@ describe('pushPages', () => {
           uuid: 'page-uuid-1',
           title: 'Home',
           description: '',
+          pageVariant: 'marketing',
           path: '/home',
           components: [],
           filePath,
@@ -186,7 +327,57 @@ describe('pushPages', () => {
     expect(results[0].success).toBe(true);
     expect(results[0].result?.operation).toBe('Updated');
     expect(api.updatePage).toHaveBeenCalledTimes(1);
+    expect(api.updatePage).toHaveBeenCalledWith(1, {
+      title: 'Home',
+      description: '',
+      pageVariant: 'marketing',
+      status: true,
+      path: '/home',
+      components: [],
+    });
     expect(api.createPage).not.toHaveBeenCalled();
+  });
+
+  it('omits page variants when the site does not support them', async () => {
+    const filePath = path.join(tmpDir, 'home.json');
+    await fs.writeFile(
+      filePath,
+      JSON.stringify({ uuid: 'page-uuid-1', title: 'Home', elements: {} }),
+      'utf-8',
+    );
+    const prepared = [
+      {
+        index: 0,
+        result: {
+          uuid: 'page-uuid-1',
+          title: 'Home',
+          description: '',
+          pageVariant: 'marketing',
+          path: '/home',
+          components: [],
+          filePath,
+        },
+      },
+    ];
+    const remoteByUuid = new Map([
+      ['page-uuid-1', mockPageListItem(1, 'page-uuid-1', 'Home', '/home')],
+    ]);
+    const updatePage = vi.fn().mockResolvedValue({});
+
+    await pushPages(
+      prepared,
+      remoteByUuid,
+      { updatePage, createPage: vi.fn() },
+      false,
+    );
+
+    expect(updatePage).toHaveBeenCalledWith(1, {
+      title: 'Home',
+      description: '',
+      status: true,
+      path: '/home',
+      components: [],
+    });
   });
 
   it('should reject path alias changes for existing pages', async () => {
@@ -204,6 +395,7 @@ describe('pushPages', () => {
           uuid: 'page-uuid-1',
           title: 'Home',
           description: '',
+          pageVariant: null,
           path: '/new-home',
           components: [],
           filePath,
@@ -247,6 +439,7 @@ describe('pushPages', () => {
           uuid: 'page-uuid-1',
           title: 'Home',
           description: '',
+          pageVariant: null,
           path: '',
           components: [],
           filePath,
@@ -290,6 +483,7 @@ describe('pushPages', () => {
           uuid: null as string | null,
           title: 'New Page',
           description: '',
+          pageVariant: null,
           path: '',
           components: [],
           filePath,
@@ -313,6 +507,14 @@ describe('pushPages', () => {
     expect(results[0].success).toBe(true);
     expect(results[0].result?.operation).toBe('Created');
     expect(api.createPage).toHaveBeenCalledTimes(1);
+    expect(api.createPage).toHaveBeenCalledWith({
+      title: 'New Page',
+      description: '',
+      pageVariant: null,
+      status: false,
+      path: '',
+      components: [],
+    });
     expect(api.updatePage).not.toHaveBeenCalled();
 
     // Verify UUID was written back to the file.
@@ -330,6 +532,7 @@ describe('pushPages', () => {
           uuid: 'page-uuid-2',
           title: 'Second',
           description: '',
+          pageVariant: null,
           path: '/changed-second',
           components: [],
           filePath: secondFilePath,

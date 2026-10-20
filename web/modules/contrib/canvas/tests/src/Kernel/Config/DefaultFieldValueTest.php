@@ -7,6 +7,7 @@ namespace Drupal\Tests\canvas\Kernel\Config;
 // cspell:ignore elink estring
 
 use Drupal\canvas\InvalidComponentInputsPropSourceException;
+use Drupal\canvas\Plugin\Field\FieldType\ComponentTreeItemList;
 use Drupal\canvas\Plugin\Validation\Constraint\ValidComponentTreeItemConstraintValidator;
 use Drupal\Core\Config\Schema\SchemaIncompleteException;
 use Drupal\field\Entity\FieldConfig;
@@ -108,7 +109,7 @@ class DefaultFieldValueTest extends CanvasKernelTestBase {
     array_push(
       $test_cases['non unique uuids'],
       SchemaIncompleteException::class,
-      'Schema errors for field.field.node.article.field_canvas_test with the following errors: 0 [default_value] Not all component instance UUIDs in this component tree are unique.'
+      'Schema errors for field.field.node.article.field_canvas_test with the following errors: 0 [default_value.0.uuid] Invalid component tree item with UUID &lt;em class=&quot;placeholder&quot;&gt;09de669f-b85b-40ef-9c01-b27f1b089020&lt;/em&gt;. This UUID is used by &lt;em class=&quot;placeholder&quot;&gt;2&lt;/em&gt; component instances in this component tree; each component instance must have a unique UUID., 1 [default_value.2.uuid] Invalid component tree item with UUID &lt;em class=&quot;placeholder&quot;&gt;09de669f-b85b-40ef-9c01-b27f1b089020&lt;/em&gt;. This UUID is used by &lt;em class=&quot;placeholder&quot;&gt;2&lt;/em&gt; component instances in this component tree; each component instance must have a unique UUID.'
     );
     array_push(
       $test_cases['invalid parent'],
@@ -120,6 +121,11 @@ class DefaultFieldValueTest extends CanvasKernelTestBase {
       $test_cases['invalid slot'],
       SchemaIncompleteException::class,
       'Schema errors for field.field.node.article.field_canvas_test with the following errors: 0 [default_value.1.slot] Invalid component subtree. This component subtree contains an invalid slot name for component &lt;em class=&quot;placeholder&quot;&gt;sdc.canvas_test_sdc.props-slots&lt;/em&gt;: &lt;em class=&quot;placeholder&quot;&gt;banana&lt;/em&gt;. Valid slot names are: &lt;em class=&quot;placeholder&quot;&gt;the_body, the_footer, the_colophon&lt;/em&gt;.'
+    );
+    array_push(
+      $test_cases['reserved root UUID'],
+      SchemaIncompleteException::class,
+      'Schema errors for field.field.node.article.field_canvas_test with the following errors: 0 [default_value.0.uuid] Invalid component tree item with UUID &lt;em class=&quot;placeholder&quot;&gt;' . ComponentTreeItemList::ROOT_UUID . '&lt;/em&gt;. This UUID is reserved to represent the root of the component tree, and must never be used by a component instance., 1 [default_value.1.parent_uuid] Invalid component tree item with UUID &lt;em class=&quot;placeholder&quot;&gt;e303dd88-9409-4dc7-8a8b-a31602884a94&lt;/em&gt; references the reserved root UUID as its parent. Component instances at the root of the tree must omit parent_uuid and slot.'
     );
     return $test_cases;
   }

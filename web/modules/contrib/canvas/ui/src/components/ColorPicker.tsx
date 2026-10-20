@@ -52,6 +52,18 @@ const valueToHsva = (val: BrandKitColorValue): HsvaColor => {
   }
 };
 
+const ALPHA_PRECISION = 2;
+
+const roundAlpha = (a: number): number => {
+  const factor = 10 ** ALPHA_PRECISION;
+  return Math.round(a * factor) / factor;
+};
+
+const withRoundedAlpha = (hsva: HsvaColor): HsvaColor => ({
+  ...hsva,
+  a: roundAlpha(hsva.a),
+});
+
 // Convert HsvaColor back to BrandKitColorValue
 const hsvaToValue = (
   hsva: HsvaColor,
@@ -89,7 +101,10 @@ const hsvaToValue = (
 
 interface ColorPickerProps {
   value: BrandKitColorValue;
-  onChange: (value: BrandKitColorValue) => void;
+  onChange: (
+    value: BrandKitColorValue,
+    displayFormat: 'rgb' | 'hex' | 'hsl',
+  ) => void;
   onValidityChange?: (isValid: boolean) => void;
 }
 
@@ -98,7 +113,9 @@ const ColorPicker = ({
   onChange,
   onValidityChange,
 }: ColorPickerProps) => {
-  const [hsva, setHsva] = useState<HsvaColor>(() => valueToHsva(value));
+  const [hsva, setHsva] = useState<HsvaColor>(() =>
+    withRoundedAlpha(valueToHsva(value)),
+  );
   const [colorMode, setColorMode] = useState<'rgba' | 'hsla' | 'hex'>(() =>
     getInitialColorMode(value.colorSpace),
   );
@@ -112,7 +129,7 @@ const ColorPicker = ({
 
   // Sync external value changes back into internal HSVA state
   useEffect(() => {
-    setHsva(valueToHsva(value));
+    setHsva(withRoundedAlpha(valueToHsva(value)));
     // Only update colorMode when colorSpace changes externally
     // (not when user switches modes internally)
     if (value.colorSpace !== prevColorSpaceRef.current) {
@@ -131,25 +148,33 @@ const ColorPicker = ({
     // Track user-selected mode to prevent auto-reset
     userModeRef.current = newMode;
 
-    // Determine the target colorSpace based on the new mode
-    // hex mode uses srgb colorSpace
+    // Determine the target colorSpace and displayFormat based on the new mode
     const targetColorSpace: BrandKitColorValue['colorSpace'] =
       newMode === 'hsla' ? 'hsl' : 'srgb';
+    const displayFormat: 'rgb' | 'hex' | 'hsl' =
+      newMode === 'hex' ? 'hex' : newMode === 'hsla' ? 'hsl' : 'rgb';
 
     // Only convert if the colorSpace is actually changing
     if (targetColorSpace !== value.colorSpace) {
-      onChange(hsvaToValue(hsva, targetColorSpace));
+      onChange(hsvaToValue(hsva, targetColorSpace), displayFormat);
+    } else {
+      // colorSpace didn't change, but displayFormat might have
+      onChange(hsvaToValue(hsva, targetColorSpace), displayFormat);
     }
   };
 
   const handleHsvaChange = (newHsva: HsvaColor) => {
     setHsva(newHsva);
-    onChange(hsvaToValue(newHsva, value.colorSpace));
+    const displayFormat =
+      colorMode === 'hex' ? 'hex' : colorMode === 'hsla' ? 'hsl' : 'rgb';
+    onChange(hsvaToValue(newHsva, value.colorSpace), displayFormat);
   };
-
   const handleColorInputsChange = (newHsva: HsvaColor) => {
-    setHsva(newHsva);
-    onChange(hsvaToValue(newHsva, value.colorSpace));
+    const roundedHsva = withRoundedAlpha(newHsva);
+    const displayFormat =
+      colorMode === 'hex' ? 'hex' : colorMode === 'hsla' ? 'hsl' : 'rgb';
+    onChange(hsvaToValue(newHsva, value.colorSpace), displayFormat);
+    setHsva(roundedHsva);
   };
 
   const hasEyeDropper = typeof window !== 'undefined' && 'EyeDropper' in window;
@@ -164,16 +189,22 @@ const ColorPicker = ({
       if (result && result.sRGBHex) {
         const newHsva = hexToHsva(result.sRGBHex);
         // Keep existing alpha when using eyedropper
-        const mergedHsva: HsvaColor = { ...newHsva, a: hsva.a };
+        const mergedHsva: HsvaColor = withRoundedAlpha({
+          ...newHsva,
+          a: hsva.a,
+        });
         setHsva(mergedHsva);
         // Eyedropper always produces sRGB
         const rgba = hsvaToRgba(mergedHsva);
-        onChange({
-          colorSpace: 'srgb',
-          components: [rgba.r / 255, rgba.g / 255, rgba.b / 255],
-          alpha: mergedHsva.a === 1 ? null : mergedHsva.a,
-          hex: result.sRGBHex,
-        });
+        onChange(
+          {
+            colorSpace: 'srgb',
+            components: [rgba.r / 255, rgba.g / 255, rgba.b / 255],
+            alpha: mergedHsva.a === 1 ? null : mergedHsva.a,
+            hex: result.sRGBHex,
+          },
+          'hex',
+        );
       }
     } catch {
       // User cancelled or eyedropper failed — no action needed

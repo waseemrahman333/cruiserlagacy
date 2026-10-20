@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useReducer } from 'react';
+import parse from 'html-react-parser';
 import { Cross2Icon } from '@radix-ui/react-icons';
 import * as Popover from '@radix-ui/react-popover';
 import {
@@ -13,9 +14,12 @@ import {
 import ColorPicker from '@/components/ColorPicker';
 import ErrorBoundary from '@/components/error/ErrorBoundary';
 import ErrorCard from '@/components/error/ErrorCard';
+import { countUniqueCurrentAndConfigUsages } from '@/features/brandKit/colorUsage';
+import { extractErrorMessageFromApiResponse } from '@/features/error-handling/error-handling';
 import { validateCssVariableClientSide } from '@/features/validation/validation';
 import {
   useCreateColorMutation,
+  useGetColorUsageDetailsQuery,
   useUpdateColorMutation,
 } from '@/services/brandKit';
 import {
@@ -23,7 +27,6 @@ import {
   useUpdateFolderMutation,
 } from '@/services/componentAndLayout';
 import { getColorAlpha, getColorHex } from '@/utils/brandKitColor';
-import { normalizeError } from '@/utils/rtkQuery-error';
 
 import type { Measurable } from '@radix-ui/rect';
 import type { BrandKitColor, BrandKitColorValue } from '@/types/CodeComponent';
@@ -34,6 +37,10 @@ interface ColorFormPopoverProps {
   operation: 'add' | 'edit';
   color?: BrandKitColor;
   folderId?: string;
+  /**
+   * Virtual anchor the popover content is positioned against (e.g. the row's
+   * dots button). The popover is opened programmatically via `open`.
+   */
   anchorRef: React.RefObject<Measurable>;
   align?: 'start' | 'center' | 'end';
   open: boolean;
@@ -52,6 +59,7 @@ interface FormState {
   colorName: string;
   variableName: string;
   colorValue: BrandKitColorValue;
+  displayFormat: 'rgb' | 'hex' | 'hsl' | null;
   variableNameTouched: boolean;
   originalColor: { value: BrandKitColorValue } | null;
   colorNameError: string;
@@ -66,7 +74,11 @@ type FormAction =
   | { type: 'INIT_EDIT'; color: BrandKitColor }
   | { type: 'SET_COLOR_NAME'; value: string }
   | { type: 'SET_VARIABLE_NAME'; value: string }
-  | { type: 'SET_COLOR_VALUE'; value: BrandKitColorValue }
+  | {
+      type: 'SET_COLOR_VALUE';
+      value: BrandKitColorValue;
+      displayFormat: 'rgb' | 'hex' | 'hsl';
+    }
   | { type: 'SET_COLOR_VALIDITY'; isValid: boolean }
   | { type: 'SET_FOLDER_ERROR'; error: string }
   | { type: 'SHOW_VALIDATION_ERRORS' };
@@ -75,6 +87,7 @@ const INITIAL_FORM_STATE: FormState = {
   colorName: '',
   variableName: '',
   colorValue: DEFAULT_COLOR_VALUE,
+  displayFormat: 'rgb',
   variableNameTouched: false,
   originalColor: null,
   colorNameError: '',
@@ -104,6 +117,7 @@ function formReducer(state: FormState, action: FormAction): FormState {
           ? action.color.cssVariable.slice(2)
           : action.color.cssVariable,
         colorValue: action.color.value,
+        displayFormat: action.color.displayFormat ?? null,
         variableNameTouched: true,
         originalColor: { value: action.color.value },
       };
@@ -136,7 +150,11 @@ function formReducer(state: FormState, action: FormAction): FormState {
       };
 
     case 'SET_COLOR_VALUE':
-      return { ...state, colorValue: action.value };
+      return {
+        ...state,
+        colorValue: action.value,
+        displayFormat: action.displayFormat,
+      };
 
     case 'SET_COLOR_VALIDITY':
       return {
@@ -192,6 +210,10 @@ const ColorFormPopover = ({
   ] = useUpdateColorMutation();
   const [updateFolder] = useUpdateFolderMutation();
   const { data: foldersData } = useGetFoldersQuery();
+  const { data: usageData, isLoading: isUsageLoading } =
+    useGetColorUsageDetailsQuery(color?.id ?? '', {
+      skip: operation !== 'edit' || !open || !color?.id,
+    });
 
   // Form state managed via reducer
   const [formState, updateForm] = useReducer(formReducer, INITIAL_FORM_STATE);
@@ -199,6 +221,7 @@ const ColorFormPopover = ({
     colorName,
     variableName,
     colorValue,
+    displayFormat,
     originalColor,
     colorNameError,
     variableNameError,
@@ -234,8 +257,15 @@ const ColorFormPopover = ({
     updateForm({ type: 'SET_COLOR_NAME', value });
   };
 
-  const handleColorPickerChange = (newValue: BrandKitColorValue) => {
-    updateForm({ type: 'SET_COLOR_VALUE', value: newValue });
+  const handleColorPickerChange = (
+    newValue: BrandKitColorValue,
+    newDisplayFormat: 'rgb' | 'hex' | 'hsl',
+  ) => {
+    updateForm({
+      type: 'SET_COLOR_VALUE',
+      value: newValue,
+      displayFormat: newDisplayFormat,
+    });
   };
 
   const handleColorValidityChange = (isValid: boolean) => {
@@ -247,7 +277,7 @@ const ColorFormPopover = ({
 
     updateForm({ type: 'SHOW_VALIDATION_ERRORS' });
 
-    const hasColorNameError = !colorName.trim();
+    const hasColorNameError = operation === 'add' && !colorName.trim();
     const hasVariableNameError = !!validateCssVariableClientSide(variableName);
     const hasColorValueError = !isColorValueValid;
 
@@ -263,6 +293,7 @@ const ColorFormPopover = ({
           name: colorName,
           cssVariable,
           value: colorValue,
+          displayFormat: displayFormat ?? undefined,
           weight: 0,
         }).unwrap();
 
@@ -294,7 +325,9 @@ const ColorFormPopover = ({
         await updateColor({
           id: color.id,
           changes: {
+            cssVariable,
             value: colorValue,
+            displayFormat: displayFormat ?? undefined,
           },
         }).unwrap();
       }
@@ -322,7 +355,7 @@ const ColorFormPopover = ({
         !!variableNameError
       );
     }
-    return false;
+    return !variableName.trim() || !!variableNameError;
   }, [
     colorName,
     variableName,
@@ -332,17 +365,20 @@ const ColorFormPopover = ({
     operation,
   ]);
 
+  // Compute total component count from usage data (current + config only)
+  const componentCount = countUniqueCurrentAndConfigUsages(usageData);
+
   const error = folderError
     ? { title: 'Color created with an issue', message: folderError }
     : isCreateError && createError
       ? {
           title: 'Failed to create color',
-          message: normalizeError(createError).message,
+          message: parse(extractErrorMessageFromApiResponse(createError)),
         }
       : isUpdateError && updateError
         ? {
             title: 'Failed to update color',
-            message: normalizeError(updateError).message,
+            message: parse(extractErrorMessageFromApiResponse(updateError)),
           }
         : null;
 
@@ -358,6 +394,8 @@ const ColorFormPopover = ({
           side="bottom"
           align={align}
           sideOffset={4}
+          avoidCollisions
+          collisionPadding={8}
           className={styles.popoverContent}
           data-testid="canvas-color-form-popover"
           onOpenAutoFocus={(e) => {
@@ -429,32 +467,37 @@ const ColorFormPopover = ({
                       </Text>
                     )}
                   </Flex>
+                </>
+              )}
 
-                  <Flex direction="column" gap="1" px="3">
-                    <label htmlFor="variableName" className={styles.fieldLabel}>
-                      Variable name
-                    </label>
-                    <TextField.Root
-                      id="variableName"
-                      value={variableName}
-                      onChange={(e) => handleVariableNameChange(e.target.value)}
-                      placeholder="e.g., color-primary"
-                      size="1"
-                      data-testid="canvas-color-variable-input"
-                    >
-                      <TextField.Slot side="left">--</TextField.Slot>
-                    </TextField.Root>
-                    {variableNameError && (
-                      <Text
-                        size="1"
-                        color="red"
-                        data-testid="color-variable-error"
-                      >
-                        {variableNameError}
-                      </Text>
-                    )}
-                  </Flex>
+              <Flex
+                direction="column"
+                gap="1"
+                px="3"
+                className={styles.verticalPadding}
+              >
+                <label htmlFor="variableName" className={styles.fieldLabel}>
+                  Variable name
+                </label>
+                <TextField.Root
+                  id="variableName"
+                  value={variableName}
+                  onChange={(e) => handleVariableNameChange(e.target.value)}
+                  placeholder="e.g., color-primary"
+                  size="1"
+                  data-testid="canvas-color-variable-input"
+                >
+                  <TextField.Slot side="left">--</TextField.Slot>
+                </TextField.Root>
+                {variableNameError && (
+                  <Text size="1" color="red" data-testid="color-variable-error">
+                    {variableNameError}
+                  </Text>
+                )}
+              </Flex>
 
+              {operation === 'add' && (
+                <>
                   <ErrorBoundary
                     title="Color picker unavailable"
                     variant="card"
@@ -581,36 +624,39 @@ const ColorFormPopover = ({
                     </Box>
                   )}
 
-                  <Box px="3">
-                    <div
-                      className={styles.infoBox}
-                      data-testid="canvas-color-edit-info"
-                    >
-                      <svg
-                        className={styles.infoIcon}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
+                  {!isUsageLoading && (
+                    <Box className={styles.verticalPadding} px="3">
+                      <div
+                        className={styles.infoBox}
+                        data-testid="canvas-color-edit-info"
                       >
-                        <path
-                          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
-                          fill="currentColor"
-                        />
-                      </svg>
-                      <Text size="1" className={styles.infoText}>
-                        Changing this color will affect 0 components across your
-                        design.
-                      </Text>
-                    </div>
-                  </Box>
+                        <svg
+                          className={styles.infoIcon}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                        >
+                          <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+                            fill="currentColor"
+                          />
+                        </svg>
+                        <Text size="1" className={styles.infoText}>
+                          Changing this color will affect {componentCount}{' '}
+                          component
+                          {componentCount !== 1 ? 's' : ''} across your design.
+                        </Text>
+                      </div>
+                    </Box>
+                  )}
                 </>
               )}
             </Flex>
 
             {error && (
-              <Box px="3" mt="3" data-testid="color-error-card">
+              <Box px="3" mt="3" mb="3" data-testid="color-error-card">
                 <ErrorCard title={error.title} error={error.message} />
               </Box>
             )}

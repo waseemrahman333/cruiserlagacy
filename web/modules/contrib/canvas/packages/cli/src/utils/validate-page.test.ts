@@ -97,6 +97,33 @@ describe('validateElements', () => {
     expect(result.details?.[0].heading).toContain('text');
     expect(result.details?.[0].content).toContain('undefined');
   });
+
+  it('reports an actionable error for prop shapes the drupal-canvas package does not bundle', () => {
+    const metadata: ComponentMetadata[] = [
+      {
+        name: 'Attachment',
+        machineName: 'attachment',
+        status: true,
+        props: {
+          properties: {
+            file: {
+              title: 'File',
+              type: 'object',
+              $ref: 'json-schema-definitions://canvas.module/unbundled-shape',
+            },
+          },
+        },
+        required: [],
+        slots: {},
+      },
+    ];
+
+    expect(() => buildElementsValidationContext(metadata)).toThrow(
+      'The installed drupal-canvas package does not support "unbundled-shape" props. ' +
+        '"unbundled-shape" props require a newer drupal-canvas version. ' +
+        'Run `npm install drupal-canvas@latest` in the project, then retry.',
+    );
+  });
 });
 
 describe('validatePages', () => {
@@ -143,14 +170,74 @@ describe('validatePages', () => {
           relativePath: 'pages/home.json',
         },
       ],
-      regions: [],
+      pageTemplates: [],
       warnings: [],
       stats: { scannedFiles: 1, ignoredFiles: 0 },
+      componentSchemas: new Map(),
     };
 
     try {
       await expect(validatePages(discoveryResult)).resolves.toEqual({
         results: [{ itemName: 'Home', success: true }],
+      });
+    } finally {
+      await fs.rm(tmpDir, { recursive: true, force: true });
+    }
+  });
+
+  it('rejects an unknown page template selection', async () => {
+    const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), 'canvas-page-'));
+    const pagePath = path.join(tmpDir, 'home.json');
+    await fs.writeFile(
+      pagePath,
+      JSON.stringify({
+        title: 'Home',
+        path: '/home',
+        pageVariant: 'missing',
+        elements: {},
+      }),
+      'utf-8',
+    );
+
+    const discoveryResult: DiscoveryResult = {
+      componentRoot: tmpDir,
+      projectRoot: tmpDir,
+      components: [],
+      contentTemplates: [],
+      pages: [
+        {
+          name: 'home',
+          slug: 'home',
+          uuid: null,
+          path: pagePath,
+          relativePath: 'pages/home.json',
+        },
+      ],
+      pageTemplates: [],
+      warnings: [],
+      stats: { scannedFiles: 1, ignoredFiles: 0 },
+      componentSchemas: new Map(),
+    };
+
+    try {
+      await expect(
+        validatePages(discoveryResult, {
+          availablePageVariantIds: new Set(['default']),
+        }),
+      ).resolves.toEqual({
+        results: [
+          {
+            itemName: 'Home (pages/home.json)',
+            success: false,
+            details: [
+              {
+                heading: 'pageVariant',
+                content:
+                  'Unknown page template "missing". Pull it from the site or add its file under page-templates.',
+              },
+            ],
+          },
+        ],
       });
     } finally {
       await fs.rm(tmpDir, { recursive: true, force: true });
@@ -181,14 +268,15 @@ describe('validatePages', () => {
         {
           name: 'home',
           slug: 'home',
-          uuid,
+          uuid: null,
           path: pagePath,
           relativePath: 'pages/home.json',
         },
       ],
-      regions: [],
+      pageTemplates: [],
       warnings: [],
       stats: { scannedFiles: 1, ignoredFiles: 0 },
+      componentSchemas: new Map(),
     };
 
     try {
@@ -245,9 +333,10 @@ describe('validatePages', () => {
           relativePath: 'pages/new-page.json',
         },
       ],
-      regions: [],
+      pageTemplates: [],
       warnings: [],
       stats: { scannedFiles: 1, ignoredFiles: 0 },
+      componentSchemas: new Map(),
     };
 
     try {
@@ -325,9 +414,10 @@ describe('validatePages', () => {
             relativePath: 'pages/home.json',
           },
         ],
-        regions: [],
+        pageTemplates: [],
         warnings: [],
         stats: { scannedFiles: 2, ignoredFiles: 0 },
+        componentSchemas: new Map(),
       };
 
       const { results } = await validatePages(discoveryResult);

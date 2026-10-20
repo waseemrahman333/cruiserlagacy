@@ -48,15 +48,26 @@ describe('parseDraftData', () => {
     );
   });
 
-  it('round-trips optional content-template preview context', () => {
-    const draftData = {
-      ...validDraftData,
-      previewContext: {
-        viewMode: 'teaser',
-      },
-    };
-    expect(parseDraftData(serializeDraftData(draftData))).toEqual(draftData);
-  });
+  it.each([
+    { language: 'fr', viewMode: 'teaser', pageVariant: 'alternate' },
+    { language: null },
+    null,
+  ])(
+    'removes obsolete rendering context from older cookies: %s',
+    (previewContext) => {
+      const data = {
+        ...validDraftData,
+        path: '/node/1?filter=a%20b&_canvas_language=pl&_canvas_viewMode=teaser&_canvas_pageVariant=alternate&_canvas_excludeAutoSave=true#section',
+        previewContext,
+      };
+      const expected = {
+        ...validDraftData,
+        path: '/node/1?filter=a%20b#section',
+      };
+      expect(parseDraftData(JSON.stringify(data))).toEqual(expected);
+      expect(JSON.parse(serializeDraftData(data))).toEqual(expected);
+    },
+  );
 
   it.each([null, undefined, ''])('returns null for %s', (value) => {
     expect(parseDraftData(value)).toBeNull();

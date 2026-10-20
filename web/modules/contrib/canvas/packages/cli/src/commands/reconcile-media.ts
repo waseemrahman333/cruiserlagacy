@@ -44,14 +44,13 @@ interface ReconcileMediaOptions {
   scope?: string;
   includePages?: boolean;
   includeContentTemplates?: boolean;
-  includeRegions?: boolean;
   pages?: boolean;
   contentTemplates?: boolean;
-  regions?: boolean;
+  pageTemplates?: boolean;
   sync?: Partial<{
     pages: boolean;
     contentTemplates: boolean;
-    regions: boolean;
+    pageTemplates: boolean;
   }>;
   dir?: string;
   yes?: boolean;
@@ -60,7 +59,7 @@ interface ReconcileMediaOptions {
 export interface ReconcileMediaSyncConfig {
   includePages: boolean;
   includeContentTemplates: boolean;
-  includeRegions: boolean;
+  includePageTemplates: boolean;
 }
 
 export interface ReconcileSpecFile {
@@ -97,17 +96,63 @@ function sanitizeFilename(filename: string): string {
   return filename.replace(/[^a-zA-Z0-9._-]+/g, '-');
 }
 
-const SUPPORTED_IMAGE_TYPES: Record<string, string> = {
-  'image/jpeg': '.jpg',
-  'image/png': '.png',
-  'image/gif': '.gif',
-  'image/webp': '.webp',
-  'image/avif': '.avif',
+// cspell:ignore msword openxmlformats officedocument wordprocessingml
+// cspell:ignore presentationml spreadsheetml opendocument
+// MIME type to file extension maps, keyed by the Drupal media bundle the
+// upload targets. The document map covers every extension in the document
+// shape's `x-allowed-file-extensions` list in schema.json (a test keeps the
+// two in sync). The list deliberately excludes `txt`: document props carry
+// `contentMediaType: application/*`, and text/plain files are not part of
+// the shape even though core's document media type field accepts them.
+export const SUPPORTED_MEDIA_MIME_TYPES: Record<
+  string,
+  Record<string, string>
+> = {
+  image: {
+    'image/jpeg': '.jpg',
+    'image/png': '.png',
+    'image/gif': '.gif',
+    'image/webp': '.webp',
+    'image/avif': '.avif',
+  },
+  document: {
+    'application/pdf': '.pdf',
+    'application/rtf': '.rtf',
+    'application/msword': '.doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+      '.docx',
+    'application/vnd.ms-powerpoint': '.ppt',
+    'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+      '.pptx',
+    'application/vnd.ms-excel': '.xls',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+      '.xlsx',
+    'application/vnd.oasis.opendocument.text': '.odt',
+    'application/vnd.oasis.opendocument.spreadsheet': '.ods',
+    'application/vnd.oasis.opendocument.presentation': '.odp',
+    'application/vnd.oasis.opendocument.graphics': '.odg',
+    'application/vnd.oasis.opendocument.formula': '.odf',
+    'application/vnd.oasis.opendocument.text-flat-xml': '.fodt',
+    'application/vnd.oasis.opendocument.spreadsheet-flat-xml': '.fods',
+    'application/vnd.oasis.opendocument.presentation-flat-xml': '.fodp',
+    'application/vnd.oasis.opendocument.graphics-flat-xml': '.fodg',
+    'application/vnd.apple.keynote': '.key',
+    'application/vnd.apple.numbers': '.numbers',
+    'application/vnd.apple.pages': '.pages',
+  },
 };
+
+// Flattened map for guessing a filename extension from a Content-Type header
+// when the URL path has none. Validation against the media type's own map
+// happens separately at upload time.
+const ALL_MIME_EXTENSIONS: Record<string, string> = Object.assign(
+  {},
+  ...Object.values(SUPPORTED_MEDIA_MIME_TYPES),
+);
 
 function extensionFromContentType(contentType: string | undefined): string {
   const normalized = contentType?.split(';')[0]?.trim().toLowerCase() ?? '';
-  return SUPPORTED_IMAGE_TYPES[normalized] ?? '';
+  return ALL_MIME_EXTENSIONS[normalized] ?? '';
 }
 
 export async function downloadExternalMedia(
@@ -179,7 +224,7 @@ async function readReconcileSpecFile(
 export async function collectReconcileSpecFiles(
   discoveryResult: Pick<
     DiscoveryResult,
-    'pages' | 'contentTemplates' | 'regions'
+    'pages' | 'contentTemplates' | 'pageTemplates'
   >,
   syncConfig: ReconcileMediaSyncConfig,
 ): Promise<ReconcileSpecFile[]> {
@@ -209,13 +254,13 @@ export async function collectReconcileSpecFiles(
     }
   }
 
-  if (syncConfig.includeRegions) {
-    for (const region of discoveryResult.regions) {
+  if (syncConfig.includePageTemplates) {
+    for (const pageTemplate of discoveryResult.pageTemplates) {
       specFiles.push(
         await readReconcileSpecFile(
-          `global region "${region.region}"`,
-          region.relativePath,
-          region.path,
+          `page template "${pageTemplate.id}"`,
+          pageTemplate.relativePath,
+          pageTemplate.path,
         ),
       );
     }
@@ -230,7 +275,7 @@ export function hasReconcileMediaSyncEnabled(
   return (
     syncConfig.includePages ||
     syncConfig.includeContentTemplates ||
-    syncConfig.includeRegions
+    syncConfig.includePageTemplates
   );
 }
 
@@ -260,6 +305,31 @@ interface MediaWorkItem {
   externalUrl: string;
   mediaType: string;
   alt: string;
+  title: string;
+  description: string;
+}
+
+function stringProp(value: unknown, key: string): string {
+  return isRecord(value) && typeof value[key] === 'string' ? value[key] : '';
+}
+
+/**
+ * Builds the upload form fields for a media type.
+ *
+ * `title` names the media entity. Image media also store `alt` on the image
+ * field; document media store `description` on the file field.
+ */
+function uploadFormData(
+  item: MediaWorkItem,
+  filename: string,
+): Record<string, string> {
+  if (item.mediaType === 'document') {
+    return {
+      title: item.title || filename,
+      description: item.description,
+    };
+  }
+  return { title: filename, alt: item.alt };
 }
 
 export async function reconcileElementMapMedia(
@@ -296,7 +366,9 @@ export async function reconcileElementMapMedia(
         propName,
         externalUrl: match.url,
         mediaType: match.mediaType,
-        alt: isRecord(value) && typeof value.alt === 'string' ? value.alt : '',
+        alt: stringProp(value, 'alt'),
+        title: stringProp(value, 'title'),
+        description: stringProp(value, 'description'),
       });
     }
   }
@@ -310,22 +382,18 @@ export async function reconcileElementMapMedia(
   const uploadResults = await processInPool(uniqueUrls, async (url) => {
     const firstItem = workItems.find((item) => item.externalUrl === url)!;
     const downloaded = await downloadMedia(url);
-    if (
-      downloaded.mimeType &&
-      !(downloaded.mimeType in SUPPORTED_IMAGE_TYPES)
-    ) {
+    const supportedMimeTypes =
+      SUPPORTED_MEDIA_MIME_TYPES[firstItem.mediaType] ?? {};
+    if (downloaded.mimeType && !(downloaded.mimeType in supportedMimeTypes)) {
       throw new Error(
-        `Unsupported image type "${downloaded.mimeType}". Supported types: ${Object.keys(SUPPORTED_IMAGE_TYPES).join(', ')}.`,
+        `Unsupported ${firstItem.mediaType} type "${downloaded.mimeType}". Supported types: ${Object.keys(supportedMimeTypes).join(', ')}.`,
       );
     }
     const uploaded = await apiService.uploadMedia<ReconciledMediaInputs>({
       mediaType: firstItem.mediaType,
       filename: downloaded.filename,
       fileBuffer: downloaded.buffer,
-      data: {
-        title: downloaded.filename,
-        alt: firstItem.alt,
-      },
+      data: uploadFormData(firstItem, downloaded.filename),
     });
     return uploaded;
   });
@@ -387,7 +455,7 @@ export function reconcileMediaCommand(program: Command): void {
   program
     .command('reconcile-media')
     .description(
-      'upload supported external media from pages, content templates, and global regions to Drupal and store its provenance',
+      'upload supported external media from pages, content templates, and page templates to Drupal and store its provenance',
     )
     .option('--client-id <id>', 'Client ID')
     .option('--client-secret <secret>', 'Client Secret')
@@ -411,15 +479,6 @@ export function reconcileMediaCommand(program: Command): void {
         .argParser(parseBooleanOption)
         .default(undefined),
     )
-    .addOption(
-      new Option(
-        '--include-regions [enabled]',
-        'Include global regions in the media reconciliation operation',
-      )
-        .preset('true')
-        .argParser(parseBooleanOption)
-        .default(undefined),
-    )
     .option(
       '--no-pages',
       'Exclude pages from the media reconciliation operation',
@@ -429,8 +488,8 @@ export function reconcileMediaCommand(program: Command): void {
       'Exclude content templates from the media reconciliation operation',
     )
     .option(
-      '--no-regions',
-      'Exclude global regions from the media reconciliation operation',
+      '--no-page-templates',
+      'Exclude page templates from the media reconciliation operation',
     )
     .option('-d, --dir <directory>', 'Component directory')
     .option('-y, --yes', 'Skip confirmation prompts')
@@ -440,21 +499,21 @@ export function reconcileMediaCommand(program: Command): void {
         applySyncOptionAliasesAndWarnings(options);
         updateConfigFromOptions(options);
 
+        await ensureAuthConfig();
         const currentConfig = getConfig();
         const syncConfig = {
           includePages: currentConfig.includePages,
           includeContentTemplates: currentConfig.includeContentTemplates,
-          includeRegions: currentConfig.includeRegions,
+          includePageTemplates: currentConfig.includePageTemplates,
         };
         if (!hasReconcileMediaSyncEnabled(syncConfig)) {
           p.log.info(
-            'No pages, content templates, or global regions are enabled for media reconciliation.',
+            'No pages, content templates, or page templates are enabled for media reconciliation.',
           );
           p.outro('Media reconciliation skipped');
           return;
         }
 
-        await ensureAuthConfig();
         await ensureConfig(['componentDir']);
 
         const nextConfig = getConfig();
@@ -462,7 +521,7 @@ export function reconcileMediaCommand(program: Command): void {
           componentRoot: nextConfig.componentDir,
           pagesRoot: nextConfig.pagesDir,
           contentTemplatesRoot: nextConfig.contentTemplatesDir,
-          regionsRoot: nextConfig.regionsDir,
+          pageTemplatesRoot: nextConfig.pageTemplatesDir,
           projectRoot: process.cwd(),
         });
         const componentMetadata = await loadComponentsMetadata(discoveryResult);
@@ -474,7 +533,7 @@ export function reconcileMediaCommand(program: Command): void {
 
         if (specFiles.length === 0) {
           p.log.warn(
-            'No local pages, content templates, or global regions found for the enabled sync settings.',
+            'No local pages, content templates, or page templates found for the enabled sync settings.',
           );
           p.outro('Media reconciliation skipped');
           return;

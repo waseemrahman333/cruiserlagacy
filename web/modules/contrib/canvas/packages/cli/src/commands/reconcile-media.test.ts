@@ -3,11 +3,13 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import canvasSchema from '../../../../schema.json';
 import {
   collectReconcileSpecFiles,
   downloadDataUrlMedia,
   hasReconcileMediaSyncEnabled,
   reconcileElementMapMedia,
+  SUPPORTED_MEDIA_MIME_TYPES,
 } from './reconcile-media';
 
 import type { ComponentMetadata } from '@drupal-canvas/discovery';
@@ -26,6 +28,11 @@ const metadata: ComponentMetadata[] = [
           title: 'Image',
           type: 'object',
           $ref: 'json-schema-definitions://canvas.module/image',
+        },
+        attachment: {
+          title: 'Attachment',
+          type: 'object',
+          $ref: 'json-schema-definitions://canvas.module/document',
         },
       },
     },
@@ -51,16 +58,16 @@ afterEach(async () => {
 });
 
 describe('collectReconcileSpecFiles', () => {
-  it('does not read specs when pages, content templates, and regions are disabled', async () => {
+  it('does not read specs when pages, content templates, and page templates are disabled', async () => {
     const root = await makeTempDir();
     tempDirs.push(root);
     const pagePath = path.join(root, 'pages/home.json');
     const templatePath = path.join(root, 'content-templates/article.json');
-    const regionPath = path.join(root, 'regions/header.json');
+    const pageTemplatePath = path.join(root, 'page-templates/marketing.json');
 
     await writeFile(pagePath, '{');
     await writeFile(templatePath, '{');
-    await writeFile(regionPath, '{');
+    await writeFile(pageTemplatePath, '{');
 
     const specFiles = await collectReconcileSpecFiles(
       {
@@ -85,37 +92,40 @@ describe('collectReconcileSpecFiles', () => {
             relativePath: 'content-templates/article.json',
           },
         ],
-        regions: [
+        pageTemplates: [
           {
-            region: 'header',
-            path: regionPath,
-            relativePath: 'regions/header.json',
+            id: 'marketing',
+            label: 'Marketing',
+            status: true,
+            isDefault: false,
+            path: pageTemplatePath,
+            relativePath: 'page-templates/marketing.json',
           },
         ],
       },
       {
         includePages: false,
         includeContentTemplates: false,
-        includeRegions: false,
+        includePageTemplates: false,
       },
     );
 
     expect(specFiles).toEqual([]);
   });
 
-  it('collects enabled pages and content templates while skipping disabled regions', async () => {
+  it('collects enabled pages and content templates while skipping disabled page templates', async () => {
     const root = await makeTempDir();
     tempDirs.push(root);
     const pagePath = path.join(root, 'pages/home.json');
     const templatePath = path.join(root, 'content-templates/article.json');
-    const regionPath = path.join(root, 'regions/header.json');
+    const pageTemplatePath = path.join(root, 'page-templates/marketing.json');
 
     await writeFile(pagePath, JSON.stringify({ title: 'Home', elements: {} }));
     await writeFile(
       templatePath,
       JSON.stringify({ label: 'Article', elements: {} }),
     );
-    await writeFile(regionPath, JSON.stringify({ elements: {} }));
+    await writeFile(pageTemplatePath, JSON.stringify({ elements: {} }));
 
     const specFiles = await collectReconcileSpecFiles(
       {
@@ -140,18 +150,21 @@ describe('collectReconcileSpecFiles', () => {
             relativePath: 'content-templates/article.json',
           },
         ],
-        regions: [
+        pageTemplates: [
           {
-            region: 'header',
-            path: regionPath,
-            relativePath: 'regions/header.json',
+            id: 'marketing',
+            label: 'Marketing',
+            status: true,
+            isDefault: false,
+            path: pageTemplatePath,
+            relativePath: 'page-templates/marketing.json',
           },
         ],
       },
       {
         includePages: true,
         includeContentTemplates: true,
-        includeRegions: false,
+        includePageTemplates: false,
       },
     );
 
@@ -170,11 +183,11 @@ describe('collectReconcileSpecFiles', () => {
     tempDirs.push(root);
     const pagePath = path.join(root, 'pages/home.json');
     const templatePath = path.join(root, 'content-templates/article.json');
-    const regionPath = path.join(root, 'regions/header.json');
+    const pageTemplatePath = path.join(root, 'page-templates/marketing.json');
 
     await writeFile(pagePath, '{');
     await writeFile(templatePath, '{');
-    await writeFile(regionPath, JSON.stringify({ elements: {} }));
+    await writeFile(pageTemplatePath, JSON.stringify({ elements: {} }));
 
     const specFiles = await collectReconcileSpecFiles(
       {
@@ -199,23 +212,26 @@ describe('collectReconcileSpecFiles', () => {
             relativePath: 'content-templates/article.json',
           },
         ],
-        regions: [
+        pageTemplates: [
           {
-            region: 'header',
-            path: regionPath,
-            relativePath: 'regions/header.json',
+            id: 'marketing',
+            label: 'Marketing',
+            status: true,
+            isDefault: false,
+            path: pageTemplatePath,
+            relativePath: 'page-templates/marketing.json',
           },
         ],
       },
       {
         includePages: false,
         includeContentTemplates: false,
-        includeRegions: true,
+        includePageTemplates: true,
       },
     );
 
     expect(specFiles.map((file) => file.label)).toEqual([
-      'global region "header"',
+      'page template "marketing"',
     ]);
     expect(specFiles[0].spec).toEqual({ elements: {} });
   });
@@ -227,28 +243,28 @@ describe('hasReconcileMediaSyncEnabled', () => {
       hasReconcileMediaSyncEnabled({
         includePages: false,
         includeContentTemplates: false,
-        includeRegions: false,
+        includePageTemplates: false,
       }),
     ).toBe(false);
     expect(
       hasReconcileMediaSyncEnabled({
         includePages: true,
         includeContentTemplates: false,
-        includeRegions: false,
+        includePageTemplates: false,
       }),
     ).toBe(true);
     expect(
       hasReconcileMediaSyncEnabled({
         includePages: false,
         includeContentTemplates: true,
-        includeRegions: false,
+        includePageTemplates: false,
       }),
     ).toBe(true);
     expect(
       hasReconcileMediaSyncEnabled({
         includePages: false,
         includeContentTemplates: false,
-        includeRegions: true,
+        includePageTemplates: true,
       }),
     ).toBe(true);
   });
@@ -470,6 +486,137 @@ describe('reconcileElementMapMedia', () => {
     expect(apiService.uploadMedia).not.toHaveBeenCalled();
   });
 
+  it('uploads external document media with the document media type', async () => {
+    const elements = {
+      hero: {
+        type: 'js.hero',
+        props: {
+          attachment: {
+            src: 'https://example.com/annual-report.pdf',
+            title: 'Annual Report',
+            description: 'Fiscal year 2025 results',
+            filename: 'annual-report.pdf',
+          },
+        },
+      },
+    } as AuthoredSpecElementMap;
+    const apiService = {
+      uploadMedia: vi.fn().mockResolvedValue({
+        id: 77,
+        uuid: 'doc-uuid',
+        inputs_resolved: {
+          src: '/sites/default/files/annual-report.pdf',
+          filename: 'annual-report.pdf',
+          filesize: 25600,
+          mimetype: 'application/pdf',
+        },
+      }),
+    };
+    const downloadMedia = vi.fn().mockResolvedValue({
+      buffer: Buffer.from('pdf-bytes'),
+      filename: 'annual-report.pdf',
+      mimeType: 'application/pdf',
+    });
+
+    const result = await reconcileElementMapMedia(
+      elements,
+      metadata,
+      apiService,
+      downloadMedia,
+    );
+
+    expect(result.reconciled).toBe(1);
+    expect(apiService.uploadMedia).toHaveBeenCalledWith({
+      mediaType: 'document',
+      filename: 'annual-report.pdf',
+      fileBuffer: Buffer.from('pdf-bytes'),
+      data: {
+        title: 'Annual Report',
+        description: 'Fiscal year 2025 results',
+      },
+    });
+    expect(elements.hero.props).toEqual({
+      attachment: {
+        src: '/sites/default/files/annual-report.pdf',
+        filename: 'annual-report.pdf',
+        filesize: 25600,
+        mimetype: 'application/pdf',
+      },
+    });
+    expect(elements.hero._provenance).toEqual({
+      attachment: {
+        target_id: 77,
+        source_url: 'https://example.com/annual-report.pdf',
+      },
+    });
+  });
+
+  it('reports failure for text/plain document media', async () => {
+    // The document shape's x-allowed-file-extensions deliberately excludes
+    // txt, even though core's document media type field accepts it.
+    const elements = {
+      hero: {
+        type: 'js.hero',
+        props: {
+          attachment: {
+            src: 'https://example.com/notes.txt',
+          },
+        },
+      },
+    } as AuthoredSpecElementMap;
+    const apiService = { uploadMedia: vi.fn() };
+    const downloadMedia = vi.fn().mockResolvedValue({
+      buffer: Buffer.from('plain text'),
+      filename: 'notes.txt',
+      mimeType: 'text/plain',
+    });
+
+    const result = await reconcileElementMapMedia(
+      elements,
+      metadata,
+      apiService,
+      downloadMedia,
+    );
+
+    expect(result.reconciled).toBe(0);
+    expect(result.failures).toHaveLength(1);
+    expect(result.failures[0].error).toContain('Unsupported document type');
+    expect(result.failures[0].error).toContain('text/plain');
+    expect(apiService.uploadMedia).not.toHaveBeenCalled();
+  });
+
+  it('reports failure for MIME types outside the document map', async () => {
+    const elements = {
+      hero: {
+        type: 'js.hero',
+        props: {
+          attachment: {
+            src: 'https://example.com/archive.zip',
+          },
+        },
+      },
+    } as AuthoredSpecElementMap;
+    const apiService = { uploadMedia: vi.fn() };
+    const downloadMedia = vi.fn().mockResolvedValue({
+      buffer: Buffer.from('zip-bytes'),
+      filename: 'archive.zip',
+      mimeType: 'application/zip',
+    });
+
+    const result = await reconcileElementMapMedia(
+      elements,
+      metadata,
+      apiService,
+      downloadMedia,
+    );
+
+    expect(result.reconciled).toBe(0);
+    expect(result.failures).toHaveLength(1);
+    expect(result.failures[0].error).toContain('Unsupported document type');
+    expect(result.failures[0].error).toContain('application/zip');
+    expect(apiService.uploadMedia).not.toHaveBeenCalled();
+  });
+
   it('allows supported MIME types through', async () => {
     const elements = {
       hero: {
@@ -534,5 +681,16 @@ describe('downloadDataUrlMedia', () => {
     expect(() => downloadDataUrlMedia('not-a-data-url')).toThrow(
       'Invalid data URL',
     );
+  });
+});
+
+describe('SUPPORTED_MEDIA_MIME_TYPES', () => {
+  it('maps a MIME type for every extension the document shape allows', () => {
+    const allowedExtensions =
+      canvasSchema.$defs.document.properties.src['x-allowed-file-extensions'];
+    const mappedExtensions = Object.values(
+      SUPPORTED_MEDIA_MIME_TYPES.document,
+    ).map((extension) => extension.replace(/^\./, ''));
+    expect(new Set(mappedExtensions)).toEqual(new Set(allowedExtensions));
   });
 });

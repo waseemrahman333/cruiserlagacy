@@ -22,7 +22,7 @@
 			<!-- Left Text Block -->
 			{% if title %}
 				<div class="heading lg:max-[600px]">
-					<h1 class=" {{ title_color }} font-bold md:w-150 text-[clamp(2.25rem,calc(3.1746vw+1.476rem),3rem)] md:text-[clamp(3rem,calc(2.0833vw+2rem),4.5rem)] leading-tight">
+					<h1 class=" {{ title_color }} !text-surface-100 font-bold md:w-150 text-[clamp(2.25rem,calc(3.1746vw+1.476rem),3rem)] md:text-[clamp(3rem,calc(2.0833vw+2rem),4.5rem)] leading-tight">
 						{{ title }}
 					</h1>
 				</div>
@@ -35,7 +35,7 @@
 					</div>
 
 				{% endif %}
-				<div class="hero_cta self-end">
+				<div class="hero_cta self-end min-w-10">
 					{{ cta }}
 				</div>
 			</div>

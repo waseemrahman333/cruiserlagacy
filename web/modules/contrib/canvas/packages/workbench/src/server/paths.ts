@@ -2,7 +2,10 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
-import { resolveCanvasConfig } from '@drupal-canvas/discovery';
+import {
+  BRAND_KIT_CONFIG_FILENAME,
+  resolveCanvasConfig,
+} from '@drupal-canvas/discovery';
 import { validateCanvasImportRoots } from '@drupal-canvas/vite-compat';
 
 export interface WorkbenchPathsOptions {
@@ -20,9 +23,7 @@ export interface WorkbenchPaths {
   hostProjectRoot: string;
   packageRoot: string;
   pagesDiscoveryRoot: string;
-  regionsDiscoveryRoot: string;
-  /** Absolute path to the user's optional layout component, or null if absent. */
-  layoutPath: string;
+  pageTemplatesDiscoveryRoot: string;
   runningInsideWorkbenchPackage: boolean;
   watchRoots: string[];
   workbenchSourceRoot: string;
@@ -74,17 +75,17 @@ export function resolveWorkbenchPaths(
     hostProjectRoot,
     canvasConfig.contentTemplatesDir,
   );
-  const regionsDiscoveryRoot = path.resolve(
+  const pageTemplatesDiscoveryRoot = path.resolve(
     hostProjectRoot,
-    canvasConfig.regionsDir,
+    canvasConfig.pageTemplatesDir,
   );
-  const layoutPath = path.resolve(hostProjectRoot, canvasConfig.layoutPath);
   const watchRoots = [
     ...new Set([
       componentDiscoveryRoot,
       pagesDiscoveryRoot,
       contentTemplatesDiscoveryRoot,
-      regionsDiscoveryRoot,
+      pageTemplatesDiscoveryRoot,
+      path.join(hostProjectRoot, BRAND_KIT_CONFIG_FILENAME),
     ]),
   ];
 
@@ -110,8 +111,7 @@ export function resolveWorkbenchPaths(
     hostProjectRoot,
     packageRoot,
     pagesDiscoveryRoot,
-    regionsDiscoveryRoot,
-    layoutPath,
+    pageTemplatesDiscoveryRoot,
     runningInsideWorkbenchPackage,
     watchRoots,
     workbenchSourceRoot,

@@ -6,7 +6,7 @@ namespace Drupal\canvas\Entity;
 
 use Drupal\canvas\ClientSideRepresentation;
 use Drupal\canvas\EntityHandlers\CanvasAssetStorage;
-use Drupal\canvas\EntityHandlers\ContentCreatorVisibleCanvasConfigEntityAccessControlHandler;
+use Drupal\canvas\EntityHandlers\ColorAccessControlHandler;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\RefinableCacheableDependencyInterface;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
@@ -26,6 +26,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  *     alpha: float|null,
  *     hex: string|null
  *   },
+ *   displayFormat: string|null,
  *   weight: int
  * }
  * @phpstan-type ColorEntryInput array{
@@ -38,6 +39,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
  *     alpha: float|int|string|null,
  *     hex: string|null
  *   },
+ *   displayFormat: string|null,
  *   weight: int|string
  * }
  */
@@ -49,7 +51,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
   label_collection: new TranslatableMarkup('Colors'),
   admin_permission: self::ADMIN_PERMISSION,
   handlers: [
-    'access' => ContentCreatorVisibleCanvasConfigEntityAccessControlHandler::class,
+    'access' => ColorAccessControlHandler::class,
   ],
   entity_keys: [
     'id' => 'uuid',
@@ -60,6 +62,7 @@ use Drupal\Core\StringTranslation\TranslatableMarkup;
     'name',
     'cssVariable',
     'value',
+    'displayFormat',
     'weight',
   ],
   constraints: [
@@ -80,6 +83,16 @@ final class Color extends ConfigEntityBase implements CanvasHttpApiEligibleConfi
   public const string ENTITY_TYPE_ID = 'color';
   public const string ADMIN_PERMISSION = 'administer brand kit';
 
+  /**
+   * Prefix marking a stored color prop value as a reference to a Color.
+   *
+   * A color prop stores either a literal CSS value (`#rrggbbaa`, `hsl(…)`) or
+   * this prefix followed by a Color config entity ID (which is its UUID).
+   *
+   * @see \Drupal\canvas\Utility\ColorResolver::parseColorEntityId()
+   */
+  public const string REFERENCE_PREFIX = 'canvas-color:';
+
   protected string $name;
   protected string $cssVariable;
 
@@ -94,6 +107,7 @@ final class Color extends ConfigEntityBase implements CanvasHttpApiEligibleConfi
    * }
    */
   protected array $value;
+  protected ?string $displayFormat = NULL;
   protected int $weight = 0;
 
   public function id(): ?string {
@@ -114,6 +128,7 @@ final class Color extends ConfigEntityBase implements CanvasHttpApiEligibleConfi
         'name' => $this->name,
         'cssVariable' => $this->cssVariable,
         'value' => $this->value,
+        'displayFormat' => $this->displayFormat ?? NULL,
         'weight' => $this->weight,
       ],
       preview: NULL,
@@ -188,6 +203,10 @@ final class Color extends ConfigEntityBase implements CanvasHttpApiEligibleConfi
     return $this->weight;
   }
 
+  public function getDisplayFormat(): ?string {
+    return $this->displayFormat;
+  }
+
   /**
    * {@inheritdoc}
    */
@@ -213,11 +232,16 @@ final class Color extends ConfigEntityBase implements CanvasHttpApiEligibleConfi
   private static function regenerateBrandKitAssets(): void {
     $storage = \Drupal::entityTypeManager()->getStorage(BrandKit::ENTITY_TYPE_ID);
     \assert($storage instanceof CanvasAssetStorage);
+    $tags = ['library_info'];
     foreach ($storage->loadMultiple() as $brand_kit) {
       \assert($brand_kit instanceof CanvasAssetInterface);
       $storage->generateFiles($brand_kit);
+      // The brand kit is not saved, so its cache tags must be invalidated
+      // explicitly for responses to refer to the newly generated files.
+      // @see \Drupal\canvas\Hook\ComponentSourceHooks::pageAttachments()
+      $tags = Cache::mergeTags($tags, array_values($brand_kit->getCacheTagsToInvalidate()));
     }
-    Cache::invalidateTags(['library_info']);
+    Cache::invalidateTags($tags);
   }
 
   /**

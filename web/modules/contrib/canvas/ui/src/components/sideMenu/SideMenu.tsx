@@ -4,11 +4,11 @@ import { useParams } from 'react-router';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import BrandKitIcon from '@assets/icons/brand-kit.svg?react';
 import ExtensionIcon from '@assets/icons/extension-sm.svg?react';
+import HeadlessIcon from '@assets/icons/headless.svg?react';
 import TemplateIcon from '@assets/icons/template.svg?react';
 import {
   CodeIcon,
   FileTextIcon,
-  GlobeIcon,
   LayersIcon,
   PlusIcon,
 } from '@radix-ui/react-icons';
@@ -150,13 +150,16 @@ export const SideMenu: React.FC<SideMenuProps> = () => {
       icon: <TemplateIcon />,
       label: 'Templates',
       enabled: true,
-      hidden: !hasPermission('contentTemplates'),
+      // The panel holds content templates and page templates; show it when
+      // the user may manage either.
+      hidden:
+        !hasPermission('contentTemplates') && !hasPermission('pageVariants'),
     },
     {
       type: 'link',
       id: 'headless',
       href: '/headless/',
-      icon: <GlobeIcon />,
+      icon: <HeadlessIcon />,
       label: 'Headless frontends',
       // Injected when the user may administer the Canvas Headless frontend
       // list. Unlike the preview settings, this flag is present before the
@@ -201,7 +204,7 @@ export const SideMenu: React.FC<SideMenuProps> = () => {
       icon: <BrandKitIcon />,
       label: 'Brand kit',
       enabled: true,
-      hidden: !hasPermission('brandKit') || !getCanvasSettings()?.devMode,
+      hidden: !hasPermission('brandKit'),
     },
   ];
 

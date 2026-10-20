@@ -4,13 +4,14 @@ export type DiscoveryWarningCode =
   | 'missing_js_entry'
   | 'duplicate_definition'
   | 'conflicting_metadata'
-  | 'duplicate_machine_name';
+  | 'duplicate_machine_name'
+  | 'invalid_page_template_filename';
 
 export interface DiscoveryOptions {
   componentRoot?: string;
   pagesRoot?: string;
   contentTemplatesRoot?: string;
-  regionsRoot?: string;
+  pageTemplatesRoot?: string;
   projectRoot?: string;
   /**
    * Extensions accepted for a component's entry file, in precedence order.
@@ -47,7 +48,6 @@ export interface DiscoveredComponent {
   metadataPath: string;
   jsEntryPath: string | null;
   cssEntryPath: string | null;
-  type?: CodeComponentSerialized['type'];
 }
 
 export interface DiscoveredPage {
@@ -69,10 +69,25 @@ export interface DiscoveredContentTemplate {
   relativePath: string;
 }
 
-export interface DiscoveredRegion {
-  region: string;
+export interface DiscoveredPageTemplate {
+  /** The page variant machine name, from the file name. */
+  id: string;
+  label: string | null;
+  status: boolean | null;
+  isDefault: boolean;
   path: string;
   relativePath: string;
+}
+
+/**
+ * Schema-derived, spec-time metadata for a single component.
+ * Populated once during discovery from the component's metadata file.
+ * Used to inform spec resolution (e.g. color prop conversion for preview)
+ * without re-reading YAML on every request.
+ */
+export interface DiscoveredComponentSchema {
+  /** Prop names declared with $ref: json-schema-definitions://canvas.module/color */
+  colorPropNames: ReadonlySet<string>;
 }
 
 export interface DiscoveryResult {
@@ -81,17 +96,23 @@ export interface DiscoveryResult {
   components: DiscoveredComponent[];
   pages: DiscoveredPage[];
   contentTemplates: DiscoveredContentTemplate[];
-  regions: DiscoveredRegion[];
+  pageTemplates: DiscoveredPageTemplate[];
   warnings: DiscoveryWarning[];
   stats: {
     scannedFiles: number;
     ignoredFiles: number;
   };
+  /**
+   * Schema index keyed by component name (the value of element.type in a Spec).
+   * Contains only the subset of schema data needed for spec-level resolution.
+   * Components whose metadata failed to parse are absent from this map.
+   */
+  componentSchemas: ReadonlyMap<string, DiscoveredComponentSchema>;
 }
 
 export interface ComponentMetadata extends Pick<
   CodeComponentSerialized,
-  'name' | 'machineName' | 'status' | 'required' | 'slots' | 'type'
+  'name' | 'machineName' | 'status' | 'required' | 'slots'
 > {
   props: {
     properties: CodeComponentSerialized['props'];
@@ -102,7 +123,18 @@ export interface ComponentMetadata extends Pick<
 export interface CanvasSyncConfig {
   pages: boolean;
   contentTemplates: boolean;
-  regions: boolean;
+  pageTemplates: boolean;
+}
+
+/**
+ * Region-era keys found in canvas.config.json. Page variants replaced
+ * global regions (Canvas ADR 0019); these keys no longer drive anything and
+ * are surfaced only so consumers can warn about the upgrade path.
+ */
+export interface CanvasLegacyRegionConfig {
+  regionsDir?: string;
+  syncRegions?: boolean;
+  layoutPath?: string;
 }
 
 export interface CanvasConfig {
@@ -111,8 +143,8 @@ export interface CanvasConfig {
   componentDir: string;
   pagesDir: string;
   contentTemplatesDir: string;
-  regionsDir: string;
+  pageTemplatesDir: string;
   globalCssPath: string;
-  layoutPath: string;
   sync: CanvasSyncConfig;
+  legacy?: CanvasLegacyRegionConfig;
 }

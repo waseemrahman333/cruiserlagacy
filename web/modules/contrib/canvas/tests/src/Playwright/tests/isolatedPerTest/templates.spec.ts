@@ -46,10 +46,12 @@ test.describe('Templates - General', () => {
       page.locator('[data-canvas-folder-name="Article"]'),
     ).toBeVisible();
     await expect(page.locator('.primaryPanelContent')).toMatchAriaSnapshot(`
-      - button "Add new template":
-        - img
       - button "Content types" [expanded]
-      - region "Content types"
+      - region "Content types":
+        - button "New content template":
+          - img
+      - button "Page templates" [expanded]
+      - region "Page templates"
     `);
 
     await canvas.addTemplate('Page', 'Full content');
@@ -458,8 +460,19 @@ test.describe('Templates - General', () => {
     await page.locator('[aria-label="Templates"]').click();
     await canvas.addTemplate('Article', 'Teaser');
 
+    // Only full content templates can select the page template that supplies
+    // page chrome.
+    const teaserTemplate = page.getByTestId(
+      'template-list-item-article-Teaser',
+    );
+    await teaserTemplate.click({ button: 'right' });
+    const templateMenu = page.getByRole('menu');
+    await expect(templateMenu).toBeVisible();
+    await expect(templateMenu.getByText('Page template')).toHaveCount(0);
+    await page.keyboard.press('Escape');
+
     // Navigate to the teaser template
-    await page.getByTestId('template-list-item-article-Teaser').click();
+    await teaserTemplate.click();
     expect(page.url()).toContain('canvas/template/node/article/teaser');
 
     // Add Hero component to the teaser template

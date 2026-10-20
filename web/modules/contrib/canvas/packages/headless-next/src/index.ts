@@ -20,12 +20,15 @@ export { toNextMetadata } from './head';
 export {
   disableDraftMode,
   enableDraftMode,
+  fetchEntity,
   fetchPage,
   getClient,
   getDraftClient,
   getDraftConfig,
   getDraftData,
+  getJsonApiRuntimeConfig,
   getPublicClient,
+  handleJsonApiProxy,
   renewDraftSession,
 } from './server';
 
@@ -38,21 +41,26 @@ export {
   type AccessToken,
   type CanvasComponentTreeElement,
   type CanvasComponentTreeSlot,
+  type CanvasContext,
   type DrupalRoute,
   type DrupalRouteEntity,
   type DraftData,
+  type EntityResult,
   type Page,
   type PageHead,
   type PageRedirect,
   type PageResult,
 } from '@drupal-canvas/headless';
 export type { DraftConfig } from '@drupal-canvas/headless/server';
+export type { JsonApiRuntimeConfig } from 'drupal-canvas/jsonapi-client';
 export type {
   ComponentMetadataEntry,
   ComponentMetadataPayload,
 } from '@drupal-canvas/headless/components-endpoint';
 export {
   CanvasComponentTree,
+  JsonApiRuntimeProvider,
   type CanvasComponentRegistry,
   type CanvasComponentTreeProps,
+  type JsonApiRuntimeProviderProps,
 } from '@drupal-canvas/headless-react';

@@ -11,14 +11,12 @@ use Drupal\canvas\Plugin\Canvas\ComponentSource\SingleDirectoryComponent;
 use Drupal\Component\Render\MarkupInterface;
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\DiffArray;
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Uuid\UuidInterface;
 use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Cache\VariationCacheInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\TypedConfigManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Template\Attribute as TemplateAttribute;
@@ -56,8 +54,6 @@ class CanvasAiPageBuilderHelper {
    * @param \Drupal\Core\Cache\VariationCacheInterface $memoryVariationCache
    *   The in-request variation cache, backed by the memory bin so it honors
    *   tag invalidations that happen mid-request.
-   * @param \Drupal\Core\Extension\ThemeHandlerInterface $themeHandler
-   *   The theme handler.
    * @param \Drupal\canvas\Component\Schema\PropMetadataNormalizer $propMetadataNormalizer
    *   The prop metadata normalizer.
    * @param \Drupal\canvas\Controller\ApiConfigControllers $apiConfigControllers
@@ -77,7 +73,6 @@ class CanvasAiPageBuilderHelper {
     private readonly VariationCacheInterface $variationCache,
     #[Autowire(service: 'cache.variation.canvas_ai_memory')]
     private readonly VariationCacheInterface $memoryVariationCache,
-    private readonly ThemeHandlerInterface $themeHandler,
     private readonly PropMetadataNormalizer $propMetadataNormalizer,
     private readonly ApiConfigControllers $apiConfigControllers,
     #[Autowire(service: 'logger.factory')]
@@ -1507,29 +1502,6 @@ class CanvasAiPageBuilderHelper {
       $region,
       implode(', ', \array_keys($layout_regions)),
     );
-  }
-
-  /**
-   * Gets the available regions from the current layout along with their descriptions, if configured.
-   *
-   * @param string $current_layout
-   *   The current layout JSON string.
-   *
-   * @return array
-   *   An array with region names as keys and their nodePathPrefix values and descriptions.
-   */
-  public function getAvailableRegions(string $current_layout) : array {
-    $region_index_mapping = $this->getRegionIndex($current_layout);
-    $region_descriptions = $this->configFactory->get('canvas_ai.theme_region.settings')->get('region_descriptions') ?? [];
-    $available_regions = [];
-    $active_theme = $this->themeHandler->getDefault();
-    foreach ($region_index_mapping as $region_name => $region_index) {
-      $available_regions[$region_name] = [
-        'nodePathPrefix' => $region_index,
-        'info' => NestedArray::getValue($region_descriptions, [$active_theme, $region_name]),
-      ];
-    }
-    return $available_regions;
   }
 
   /**

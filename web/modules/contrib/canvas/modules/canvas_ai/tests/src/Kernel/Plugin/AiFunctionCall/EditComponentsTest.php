@@ -15,6 +15,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
 use Drupal\Tests\canvas\Kernel\CanvasKernelTestBase;
 use Drupal\Tests\canvas_ai\Traits\FunctionalCallTestTrait;
+use Drupal\Tests\canvas_ai\Traits\ImageMediaPropTestTrait;
 use Drupal\Tests\user\Traits\UserCreationTrait;
 use Drupal\user\Entity\User;
 use PHPUnit\Framework\Attributes\Group;
@@ -26,7 +27,13 @@ use PHPUnit\Framework\Attributes\Group;
 final class EditComponentsTest extends CanvasKernelTestBase {
 
   use FunctionalCallTestTrait;
+  use ImageMediaPropTestTrait;
   use UserCreationTrait;
+
+  /**
+   * The UUID of the image component in ::getLayoutWithImageComponent().
+   */
+  private const IMAGE_COMPONENT_UUID = 'b3e4a0a2-6f4b-4a2e-9f5c-1d6f0c6b9a11';
 
   /**
    * The function call plugin manager.
@@ -53,6 +60,7 @@ final class EditComponentsTest extends CanvasKernelTestBase {
    * {@inheritdoc}
    */
   protected static $modules = [
+    'field',
     'ai',
     'ai_agents',
     'canvas_ai',
@@ -67,6 +75,7 @@ final class EditComponentsTest extends CanvasKernelTestBase {
     $this->installEntitySchema('user');
     $this->installEntitySchema('file');
     $this->installEntitySchema(Page::ENTITY_TYPE_ID);
+    $this->setUpImageMediaType();
     $this->container->get(ComponentSourceManager::class)->generateComponents();
 
     $this->functionCallManager = $this->container->get('plugin.manager.ai.function_calls');
@@ -153,6 +162,22 @@ final class EditComponentsTest extends CanvasKernelTestBase {
   }
 
   /**
+   * Tests that a props value that is not a mapping is rejected.
+   *
+   * A bare string parses as valid YAML, and the tool used to forward it as
+   * the component's updates, which the client then spread into the model one
+   * character at a time.
+   */
+  public function testScalarPropsValueReportsError(): void {
+    $this->container->get(AccountProxyInterface::class)->setAccount($this->privilegedUser);
+    $this->container->get(CanvasAiTempStore::class)->setData(CanvasAiTempStore::CURRENT_LAYOUT_KEY, $this->getCurrentLayout());
+
+    $edits = [['component_uuid' => '72384115-a8ee-44bc-9a13-de1c7a4d9b96', 'props' => 'just a string']];
+    $result = $this->getToolOutput('canvas_ai:edit_components', ['component_edits' => $edits]);
+    $this->assertSame('Failed to edit components: The props value for component 72384115-a8ee-44bc-9a13-de1c7a4d9b96 must be a YAML mapping of prop names to values, one "prop_name: value" pair per line.', self::normalizeErrorString($result));
+  }
+
+  /**
    * Tests that editing a UUID absent from the page is reported as an error.
    */
   public function testEditUnknownUuidReportsError(): void {
@@ -168,6 +193,31 @@ final class EditComponentsTest extends CanvasKernelTestBase {
 
     $result = $this->getToolOutput('canvas_ai:edit_components', ['component_edits' => $edits]);
     $this->assertSame('Failed to edit components: Component defd2f6c-f27d-422b-b397-b793df89d922 was not found on the page.', self::normalizeErrorString($result));
+  }
+
+  /**
+   * Tests that unparseable props YAML produces an instructive error.
+   *
+   * Unquoted date-like values such as 2233-33-33 make Symfony YAML throw a
+   * cryptic invalid-date ParseException; the tool must tell the model to
+   * quote string values instead of echoing the raw parse error.
+   */
+  public function testUnparseablePropsYamlGetsInstructiveError(): void {
+    $this->container->get(AccountProxyInterface::class)->setAccount($this->privilegedUser);
+    $this->container->get(CanvasAiTempStore::class)->setData(CanvasAiTempStore::CURRENT_LAYOUT_KEY, $this->getCurrentLayout());
+
+    $edits = [
+      [
+        'component_uuid' => '72384115-a8ee-44bc-9a13-de1c7a4d9b96',
+        'props' => 'text: 2233-33-33',
+      ],
+    ];
+    $result = $this->getToolOutput('canvas_ai:edit_components', ['component_edits' => $edits]);
+
+    $normalized = self::normalizeErrorString($result);
+    $this->assertStringStartsWith('Failed to edit components:', $normalized);
+    $this->assertStringContainsString('The props value is not valid YAML:', $normalized);
+    $this->assertStringContainsString('Rewrite it with every string value quoted', $normalized);
   }
 
   /**
@@ -212,6 +262,62 @@ final class EditComponentsTest extends CanvasKernelTestBase {
 
     $tool->setContextValue('component_edits', [['component_uuid' => 'test', 'props' => 'text: value']]);
     $tool->execute();
+  }
+
+  /**
+   * Tests editing a component to use a media item the user cannot view.
+   *
+   * An image prop is populated by a reference to a media item, and Canvas
+   * resolves that reference with the current user's access rights: an agent
+   * must not be able to put media on the page for a user who may not see it.
+   */
+  public function testEditComponentsWithInaccessibleMedia(): void {
+    $media = $this->createImageMedia();
+    $edits = [
+      [
+        'component_uuid' => self::IMAGE_COMPONENT_UUID,
+        'props' => 'image: ' . $media->id(),
+      ],
+    ];
+
+    // The first account ::setUp() creates is user 1, which bypasses access
+    // checks: the very same media item raises no validation error for it.
+    $this->assertSame(1, (int) $this->privilegedUser->id());
+    $this->container->get(AccountProxyInterface::class)->setAccount($this->privilegedUser);
+    $this->container->get(CanvasAiTempStore::class)->setData(CanvasAiTempStore::CURRENT_LAYOUT_KEY, $this->getLayoutWithImageComponent());
+    $result = $this->getToolOutput('canvas_ai:edit_components', ['component_edits' => $edits]);
+    $this->assertStringContainsString('The updates were applied successfully.', $result);
+
+    // User A may use Canvas AI, but may not view the media item.
+    $user_a = $this->createUserWithoutMediaAccess();
+    $this->assertFalse($media->access('view', $user_a));
+    $this->container->get(AccountProxyInterface::class)->setAccount($user_a);
+    $this->container->get(CanvasAiTempStore::class)->setData(CanvasAiTempStore::CURRENT_LAYOUT_KEY, $this->getLayoutWithImageComponent());
+    $result = $this->getToolOutput('canvas_ai:edit_components', ['component_edits' => $edits]);
+    $this->assertSame(\sprintf('Failed to edit components: %s', self::MEDIA_ACCESS_DENIED_MESSAGE), self::normalizeErrorString($result));
+  }
+
+  /**
+   * Returns a layout with a single image component in the content region.
+   *
+   * @return string
+   *   The JSON-encoded layout.
+   */
+  private function getLayoutWithImageComponent(): string {
+    return json_encode([
+      'regions' => [
+        'content' => [
+          'nodePathPrefix' => [0],
+          'components' => [
+            [
+              'name' => 'sdc.canvas_test_sdc.image',
+              'uuid' => self::IMAGE_COMPONENT_UUID,
+              'props' => [],
+            ],
+          ],
+        ],
+      ],
+    ], JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
   }
 
   /**

@@ -1,7 +1,7 @@
 import addFormats from 'ajv-formats';
+import { createCanvasAjv } from '@drupal-canvas/json-schema-validation';
 
 import { isPropSourceComponent } from '@/types/Component';
-import { createAjv } from '@/utils/ajv';
 import { parseValue } from '@/utils/function-utils';
 import transforms from '@/utils/transforms';
 
@@ -18,7 +18,7 @@ import type { SchemaObject, ValidateFunction } from 'ajv';
 import type { FieldDataItem } from '@/types/Component';
 import type { InputUIData } from '@/types/Form';
 
-const ajv = createAjv();
+const ajv = createCanvasAjv();
 
 /**
  * Formats an Ajv errors array into a human-readable string.
@@ -159,6 +159,17 @@ export const shouldSkipPropValidation = (
     propSchemas[propName]?.type === 'object' ||
     (propSchemas[propName]?.type === 'array' &&
       propSchemas[propName]?.items?.type === 'object')
+  ) {
+    return true;
+  }
+
+  // Color props are string props with a Canvas $ref sentinel that AJV cannot
+  // resolve; validation happens server-side. Unlike object props, they don't
+  // get the type-based bypass.
+  if (
+    propSchemas[propName]?.$ref?.startsWith(
+      'json-schema-definitions://canvas.module/',
+    )
   ) {
     return true;
   }

@@ -6,7 +6,8 @@ namespace Drupal\canvas\ConfigTranslation;
 
 use Drupal\canvas\Entity\Component;
 use Drupal\canvas\Entity\ContentTemplate;
-use Drupal\canvas\Entity\PageRegion;
+use Drupal\canvas\Entity\EmptyTargetEntityProviderInterface;
+use Drupal\canvas\Entity\PageVariant;
 use Drupal\canvas\Plugin\Canvas\ComponentSource\JsonSchemaPropsComponentSourceBase;
 use Drupal\canvas\PropSource\StaticPropSource;
 use Drupal\config_translation\FormElement\FormElementBase;
@@ -100,6 +101,16 @@ final class CanvasStaticPropSourceFieldWidget extends FormElementBase {
     // because their keys are property names, not deltas.
     if ($default_static_prop_source->getCardinality() !== 1 && \is_array($config_values)) {
       $config_values = \array_filter($config_values, '\is_int', ARRAY_FILTER_USE_KEY);
+    }
+    $submitted_static_prop_source = $default_static_prop_source
+      ->withValue($config_values, allow_empty: TRUE);
+    // A translator may leave an optional input empty, including an input that
+    // is empty in the source language. It is not a translation, so remove any
+    // stale override. Do not interpret a partially empty multi-value input as
+    // entirely empty; the strict ::withValue() call below must still reject it.
+    if ($submitted_static_prop_source->isEmpty()) {
+      $config_translation->clear($base_key);
+      return;
     }
     $optimized_value = $default_static_prop_source
       // Pass the raw values expected by the field type.
@@ -233,11 +244,11 @@ final class CanvasStaticPropSourceFieldWidget extends FormElementBase {
     }
     $config_entity = match ($config_entity_type_id) {
       ContentTemplate::ENTITY_TYPE_ID => ContentTemplate::load($id),
-      PageRegion::ENTITY_TYPE_ID => PageRegion::load($id),
+      PageVariant::ENTITY_TYPE_ID => PageVariant::load($id),
       default => throw new \LogicException(),
     };
     $entity_object_for_field_widget = match (TRUE) {
-      $config_entity instanceof ContentTemplate => $config_entity->createEmptyTargetEntity(),
+      $config_entity instanceof EmptyTargetEntityProviderInterface => $config_entity->createEmptyTargetEntity(),
       default => NULL,
     };
 
