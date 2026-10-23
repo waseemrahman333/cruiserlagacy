@@ -1,0 +1,30 @@
+uuid: e228f254-58b9-480f-8cb0-2f961ea70627
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.trim.field_select_series
+    - taxonomy.vocabulary.trim
+  module:
+    - text
+id: taxonomy_term.trim.default
+targetEntityType: taxonomy_term
+bundle: trim
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_select_series:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 1
+    region: content
+hidden: {  }

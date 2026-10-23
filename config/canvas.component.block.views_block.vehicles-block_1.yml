@@ -1,0 +1,26 @@
+uuid: 79e56c7a-30ca-47b9-a913-8cbd868ca10e
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.vehicles
+  module:
+    - views
+active_version: fba3a7d5eaf6f8df
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:vehicles-block_1'
+        label: 'Vehicles listing'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Vehicles listing'
+id: block.views_block.vehicles-block_1
+provider: views
+source: block
+source_local_id: 'views_block:vehicles-block_1'

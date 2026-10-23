@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Vehicles listing rows: each row is a node in the "Vehicle card" view mode,
+ * rendered by the Canvas content template.
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[clamp(16px,2vw,26px)]">
+  {% for row in rows %}
+    <div class="h-full">
+      {{ row.content }}
+    </div>
+  {% endfor %}
+</div>

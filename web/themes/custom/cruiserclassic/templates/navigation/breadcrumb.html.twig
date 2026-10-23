@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Theme override for a breadcrumb trail: HOME / SECTION / CURRENT PAGE.
+ *
+ * The current page (last item, no link) is shown in the primary color.
+ * It is appended in cruiserclassic_preprocess_breadcrumb().
+ *
+ * Available variables:
+ * - breadcrumb: Breadcrumb trail items.
+ */
+#}
+{% if breadcrumb %}
+  <nav class="breadcrumb w-full" role="navigation" aria-labelledby="system-breadcrumb">
+    <h2 id="system-breadcrumb" class="visually-hidden">{{ 'Breadcrumb'|t }}</h2>
+    <ol class="breadcrumb__list flex flex-wrap items-center gap-x-2 gap-y-1 !m-0 !p-0 list-none uppercase text-white text-base md:text-lg xl:text-base leading-tight">
+      {% for item in breadcrumb %}
+        <li class="breadcrumb__item flex items-center gap-2">
+          {% if loop.last %}
+            <span class="text-primary" aria-current="page">{{ item.text }}</span>
+          {% elseif item.url %}
+            <a href="{{ item.url }}" class="text-white no-underline hover:text-primary transition-colors">{{ item.text }}</a>
+          {% else %}
+            <span>{{ item.text }}</span>
+          {% endif %}
+          {% if not loop.last %}
+            <span aria-hidden="true">/</span>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </nav>
+{% endif %}

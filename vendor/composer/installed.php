@@ -3,7 +3,7 @@
         'name' => 'drupal/recommended-project',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8a1091d403769cd61682cc28315fb6faa5953d29',
+        'reference' => '1eb3a7391fa46f17d20db3ff6dfd362727568509',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -343,6 +343,15 @@
                 0 => '11.4.10',
             ),
         ),
+        'drupal/cshs' => array(
+            'pretty_version' => '4.0.5',
+            'version' => '4.0.5.0',
+            'reference' => '4.0.5',
+            'type' => 'drupal-module',
+            'install_path' => __DIR__ . '/../../web/modules/contrib/cshs',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'drupal/entity_reference_revisions' => array(
             'pretty_version' => '1.14.0',
             'version' => '1.14.0.0',
@@ -400,7 +409,7 @@
         'drupal/recommended-project' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8a1091d403769cd61682cc28315fb6faa5953d29',
+            'reference' => '1eb3a7391fa46f17d20db3ff6dfd362727568509',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

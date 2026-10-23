@@ -1,0 +1,15 @@
+uuid: b66bc8a8-23a4-4146-b0ef-de6444e22a4c
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.section
+    - canvas.component.sdc.tailpine.canvas-section
+    - canvas.component.sdc.tailpine.canvas-sidebar
+name: Layout
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.section
+  - sdc.tailpine.canvas-section
+  - sdc.tailpine.canvas-sidebar

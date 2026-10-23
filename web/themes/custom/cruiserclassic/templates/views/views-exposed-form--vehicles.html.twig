@@ -1,0 +1,74 @@
+{#
+/**
+ * @file
+ * Vehicles exposed filters (search, brand, model type, series, trim, Apply).
+ *
+ * Layout:
+ * - Mobile:  2-column grid (search and Apply span both columns).
+ * - Tablet:  3-column grid (search spans 2, Apply in the last column).
+ * - Desktop: single flex row.
+ *
+ * Inputs are styled from their wrapper with Tailwind arbitrary variants
+ * ([&_input], [&_select]) so no CSS file is needed.
+ * Labels are hidden and "- Any -" is replaced in cruiserclassic.theme, which
+ * also adds !max-w-480 to the <form> to override Tailpine's max-w-6xl.
+ *
+ * Available variables:
+ * - form: The exposed form render element.
+ */
+#}
+{% set field = 'relative min-w-0 w-full xl:flex-[1_1_160px] !m-0
+  [&_.form-item]:!m-0
+  [&_select]:!w-full [&_select]:!h-11 [&_select]:!m-0 [&_select]:appearance-none [&_select]:cursor-pointer
+  [&_select]:!bg-white [&_select]:!border [&_select]:!border-gray-300 [&_select]:!rounded-sm [&_select]:!shadow-none
+  [&_select]:!pl-4 [&_select]:!pr-10 [&_select]:!py-0 [&_select]:!text-sm [&_select]:!text-body
+  [&_select:focus]:!outline-none [&_select:focus]:!ring-0 [&_select:focus]:!border-primary' %}
+
+{% set chevron %}
+  <svg class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-body" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+{% endset %}
+
+{% if q is not empty %}
+  {{ q }}
+{% endif %}
+
+<div class="vehicles-filters__grid grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 xl:flex xl:items-center w-full">
+
+  {# Search #}
+  {% if form.search %}
+    <div class="relative min-w-0 col-span-2 xl:flex-[2_1_240px] !m-0
+      [&_.form-item]:!m-0
+      [&_input]:!w-full [&_input]:!h-11 [&_input]:!m-0 [&_input]:!bg-white [&_input]:!bg-none
+      [&_input]:!border [&_input]:!border-gray-300 [&_input]:!rounded-sm [&_input]:!shadow-none
+      [&_input]:!pl-10 [&_input]:!pr-4 [&_input]:!py-0 [&_input]:!text-sm [&_input]:!text-body
+      [&_input:focus]:!outline-none [&_input:focus]:!ring-0 [&_input:focus]:!border-primary">
+      <svg class="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-body z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      {{ form.search }}
+    </div>
+  {% endif %}
+
+  {# Taxonomy selects #}
+  {% for key in ['brand', 'model_type', 'series', 'trim'] %}
+    {% if form[key] %}
+      <div class="{{ field }}">
+        {{ form[key] }}
+        {{ chevron }}
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {# Apply #}
+  {% if form.actions %}
+    <div class="col-span-2 md:col-span-1 md:col-start-3 xl:flex-none
+      [&_.form-actions]:!m-0
+      [&_input[type=submit]]:!w-full xl:[&_input[type=submit]]:!w-auto [&_input[type=submit]]:!h-11 [&_input[type=submit]]:!m-0
+      [&_input[type=submit]]:!px-8 [&_input[type=submit]]:!py-0 [&_input[type=submit]]:!rounded-sm [&_input[type=submit]]:!shadow-none
+      [&_input[type=submit]]:!bg-primary [&_input[type=submit]]:!text-white [&_input[type=submit]]:!text-sm [&_input[type=submit]]:!font-medium [&_input[type=submit]]:uppercase
+      [&_input[type=submit]:hover]:!opacity-90">
+      {{ form.actions }}
+    </div>
+  {% endif %}
+
+</div>
+
+{{ form|without('search', 'brand', 'model_type', 'series', 'trim', 'actions') }}

@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: About Us (Cruiserclassic)
+status: stable
+description: "Intro heading + text, a vehicle image that bleeds to the left edge and overlaps into a red panel with heading, text and button."
+group: About Us
+
+slots:
+  cta:
+    title: Button
+    description: "Button inside the red panel"
+
+props:
+  type: object
+  properties:
+    heading:
+      type: string
+      title: Heading
+      examples: ['Iconic Jeeps. Reimagined for Modern Explorers.']
+    description:
+      title: description
+      type: string
+      description:  Iconic Jeeps Intro Description .
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['Classic Jeep design never goes out of style. At CruiserClassic, we combine heritage, craftsmanship, and advanced engineering to create exceptional vehicles that honor the past while embracing the future.']   
+
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+      description: "Transparent PNG/WebP of the vehicle works best"
+      examples:
+        - src: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1200'
+          alt: 'Classic Land Cruiser'
+          width: 1200
+          height: 720
+
+    panel_heading:
+      type: string
+      title: Panel Heading
+      examples: ['Who we are']
+
+    panel_text:
+      title: Panel Text
+      type: string
+      description:  Text inside the red panel.
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['Classic Jeep design never goes out of style. At CruiserClassic, we combine heritage, craftsmanship, and advanced engineering to create exceptional vehicles that honor the past while embracing the future.']   
+

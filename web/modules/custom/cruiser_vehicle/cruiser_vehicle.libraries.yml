@@ -1,0 +1,15 @@
+cascade:
+  js:
+    js/cascade.js: {}
+  dependencies:
+    - core/drupal
+    - core/drupalSettings
+    - core/once
+
+search:
+  js:
+    js/search.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+    - core/drupal.autocomplete

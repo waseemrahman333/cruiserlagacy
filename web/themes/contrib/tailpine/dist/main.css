@@ -6206,6 +6206,11 @@
       margin-bottom: 40px;
     }
   }
+  .md\:ml-auto {
+    @media (width >= 48rem) {
+      margin-left: auto;
+    }
+  }
   .md\:\!block {
     @media (width >= 48rem) {
       display: block !important;
@@ -6425,6 +6430,11 @@
   .md\:items-center {
     @media (width >= 48rem) {
       align-items: center;
+    }
+  }
+  .md\:items-end {
+    @media (width >= 48rem) {
+      align-items: flex-end;
     }
   }
   .md\:items-start {

@@ -1,0 +1,11 @@
+uuid: 9afc589b-10d8-46b5-84b4-8702cf006615
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-heading
+name: Base
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-heading

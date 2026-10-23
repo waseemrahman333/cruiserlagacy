@@ -1,6 +1,6 @@
-uuid: 49a252c6-d151-450a-bbdb-af672b94611e
+uuid: 9d36e9bd-decb-4ac3-8345-0ceb35413190
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - views.view.new_fleet
@@ -19,11 +19,11 @@ versioned_properties:
         items_per_page: null
     fallback_metadata:
       slot_definitions: null
-  93508178fba636c3:
+  d009e32409bd32ba:
     settings:
       default_settings:
         id: 'views_block:new_fleet-block_1'
-        label: 'new fleet'
+        label: 'new fleet: new fleet'
         label_display: '0'
         provider: views
         views_label: ''

@@ -1,6 +1,6 @@
-uuid: 1a9be1c6-990d-4ee6-8eb1-be5f14e95cef
+uuid: 302c97a9-43a4-471c-93b5-6ea6889ae9b0
 langcode: en
-status: false
+status: true
 dependencies:
   theme:
     - cruiserclassic

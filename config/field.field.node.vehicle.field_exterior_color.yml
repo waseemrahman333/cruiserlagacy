@@ -1,0 +1,25 @@
+uuid: 1f3dfd6d-b34e-4b8d-a689-4413fdb5ebd8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_exterior_color
+    - node.type.vehicle
+    - taxonomy.vocabulary.exterior_color
+id: node.vehicle.field_exterior_color
+field_name: field_exterior_color
+entity_type: node
+bundle: vehicle
+label: 'Exterior color'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      exterior_color: exterior_color
+    auto_create: false
+field_type: entity_reference

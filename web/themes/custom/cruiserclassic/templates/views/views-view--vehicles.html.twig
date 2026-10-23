@@ -1,0 +1,43 @@
+{#
+/**
+ * @file
+ * Vehicles listing: filter bar, card grid, pager.
+ *
+ * @see template_preprocess_views_view()
+ */
+#}
+{%
+  set classes = [
+    'view',
+    'view-' ~ id|clean_class,
+    'view-id-' ~ id,
+    'view-display-id-' ~ display_id,
+    dom_id ? 'js-view-dom-id-' ~ dom_id,
+  ]
+%}
+<div{{ attributes.addClass(classes, 'w-full') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+
+  {% if exposed %}
+    <div class="view-filters mb-[clamp(24px,3vw,40px)]">
+      {{ exposed }}
+    </div>
+  {% endif %}
+
+  {% if rows %}
+    <div class="view-content">
+      {{ rows }}
+    </div>
+  {% elseif empty %}
+    <div class="view-empty text-center py-10">
+      {{ empty }}
+    </div>
+  {% endif %}
+
+  {% if pager %}
+    <div class="mt-[clamp(24px,3vw,40px)]">
+      {{ pager }}
+    </div>
+  {% endif %}
+</div>

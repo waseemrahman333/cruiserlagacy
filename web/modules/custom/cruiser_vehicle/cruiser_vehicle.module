@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * Dependent vehicle taxonomy selects.
+ *
+ * Chain: Vehicle brand → Model type (field_select_brand)
+ *   → Series (field_select_model_type) → Trim (field_select_series).
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Child vocabulary => field on its terms that points at the parent term.
+ */
+const CRUISER_VEHICLE_PARENT_FIELDS = [
+  'model_type' => 'field_select_brand',
+  'series' => 'field_select_model_type',
+  'trim' => 'field_select_series',
+];
+
+/**
+ * Builds [vid => [child tid => [parent tids]]] for the chain.
+ */
+function cruiser_vehicle_parent_map(): array {
+  $map = [];
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  foreach (CRUISER_VEHICLE_PARENT_FIELDS as $vid => $field) {
+    $map[$vid] = [];
+    foreach ($storage->loadByProperties(['vid' => $vid]) as $term) {
+      $parents = [];
+      if ($term->hasField($field)) {
+        foreach ($term->get($field) as $item) {
+          $parents[] = (string) $item->target_id;
+        }
+      }
+      $map[$vid][(string) $term->id()] = $parents;
+    }
+  }
+  return $map;
+}
+
+/**
+ * Attaches the cascade behavior for one set of select names.
+ */
+function cruiser_vehicle_attach_cascade(array &$form, array $names, string $id): void {
+  $map = cruiser_vehicle_parent_map();
+  $form['#attached']['library'][] = 'cruiser_vehicle/cascade';
+  $form['#attached']['drupalSettings']['cruiserCascade'][$id] = [
+    'levels' => [
+      ['name' => $names[0], 'parents' => NULL],
+      ['name' => $names[1], 'parents' => $map['model_type']],
+      ['name' => $names[2], 'parents' => $map['series']],
+      ['name' => $names[3], 'parents' => $map['trim']],
+    ],
+  ];
+  $form['#cache']['tags'][] = 'taxonomy_term_list';
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter() for node_form.
+ */
+function cruiser_vehicle_form_node_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if ($form_state->getFormObject()->getEntity()->bundle() !== 'vehicle') {
+    return;
+  }
+  cruiser_vehicle_attach_cascade($form, ['field_vehicle_model', 'field_model_type', 'field_series', 'field_trim'], 'node');
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for views_exposed_form.
+ */
+function cruiser_vehicle_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $view = $form_state->get('view');
+  if ($view && $view->id() === 'vehicles') {
+    cruiser_vehicle_attach_cascade($form, ['brand', 'model_type', 'series', 'trim'], 'filters');
+    // Title suggestions under the search field; picking one applies the filter.
+    if (isset($form['search'])) {
+      $form['search']['#autocomplete_route_name'] = 'cruiser_vehicle.title_autocomplete';
+      $form['#attached']['library'][] = 'cruiser_vehicle/search';
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for taxonomy_term.
+ *
+ * Changing a relationship changes the map, so rendered forms must refresh.
+ */
+function cruiser_vehicle_taxonomy_term_presave($term) {
+  if (isset(CRUISER_VEHICLE_PARENT_FIELDS[$term->bundle()])) {
+    \Drupal\Core\Cache\Cache::invalidateTags(['taxonomy_term_list']);
+  }
+}

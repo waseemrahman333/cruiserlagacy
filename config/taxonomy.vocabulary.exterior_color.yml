@@ -1,0 +1,9 @@
+uuid: fac5a99f-e332-4fc0-bd65-d70625101ca4
+langcode: en
+status: true
+dependencies: {  }
+name: 'Exterior color'
+vid: exterior_color
+description: null
+weight: 0
+new_revision: false

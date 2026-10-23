@@ -1,0 +1,25 @@
+uuid: 4aeb0bf6-a11a-40b4-a941-9c6d95b7243e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_engine
+    - node.type.vehicle
+    - taxonomy.vocabulary.engine
+id: node.vehicle.field_engine
+field_name: field_engine
+entity_type: node
+bundle: vehicle
+label: Engine
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      engine: engine
+    auto_create: false
+field_type: entity_reference

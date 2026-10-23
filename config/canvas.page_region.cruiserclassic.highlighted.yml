@@ -1,4 +1,4 @@
-uuid: 61d60278-805e-4b67-acfa-1e3b1ad189b1
+uuid: 52a17c3b-142a-42f4-864a-65d391353703
 langcode: en
 status: true
 dependencies:
@@ -11,15 +11,15 @@ id: cruiserclassic.highlighted
 region: highlighted
 theme: cruiserclassic
 component_tree:
-  '0:cf614973-446d-4958-8982-30f80ff86372':
-    uuid: cf614973-446d-4958-8982-30f80ff86372
+  '0:f60e3bc5-f5d2-4e8f-a9e4-b3c77ed71bbb':
+    uuid: f60e3bc5-f5d2-4e8f-a9e4-b3c77ed71bbb
     component_id: block.local_actions_block
     component_version: 8e3ae21ee61ff56d
     inputs:
       label: 'Primary admin actions'
       label_display: '0'
-  '1:0733a502-5778-4a89-a5a8-9da9290d02f3':
-    uuid: 0733a502-5778-4a89-a5a8-9da9290d02f3
+  '1:d613701b-006d-49c1-b908-f0a00e6f56a9':
+    uuid: d613701b-006d-49c1-b908-f0a00e6f56a9
     component_id: block.local_tasks_block
     component_version: fbd9367ece78bba5
     inputs:

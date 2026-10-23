@@ -1,0 +1,60 @@
+uuid: c6a9c0f7-40b3-4184-8587-5b497d66e963
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+active_version: 2a3d6e0d7c4473e0
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        subtitle:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Our Pricing'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        title_before:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Invest in your'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        title_highlight:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: growth
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        plans:
+          title: 'Pricing Plans'
+          description: 'Add pricing plan cards to this slot.'
+        cta:
+          title: 'Call to Action'
+          description: 'Add a call-to-action button or component to this slot.'
+label: 'pricing Card (drupak)'
+id: sdc.cruiserclassic.pricing-plans
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:pricing-plans'

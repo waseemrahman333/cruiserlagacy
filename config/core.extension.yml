@@ -11,9 +11,12 @@ module:
   block_content: 0
   breakpoint: 0
   canvas: 0
+  canvas_page_template_component: 0
   ckeditor5: 0
   config: 0
   contextual: 0
+  cruiser_vehicle: 0
+  cshs: 0
   datetime: 0
   dblog: 0
   dynamic_page_cache: 0

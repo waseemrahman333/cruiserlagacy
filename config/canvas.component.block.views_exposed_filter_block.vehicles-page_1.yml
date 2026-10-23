@@ -1,0 +1,25 @@
+uuid: b983858a-b0df-48db-8757-27cee774cd0d
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.vehicles
+  module:
+    - views
+active_version: ce6744ff48bc59b6
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_exposed_filter_block:vehicles-page_1'
+        label: 'Exposed form: vehicles-page_1'
+        label_display: '0'
+        provider: views
+        views_label: ''
+    fallback_metadata:
+      slot_definitions: null
+label: 'Exposed form: vehicles-page_1'
+id: block.views_exposed_filter_block.vehicles-page_1
+provider: views
+source: block
+source_local_id: 'views_exposed_filter_block:vehicles-page_1'

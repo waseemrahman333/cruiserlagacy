@@ -1,0 +1,26 @@
+uuid: d95ced97-a5d8-4a55-b370-a66934601665
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.vehicle_view
+  module:
+    - views
+active_version: 64b01cff4096e128
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:vehicle_view-block_1'
+        label: 'Vehicle View'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Vehicle View'
+id: block.views_block.vehicle_view-block_1
+provider: views
+source: block
+source_local_id: 'views_block:vehicle_view-block_1'

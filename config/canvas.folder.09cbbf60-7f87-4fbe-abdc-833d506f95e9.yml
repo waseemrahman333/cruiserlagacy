@@ -1,0 +1,11 @@
+uuid: 09cbbf60-7f87-4fbe-abdc-833d506f95e9
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-tabs
+name: 'Navigation & UI'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-tabs

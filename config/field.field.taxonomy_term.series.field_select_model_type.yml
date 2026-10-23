@@ -1,0 +1,29 @@
+uuid: b76f4902-d337-4609-ac33-f99e6b1c36d3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_select_model_type
+    - taxonomy.vocabulary.model_type
+    - taxonomy.vocabulary.series
+id: taxonomy_term.series.field_select_model_type
+field_name: field_select_model_type
+entity_type: taxonomy_term
+bundle: series
+label: 'Select Model type'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      model_type: model_type
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

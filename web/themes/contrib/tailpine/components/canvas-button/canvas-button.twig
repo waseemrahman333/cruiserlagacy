@@ -1,7 +1,7 @@
 
 {% set border_radius = rounded|striptags %}
 
-{% set base_classes = 'inline-flex w-fit items-center justify-between  font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
+{% set base_classes = 'inline-flex text-center w-fit items-center ' ~ (show_arrow ? 'justify-between' : 'justify-center') ~ ' font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
 
 
 {% set variant_key = style_variant|default('solid') %}

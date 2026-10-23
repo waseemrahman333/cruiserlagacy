@@ -1,0 +1,17 @@
+uuid: f96f3c54-04cc-4a58-b21c-a8582c2f5a4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.footer
+    - canvas.component.sdc.cruiserclassic.footer-block
+    - canvas.component.sdc.tailpine.footer
+    - canvas.component.sdc.tailpine.footer-block
+name: Footer
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.footer
+  - sdc.cruiserclassic.footer-block
+  - sdc.tailpine.footer
+  - sdc.tailpine.footer-block

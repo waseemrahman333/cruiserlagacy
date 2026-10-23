@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the Cruiserclassic theme.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter() for views_exposed_form.
+ *
+ * Vehicles listing: hide filter labels and show them as the first select
+ * option instead of "- Any -", as in the design.
+ */
+function cruiserclassic_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $view = $form_state->get('view');
+  if (!$view || $view->id() !== 'vehicles') {
+    return;
+  }
+
+  $form['#attributes']['class'][] = 'vehicles-filters';
+  // Tailpine's form component adds max-w-6xl to every form; use the site width here.
+  $form['#attributes']['class'][] = '!max-w-480';
+
+  if (isset($form['search'])) {
+    $form['search']['#title_display'] = 'invisible';
+    $form['search']['#attributes']['placeholder'] = t('Searching...');
+  }
+
+  foreach (['brand', 'model_type', 'series', 'trim'] as $key) {
+    if (!isset($form[$key]['#options'])) {
+      continue;
+    }
+    $label = $form['#info']["filter-field_{$key}_target_id"]['label'] ?? $form[$key]['#title'] ?? '';
+    if (isset($form[$key]['#options']['All'])) {
+      $form[$key]['#options']['All'] = $label;
+    }
+    $form[$key]['#title_display'] = 'invisible';
+  }
+
+  // The brand filter uses the field_vehicle_model field.
+  if (isset($form['brand']['#options']['All'])) {
+    $form['brand']['#options']['All'] = t('Model Brand');
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for pager templates.
+ *
+ * Adds the total page count so the vehicles pager can show "1/2".
+ */
+function cruiserclassic_preprocess_pager(array &$variables) {
+  $pager = \Drupal::service('pager.manager')->getPager($variables['pager']['#element'] ?? 0);
+  $variables['total_pages'] = $pager ? $pager->getTotalPages() : 1;
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for breadcrumb.
+ *
+ * Drupal leaves the current page out of the trail; add it (unlinked) so the
+ * breadcrumb reads HOME / SECTION / CURRENT PAGE.
+ */
+function cruiserclassic_preprocess_breadcrumb(array &$variables) {
+  $variables['#cache']['contexts'][] = 'url.path';
+  $route = \Drupal::routeMatch()->getRouteObject();
+  if (!$route || \Drupal::service('path.matcher')->isFrontPage()) {
+    return;
+  }
+  $title = \Drupal::service('title_resolver')->getTitle(\Drupal::request(), $route);
+  if (is_array($title)) {
+    $title = \Drupal::service('renderer')->renderInIsolation($title);
+  }
+  if ($title !== NULL && (string) $title !== '') {
+    $variables['breadcrumb'][] = ['text' => $title];
+  }
+}

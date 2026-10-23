@@ -1,0 +1,11 @@
+uuid: 0328366b-d0d3-4d83-9ad3-f4a10705d03c
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.image
+name: Media
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.image

@@ -1,0 +1,88 @@
+{#
+/**
+ * About Us Component (Cruiserclassic)
+ *
+ * Mobile / tablet (< 1280px):
+ *   heading → intro → image (bleeds left; red starts 40% down the image) → red panel.
+ * Desktop (1280px+):
+ *   [heading | intro]
+ *   [image   | red panel content]  — image bleeds to the left edge and its top
+ *   40% sits above the red band, which spans the full width.
+ *
+ * The red band is placed with grid rows instead of absolute positioning, so the
+ * image never overlaps any text: if the text is taller, the band grows.
+ * --about-ratio (image height / width) sizes the part of the image above the band.
+ *
+ * Props: heading, image, panel_heading
+ * Slots: intro, panel_text, cta
+ */
+#}
+{% set ratio = (image.width and image.height) ? (image.height / image.width) : 0.6 %}
+{# {% set intro_html %}{% block intro %}{% endblock %}{% endset %} #}
+{# {% set panel_html %}{% block panel_text %}{% endblock %}{% endset %} #}
+{% set cta_html %}{% block cta %}{% endblock %}{% endset %}
+
+<section class="about-us w-full overflow-hidden pt-[clamp(40px,6vw,120px)]" style="--about-ratio: {{ ratio }};">
+  <div class=" ">
+
+    {# ---------- Top: heading + intro ---------- #}
+    <div class="about-us__top container ">
+      <div class="max-w-480 mx-auto w-full mb-23 xl:mb-[clamp(92px,calc(16.875vw_-_124px),200px)] grid gap-6 xl:gap-x-[clamp(40px,4vw,96px)]  xl:grid-cols-2 xl:items-end   pb-[clamp(24px,4vw,64px)]">
+      {% if heading %}
+        <h2 class="about-us__heading !m-0 !font-heading uppercase !text-body !leading-[1.15] !text-[clamp(1.75rem,1.2rem+2.2vw,2.75rem)] 2xl:col-start-1 2xl:row-start-1">
+          {{ heading }}
+        </h2>
+      {% endif %}
+      {% if description %}
+        <div class="about-us__intro 2xl:col-start-2 2xl:row-start-2 text-body text-sm md:text-base leading-7 [&_p]:!m-0 [&_p+p]:!mt-3">
+          {{ description}}
+        </div>
+      {% endif %}
+      </div>
+    </div>
+
+    {# ---------- Bottom: image + red panel ---------- #}
+    <div class="about-us__bottom bg-primary container grid grid-cols-1 xl:grid-cols-2 xl:grid-rows-[auto_1fr] xl:gap-x-[clamp(40px,4vw,96px)]">
+
+      {# Desktop: sets row 1 = top 40% of the image (padding % is relative to width) #}
+      <div class="hidden xl:block xl:col-start-1 xl:row-start-1" style="padding-top: calc(var(--about-ratio) * 40%);" aria-hidden="true"></div>
+
+      {# Desktop: full-width red band behind row 2 #}
+      <div class="hidden xl:block xl:col-span-2 xl:row-start-2 bg-primary " aria-hidden="true"></div>
+
+      {# Image: full bleed on mobile/tablet with red starting 40% down; left bleed on desktop #}
+      {% if image.src %}
+        <div class="about-us__image relative z-10 xl:mr-0 xl:col-start-1 xl:row-span-2 xl:row-start-1 xl:self-start -ml-[var(--t-container-padding-inline)] -mt-23 xl:-mt-[clamp(92px,calc(35.78125vw_-_366px),321px)]
+                    bg-[linear-gradient(to_bottom,transparent_40%,var(--color-primary)_40%)] xl:bg-none">
+          <img src="{{ image.src }}" alt="{{ image.alt|default('') }}"
+               {% if image.width %}width="{{ image.width }}"{% endif %}
+               {% if image.height %}height="{{ image.height }}"{% endif %}
+               loading="lazy"
+               class="block w-full md:w-[72%] xl:w-full h-auto">
+        </div>
+      {% endif %}
+
+      {# Red panel content #}
+      <div class="about-us__panel relative z-10 xl:bg-transparent   xl:m-0 xl:p-0
+                  xl:col-start-2 xl:row-start-2 xl:self-center
+                  pt-[clamp(32px,5vw,56px)] pb-[clamp(40px,6vw,72px)] xl:py-[clamp(40px,4vw,80px)]">
+        {% if panel_heading %}
+          <h3 class="!m-0 !font-heading uppercase !text-white !leading-tight !text-[clamp(1.5rem,1.1rem+1.6vw,2.5rem)]">
+            {{ panel_heading }}
+          </h3>
+        {% endif %}
+        {% if panel_text %}
+          <div class="about-us__panel-text mt-4 md:mt-5 xl:mt-6 text-white text-sm md:text-base leading-7 [&_*]:!text-white [&_p]:!m-0 [&_p+p]:!mt-2">
+            {{ panel_text }}
+          </div>
+        {% endif %}
+        {% if cta_html|trim is not empty %}
+          <div class="about-us__cta mt-6 xl:mt-8">
+            {{ cta_html }}
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>

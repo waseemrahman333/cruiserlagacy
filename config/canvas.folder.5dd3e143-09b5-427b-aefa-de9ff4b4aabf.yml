@@ -1,0 +1,11 @@
+uuid: 5dd3e143-09b5-427b-aefa-de9ff4b4aabf
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.drupak-button
+name: Drupak
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.drupak-button

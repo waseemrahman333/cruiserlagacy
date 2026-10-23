@@ -1,15 +1,34 @@
- <div class="bg-primary  pb-12 pt-50 relative md:pt-88 md:pb-10 md:pr-10 mx-auto  container xl:py-11 xl:pr-37.5">
-       <div class="absolute w-92.5 h-67.5 xl:w-155 xl:h-112 left-0 -top-19.5 xl:-top-35 2xl:w-[clamp(620px,47vw,1000px)] 2xl:h-auto 2xl:-top-80 md:w-132.5 md:h-95.75">
-        <img src="{{image.src}}" alt="{{image.alt}}" class="w-full h-full object-cover ">
-       </div> 
+ <div class="bg-primary min-h-116 pb-12 pt-50 relative md:pt-88 md:pb-10 md:pr-10 mx-auto  container xl:py-11 xl:pr-37.5">
+
+    <div class="w-full mx-auto max-w-480 ">
+       {# <div class="absolute w-92.5 h-67.5 left-0 -top-19.5 xl:-top-35 md:w-[clamp(530px,calc(200.667px_+_42.882vw),1024px)] md:h-auto 2xl:-top-80">
+        <img src="{{image.src}}" alt="{{image.alt}}" class="w-full h-full object-cover md:h-auto"> #}
+
+                 {% if image.src %}
+        <div class="about-us__image relative z-10 -ml-[var(--t-container-padding-inline)] -mr-[var(--t-container-padding-inline)] xl:mr-0 xl:col-start-1 xl:row-span-2 xl:row-start-1 xl:self-start
+                    bg-[linear-gradient(to_bottom,transparent_40%,var(--color-primary)_40%)] xl:bg-none">
+                    {# <img src="{{image.src}}" alt="{{image.alt}}" loading="lazy" class="block w-full md:w-[72%] xl:w-full h-auto"> #}
+          <img src="{{ image.src }}" alt="{{ image.alt|default('') }}"
+               {% if image.width %}width="{{ image.width }}"{% endif %}
+               {% if image.height %}height="{{ image.height }}"{% endif %}
+               loading="lazy"
+               class="block w-full md:w-[72%] xl:w-full h-auto">
+        </div>
+      {% endif %}
+
+
+       {# </div>  #}
        <div class="flex flex-col xl:justify-self-end  xl:max-w-125 2xl:max-w-171.25">
              <h2 class="font-semibold text-[26px] leading-8 !text-surface-100 md:text-[28px] xl:text-[48px] xl:leading-13.5">{{title}}</h2>
-        <div class="font-normal text-sm leading-6 xl:leading-8 tracking-[0%] text-white mt-4 md:text-base md:mt-5 xl:mt-8">{{description }}</div>
+        <div class="!text-sm leading-6 xl:leading-8 tracking-[0%] text-white mt-4  md:mt-5 xl:mt-8">{{description }}</div>
         <div class="mt-6 xl:mt-10">
             {{cta}}
         </div>
 
        </div>
+       </div>
    
     </div>
+
+
     

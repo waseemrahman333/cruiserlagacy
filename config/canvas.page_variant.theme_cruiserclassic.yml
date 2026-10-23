@@ -1,0 +1,335 @@
+uuid: 134a1e3c-dbfb-4566-a469-572fbcb2397e
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.block_content.3d881ae4-f940-4f21-9e36-a080554175be
+    - canvas.component.block.block_content.ac90886a-66cf-49b5-9a76-ccaae6cfc43d
+    - canvas.component.block.block_content.b200c324-120c-4ca1-8719-48b6aee50cf4
+    - canvas.component.block.help_block
+    - canvas.component.block.local_actions_block
+    - canvas.component.block.local_tasks_block
+    - canvas.component.block.system_branding_block
+    - canvas.component.block.system_menu_block.account
+    - canvas.component.block.system_menu_block.main
+    - canvas.component.block.system_menu_block.more-links
+    - canvas.component.block.system_menu_block.quick-links
+    - canvas.component.block.webform_block
+    - canvas.component.marker.page_content
+    - canvas.component.sdc.tailpine.canvas-button
+    - canvas.component.sdc.tailpine.footer
+    - canvas.component.sdc.tailpine.footer-block
+    - canvas.component.sdc.tailpine.header_navigation
+    - canvas.component.sdc.tailpine.image
+    - canvas.component.theme_page_template.cruiserclassic
+    - field.field.media.image.field_media_image
+    - image.style.canvas_parametrized_width
+    - media.type.image
+  content:
+    - 'file:file:209f7985-7588-4a3f-b61f-c46289621fe4'
+    - 'media:image:1f63f163-933a-4769-86e8-e1858b11367a'
+  module:
+    - file
+    - media
+    - options
+id: theme_cruiserclassic
+label: 'Cruiserclassic theme'
+description: null
+component_tree:
+  2c9becde-14bf-49e2-b9cf-ef6f866d7a55:
+    uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    component_id: theme_page_template.cruiserclassic
+    component_version: 40f2be7e73631c0a
+    inputs: {  }
+  7e6ec2e2-d57b-4aeb-857c-2460fdd95d7d:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: header
+    uuid: 7e6ec2e2-d57b-4aeb-857c-2460fdd95d7d
+    component_id: sdc.tailpine.header_navigation
+    component_version: bb7140689367e43b
+    inputs:
+      variant: menu-right
+      background_color: transparent
+      padding_block: xs
+      column_gap: md
+      show_search: false
+      header_behavior: fixed
+      header_shadow: false
+      show_border: false
+  1a92c518-0ffa-4758-9d35-748961416971:
+    parent_uuid: 7e6ec2e2-d57b-4aeb-857c-2460fdd95d7d
+    slot: branding
+    uuid: 1a92c518-0ffa-4758-9d35-748961416971
+    component_id: block.system_branding_block
+    component_version: 7d528e00f56b3abf
+    inputs:
+      label: 'Site branding'
+      label_display: '0'
+      use_site_logo: true
+      use_site_name: false
+      use_site_slogan: false
+  89970a42-5dd5-4de4-9c35-899eef30fb21:
+    parent_uuid: 7e6ec2e2-d57b-4aeb-857c-2460fdd95d7d
+    slot: menu
+    uuid: 89970a42-5dd5-4de4-9c35-899eef30fb21
+    component_id: block.system_menu_block.main
+    component_version: 322535c0078cf59c
+    inputs:
+      label: 'Main navigation'
+      label_display: '0'
+      level: 1
+      depth: null
+      expand_all_items: false
+  eec8da1a-afd7-4f9a-81ea-1fecce410390:
+    parent_uuid: 7e6ec2e2-d57b-4aeb-857c-2460fdd95d7d
+    slot: actions
+    uuid: eec8da1a-afd7-4f9a-81ea-1fecce410390
+    component_id: sdc.tailpine.canvas-button
+    component_version: b02a4b34f715328a
+    inputs:
+      title: 'CONTACT US'
+      link: 'https://example.com'
+      color_varient: primary
+      rounded: rounded-none
+      style_variant: solid
+      button_size: md
+      show_arrow: false
+      add_border: false
+      open_new_tab: false
+  7a434754-93dd-44a3-830c-b6aa2d7640d8:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: branding
+    uuid: 7a434754-93dd-44a3-830c-b6aa2d7640d8
+    component_id: block.system_branding_block
+    component_version: 7d528e00f56b3abf
+    inputs:
+      label: 'Site branding'
+      label_display: '0'
+      use_site_logo: true
+      use_site_name: false
+      use_site_slogan: false
+  4274c889-bb64-46f9-a0cf-6aaa8a6fefd5:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: header_menu
+    uuid: 4274c889-bb64-46f9-a0cf-6aaa8a6fefd5
+    component_id: block.system_menu_block.main
+    component_version: 322535c0078cf59c
+    inputs:
+      label: 'Main navigation'
+      label_display: '0'
+      level: 1
+      depth: 2
+      expand_all_items: true
+  1f290904-4679-41c4-8651-12836c6a7ed5:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: header_actions
+    uuid: 1f290904-4679-41c4-8651-12836c6a7ed5
+    component_id: block.system_menu_block.account
+    component_version: bc0ea0dab4832c55
+    inputs:
+      label: 'User account menu'
+      label_display: '0'
+      level: 1
+      depth: 2
+      expand_all_items: false
+  f60e3bc5-f5d2-4e8f-a9e4-b3c77ed71bbb:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: highlighted
+    uuid: f60e3bc5-f5d2-4e8f-a9e4-b3c77ed71bbb
+    component_id: block.local_actions_block
+    component_version: 8e3ae21ee61ff56d
+    inputs:
+      label: 'Primary admin actions'
+      label_display: '0'
+  d613701b-006d-49c1-b908-f0a00e6f56a9:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: highlighted
+    uuid: d613701b-006d-49c1-b908-f0a00e6f56a9
+    component_id: block.local_tasks_block
+    component_version: fbd9367ece78bba5
+    inputs:
+      label: Tabs
+      label_display: '0'
+      primary: true
+      secondary: true
+  75e38146-386b-42e1-9068-c34024b0c29e:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: help
+    uuid: 75e38146-386b-42e1-9068-c34024b0c29e
+    component_id: block.help_block
+    component_version: 2fc02d0eb487e62e
+    inputs:
+      label: Help
+      label_display: '0'
+  ad1f3e90-6940-4941-911c-32df1d79a63a:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: content
+    uuid: ad1f3e90-6940-4941-911c-32df1d79a63a
+    component_id: marker.page_content
+    component_version: 3b12c0b99a6caecc
+    inputs: {  }
+  0771e57a-86bc-41b0-9253-867d31ffdf2a:
+    parent_uuid: 2c9becde-14bf-49e2-b9cf-ef6f866d7a55
+    slot: footer
+    uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    component_id: sdc.tailpine.footer
+    component_version: 459ef1de83faea1f
+    inputs:
+      background_color: surface-100
+      padding_block: lg
+      column_gap: md
+      row_gap: lg
+      top_columns: 3
+      top_alignment: left
+      top_width: full
+      main_columns: 1
+      main_columns_tab: 1
+      main_alignment: left
+      main_width: full
+      bottom_columns: 3
+      bottom_alignment: left
+      bottom_width: full
+  c9d3e030-61e5-42dd-8cf2-a9c68285f295:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: top_first
+    uuid: c9d3e030-61e5-42dd-8cf2-a9c68285f295
+    component_id: sdc.tailpine.footer-block
+    component_version: 478217641954bee4
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      content_width: full
+  d269ecfb-db46-40b8-a1fa-7f1c62219592:
+    parent_uuid: c9d3e030-61e5-42dd-8cf2-a9c68285f295
+    slot: content
+    uuid: d269ecfb-db46-40b8-a1fa-7f1c62219592
+    component_id: block.system_menu_block.quick-links
+    component_version: 631125561071f763
+    inputs:
+      label: 'Quick Links'
+      label_display: '0'
+      level: 1
+      depth: null
+      expand_all_items: false
+  4526b4c3-8bb9-462b-8040-7d760b48e530:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: top_middle
+    uuid: 4526b4c3-8bb9-462b-8040-7d760b48e530
+    component_id: sdc.tailpine.footer-block
+    component_version: 478217641954bee4
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      content_width: full
+  2604ded8-450b-49ad-aa9f-939f5b1bd8b9:
+    parent_uuid: 4526b4c3-8bb9-462b-8040-7d760b48e530
+    slot: content
+    uuid: 2604ded8-450b-49ad-aa9f-939f5b1bd8b9
+    component_id: block.system_menu_block.more-links
+    component_version: 4a4be5278a6a3081
+    inputs:
+      label: 'More Links'
+      label_display: '0'
+      level: 1
+      depth: null
+      expand_all_items: false
+  1726e92a-a4d8-45c6-abc7-d80a1a5f4967:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: top_secondlast
+    uuid: 1726e92a-a4d8-45c6-abc7-d80a1a5f4967
+    component_id: block.webform_block
+    component_version: b5dca6ca0519bf1b
+    inputs:
+      label: Webform
+      label_display: '0'
+      webform_id: newsletter
+      default_data: ''
+      redirect: false
+      lazy: false
+  947de2f3-eafa-4342-bf82-33a0fda08613:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: main_first
+    uuid: 947de2f3-eafa-4342-bf82-33a0fda08613
+    component_id: sdc.tailpine.image
+    component_version: 9f04894f1f24e401
+    inputs:
+      media:
+        target_id: '22'
+      url: 'https://example.com'
+      enable_hover_zoom: false
+  7025de18-7e14-40e8-8762-dba421669e99:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: bottom_first
+    uuid: 7025de18-7e14-40e8-8762-dba421669e99
+    component_id: sdc.tailpine.footer-block
+    component_version: 478217641954bee4
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      content_width: full
+  4b603e0f-b54a-4560-a2b2-097ac64acffe:
+    parent_uuid: 7025de18-7e14-40e8-8762-dba421669e99
+    slot: content
+    uuid: 4b603e0f-b54a-4560-a2b2-097ac64acffe
+    component_id: block.block_content.3d881ae4-f940-4f21-9e36-a080554175be
+    component_version: f8304195d897836e
+    inputs:
+      label: 'Privacy Policy'
+      label_display: '0'
+      view_mode: full
+  64b0dd64-e5c0-4fbb-b194-2af280268b92:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: bottom_middle
+    uuid: 64b0dd64-e5c0-4fbb-b194-2af280268b92
+    component_id: sdc.tailpine.footer-block
+    component_version: 478217641954bee4
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      content_width: full
+  c0b67da1-f773-4fe0-9509-d3fdc07e5cf5:
+    parent_uuid: 64b0dd64-e5c0-4fbb-b194-2af280268b92
+    slot: content
+    uuid: c0b67da1-f773-4fe0-9509-d3fdc07e5cf5
+    component_id: block.block_content.ac90886a-66cf-49b5-9a76-ccaae6cfc43d
+    component_version: 064118e2132b214a
+    inputs:
+      label: 'Copy Rights'
+      label_display: '0'
+      view_mode: full
+  400a41e3-7172-4828-9894-fa636e384bcc:
+    parent_uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
+    slot: bottom_last
+    uuid: 400a41e3-7172-4828-9894-fa636e384bcc
+    component_id: sdc.tailpine.footer-block
+    component_version: 478217641954bee4
+    inputs:
+      show_title: false
+      show_underline: false
+      show_content: true
+      heading: 'Quick Links'
+      heading_alignment: left
+      content_alignment: right
+      content_width: fit
+  a44520c1-2551-4d6c-83b8-ddf6d92e9132:
+    parent_uuid: 400a41e3-7172-4828-9894-fa636e384bcc
+    slot: content
+    uuid: a44520c1-2551-4d6c-83b8-ddf6d92e9132
+    component_id: block.block_content.b200c324-120c-4ca1-8719-48b6aee50cf4
+    component_version: 7fbd13d5281ea597
+    inputs:
+      label: 'Social Media Icons'
+      label_display: '0'
+      view_mode: full

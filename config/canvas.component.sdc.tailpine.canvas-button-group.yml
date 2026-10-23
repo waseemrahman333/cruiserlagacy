@@ -1,20 +1,46 @@
-uuid: c3b46bc6-2d7f-4ab5-985c-379fae068242
+uuid: 415fc387-5d00-4dde-b03e-4c84d8573f2a
 langcode: en
 status: true
 dependencies:
+  module:
+    - options
   theme:
     - tailpine
-active_version: 89c84a6148871681
+active_version: f51aba689ce78216
 versioned_properties:
   active:
     settings:
-      prop_field_definitions: {  }
+      prop_field_definitions:
+        layout:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: horizontal
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        gap:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: md
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
     fallback_metadata:
       slot_definitions:
         buttons:
           title: Buttons
           description: 'Button components to group.'
-label: 'Button Group (Canvas)'
+label: 'Button Group (Tailpine)'
 id: sdc.tailpine.canvas-button-group
 provider: tailpine
 source: sdc

@@ -1,0 +1,13 @@
+uuid: 0731f59c-b0b4-4933-9d36-f54f080e5a8e
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.premium-fleet
+    - canvas.component.sdc.cruiserclassic.testimonial-card
+name: 'Jeep Components'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.premium-fleet
+  - sdc.cruiserclassic.testimonial-card

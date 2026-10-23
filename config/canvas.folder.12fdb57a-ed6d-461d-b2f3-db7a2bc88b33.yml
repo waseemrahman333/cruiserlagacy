@@ -1,0 +1,27 @@
+uuid: 12fdb57a-ed6d-461d-b2f3-db7a2bc88b33
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.vehicle-card
+    - canvas.component.sdc.tailpine.base-card
+    - canvas.component.sdc.tailpine.canvas-cardheader
+    - canvas.component.sdc.tailpine.canvas-cardonestyle
+    - canvas.component.sdc.tailpine.canvas-cardtwostyle
+    - canvas.component.sdc.tailpine.canvas-postheader
+    - canvas.component.sdc.tailpine.canvas-poststyleone
+    - canvas.component.sdc.tailpine.canvas-poststylethree
+    - canvas.component.sdc.tailpine.canvas-postwrapper
+name: 'Cards & Posts'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.vehicle-card
+  - sdc.tailpine.base-card
+  - sdc.tailpine.canvas-cardheader
+  - sdc.tailpine.canvas-cardonestyle
+  - sdc.tailpine.canvas-cardtwostyle
+  - sdc.tailpine.canvas-postheader
+  - sdc.tailpine.canvas-poststyleone
+  - sdc.tailpine.canvas-poststylethree
+  - sdc.tailpine.canvas-postwrapper

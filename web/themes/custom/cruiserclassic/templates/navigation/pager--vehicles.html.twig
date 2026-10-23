@@ -1,0 +1,42 @@
+{#
+/**
+ * @file
+ * Vehicles listing pager: "PREV  1/2  NEXT".
+ *
+ * Variables (see template_preprocess_pager()):
+ * - items.previous / items.next: links, missing on the first / last page.
+ * - current: current page number.
+ * - total_pages: added in cruiserclassic_preprocess_pager().
+ */
+#}
+{% if items %}
+  {% set btn = 'inline-flex items-center gap-2 uppercase font-medium text-sm px-5 py-3 rounded-sm transition-colors' %}
+  <nav class="pager js-pager__items flex items-center justify-center gap-[clamp(24px,4vw,42px)]" role="navigation" aria-label="{{ 'Pagination'|t }}">
+
+    {% if items.previous %}
+      <a href="{{ items.previous.href }}" class="{{ btn }} bg-primary text-white hover:bg-primary/90" rel="prev">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        {{ 'Prev'|t }}
+      </a>
+    {% else %}
+      <span class="{{ btn }} bg-gray-400 text-white/80 cursor-not-allowed" aria-disabled="true">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        {{ 'Prev'|t }}
+      </span>
+    {% endif %}
+
+    <span class="text-sm text-body" aria-current="page">{{ current }}/{{ total_pages|default(1) }}</span>
+
+    {% if items.next %}
+      <a href="{{ items.next.href }}" class="{{ btn }} bg-primary text-white hover:bg-primary/90" rel="next">
+        {{ 'Next'|t }}
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    {% else %}
+      <span class="{{ btn }} bg-gray-400 text-white/80 cursor-not-allowed" aria-disabled="true">
+        {{ 'Next'|t }}
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+      </span>
+    {% endif %}
+  </nav>
+{% endif %}

@@ -1,0 +1,25 @@
+uuid: 3fe008c8-d6b7-46e5-948a-52f6cccf6d9b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_interior
+    - node.type.vehicle
+    - taxonomy.vocabulary.interior
+id: node.vehicle.field_interior
+field_name: field_interior
+entity_type: node
+bundle: vehicle
+label: Interior
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      interior: interior
+    auto_create: false
+field_type: entity_reference

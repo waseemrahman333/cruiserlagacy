@@ -1,0 +1,29 @@
+uuid: 47bddf77-f0f4-4218-ab11-8991b5e19d73
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_select_brand
+    - taxonomy.vocabulary.model_type
+    - taxonomy.vocabulary.vehicle_brand
+id: taxonomy_term.model_type.field_select_brand
+field_name: field_select_brand
+entity_type: taxonomy_term
+bundle: model_type
+label: 'Select Brand'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      vehicle_brand: vehicle_brand
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

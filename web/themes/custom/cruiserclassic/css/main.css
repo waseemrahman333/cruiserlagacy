@@ -31,21 +31,21 @@
 @font-face {
   font-family: 'Helvetica';
   src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-65-Medium.ttf') format('truetype');
-  font-weight: 400;
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
-}
-@font-face {
+} 
+ @font-face {
   font-family: 'Helvetica';
   src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-Regular.ttf') format('truetype');
-  font-weight: 400;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Helvetica';
   src: url('../fonts/Helvetica-Neue_Regular/Helvetica-Neue-Light.ttf') format('truetype');
-  font-weight: 300;
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -69,6 +69,8 @@
   --font-heading: "Conthrax";
 }
 
+
+
 header .search-icon form {
   @apply flex flex-row justify-around w-[300px] sm:w-[400px] items-center bg-white shadow px-4 py-2;
 
@@ -78,6 +80,20 @@ header .search-icon form {
   input[type="submit"] {
     @apply  text-white cursor-pointer sm:w-[100px];
   }
+}
+
+.bg-primary{
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+}
+
+
+/* sub-hero__title */
+
+.sub-hero__title {
+    font-size: var(--h2-size) !important;
+    font-weight: 600 !important;
+    line-height: var(--h2-line-height) !important;
 }
 
 
@@ -254,9 +270,6 @@ header .search-icon form {
 }
 
 
-
-
-
 .responsive-review .slick-dots {
     position: static;
     display: flex;
@@ -336,12 +349,17 @@ header .search-icon form {
 
 
 /* webform designing  */
-.webform-submission-newsletter-form{
+
+.webform-submission-form .webform-submission-add-form .webform-submission-newsletter-form{
   display: flex;
   flex-direction: column;
   align-items: start;
 
 }
+
+.webform-submission-newsletter-form .webform-flexbox {
+    @apply !m-0 flex items-end;
+  }
 
 .form-submit {
    @apply self-end py-3 px-4;
@@ -350,15 +368,98 @@ header .search-icon form {
 .webform-flex--1{
   @apply  w-3/5 h-fit ;
 }
+
+.webform-flex--1 .webform-flex--container{
+  @apply !m-0 ;
+}
+
 .webform-flex--2{
   @apply self-end w-2/5 h-fit ;
 }
 
+.webform-flex--2 .webform-flex--container{
+  @apply !m-0 !rounded-none bg-primary border border-primary;
+}
+
+/* Newsletter email: on focus only recolor the existing border (no outline/ring) */
+.webform-submission-newsletter-form input[type="email"]:focus,
+.webform-submission-newsletter-form input[type="email"]:focus-visible {
+  @apply outline-none ring-0 shadow-none border-primary;
+}
 
 @media (min-width: 768px) {
   .webform-flex--2 {
     @apply self-end w-2/5 h-fit;
     flex: none; 
   }
+  .webform-submission-form .webform-submission-add-form .webform-submission-newsletter-form{
+width: 140%;
+
+}
 }
 
+/* Newsletter webform — tablet layout (Figma) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Let the footer column holding the newsletter span both grid columns */
+  .footer-top-inner > div:has(.webform-submission-newsletter-form) {
+    @apply col-span-2;
+  }
+  form.webform-submission-newsletter-form {
+    @apply !w-[70%] items-stretch;
+  }
+  .webform-submission-newsletter-form .webform-flexbox {
+    @apply !m-0 items-end;
+  }
+  .webform-submission-newsletter-form .webform-flex--1 {
+    @apply w-[68%] flex-none;
+  }
+  .webform-submission-newsletter-form .webform-flex--2 {
+    @apply w-[32%] self-auto;
+  }
+  .webform-submission-newsletter-form .webform-flex--container,
+  .webform-submission-newsletter-form .form-item,
+  .webform-submission-newsletter-form .form-actions {
+    @apply !m-0 !p-0;
+  }
+  /* .webform-submission-newsletter-form label {
+    @apply block text-xl !font-medium mb-6;
+  } */
+
+  .webform-submission-newsletter-form input[type="email"] {
+    @apply w-full h-14 px-4 py-0 text-lg border border-r-0 border-gray-400 rounded-l bg-white;
+  }
+  .webform-submission-newsletter-form .form-submit {
+    @apply w-full h-14 py-0 px-4 text-lg uppercase rounded-r;
+  }
+  .webform-submission-newsletter-form .webform-flex--2 .webform-flex--container {
+    @apply bg-transparent;
+  }
+  .webform-submission-newsletter-form p {
+    @apply mt-6 mb-0 px-0 text-lg;
+  }
+}
+
+
+
+
+/* Vehicles search — suggestion dropdown (Drupal autocomplete / jQuery UI) */
+.ui-autocomplete {
+  @apply absolute z-50 max-h-72 overflow-y-auto bg-white border border-gray-200 rounded-sm shadow-lg !p-1 list-none;
+}
+.ui-autocomplete .ui-menu-item-wrapper {
+  @apply block px-3 py-2 text-sm text-body cursor-pointer rounded-sm;
+}
+.ui-autocomplete .ui-menu-item-wrapper.ui-state-active,
+.ui-autocomplete .ui-menu-item-wrapper:hover {
+  @apply bg-primary text-white border-0 m-0;
+}
+.ui-helper-hidden-accessible {
+  @apply sr-only;
+}
+
+/* Footer menu list (tailpine:footer-menu-list): medium weight for items and links */
+.footer-menu-list ul,
+.footer-menu-list li,
+.footer-menu-list li a {
+  @apply !font-medium;
+}

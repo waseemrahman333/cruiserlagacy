@@ -1,0 +1,42 @@
+uuid: 4a4051b7-e0f9-491c-bd39-65975cc5c5e5
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+active_version: 5ec0575114b1f962
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Standard
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        description:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'For new businesses building an online presence.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Pricing Plan'
+id: sdc.cruiserclassic.pricing-plans-card
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:pricing-plans-card'

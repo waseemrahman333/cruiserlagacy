@@ -1,0 +1,31 @@
+{#
+/**
+ * @file
+ * "New Land Cruisers" slider on the home page: the 5 latest vehicles,
+ * each rendered as a premium-fleet card inside the Slick carousel
+ * (js/jeep-carousel.js targets the .responsive wrapper).
+ *
+ * @see template_preprocess_views_view_unformatted()
+ */
+#}
+{{ attach_library('cruiserclassic/jeep-carousel') }}
+
+<section class="overflow-hidden">
+  <div class="responsive">
+    {% for row in rows %}
+      {% set entity = row.content['#row']._entity ?? row._entity %}
+
+      {# Background: the vehicle's Image (media) field #}
+      {% set jeep_background = '' %}
+      {% if entity and entity.field_image.entity and entity.field_image.entity.field_media_image.entity %}
+        {% set jeep_background = file_url(entity.field_image.entity.field_media_image.entity.uri.value) %}
+      {% endif %}
+
+      {{ include('cruiserclassic:premium-fleet', {
+        jeep_background: jeep_background,
+        jeep_title: entity ? entity.label : '',
+        jeep_year: entity and entity.field_year.value ? entity.field_year.value ~ '' : '',
+      }) }}
+    {% endfor %}
+  </div>
+</section>

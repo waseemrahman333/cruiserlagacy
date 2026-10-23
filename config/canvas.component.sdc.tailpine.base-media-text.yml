@@ -1,4 +1,4 @@
-uuid: 2c3a15c7-9106-4094-82a7-a8895996c443
+uuid: 87deb86f-8620-4d67-bf99-a8bb1d2248e1
 langcode: en
 status: true
 dependencies:
@@ -13,7 +13,7 @@ dependencies:
     - options
   theme:
     - tailpine
-active_version: b078c668c45b80c9
+active_version: a03598025ca66c81
 versioned_properties:
   active:
     settings:
@@ -42,6 +42,18 @@ versioned_properties:
           default_value:
             -
               value: row
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        bg_color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: primary
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         enable_container:
@@ -77,60 +89,6 @@ versioned_properties:
               value: true
           expression: ℹ︎boolean␟value
           derived_schema_metadata: {  }
-        image_width:
-          required: false
-          field_type: integer
-          field_storage_settings: {  }
-          field_instance_settings:
-            min: 0
-            max: 1000
-          field_widget: number
-          default_value: null
-          expression: ℹ︎integer␟value
-          derived_schema_metadata: {  }
-        image_height:
-          required: false
-          field_type: integer
-          field_storage_settings: {  }
-          field_instance_settings:
-            min: 0
-            max: 1000
-          field_widget: number
-          default_value: null
-          expression: ℹ︎integer␟value
-          derived_schema_metadata: {  }
-        image_position_mode:
-          required: false
-          field_type: list_string
-          field_storage_settings:
-            allowed_values_function: canvas_load_allowed_values_for_component_prop
-          field_instance_settings: {  }
-          field_widget: options_select
-          default_value: null
-          expression: ℹ︎list_string␟value
-          derived_schema_metadata: {  }
-        image_translate_x:
-          required: false
-          field_type: integer
-          field_storage_settings: {  }
-          field_instance_settings:
-            min: -1000
-            max: 1000
-          field_widget: number
-          default_value: null
-          expression: ℹ︎integer␟value
-          derived_schema_metadata: {  }
-        image_translate_y:
-          required: false
-          field_type: integer
-          field_storage_settings: {  }
-          field_instance_settings:
-            min: -500
-            max: 500
-          field_widget: number
-          default_value: null
-          expression: ℹ︎integer␟value
-          derived_schema_metadata: {  }
         gap:
           required: false
           field_type: list_string
@@ -140,7 +98,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: 8px
+              value: sm
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         content_horizontal_alignment:
@@ -172,7 +130,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         section_padding_block:
@@ -184,7 +142,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         content_padding_inline:
@@ -196,7 +154,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: md
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         content_padding_block:
@@ -208,19 +166,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
-          expression: ℹ︎list_string␟value
-          derived_schema_metadata: {  }
-        bg_color:
-          required: false
-          field_type: list_string
-          field_storage_settings:
-            allowed_values_function: canvas_load_allowed_values_for_component_prop
-          field_instance_settings: {  }
-          field_widget: options_select
-          default_value:
-            -
-              value: transparent
+              value: md
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
     fallback_metadata:

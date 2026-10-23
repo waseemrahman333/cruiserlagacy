@@ -1,0 +1,9 @@
+uuid: 99e34424-b202-412a-bdd0-d44173d4b3cb
+langcode: en
+status: true
+dependencies: {  }
+name: trim
+vid: trim
+description: null
+weight: 0
+new_revision: false

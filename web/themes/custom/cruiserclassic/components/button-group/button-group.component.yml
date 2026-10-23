@@ -1,0 +1,92 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+
+name: Button Group (Cruiserclassic)
+status: stable
+description: "Up to 3 buttons with responsive layout: choose how many to show and how they stack on mobile, tablet and desktop."
+group: Forms
+
+slots:
+  button_1:
+    title: Button 1
+  button_2:
+    title: Button 2
+  button_3:
+    title: Button 3
+
+props:
+  type: object
+  properties:
+
+    # ── Buttons ──────────────────────────────
+    button_count:
+      type: string
+      title: Number of Buttons
+      enum: ['1', '2', '3']
+      meta:enum:
+        '1': '1 button'
+        '2': '2 buttons'
+        '3': '3 buttons'
+      default: '2'
+      examples: ['2']
+
+    # ── Layout per screen ────────────────────
+    direction_mobile:
+      type: string
+      title: Mobile Layout
+      enum: [column, row]
+      meta:enum:
+        column: 'Stacked (vertical)'
+        row: 'Side by side (horizontal)'
+      default: column
+      examples: [column]
+
+    direction_tablet:
+      type: string
+      title: Tablet Layout
+      enum: [column, row]
+      meta:enum:
+        column: 'Stacked (vertical)'
+        row: 'Side by side (horizontal)'
+      default: row
+      examples: [row]
+
+    direction_desktop:
+      type: string
+      title: Desktop Layout
+      enum: [column, row]
+      meta:enum:
+        column: 'Stacked (vertical)'
+        row: 'Side by side (horizontal)'
+      default: row
+      examples: [row]
+
+    # ── Spacing & alignment ──────────────────
+    gap:
+      type: string
+      title: Gap Between Buttons
+      enum: [none, sm, md, lg]
+      meta:enum:
+        none: None
+        sm: Small
+        md: Medium
+        lg: Large
+      default: md
+      examples: [md]
+
+    alignment:
+      type: string
+      title: Alignment
+      enum: [start, center, end]
+      meta:enum:
+        start: Left
+        center: Center
+        end: Right
+      default: start
+      examples: [start]
+
+    full_width_mobile:
+      type: boolean
+      title: Full-width Buttons on Mobile
+      description: "Stretch buttons to the full width when stacked on mobile"
+      default: true
+      examples: [true]

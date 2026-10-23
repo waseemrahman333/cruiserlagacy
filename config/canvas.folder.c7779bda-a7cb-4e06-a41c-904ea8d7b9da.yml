@@ -1,0 +1,15 @@
+uuid: c7779bda-a7cb-4e06-a41c-904ea8d7b9da
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.book-plan
+    - canvas.component.sdc.cruiserclassic.pricing-plans
+    - canvas.component.sdc.cruiserclassic.pricing-plans-card
+name: Marketing
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.book-plan
+  - sdc.cruiserclassic.pricing-plans
+  - sdc.cruiserclassic.pricing-plans-card

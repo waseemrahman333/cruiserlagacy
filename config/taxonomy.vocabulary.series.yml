@@ -1,0 +1,9 @@
+uuid: 0560d4eb-6371-46ce-8c35-042fc21194f3
+langcode: en
+status: true
+dependencies: {  }
+name: Series
+vid: series
+description: null
+weight: 0
+new_revision: false

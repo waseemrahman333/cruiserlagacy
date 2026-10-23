@@ -1,4 +1,4 @@
-uuid: 626fb9cc-11de-4055-90e6-7b9c7dbb77bc
+uuid: 86a96ec2-3771-4cda-85f8-2442354fa855
 langcode: en
 status: true
 dependencies:
@@ -6,7 +6,7 @@ dependencies:
     - options
   theme:
     - tailpine
-active_version: 78d05cc89a791c25
+active_version: 459ef1de83faea1f
 versioned_properties:
   active:
     settings:
@@ -20,21 +20,9 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: secondary
+              value: primary
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        text_color:
-          required: false
-          field_type: string
-          field_storage_settings: {  }
-          field_instance_settings: {  }
-          field_widget: string_textfield
-          default_value:
-            -
-              value: text-body-bg
-          expression: ℹ︎string␟value
-          derived_schema_metadata:
-            string_shape: {  }
         padding_block:
           required: false
           field_type: list_string
@@ -219,7 +207,7 @@ versioned_properties:
           title: 'Bottom — Column 2'
         bottom_last:
           title: 'Bottom — Column 3'
-label: 'Footer (Canvas)'
+label: 'Footer (Tailpine)'
 id: sdc.tailpine.footer
 provider: tailpine
 source: sdc

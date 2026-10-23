@@ -1,0 +1,46 @@
+{#
+/**
+ * Sub Hero Component
+ *
+ * Inner-page hero: full-width background image with dark overlay; breadcrumb
+ * and title sit at the bottom left. Leaves room at the top for the
+ * transparent site header that overlays it.
+ *
+ * Props: image, title, heading_level, height, overlay, image_position
+ * Slots: breadcrumb
+ */
+#}
+{% set heights = {
+  'small': 'min-h-[400px] md:min-h-[450px] xl:min-h-[500px]',
+  'default': 'min-h-[500px] md:min-h-[550px] xl:min-h-[600px]',
+  'large': 'min-h-[600px] md:min-h-[650px] xl:min-h-[700px]',
+} %}
+{% set overlays = {'30': 'bg-black/30', '45': 'bg-black/45', '60': 'bg-black/60', '75': 'bg-black/75'} %}
+{% set positions = {'center': 'object-center', 'left': 'object-left', 'right': 'object-right'} %}
+{# {% set tag = heading_level in ['h1', 'h2'] ? heading_level : 'h1' %} #}
+
+<section class="sub-hero relative w-full max-w-[1920px] mx-auto overflow-hidden flex items-end {{ heights[height]|default(heights.medium) }}">
+
+  {% if image.src %}
+    <img src="{{ image.src }}" alt="{{ image.alt|default('') }}"
+         {% if image.width %}width="{{ image.width }}"{% endif %}
+         {% if image.height %}height="{{ image.height }}"{% endif %}
+         class="absolute inset-0 w-full h-full object-cover {{ positions[image_position]|default('object-center') }}"
+         fetchpriority="high">
+  {% endif %}
+  <div class="absolute inset-0 {{ overlays[overlay]|default('bg-black/45') }}" aria-hidden="true"></div>
+
+  <div class="relative z-10 w-full px-5 md:px-12 xl:px-24 pt-32 pb-[clamp(48px,7vw,64px)]">
+    {% if breadcrumb %}
+      <div class="sub-hero__breadcrumb mb-[clamp(24px,4vw,40px)] xl:mb-5">
+        {{ breadcrumb }}
+      </div>
+    {% endif %}
+
+    {% if title %}
+      <h1 class="sub-hero__title max-w-3xl !text-white !font-heading uppercase !leading-[1.15] ">
+        {{ title }}
+      </h1>
+    {% endif %}
+  </div>
+</section>

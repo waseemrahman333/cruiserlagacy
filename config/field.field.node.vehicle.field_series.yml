@@ -1,0 +1,25 @@
+uuid: 6b420f4b-afd3-41c8-bcf2-aa86a4deb393
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_series
+    - node.type.vehicle
+    - taxonomy.vocabulary.series
+id: node.vehicle.field_series
+field_name: field_series
+entity_type: node
+bundle: vehicle
+label: Series
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      series: series
+    auto_create: false
+field_type: entity_reference

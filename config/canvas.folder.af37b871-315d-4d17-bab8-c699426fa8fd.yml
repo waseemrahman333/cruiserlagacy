@@ -1,0 +1,27 @@
+uuid: af37b871-315d-4d17-bab8-c699426fa8fd
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-offcanvas
+    - canvas.component.sdc.tailpine.canvas-verticaltabs
+    - canvas.component.sdc.tailpine.dropdown
+    - canvas.component.sdc.tailpine.dropdown-menu
+    - canvas.component.sdc.tailpine.menulocaltasks
+    - canvas.component.sdc.tailpine.navbar
+    - canvas.component.sdc.tailpine.navbar-brand
+    - canvas.component.sdc.tailpine.offcanvas
+    - canvas.component.sdc.tailpine.verticaltabs
+name: Navigation
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-offcanvas
+  - sdc.tailpine.canvas-verticaltabs
+  - sdc.tailpine.dropdown
+  - sdc.tailpine.dropdown-menu
+  - sdc.tailpine.menulocaltasks
+  - sdc.tailpine.navbar
+  - sdc.tailpine.navbar-brand
+  - sdc.tailpine.offcanvas
+  - sdc.tailpine.verticaltabs

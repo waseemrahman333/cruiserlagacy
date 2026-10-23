@@ -1,0 +1,21 @@
+{#
+/**
+ * @file
+ * Theme override to display a menu using the footer-menu-list component.
+ *
+ * Available variables:
+ * - menu_name: The machine name of the menu.
+ * - items: A nested list of menu items. Each menu item contains:
+ *   - attributes: HTML attributes for the menu item.
+ *   - below: The menu item child items.
+ *   - title: The menu link title.
+ *   - url: The menu link URL, instance of \Drupal\Core\Url
+ *   - in_active_trail: TRUE if the link is in the active trail.
+ *
+ * Menus with their own template (menu--main, menu--account, menu--footer,
+ * etc.) are not affected by this override.
+ */
+#}
+{% include 'tailpine:footer-menu-list' with {
+  items: items,
+} only %}

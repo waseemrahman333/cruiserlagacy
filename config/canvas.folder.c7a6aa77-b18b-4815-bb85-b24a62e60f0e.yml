@@ -1,0 +1,77 @@
+uuid: c7a6aa77-b18b-4815-bb85-b24a62e60f0e
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.marker.page_content
+    - canvas.component.sdc.cruiserclassic.button
+    - canvas.component.sdc.cruiserclassic.our-fleet-design
+    - canvas.component.sdc.cruiserclassic.who-we-are
+    - canvas.component.sdc.olivero.teaser
+    - canvas.component.sdc.tailpine.audio
+    - canvas.component.sdc.tailpine.base-media-text
+    - canvas.component.sdc.tailpine.canvas-accordionheader
+    - canvas.component.sdc.tailpine.canvas-accordionstyleone
+    - canvas.component.sdc.tailpine.canvas-accordionstyletwo
+    - canvas.component.sdc.tailpine.canvas-accordionstyletwoheader
+    - canvas.component.sdc.tailpine.canvas-contact_form
+    - canvas.component.sdc.tailpine.canvas-contact_us
+    - canvas.component.sdc.tailpine.canvas-error404
+    - canvas.component.sdc.tailpine.canvas-file-upload-help
+    - canvas.component.sdc.tailpine.canvas-mark
+    - canvas.component.sdc.tailpine.canvas-mediaandtext
+    - canvas.component.sdc.tailpine.canvas-modal
+    - canvas.component.sdc.tailpine.canvas-openclose
+    - canvas.component.sdc.tailpine.canvas-poststyleoneheader
+    - canvas.component.sdc.tailpine.canvas-sidebarlinks
+    - canvas.component.sdc.tailpine.canvas-subpagehero
+    - canvas.component.sdc.tailpine.canvas-text
+    - canvas.component.sdc.tailpine.canvas-user
+    - canvas.component.sdc.tailpine.canvas-username
+    - canvas.component.sdc.tailpine.carousel
+    - canvas.component.sdc.tailpine.date
+    - canvas.component.sdc.tailpine.image-style
+    - canvas.component.sdc.tailpine.mark
+    - canvas.component.sdc.tailpine.openclose
+    - canvas.component.sdc.tailpine.rating
+    - canvas.component.sdc.tailpine.subpagehero
+    - canvas.component.sdc.tailpine.video
+    - canvas.component.theme_page_template.cruiserclassic
+name: Other
+configEntityTypeId: component
+weight: 0
+items:
+  - marker.page_content
+  - sdc.cruiserclassic.button
+  - sdc.cruiserclassic.our-fleet-design
+  - sdc.cruiserclassic.who-we-are
+  - sdc.olivero.teaser
+  - sdc.tailpine.audio
+  - sdc.tailpine.base-media-text
+  - sdc.tailpine.canvas-accordionheader
+  - sdc.tailpine.canvas-accordionstyleone
+  - sdc.tailpine.canvas-accordionstyletwo
+  - sdc.tailpine.canvas-accordionstyletwoheader
+  - sdc.tailpine.canvas-contact_form
+  - sdc.tailpine.canvas-contact_us
+  - sdc.tailpine.canvas-error404
+  - sdc.tailpine.canvas-file-upload-help
+  - sdc.tailpine.canvas-mark
+  - sdc.tailpine.canvas-mediaandtext
+  - sdc.tailpine.canvas-modal
+  - sdc.tailpine.canvas-openclose
+  - sdc.tailpine.canvas-poststyleoneheader
+  - sdc.tailpine.canvas-sidebarlinks
+  - sdc.tailpine.canvas-subpagehero
+  - sdc.tailpine.canvas-text
+  - sdc.tailpine.canvas-user
+  - sdc.tailpine.canvas-username
+  - sdc.tailpine.carousel
+  - sdc.tailpine.date
+  - sdc.tailpine.image-style
+  - sdc.tailpine.mark
+  - sdc.tailpine.openclose
+  - sdc.tailpine.rating
+  - sdc.tailpine.subpagehero
+  - sdc.tailpine.video
+  - theme_page_template.cruiserclassic

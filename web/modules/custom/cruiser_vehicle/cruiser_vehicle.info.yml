@@ -1,0 +1,8 @@
+name: Cruiser Vehicle
+type: module
+description: 'Dependent Brand → Model type → Series → Trim selects on the vehicle form and the vehicles filter.'
+package: Cruiser
+core_version_requirement: ^10.3 || ^11
+dependencies:
+  - drupal:taxonomy
+  - drupal:views

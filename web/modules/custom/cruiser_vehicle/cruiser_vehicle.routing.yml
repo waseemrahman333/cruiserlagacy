@@ -1,0 +1,6 @@
+cruiser_vehicle.title_autocomplete:
+  path: '/cruiser-vehicle/autocomplete/title'
+  defaults:
+    _controller: '\Drupal\cruiser_vehicle\Controller\VehicleAutocompleteController::title'
+  requirements:
+    _permission: 'access content'

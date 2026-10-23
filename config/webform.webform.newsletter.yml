@@ -32,15 +32,25 @@ elements: |-
           - border-b
           - px-4
           - py-2.5
+      '#label_attributes':
+        class:
+          - mb-5
     actions:
       '#type': webform_actions
       '#title': 'Submit button(s)'
       '#flex': 2
+      '#attributes':
+        class:
+          - bg-primary
+          - '!rounded-none'
       '#submit__label': SUBSCRIBE
   processed_text:
     '#type': processed_text
-    '#text': '<p>By subscribing, you agree to our <a href="/privacypolicy">Privacy Policy.</a></p>'
-    '#format': basic_html
+    '#text': '<p class="font-normal">By subscribing, you agree to our <a href="/privacypolicy">Privacy Policy.</a></p>'
+    '#format': full_html
+    '#wrapper_attributes':
+      class:
+        - mt-5
 css: ''
 javascript: ''
 settings:

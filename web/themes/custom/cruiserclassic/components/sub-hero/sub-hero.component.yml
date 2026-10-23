@@ -1,0 +1,63 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Sub Hero (Cruiserclassic)
+status: stable
+description: "Inner-page hero with background image, dark overlay, breadcrumb slot and title."
+group: Heros
+
+slots:
+  breadcrumb:
+    title: Breadcrumb
+    description: "Place the breadcrumb block here"
+
+props:
+  type: object
+  properties:
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Background Image
+      examples:
+        - src: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1920'
+          alt: 'Classic Land Cruiser'
+          width: 1920
+          height: 1080
+
+    title:
+      type: string
+      title: Title
+      examples: ['Discover Your Perfect Cruiser']
+
+    height:
+      type: string
+      title: Height
+      enum: ['small', 'default', 'large']
+      meta:enum:
+        small: Small
+        default: default
+        large: Large
+      default: 'default'
+      examples: ['default']
+
+    overlay:
+      type: string
+      title: Overlay Darkness
+      enum: ['30', '45', '60', '75']
+      meta:enum:
+        '30': Light
+        '45': Medium
+        '60': Dark
+        '75': Very dark
+      default: '45'
+      examples: ['45']
+
+    image_position:
+      type: string
+      title: Image Focus
+      enum: ['center', 'left', 'right']
+      meta:enum:
+        center: Center
+        left: Left
+        right: Right
+      default: 'center'
+      examples: ['center']

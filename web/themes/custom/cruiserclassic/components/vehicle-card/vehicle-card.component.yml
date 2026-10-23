@@ -1,0 +1,121 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Vehicle Card (Cruiserclassic)
+status: stable
+description: "Vehicle listing card with image, title, status badge, engine, transmission, exterior and interior details."
+group: Cards & Posts
+
+props:
+  type: object
+  properties:
+    # Content
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+      description: Vehicle photo
+      examples:
+        - src: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1200'
+          alt: 'Classic Toyota Land Cruiser'
+          width: 1200
+          height: 900
+
+    title:
+      type: string
+      title: Title
+      examples: ['CC Land Cruiser']
+
+    url:
+      type: string
+      format: uri-reference
+      title: Link URL
+      description: "Makes the image and title link to the vehicle page"
+      examples: ['/vehicle/cc-land-cruiser']
+
+    badge_text:
+      type: string
+      title: Badge Text
+      description: "e.g. For Sale, Sold, Reserved"
+      examples: ['For Sale']
+
+    badge_variant:
+      type: string
+      title: Badge Style
+      enum:
+        - primary
+        - dark
+        - success
+        - outline
+      meta:enum:
+        primary: Primary
+        dark: Dark
+        success: Success
+        outline: Outline
+      default: primary
+      examples: ['primary']
+
+    engine:
+      type: string
+      title: Engine
+      examples: ['1GR-FE 4.0L V6']
+
+    transmission:
+      type: string
+      title: Transmission
+      examples: ['Manual']
+
+    engine_icon:
+      type: string
+      title: Engine Icon (SVG)
+      description: "Path or URL to an SVG icon. Leave empty to use the built-in icon."
+
+    transmission_icon:
+      type: string
+      title: Transmission Icon (SVG)
+      description: "Path or URL to an SVG icon. Leave empty to use the built-in icon."
+
+    exterior:
+      type: string
+      title: Exterior
+      examples: ['Heritage Blue']
+
+    interior:
+      type: string
+      title: Interior
+      examples: ['Cloth']
+
+    # Display
+    image_ratio:
+      type: string
+      title: Image Ratio
+      enum:
+        - '4/3'
+        - '16/9'
+        - '1/1'
+        - '3/2'
+      meta:enum:
+        '4/3': '4:3'
+        '16/9': '16:9'
+        '1/1': 'Square'
+        '3/2': '3:2'
+      default: '4/3'
+      examples: ['4/3']
+
+
+    show_specs:
+      type: boolean
+      title: Show Engine & Transmission
+      default: true
+      examples: [true]
+
+    show_colors:
+      type: boolean
+      title: Show Exterior & Interior
+      default: true
+      examples: [true]
+
+    shadow:
+      type: boolean
+      title: Shadow on Hover
+      default: true
+      examples: [true]

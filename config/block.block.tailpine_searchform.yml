@@ -1,4 +1,4 @@
-uuid: 70e8938c-4893-43b4-896a-ffec7ab1bb4d
+uuid: 3fb6a874-5dbb-46a5-9b99-2f87d40f3daa
 langcode: en
 status: true
 dependencies:
@@ -7,7 +7,7 @@ dependencies:
   theme:
     - tailpine
 _core:
-  default_config_hash: 4RUjqs9sbfb4Q8bXTFyoRwMrmbkU_Qd9dpox6ZD_TYI
+  default_config_hash: NncXp7c3W_4rPnxP8WmNgY9nH1i3lfFEw8ZM_htHEI8
 id: tailpine_searchform
 theme: tailpine
 region: search
@@ -17,7 +17,7 @@ plugin: search_form_block
 settings:
   id: search_form_block
   label: 'Search form'
-  label_display: ''
-  provider: search
+  label_display: '0'
+  provider: system
   page_id: null
 visibility: {  }

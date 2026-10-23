@@ -1,0 +1,92 @@
+uuid: d8b3f37c-8f37-46c7-8965-6accc6210f0b
+langcode: en
+status: true
+dependencies:
+  module:
+    - canvas_page_template_component
+active_version: 40f2be7e73631c0a
+versioned_properties:
+  active:
+    settings: {  }
+    fallback_metadata:
+      slot_definitions:
+        top_bar:
+          title: 'Top Bar'
+          description: 'The Top Bar region.'
+          examples:
+            - ''
+        header:
+          title: Header
+          description: 'The Header region.'
+          examples:
+            - ''
+        branding:
+          title: Branding
+          description: 'The Branding region.'
+          examples:
+            - ''
+        header_menu:
+          title: 'Header Menu'
+          description: 'The Header Menu region.'
+          examples:
+            - ''
+        header_actions:
+          title: 'Header Action'
+          description: 'The Header Action region.'
+          examples:
+            - ''
+        secondary_menu:
+          title: 'Secondary Menu'
+          description: 'The Secondary Menu region.'
+          examples:
+            - ''
+        breadcrumb:
+          title: Breadcrumb
+          description: 'The Breadcrumb region.'
+          examples:
+            - ''
+        highlighted:
+          title: Highlighted
+          description: 'The Highlighted region.'
+          examples:
+            - ''
+        help:
+          title: Help
+          description: 'The Help region.'
+          examples:
+            - ''
+        sidebar_left:
+          title: 'Sidebar Left'
+          description: 'The Sidebar Left region.'
+          examples:
+            - ''
+        content:
+          title: Content
+          description: 'The Content region.'
+          examples:
+            - ''
+        sidebar_right:
+          title: 'Sidebar Right'
+          description: 'The Sidebar Right region.'
+          examples:
+            - ''
+        footer_top:
+          title: 'Footer Top'
+          description: 'The Footer Top region.'
+          examples:
+            - ''
+        footer:
+          title: Footer
+          description: 'The Footer region.'
+          examples:
+            - ''
+        footer_bottom:
+          title: 'Footer Bottom'
+          description: 'The Footer Bottom region.'
+          examples:
+            - ''
+label: 'cruiserclassic page template'
+id: theme_page_template.cruiserclassic
+provider: canvas_page_template_component
+source: theme_page_template
+source_local_id: cruiserclassic

@@ -1,0 +1,11 @@
+uuid: b2d7d52a-4cc7-44a7-8ab3-f3a4a9300970
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.header_navigation
+name: Header
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.header_navigation

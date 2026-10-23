@@ -1,0 +1,9 @@
+uuid: d07acd04-fe92-4ad6-8172-461b8e3f5f0d
+langcode: en
+status: true
+dependencies: {  }
+name: 'Vehicle Brand'
+vid: vehicle_brand
+description: null
+weight: 0
+new_revision: false

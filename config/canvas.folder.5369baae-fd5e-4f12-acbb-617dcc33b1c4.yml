@@ -1,0 +1,65 @@
+uuid: 5369baae-fd5e-4f12-acbb-617dcc33b1c4
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.canvas-button
+    - canvas.component.sdc.tailpine.canvas-countdown
+    - canvas.component.sdc.tailpine.canvas-divider
+    - canvas.component.sdc.tailpine.canvas-dynamic-grids
+    - canvas.component.sdc.tailpine.canvas-faq-block
+    - canvas.component.sdc.tailpine.canvas-faq-blockitem
+    - canvas.component.sdc.tailpine.canvas-feature-grid
+    - canvas.component.sdc.tailpine.canvas-feature-griditem
+    - canvas.component.sdc.tailpine.canvas-hover-reveal
+    - canvas.component.sdc.tailpine.canvas-image-mosaic
+    - canvas.component.sdc.tailpine.canvas-image-mosaicitem
+    - canvas.component.sdc.tailpine.canvas-map-embed
+    - canvas.component.sdc.tailpine.canvas-notice-banner
+    - canvas.component.sdc.tailpine.canvas-pricing-shelf
+    - canvas.component.sdc.tailpine.canvas-pricing-shelfitem
+    - canvas.component.sdc.tailpine.canvas-pullquote
+    - canvas.component.sdc.tailpine.canvas-signup-strip
+    - canvas.component.sdc.tailpine.canvas-split-panel
+    - canvas.component.sdc.tailpine.canvas-stats-row
+    - canvas.component.sdc.tailpine.canvas-stats-row2
+    - canvas.component.sdc.tailpine.canvas-step-trail
+    - canvas.component.sdc.tailpine.canvas-step-trailitem
+    - canvas.component.sdc.tailpine.canvas-text-only
+    - canvas.component.sdc.tailpine.canvas-timeline
+    - canvas.component.sdc.tailpine.canvas-timelineitem
+    - canvas.component.sdc.tailpine.canvas-video-spotlight
+    - canvas.component.sdc.tailpine.tailpine-flexible-grid
+    - canvas.component.sdc.tailpine.tailpine-flexible-grid-item
+name: Tailpine
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.canvas-button
+  - sdc.tailpine.canvas-countdown
+  - sdc.tailpine.canvas-divider
+  - sdc.tailpine.canvas-dynamic-grids
+  - sdc.tailpine.canvas-faq-block
+  - sdc.tailpine.canvas-faq-blockitem
+  - sdc.tailpine.canvas-feature-grid
+  - sdc.tailpine.canvas-feature-griditem
+  - sdc.tailpine.canvas-hover-reveal
+  - sdc.tailpine.canvas-image-mosaic
+  - sdc.tailpine.canvas-image-mosaicitem
+  - sdc.tailpine.canvas-map-embed
+  - sdc.tailpine.canvas-notice-banner
+  - sdc.tailpine.canvas-pricing-shelf
+  - sdc.tailpine.canvas-pricing-shelfitem
+  - sdc.tailpine.canvas-pullquote
+  - sdc.tailpine.canvas-signup-strip
+  - sdc.tailpine.canvas-split-panel
+  - sdc.tailpine.canvas-stats-row
+  - sdc.tailpine.canvas-stats-row2
+  - sdc.tailpine.canvas-step-trail
+  - sdc.tailpine.canvas-step-trailitem
+  - sdc.tailpine.canvas-text-only
+  - sdc.tailpine.canvas-timeline
+  - sdc.tailpine.canvas-timelineitem
+  - sdc.tailpine.canvas-video-spotlight
+  - sdc.tailpine.tailpine-flexible-grid
+  - sdc.tailpine.tailpine-flexible-grid-item

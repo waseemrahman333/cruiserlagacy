@@ -1,0 +1,11 @@
+uuid: 23b23630-a654-4124-97e1-077a151ba56c
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.about-us
+name: 'About Us'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.about-us

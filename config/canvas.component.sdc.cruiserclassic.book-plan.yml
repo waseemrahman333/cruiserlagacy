@@ -1,0 +1,57 @@
+uuid: 0a3140c2-a90f-4863-8dfa-6fd42f4dbf89
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+active_version: fac36c10e395fb85
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        title_line_one:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: "Let's grow your"
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        title_line_two:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'brand together'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        description:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Ready to take your business to the next level? Partner with Drupak and experience data-driven strategies that deliver measurable growth and real results.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions:
+        form:
+          title: 'Contact Form'
+          description: 'Place a contact form component or Drupal form in this slot.'
+label: 'Contact Section'
+id: sdc.cruiserclassic.book-plan
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:book-plan'

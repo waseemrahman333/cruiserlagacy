@@ -1,4 +1,4 @@
-uuid: e286fb21-da90-45b0-8bb1-a623d80ad63f
+uuid: f16e3477-ea84-4ea9-b372-fab6a784e2dc
 langcode: en
 status: true
 dependencies:
@@ -9,7 +9,7 @@ dependencies:
     - text
   theme:
     - tailpine
-active_version: 6894abdbae3bee18
+active_version: 65bc7f78c64a4c80
 versioned_properties:
   active:
     settings:
@@ -40,7 +40,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: div
+              value: p
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         text_size:
@@ -60,7 +60,9 @@ versioned_properties:
             allowed_values_function: canvas_load_allowed_values_for_component_prop
           field_instance_settings: {  }
           field_widget: options_select
-          default_value: null
+          default_value:
+            -
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         text_width:
@@ -72,10 +74,10 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: full
+              value: fit
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        bg_color:
+        text_decoration:
           required: false
           field_type: list_string
           field_storage_settings:
@@ -84,10 +86,10 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: transparent
+              value: default
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        horizontal_align:
+        text_bg_color:
           required: false
           field_type: list_string
           field_storage_settings:
@@ -97,7 +99,7 @@ versioned_properties:
           default_value: null
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        vertical_align:
+        horizontal_align:
           required: false
           field_type: list_string
           field_storage_settings:
@@ -116,16 +118,6 @@ versioned_properties:
           default_value: null
           expression: ℹ︎string␟value
           derived_schema_metadata: {  }
-        text_classes:
-          required: false
-          field_type: string
-          field_storage_settings: {  }
-          field_instance_settings: {  }
-          field_widget: string_textfield
-          default_value: null
-          expression: ℹ︎string␟value
-          derived_schema_metadata:
-            string_shape: {  }
         padding_inline:
           required: false
           field_type: list_string
@@ -135,7 +127,7 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
         padding_block:
@@ -147,10 +139,10 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        margin_inline:
+        margin_top:
           required: false
           field_type: list_string
           field_storage_settings:
@@ -159,10 +151,10 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
-        margin_block:
+        margin_bottom:
           required: false
           field_type: list_string
           field_storage_settings:
@@ -171,12 +163,23 @@ versioned_properties:
           field_widget: options_select
           default_value:
             -
-              value: '0'
+              value: none
           expression: ℹ︎list_string␟value
           derived_schema_metadata: {  }
+        text_classes:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value: null
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
     fallback_metadata:
       slot_definitions: {  }
-label: 'Text (Canvas)'
+label: 'Text (Tailpine)'
 id: sdc.tailpine.canvas-text
 provider: tailpine
 source: sdc

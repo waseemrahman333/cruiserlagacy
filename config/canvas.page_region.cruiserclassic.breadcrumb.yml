@@ -1,4 +1,4 @@
-uuid: e99398e1-e98b-48bd-bb3d-041dd82694b5
+uuid: f99c658a-c18b-48f7-a006-d3e43c88075b
 langcode: en
 status: true
 dependencies:
@@ -10,8 +10,8 @@ id: cruiserclassic.breadcrumb
 region: breadcrumb
 theme: cruiserclassic
 component_tree:
-  '0:2c41fb64-2218-470f-9b24-0c16129f4a50':
-    uuid: 2c41fb64-2218-470f-9b24-0c16129f4a50
+  '0:6d3cd8a1-37df-4d24-9c8f-dcdd3d2410db':
+    uuid: 6d3cd8a1-37df-4d24-9c8f-dcdd3d2410db
     component_id: block.system_breadcrumb_block
     component_version: 0d7e961dd03aa710
     inputs:

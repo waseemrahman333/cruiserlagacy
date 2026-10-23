@@ -1,0 +1,9 @@
+uuid: bc2d31a3-92be-4e17-8c59-434a0bd87111
+langcode: en
+status: true
+dependencies: {  }
+name: 'Model type'
+vid: model_type
+description: null
+weight: 0
+new_revision: false

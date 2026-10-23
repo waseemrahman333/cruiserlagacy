@@ -1,4 +1,4 @@
-uuid: 5fe27b8f-0908-49df-91a8-7c3f6bb077e0
+uuid: 7cb34a6c-30a8-4d90-987e-e920ac60e93a
 langcode: en
 status: true
 dependencies:
@@ -10,8 +10,8 @@ id: cruiserclassic.header_actions
 region: header_actions
 theme: cruiserclassic
 component_tree:
-  '0:4cbcaab7-0627-4f15-8f53-0fbbab66ef71':
-    uuid: 4cbcaab7-0627-4f15-8f53-0fbbab66ef71
+  '0:1f290904-4679-41c4-8651-12836c6a7ed5':
+    uuid: 1f290904-4679-41c4-8651-12836c6a7ed5
     component_id: block.system_menu_block.account
     component_version: bc0ea0dab4832c55
     inputs:

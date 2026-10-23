@@ -1,0 +1,11 @@
+uuid: 1d2807c2-13be-4fb2-bb4c-105891256ed6
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.vehicle_card
+label: 'Vehicle card'
+description: null
+targetEntityType: node
+cache: true

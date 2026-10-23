@@ -1,0 +1,25 @@
+uuid: 016d1886-e330-49ce-9de6-34314445f146
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_trim
+    - node.type.vehicle
+    - taxonomy.vocabulary.trim
+id: node.vehicle.field_trim
+field_name: field_trim
+entity_type: node
+bundle: vehicle
+label: Trim
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      trim: trim
+    auto_create: false
+field_type: entity_reference

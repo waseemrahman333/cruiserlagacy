@@ -1,4 +1,4 @@
-uuid: 6fdb28e0-989e-49bc-820a-e13f015b4c7c
+uuid: a370d8be-8f03-4fdf-8833-c9be8edc56fb
 langcode: en
 status: true
 dependencies:
@@ -254,7 +254,7 @@ versioned_properties:
         cell_18:
           title: 'Cell 18'
           description: 'Grid cell 18.'
-label: 'Dynamic Grids (Canvas)'
+label: 'Dynamic Grids (Tailpine)'
 id: sdc.tailpine.canvas-dynamic-grids
 provider: tailpine
 source: sdc

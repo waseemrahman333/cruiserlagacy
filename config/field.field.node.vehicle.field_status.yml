@@ -1,0 +1,21 @@
+uuid: 1be114b1-ef73-463f-8fb2-00a8b13bf6b4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_status
+    - node.type.vehicle
+  module:
+    - options
+id: node.vehicle.field_status
+field_name: field_status
+entity_type: node
+bundle: vehicle
+label: Status
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

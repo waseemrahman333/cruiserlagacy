@@ -1,0 +1,51 @@
+uuid: 6017f66e-8ab4-4049-af5f-ae24c6d579eb
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.adventure
+    - canvas.component.sdc.tailpine.canvas-button
+    - field.field.media.image.field_media_image
+    - filter.format.canvas_html_block
+    - image.style.canvas_parametrized_width
+    - media.type.image
+  content:
+    - 'file:file:741eec8b-0b57-4768-ada6-5162bee3440c'
+    - 'media:image:8c9041cb-485e-4a79-933b-cefa61aeaae9'
+  module:
+    - file
+    - media
+    - options
+    - text
+id: startadventurecruisercl
+label: 'Start adventure (cruiserclassic) pattern'
+component_tree:
+  '0:027d2cd4-2253-49bb-93ab-2147a871a416':
+    uuid: 027d2cd4-2253-49bb-93ab-2147a871a416
+    component_id: sdc.cruiserclassic.adventure
+    component_version: 3ca5eb8e7bfbe67e
+    inputs:
+      image_url:
+        target_id: '18'
+      title: 'YOUR NEXT ADVENTURE STARTS HERE'
+      text_color: white
+      description_text_color: white
+      description:
+        value: '<p>Ready to build a Jeep that matches your lifestyle?</p>'
+        format: canvas_html_block
+  '0:cta:0:543e2a6e-df9a-40dc-9b78-736c70548e10':
+    parent_uuid: 027d2cd4-2253-49bb-93ab-2147a871a416
+    slot: cta
+    uuid: 543e2a6e-df9a-40dc-9b78-736c70548e10
+    component_id: sdc.tailpine.canvas-button
+    component_version: b02a4b34f715328a
+    inputs:
+      title: 'Explore Builds'
+      link: 'https://example.com'
+      color_varient: primary
+      rounded: rounded-none
+      style_variant: solid
+      button_size: md
+      show_arrow: false
+      add_border: false
+      open_new_tab: false

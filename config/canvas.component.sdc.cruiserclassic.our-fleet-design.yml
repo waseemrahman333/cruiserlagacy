@@ -1,4 +1,4 @@
-uuid: 22d9b7f2-46ec-463d-a69d-05bbb942ed7d
+uuid: d6936ecd-e2f5-4549-8ecb-b0a83b3e0968
 langcode: en
 status: true
 dependencies:
@@ -11,40 +11,6 @@ dependencies:
 active_version: b120ce919b041be6
 versioned_properties:
   active:
-    settings:
-      prop_field_definitions:
-        title:
-          required: false
-          field_type: string
-          field_storage_settings: {  }
-          field_instance_settings: {  }
-          field_widget: string_textfield
-          default_value:
-            -
-              value: 'ICONIC JEEPS. '
-          expression: ℹ︎string␟value
-          derived_schema_metadata:
-            string_shape: {  }
-        description:
-          required: false
-          field_type: text_long
-          field_storage_settings: {  }
-          field_instance_settings:
-            allowed_formats:
-              - canvas_html_block
-          field_widget: text_textarea
-          default_value:
-            -
-              value: 'Classic Jeep design never goes out of style. At CruiserClassic, we combine heritage, craftsmanship, and advanced engineering to create exceptional vehicles that honor the past while embracing the future.'
-              format: canvas_html_block
-          expression: ℹ︎text_long␟processed
-          derived_schema_metadata:
-            string_shape:
-              contentMediaType: text/html
-              x-formatting-context: block
-    fallback_metadata:
-      slot_definitions: {  }
-  b120ce919b041be6:
     settings:
       prop_field_definitions:
         title:

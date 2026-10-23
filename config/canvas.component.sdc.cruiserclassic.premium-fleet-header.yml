@@ -1,4 +1,4 @@
-uuid: 79691a42-3456-458a-ae97-5a2e067f779a
+uuid: 3f5b21b7-26f5-480b-b967-205acf2de2a7
 langcode: en
 status: true
 dependencies:
@@ -26,43 +26,6 @@ versioned_properties:
         main:
           title: 'Fleet Content'
           description: 'fleet content comes here'
-  2803a3116b057cd7:
-    settings:
-      prop_field_definitions:
-        title:
-          required: false
-          field_type: string
-          field_storage_settings: {  }
-          field_instance_settings: {  }
-          field_widget: string_textfield
-          default_value:
-            -
-              value: 'New Land Crouiser'
-          expression: ℹ︎string␟value
-          derived_schema_metadata:
-            string_shape: {  }
-    fallback_metadata:
-      slot_definitions:
-        main:
-          title: 'Fleet Content'
-          description: 'fleet content comes here'
-  eb945f30fc70f4da:
-    settings:
-      prop_field_definitions:
-        title:
-          required: false
-          field_type: string
-          field_storage_settings: {  }
-          field_instance_settings: {  }
-          field_widget: string_textfield
-          default_value: null
-          expression: ℹ︎string␟value
-          derived_schema_metadata:
-            string_shape: {  }
-    fallback_metadata:
-      slot_definitions:
-        main:
-          title: 'Fleet Content'
 label: 'New Fleet Header'
 id: sdc.cruiserclassic.premium-fleet-header
 provider: cruiserclassic

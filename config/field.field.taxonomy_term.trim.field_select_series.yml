@@ -1,0 +1,29 @@
+uuid: 93fa9690-9390-46b5-8ecf-ac54dbcb2d67
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_select_series
+    - taxonomy.vocabulary.series
+    - taxonomy.vocabulary.trim
+id: taxonomy_term.trim.field_select_series
+field_name: field_select_series
+entity_type: taxonomy_term
+bundle: trim
+label: 'Select Series'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      series: series
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

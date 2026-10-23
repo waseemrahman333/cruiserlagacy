@@ -1,0 +1,276 @@
+uuid: b1ba3f28-881f-451a-b71d-49201913335e
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.vehicle_card
+    - node.type.vehicle
+    - taxonomy.vocabulary.model_type
+    - taxonomy.vocabulary.series
+    - taxonomy.vocabulary.trim
+    - taxonomy.vocabulary.vehicle_brand
+  module:
+    - node
+    - taxonomy
+    - user
+id: vehicles
+label: Vehicles
+module: views
+description: 'Vehicle listing with search, taxonomy filters and vehicle card view mode.'
+tag: ''
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: Vehicles
+      fields: {  }
+      pager:
+        type: full
+        options:
+          offset: 0
+          items_per_page: 6
+          total_pages: null
+          id: 0
+          tags:
+            next: Next
+            previous: Prev
+            first: First
+            last: Last
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 5
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No vehicles match your filters.'
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          exposed: false
+          granularity: second
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            vehicle: vehicle
+          group: 1
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          entity_type: node
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: Search
+            identifier: search
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            placeholder: Searching...
+        field_vehicle_model_target_id:
+          id: field_vehicle_model_target_id
+          table: node__field_vehicle_model
+          field: field_vehicle_model_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_vehicle_model_op
+            label: 'Model Brand'
+            identifier: brand
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          reduce_duplicates: false
+          vid: vehicle_brand
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_model_type_target_id:
+          id: field_model_type_target_id
+          table: node__field_model_type
+          field: field_model_type_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_model_type_op
+            label: 'Model Type'
+            identifier: model_type
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          reduce_duplicates: false
+          vid: model_type
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_series_target_id:
+          id: field_series_target_id
+          table: node__field_series
+          field: field_series_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_series_op
+            label: Series
+            identifier: series
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          reduce_duplicates: false
+          vid: series
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+        field_trim_target_id:
+          id: field_trim_target_id
+          table: node__field_trim
+          field: field_trim_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_trim_op
+            label: Trim
+            identifier: trim
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          reduce_duplicates: false
+          vid: trim
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
+          uses_fields: false
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: vehicle_card
+      query:
+        type: views_query
+        options: {  }
+      use_ajax: true
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
+    position: 2
+    display_options:
+      defaults:
+        exposed_block: false
+      exposed_block: true
+      display_extenders: {  }
+      block_description: 'Vehicles listing'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }

@@ -1,0 +1,23 @@
+uuid: 1b47cacc-557a-4ad6-937f-f0c4af3adc37
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.base-testimonial
+    - canvas.component.sdc.tailpine.canvas-team-styletwo
+    - canvas.component.sdc.tailpine.canvas-teamheader
+    - canvas.component.sdc.tailpine.canvas-teamstyleone
+    - canvas.component.sdc.tailpine.canvas-teamstyletwoheader
+    - canvas.component.sdc.tailpine.canvas-testimonialheader
+    - canvas.component.sdc.tailpine.canvas-testimonialstyleone
+name: 'Teams & Testimonials'
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.base-testimonial
+  - sdc.tailpine.canvas-team-styletwo
+  - sdc.tailpine.canvas-teamheader
+  - sdc.tailpine.canvas-teamstyleone
+  - sdc.tailpine.canvas-teamstyletwoheader
+  - sdc.tailpine.canvas-testimonialheader
+  - sdc.tailpine.canvas-testimonialstyleone

@@ -1,0 +1,26 @@
+uuid: 086f6b07-7f06-4203-b7d2-fb3bf4a71dfe
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.latest_vehicles
+  module:
+    - views
+active_version: bf6481241f0c0a11
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:latest_vehicles-block_1'
+        label: 'Latest vehicles slider'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Latest vehicles slider'
+id: block.views_block.latest_vehicles-block_1
+provider: views
+source: block
+source_local_id: 'views_block:latest_vehicles-block_1'

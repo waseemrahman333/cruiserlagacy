@@ -1,0 +1,11 @@
+uuid: 0739236c-93ea-4562-9bec-f5a6f94a8803
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.tailpine.base_hero
+name: Sections
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.tailpine.base_hero
