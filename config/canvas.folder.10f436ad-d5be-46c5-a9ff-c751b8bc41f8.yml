@@ -5,10 +5,7 @@ dependencies:
   config:
     - canvas.component.block.views_block.content_recent-block_1
     - canvas.component.block.views_block.latest_vehicles-block_1
-    - canvas.component.block.views_block.new_fleet-block_1
-    - canvas.component.block.views_block.new_fleet_design-block_1
     - canvas.component.block.views_block.review_row-block_1
-    - canvas.component.block.views_block.vehicle_view-block_1
     - canvas.component.block.views_block.vehicles-block_1
     - canvas.component.block.views_block.who_s_online-who_s_online_block
 name: 'Lists (Views)'
@@ -17,9 +14,6 @@ weight: 0
 items:
   - block.views_block.content_recent-block_1
   - block.views_block.latest_vehicles-block_1
-  - block.views_block.new_fleet-block_1
-  - block.views_block.new_fleet_design-block_1
   - block.views_block.review_row-block_1
-  - block.views_block.vehicle_view-block_1
   - block.views_block.vehicles-block_1
   - block.views_block.who_s_online-who_s_online_block
