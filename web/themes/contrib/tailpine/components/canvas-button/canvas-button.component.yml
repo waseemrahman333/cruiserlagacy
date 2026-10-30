@@ -143,3 +143,10 @@ props:
       default: false
       examples:
         - false
+    disabled:
+      type: boolean
+      title: Disable Button
+      description: "Button is shown faded and the link does not work."
+      default: false
+      examples:
+        - false

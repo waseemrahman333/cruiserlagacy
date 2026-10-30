@@ -108,6 +108,11 @@
 {% set main_cols_tab   = main_columns_tab   ?? 4 %}
 {% set bottom_cols = bottom_columns ?? 3 %}
 
+{# Row switches: a hidden row takes no space (no markup, no row gap). #}
+{% set top_on    = (show_top ?? true) and top_cols > 0 %}
+{% set main_on   = (show_main ?? true) and main_cols > 0 %}
+{% set bottom_on = (show_bottom ?? true) and bottom_cols > 0 %}
+
 {# Alignment objects #}
 {% set top_a    = align_map[top_alignment    ?? 'left'] %}
 {% set main_a   = align_map[main_alignment   ?? 'left'] %}
@@ -171,7 +176,7 @@
     {# ════════════════════════════════
        TOP ROW
     ════════════════════════════════ #}
-    {% if top_cols > 0 %}
+    {% if top_on %}
       <div class="footer-top w-full  ">
         {# Width constrainer — centred, respects top_width prop #}
         <div class="footer-top-inner {{top_grid }}
@@ -226,8 +231,8 @@
     {# ════════════════════════════════
        MAIN ROW
     ════════════════════════════════ #}
-    {% if main_cols > 0 %}
-      <div class="footer-main w-full  {{ top_cols > 0 ? rgap : '' }}">
+    {% if main_on %}
+      <div class="footer-main w-full  {{ top_on ? rgap : '' }}">
         <div class="footer-main-inner w-full {{main_grid}}   {{ main_a.justify == 'justify-between' ? 'grid xl:flex xl:justify-between xl:items-center  xl:flex-nowrap' : 'grid '  }} 
                       {{ gap_class }}
                    {{main_a.justify}} ">
@@ -292,9 +297,9 @@
     {# ════════════════════════════════
        BOTTOM ROW
     ════════════════════════════════ #}
-    {% if bottom_cols > 0 %}
+    {% if bottom_on %}
       <div class="footer-bottom w-full 
-                  {{ (top_cols > 0 or main_cols > 0) ? rgap : '' }}">
+                  {{ (top_on or main_on) ? rgap : '' }}">
         <div class="footer-bottom-inner {{ bottom_grid }} {{ bottom_a.justify and bottom_w != 'w-full' ? 'grid xl:flex xl:justify-between xl:items-center  xl:flex-nowrap' : 'grid ' }}  
                      {{ bottom_grid }} {{ gap_class }}
                     {{ bottom_a.justify }}">

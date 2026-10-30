@@ -88,6 +88,13 @@ props:
     # ══════════════════════════════
     # TOP ROW
     # ══════════════════════════════
+    show_top:
+      type: boolean
+      title: Show Top Row
+      description: "Turn off to hide the top row completely (no space is kept)."
+      default: true
+      examples: [true]
+
     top_columns:
       type: integer
       title: "Top Row — Number of Columns (desktop)"
@@ -132,6 +139,13 @@ props:
     # ══════════════════════════════
     # MAIN ROW
     # ══════════════════════════════
+    show_main:
+      type: boolean
+      title: Show Main Row
+      description: "Turn off to hide the main row completely (no space is kept)."
+      default: true
+      examples: [true]
+
     main_columns:
       type: integer
       title: "Main Row — Number of Columns (desktop)"
@@ -174,6 +188,13 @@ props:
     # ══════════════════════════════
     # BOTTOM ROW
     # ══════════════════════════════
+    show_bottom:
+      type: boolean
+      title: Show Bottom Row
+      description: "Turn off to hide the bottom row completely (no space is kept)."
+      default: true
+      examples: [true]
+
     bottom_columns:
       type: integer
       title: "Bottom Row — Number of Columns (desktop)"

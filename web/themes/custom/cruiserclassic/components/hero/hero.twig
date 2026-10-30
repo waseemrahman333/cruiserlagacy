@@ -32,6 +32,11 @@
  */
 #}
 
+{% set overlay_map = {
+  '10': 'bg-black/10', '20': 'bg-black/20', '30': 'bg-black/30', '40': 'bg-black/40', '50': 'bg-black/50',
+  '60': 'bg-black/60', '70': 'bg-black/70', '80': 'bg-black/80', '90': 'bg-black/90',
+} %}
+{% set overlay_class = overlay_map[overlay_opacity|default('40')] ?? '' %}
 {% set hero_heading_level = heading_level|default(1) %}
 {# {% set bg_image = imageurl|default('') %} #}
 
@@ -43,9 +48,13 @@
   role="img"
   aria-label="Hero background"
 >
+  {% if overlay_class %}
+  <div class="hero__overlay absolute inset-0 pointer-events-none {{ overlay_class }}" aria-hidden="true"></div>
+  {% endif %}
+
   <!-- Hero Section -->
   <section 
-    class="flex flex-col gap-4 px-5 pt-45 md:pt-65 xl:pt-160  pb-12.5 md:pb-25 md:px-12 md: xl:px-24"
+    class="relative z-10 flex flex-col gap-4 px-5 pt-45 md:pt-65 xl:pt-160  pb-12.5 md:pb-25 md:px-12 md: xl:px-24"
     aria-label="Hero section"
   >
     <div class="content max-w-177 w-full text-body-bg">
