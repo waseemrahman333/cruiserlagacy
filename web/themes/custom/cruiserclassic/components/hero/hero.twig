@@ -48,12 +48,18 @@
     class="flex flex-col gap-4 px-5 pt-45 md:pt-65 xl:pt-160  pb-12.5 md:pb-25 md:px-12 md: xl:px-24"
     aria-label="Hero section"
   >
-    <div class="content max-w-4xl md:w-4/5 w-full text-body-bg">
+    <div class="content max-w-177 w-full text-body-bg">
       <h{{ hero_heading_level }} 
         class=" leading-tight !text-surface-100 md:leading-tight font-black uppercase text-shadow-lg"
       >
         {{ title }}
       </h{{ hero_heading_level }}>
+
+      {% if description %}
+      <div class="hero__description mt-6 md:mt-8 max-w-[660px] !text-white/90 text-sm md:text-base leading-7 text-shadow-sm [&_*]:!text-white/90 [&_p]:!m-0 [&_p+p]:!mt-3">
+        {{ description }}
+      </div>
+      {% endif %}
 
       {% if cta %}
       <div class=" w-full md:w-fit pt-10 flex flex-col md:flex-row gap-5 min-w-25">

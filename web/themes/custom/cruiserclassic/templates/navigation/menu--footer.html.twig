@@ -1,0 +1,11 @@
+{#
+/**
+ * @file
+ * Footer menu: links in a row, using cruiserclassic:footer-menu-list
+ * (overrides Tailpine's menu--footer, which uses tailpine:footer-menu-list).
+ */
+#}
+{% include 'cruiserclassic:footer-menu-list' with {
+  items: items,
+  direction: 'row',
+} only %}

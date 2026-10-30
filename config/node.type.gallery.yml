@@ -1,0 +1,11 @@
+uuid: b8c962a4-3b08-41d0-ab67-e8a421e08976
+langcode: en
+status: true
+dependencies: {  }
+name: Gallery
+type: gallery
+description: 'A photo for the gallery: caption (title), image, category and an optional link.'
+help: null
+new_revision: true
+preview_mode: 1
+display_submitted: false

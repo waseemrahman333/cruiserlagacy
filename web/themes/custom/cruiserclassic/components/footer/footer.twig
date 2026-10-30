@@ -132,40 +132,21 @@
    right width even for empty slots.
 ══════════════════════════════════════════ #}
 
-{# Top grid #}
-{% if top_cols == 1 %}
-  {% set top_grid = 'grid-cols-1' %}
-{% elseif top_cols == 2 %}
-  {% set top_grid = 'grid-cols-1 md:grid-cols-2' %}
-{% elseif top_cols == 3 %}
-  {% set top_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
-{% else %}
-  {% set top_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-4' %}
-{% endif %}
+{# Mobile is always 1 column; tablet (md) and desktop (xl) are set per row.
+   The tablet count is capped at the desktop count. #}
+{% set tab_grid_map  = { 1: 'md:grid-cols-1', 2: 'md:grid-cols-2', 3: 'md:grid-cols-3', 4: 'md:grid-cols-4' } %}
+{% set desk_grid_map = { 1: 'xl:grid-cols-1', 2: 'xl:grid-cols-2', 3: 'xl:grid-cols-3', 4: 'xl:grid-cols-4', 5: 'xl:grid-cols-5', 6: 'xl:grid-cols-6' } %}
 
-{# Main grid #}
-{% if main_cols == 1 %}
-  {% set main_grid = 'grid-cols-1' %}
-{% elseif main_cols == 2 %}
-  {% set main_grid = 'grid-cols-1 md:grid-cols-2' %}
-{% elseif main_cols == 3 %}
-  {% set main_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
-{% elseif main_cols == 5 %}
-  {% set main_grid = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5'  %}
-{% elseif main_cols == 6 %}
-  {% set main_grid = 'grid-cols-1 md:grid-cols-2  lg:grid-cols-4 xl:grid-cols-6'  %}
-{% else %}
-  {% set main_grid = 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4' %}
-{% endif %}
+{% set top_tab    = min(top_columns_tab ?? 2, max(top_cols, 1)) %}
+{% set main_tab   = min(main_cols_tab, max(main_cols, 1)) %}
+{% set bottom_tab = min(bottom_columns_tab ?? 2, max(bottom_cols, 1)) %}
 
-{# Bottom grid #}
-{% if bottom_cols == 1 %}
-  {% set bottom_grid = 'grid-cols-1' %}
-{% elseif bottom_cols == 2 %}
-  {% set bottom_grid = 'grid-cols-1 md:grid-cols-2' %}
-{% else %}
-  {% set bottom_grid = 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' %}
-{% endif %}
+{% set top_grid    = 'grid-cols-1 ' ~ (tab_grid_map[top_tab] ?? '') ~ ' ' ~ (desk_grid_map[top_cols] ?? '') %}
+{% set main_grid   = 'grid-cols-1 ' ~ (tab_grid_map[main_tab] ?? '') ~ ' ' ~ (desk_grid_map[main_cols] ?? '') %}
+{% set bottom_grid = 'grid-cols-1 ' ~ (tab_grid_map[bottom_tab] ?? '') ~ ' ' ~ (desk_grid_map[bottom_cols] ?? '') %}
+
+{# Bottom: with 3 columns on desktop and 2 on tablet, the 3rd spans the tablet line #}
+{% set bottom_last_span = (bottom_cols == 3 and bottom_tab == 2) ? 'md:col-span-2 xl:col-span-1' : '' %}
 
 
 {# ══════════════════════════════════════════
@@ -334,7 +315,7 @@
 
           {# Col 3 #}
           {% if bottom_cols == 3 %}
-            <div class="footer-bottom-col-3 w-full {{ bottom_w }}
+            <div class="footer-bottom-col-3 {{ bottom_last_span }} w-full {{ bottom_w }}
                         {{ bottom_a.text }}">
               {{ bottom_last }}
             </div>

@@ -1,0 +1,15 @@
+uuid: dbc1171f-8912-4a60-ab69-b5365b537415
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.vehicle-body
+    - canvas.component.sdc.cruiserclassic.vehicle-slider
+    - canvas.component.sdc.cruiserclassic.vehicle-specifications
+name: Vehicle
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.vehicle-body
+  - sdc.cruiserclassic.vehicle-slider
+  - sdc.cruiserclassic.vehicle-specifications

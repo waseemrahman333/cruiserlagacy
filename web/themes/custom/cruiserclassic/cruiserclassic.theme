@@ -75,3 +75,104 @@ function cruiserclassic_preprocess_breadcrumb(array &$variables) {
     $variables['breadcrumb'][] = ['text' => $title];
   }
 }
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Contact webform layout (Tailwind, so Tailpine's input styles are overridden):
+ * - Mobile: one column, every field full width.
+ * - Tablet and up: first/last name and email/phone in 2 columns,
+ *   message full width, button always fits its text.
+ * - Centered, max-w-5xl.
+ */
+function cruiserclassic_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (($form['#webform_id'] ?? NULL) !== 'contact') {
+    return;
+  }
+
+  $form['#attributes']['class'][] = 'contact-form grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 md:gap-y-5 w-full !max-w-5xl mx-auto';
+
+  $input = '!w-full !h-14 !m-0 !px-5 !py-0 !bg-white !text-body !text-sm !border !border-[#e7d9a8] !rounded-sm !shadow-none placeholder:!text-body/70 focus:!outline-none focus:!ring-0 focus:!border-primary';
+  $wrapper = '!m-0 w-full min-w-0';
+
+  foreach (['first_name', 'last_name', 'email', 'phone', 'message'] as $key) {
+    if (!isset($form['elements'][$key])) {
+      continue;
+    }
+    $form['elements'][$key]['#wrapper_attributes']['class'][] = $wrapper . ($key === 'message' ? ' md:col-span-2' : '');
+    $form['elements'][$key]['#attributes']['class'][] = $key === 'message'
+      ? str_replace(['!h-14', '!py-0'], ['!h-auto !min-h-48 resize-y', '!py-4'], $input)
+      : $input;
+  }
+
+  // Actions: full row, button sized to its label.
+  $actions = isset($form['elements']['actions']) ? 'elements' : NULL;
+  if ($actions) {
+    $form['elements']['actions']['#attributes']['class'][] = '!m-0 md:col-span-2 flex';
+    $form['elements']['actions']['#submit__attributes']['class'][] = '!w-fit !h-12 !px-7 !py-0 !m-0 !bg-primary !text-white !text-sm !font-medium uppercase !rounded-sm !shadow-none hover:!opacity-90 cursor-pointer';
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the gallery view rows.
+ *
+ * Builds `cards` for the Gallery Card component. The arrow goes to the
+ * optional link, or to the full-size photo (new tab) when no link is set.
+ */
+function cruiserclassic_preprocess_views_view_unformatted__gallery(array &$variables) {
+  $variables['cards'] = [];
+  $file_url = \Drupal::service('file_url_generator');
+  foreach ($variables['view']->result as $index => $row) {
+    $node = $row->_entity ?? NULL;
+    if (!$node) {
+      continue;
+    }
+    // field_image references a Media image; read its source image item.
+    $image = [];
+    $media = $node->get('field_image')->entity;
+    $image_item = ($media && $media->hasField('field_media_image')) ? $media->get('field_media_image')->first() : NULL;
+    if ($image_item && $image_item->entity) {
+      $image = [
+        'src' => $file_url->generateString($image_item->entity->getFileUri()),
+        'alt' => $image_item->alt ?: $node->label(),
+        'width' => (int) $image_item->width,
+        'height' => (int) $image_item->height,
+      ];
+    }
+    $link = $node->get('field_gallery_link')->first();
+    $url = $link ? $link->getUrl()->toString() : ($image['src'] ?? '');
+    $category = $node->get('field_gallery_category')->entity;
+    $variables['cards'][] = [
+      'image' => $image,
+      'category' => $category ? $category->label() : '',
+      'title' => $node->label(),
+      'url' => $url,
+      'new_tab' => !$link && $url,
+      'variant' => $index < 2 ? 'overlay' : 'below',
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the services view rows.
+ *
+ * Builds `items` for the Service Item component, numbered in view order.
+ */
+function cruiserclassic_preprocess_views_view_unformatted__services(array &$variables) {
+  $variables['items'] = [];
+  foreach (array_values($variables['view']->result) as $index => $row) {
+    $node = $row->_entity ?? NULL;
+    if (!$node) {
+      continue;
+    }
+    $link = $node->get('field_service_link')->first();
+    $variables['items'][] = [
+      'number' => str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT),
+      'title' => $node->label(),
+      'description' => (string) check_markup($node->get('field_service_description')->value ?? '', $node->get('field_service_description')->format ?? 'basic_html'),
+      'link_text' => $link ? $link->title : '',
+      'url' => $link ? $link->getUrl()->toString() : '',
+      'first' => $index === 0,
+    ];
+  }
+}

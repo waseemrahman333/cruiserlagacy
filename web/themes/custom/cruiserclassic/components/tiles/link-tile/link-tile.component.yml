@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Link Tile (Cruiserclassic)
+status: stable
+description: "Single tile with a centred label; optional link. Use inside Tile Grid."
+group: Content
+
+props:
+  type: object
+  required: [label]
+  properties:
+    label:
+      type: string
+      title: Label
+      examples: ['FJ40']
+
+    url:
+      type: string
+      format: uri-reference
+      title: Link
+      description: "Optional, e.g. /vehicles?series=12"
+      examples: ['/vehicles']
+
+    text_color:
+      type: string
+      title: Text Color
+      enum: [green, primary, body]
+      meta:enum:
+        green: Dark green
+        primary: Primary
+        body: Text color
+      default: green
+      examples: [green]
+
+    size:
+      type: string
+      title: Tile Height
+      enum: [sm, md, lg]
+      meta:enum:
+        sm: Small
+        md: Medium
+        lg: Large
+      default: md
+      examples: [md]
+
+    border_right:
+      type: boolean
+      title: Border Right
+      description: "Show a line on the right side of the tile."
+      default: true
+      examples: [true]

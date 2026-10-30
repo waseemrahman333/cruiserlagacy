@@ -22,7 +22,14 @@ props:
       title: Title
       type: string
       description: Title
-      examples: ['Welcome to our Website']          
+      examples: ['Welcome to our Website']
+    description:
+      title: Description
+      type: string
+      description: "Optional text below the title."
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>Cruiser Legacy sells classic Toyota Land Cruiser FJ40, FJ45, BJ40, and BJ45 models from 1970 to 1980, along with professionally rebuilt engines and transmissions.</p>']
   
 slots:
   cta:

@@ -1,0 +1,105 @@
+{#
+/**
+ * Flex Item Component (Cruiserclassic)
+ *
+ * One child of the Flexbox component. Fraction widths subtract the parent's
+ * --flex-gap so items fill a row exactly.
+ *
+ * Props: width_mobile, width (tablet), width_desktop, full_width_mobile, align_self, push, order, order_mobile_only
+ * Slots: content
+ */
+#}
+
+{# Mobile (all screens unless overridden) #}
+{% set width_mobile_map = {
+  'auto': 'basis-auto grow-0 shrink',
+  'fill': 'basis-0 grow shrink',
+  '1/4':  'basis-[calc(25%-var(--flex-gap,0px)*3/4)] grow-0 shrink-0',
+  '1/3':  'basis-[calc(33.333%-var(--flex-gap,0px)*2/3)] grow-0 shrink-0',
+  '1/2':  'basis-[calc(50%-var(--flex-gap,0px)/2)] grow-0 shrink-0',
+  '2/3':  'basis-[calc(66.666%-var(--flex-gap,0px)/3)] grow-0 shrink-0',
+  '3/4':  'basis-[calc(75%-var(--flex-gap,0px)/4)] grow-0 shrink-0',
+  'full': 'basis-full grow-0 shrink-0',
+} %}
+
+{# Tablet (768px+); basis subtracts its share of the gap #}
+{% set width_tablet_map = {
+  'auto': 'md:basis-auto md:grow-0 md:shrink',
+  'fill': 'md:basis-0 md:grow md:shrink',
+  '1/4':  'md:basis-[calc(25%-var(--flex-gap,0px)*3/4)] md:grow-0 md:shrink-0',
+  '1/3':  'md:basis-[calc(33.333%-var(--flex-gap,0px)*2/3)] md:grow-0 md:shrink-0',
+  '1/2':  'md:basis-[calc(50%-var(--flex-gap,0px)/2)] md:grow-0 md:shrink-0',
+  '2/3':  'md:basis-[calc(66.666%-var(--flex-gap,0px)/3)] md:grow-0 md:shrink-0',
+  '3/4':  'md:basis-[calc(75%-var(--flex-gap,0px)/4)] md:grow-0 md:shrink-0',
+  'full': 'md:basis-full md:grow-0 md:shrink-0',
+} %}
+
+{# Desktop (1280px+) #}
+{% set width_desktop_map = {
+  'auto': 'xl:basis-auto xl:grow-0 xl:shrink',
+  'fill': 'xl:basis-0 xl:grow xl:shrink',
+  '1/4':  'xl:basis-[calc(25%-var(--flex-gap,0px)*3/4)] xl:grow-0 xl:shrink-0',
+  '1/3':  'xl:basis-[calc(33.333%-var(--flex-gap,0px)*2/3)] xl:grow-0 xl:shrink-0',
+  '1/2':  'xl:basis-[calc(50%-var(--flex-gap,0px)/2)] xl:grow-0 xl:shrink-0',
+  '2/3':  'xl:basis-[calc(66.666%-var(--flex-gap,0px)/3)] xl:grow-0 xl:shrink-0',
+  '3/4':  'xl:basis-[calc(75%-var(--flex-gap,0px)/4)] xl:grow-0 xl:shrink-0',
+  'full': 'xl:basis-full xl:grow-0 xl:shrink-0',
+} %}
+
+{# Item width per screen. In a row, flex-basis decides the width; in a column
+   the basis works on height, so the width needs its own class: Full = edge
+   to edge, fractions = same share of the line, Auto = fit content. #}
+{% set w_mobile_map = {
+  'auto': 'w-fit', 'fill': 'w-full', 'full': 'w-full',
+  '1/4': 'w-[calc(25%-var(--flex-gap,0px)*3/4)]', '1/3': 'w-[calc(33.333%-var(--flex-gap,0px)*2/3)]',
+  '1/2': 'w-[calc(50%-var(--flex-gap,0px)/2)]', '2/3': 'w-[calc(66.666%-var(--flex-gap,0px)/3)]',
+  '3/4': 'w-[calc(75%-var(--flex-gap,0px)/4)]',
+} %}
+{% set w_tablet_map = {
+  'auto': 'md:w-fit', 'fill': 'md:w-full', 'full': 'md:w-full',
+  '1/4': 'md:w-[calc(25%-var(--flex-gap,0px)*3/4)]', '1/3': 'md:w-[calc(33.333%-var(--flex-gap,0px)*2/3)]',
+  '1/2': 'md:w-[calc(50%-var(--flex-gap,0px)/2)]', '2/3': 'md:w-[calc(66.666%-var(--flex-gap,0px)/3)]',
+  '3/4': 'md:w-[calc(75%-var(--flex-gap,0px)/4)]',
+} %}
+{% set w_desktop_map = {
+  'auto': 'xl:w-fit', 'fill': 'xl:w-full', 'full': 'xl:w-full',
+  '1/4': 'xl:w-[calc(25%-var(--flex-gap,0px)*3/4)]', '1/3': 'xl:w-[calc(33.333%-var(--flex-gap,0px)*2/3)]',
+  '1/2': 'xl:w-[calc(50%-var(--flex-gap,0px)/2)]', '2/3': 'xl:w-[calc(66.666%-var(--flex-gap,0px)/3)]',
+  '3/4': 'xl:w-[calc(75%-var(--flex-gap,0px)/4)]',
+} %}
+
+{% set tablet_width = width_tablet_map[width] is defined ? width : 'fill' %}
+{% if width_mobile_map[width_mobile] is defined %}
+  {% set mobile_width = width_mobile %}
+{% else %}
+  {# Default: older behaviour driven by the switch #}
+  {% set mobile_width = (full_width_mobile ?? true) ? 'full' : tablet_width %}
+{% endif %}
+
+{% set align_self_map = {
+  auto: 'self-auto', start: 'self-start', center: 'self-center', end: 'self-end', stretch: 'self-stretch',
+} %}
+
+{% set push_map = { none: '', start: 'ms-auto', end: 'me-auto', center: 'mx-auto' } %}
+
+{% set order_map = {
+  all:    { default: '', first: 'order-first', last: 'order-last' },
+  mobile: { default: '', first: 'order-first md:order-none', last: 'order-last md:order-none' },
+} %}
+
+{% set classes = [
+  'flex-item min-w-20',
+  width_mobile_map[mobile_width],
+  width_tablet_map[tablet_width],
+  width_desktop_map[width_desktop] ?? '',
+  w_mobile_map[mobile_width],
+  w_tablet_map[tablet_width],
+  w_desktop_map[width_desktop] ?? '',
+  align_self_map[align_self] ?? 'self-auto',
+  push_map[push] ?? '',
+  order_map[order_mobile_only ? 'mobile' : 'all'][order] ?? '',
+] %}
+
+<div {{ attributes.addClass(classes) }}>
+  {% block content %}{% endblock %}
+</div>

@@ -1,0 +1,32 @@
+{#
+/**
+ * Footer Menu List (Cruiserclassic)
+ *
+ * Overrides tailpine:footer-menu-list for this theme.
+ * row:    links side by side (wrapping on small screens), uppercase.
+ * column: links stacked, like the Tailpine version.
+ *
+ * Props: items, title, direction
+ */
+#}
+{% set is_row = (direction|default('row')) == 'row' %}
+
+<nav class="footer-menu-list w-full" aria-label="{{ title|default('Footer menu'|t) }}">
+  {% if title %}
+    <h3 class="!m-0 mb-3 !text-white !text-base md:!text-lg !font-medium uppercase tracking-wide">{{ title }}</h3>
+  {% endif %}
+
+  {% if items %}
+    <ul class="!m-0 !p-0 list-none flex {{ is_row ? 'flex-row flex-wrap items-center justify-start md:justify-end gap-x-[clamp(20px,2.4vw,40px)] gap-y-3' : 'flex-col gap-2.5' }}">
+      {% for item in items %}
+        <li class="!m-0">
+          <a href="{{ item.url }}"
+             {% if item.target %}target="{{ item.target }}"{% endif %}
+             class="!text-white hover:!text-secondary transition-colors !no-underline text-sm {{ is_row ? 'uppercase tracking-wide' : 'md:text-base' }}{{ item.in_active_trail ? ' !text-secondary' : '' }}">
+            {{ item.title }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</nav>

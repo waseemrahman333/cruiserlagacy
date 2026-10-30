@@ -1,0 +1,129 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Flexbox (Cruiserclassic)
+status: stable
+description: "Flex container. Drop Flex Item components into it and control direction, alignment, wrapping and gap per screen size."
+group: Layout
+
+slots:
+  items:
+    title: Items
+    description: "Add Flex Item components here (one per item)"
+
+props:
+  type: object
+  properties:
+
+    # ── Direction per screen ─────────────────
+    direction_mobile:
+      type: string
+      title: Direction – Mobile
+      enum: [row, column, row-reverse, column-reverse]
+      meta:enum:
+        row: 'Row →'
+        column: 'Column ↓'
+        row-reverse: 'Row reversed ←'
+        column-reverse: 'Column reversed ↑'
+      default: column
+      examples: [column]
+
+    direction_tablet:
+      type: string
+      title: Direction – Tablet
+      enum: [row, column, row-reverse, column-reverse]
+      meta:enum:
+        row: 'Row →'
+        column: 'Column ↓'
+        row-reverse: 'Row reversed ←'
+        column-reverse: 'Column reversed ↑'
+      default: row
+      examples: [row]
+
+    direction_desktop:
+      type: string
+      title: Direction – Desktop
+      enum: [row, column, row-reverse, column-reverse]
+      meta:enum:
+        row: 'Row →'
+        column: 'Column ↓'
+        row-reverse: 'Row reversed ←'
+        column-reverse: 'Column reversed ↑'
+      default: row
+      examples: [row]
+
+    # ── Alignment ────────────────────────────
+    justify:
+      type: string
+      title: Justify (main axis)
+      description: "Where items sit along the direction"
+      enum: [start, center, end, between, around, evenly]
+      meta:enum:
+        start: Start
+        center: Center
+        end: End
+        between: Space between
+        around: Space around
+        evenly: Space evenly
+      default: start
+      examples: [start]
+
+    align:
+      type: string
+      title: Align (cross axis)
+      description: "How items line up across the direction"
+      enum: [stretch, start, center, end, baseline]
+      meta:enum:
+        stretch: Stretch
+        start: Start
+        center: Center
+        end: End
+        baseline: Baseline
+      default: stretch
+      examples: [stretch]
+
+    wrap:
+      type: string
+      title: Wrap
+      enum: [wrap, nowrap, wrap-reverse]
+      meta:enum:
+        wrap: 'Wrap to next line'
+        nowrap: 'Keep on one line'
+        wrap-reverse: 'Wrap reversed'
+      default: wrap
+      examples: [wrap]
+
+    # ── Spacing & size ───────────────────────
+    gap:
+      type: string
+      title: Gap
+      enum: [none, xs, sm, md, lg, xl]
+      meta:enum:
+        none: None
+        xs: Extra small
+        sm: Small
+        md: Medium
+        lg: Large
+        xl: Extra large
+      default: md
+      examples: [md]
+
+    min_height:
+      type: string
+      title: Minimum Height
+      description: "Gives room to move items vertically"
+      enum: [auto, sm, md, lg, screen]
+      meta:enum:
+        auto: 'Auto (fit content)'
+        sm: 'Small (200px)'
+        md: 'Medium (400px)'
+        lg: 'Large (600px)'
+        screen: 'Full screen'
+      default: auto
+      examples: [auto]
+
+    enable_container:
+      type: boolean
+      title: Use Site Container
+      description: "Constrain to the site width with side padding"
+      default: false
+      examples: [false]

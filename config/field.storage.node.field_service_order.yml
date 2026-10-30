@@ -1,0 +1,20 @@
+uuid: 84886424-497a-4aa3-845a-20480b3208e2
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_service_order
+field_name: field_service_order
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

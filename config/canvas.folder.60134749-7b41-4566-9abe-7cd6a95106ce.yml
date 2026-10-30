@@ -3,6 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - canvas.component.sdc.cruiserclassic.divider-list
+    - canvas.component.sdc.cruiserclassic.feature-list
+    - canvas.component.sdc.cruiserclassic.gallery-card
+    - canvas.component.sdc.cruiserclassic.link-tile
+    - canvas.component.sdc.cruiserclassic.service-item
     - canvas.component.sdc.tailpine.canvas-figure
     - canvas.component.sdc.tailpine.node
     - canvas.component.sdc.tailpine.node-teaser
@@ -10,6 +15,11 @@ name: Content
 configEntityTypeId: component
 weight: 0
 items:
+  - sdc.cruiserclassic.divider-list
+  - sdc.cruiserclassic.feature-list
+  - sdc.cruiserclassic.gallery-card
+  - sdc.cruiserclassic.link-tile
+  - sdc.cruiserclassic.service-item
   - sdc.tailpine.canvas-figure
   - sdc.tailpine.node
   - sdc.tailpine.node-teaser

@@ -1,0 +1,26 @@
+uuid: 5b1aa580-6c57-47ae-9eef-8bd94bf6c5c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.similar_vehicles
+  module:
+    - views
+active_version: 5587b3020aa7e914
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:similar_vehicles-block_1'
+        label: 'Similar vehicles'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Similar vehicles'
+id: block.views_block.similar_vehicles-block_1
+provider: views
+source: block
+source_local_id: 'views_block:similar_vehicles-block_1'

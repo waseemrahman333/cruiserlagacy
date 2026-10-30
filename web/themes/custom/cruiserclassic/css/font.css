@@ -4,8 +4,8 @@
    Archivo Font
 --------------------------- */
 @font-face {
-  font-family: 'Conthrax';
-  src: url('../fonts/Conthrax/conthrax-sb.ttf') format('truetype');
+  font-family: 'Cinzel';
+  src: url('../fonts/Cinzel/Cinzel-Variable.ttf') format('truetype');
   font-weight: 400 800;
   font-style: normal;
   font-display: swap;

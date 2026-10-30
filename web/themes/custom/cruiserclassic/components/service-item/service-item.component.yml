@@ -1,0 +1,39 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Service Item (Cruiserclassic)
+status: stable
+description: "Numbered service row: gold number, title, text and an underlined link, with a line below. Used by the Services view."
+group: Content
+
+props:
+  type: object
+  properties:
+    number:
+      type: string
+      title: Number
+      examples: ['01']
+    title:
+      type: string
+      title: Title
+      examples: ['Classic Land Cruisers:']
+    description:
+      type: string
+      title: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>Explore our FJ40, FJ45, BJ40, and BJ45 Land Cruisers from 1970 to 1980.</p>']
+    link_text:
+      type: string
+      title: Link Text
+      examples: ['View Vehicles']
+    url:
+      type: string
+      format: uri-reference
+      title: Link
+      examples: ['/vehicles']
+    first:
+      type: boolean
+      title: Line Above
+      description: "Draw a line above the row (for the first item)."
+      default: false
+      examples: [false]

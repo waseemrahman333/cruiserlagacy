@@ -1,0 +1,59 @@
+{#
+/**
+ * Gallery Card Component (Cruiserclassic)
+ *
+ * overlay: large photo, dark fade at the bottom, category + caption + arrow on top.
+ * below:   photo, then category, caption + arrow, and a gold line underneath.
+ * The whole card is the link when a URL is set.
+ *
+ * Props: image {src, alt, width, height}, category, title, url, new_tab, variant
+ */
+#}
+{% set is_overlay = variant == 'overlay' %}
+{% set tag = url ? 'a' : 'div' %}
+{% set link_attrs = url ? ' href="' ~ url|e('html_attr') ~ '"' ~ (new_tab ? ' target="_blank" rel="noopener"' : '') : '' %}
+
+{% set arrow %}
+  <svg class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+{% endset %}
+
+{% if is_overlay %}
+  <{{ tag }}{{ link_attrs|raw }} class="gallery-card gallery-card--overlay group relative block w-full h-full overflow-hidden !no-underline aspect-[4/3] md:aspect-[16/10]">
+    {% if image.src %}
+      <img src="{{ image.src }}" alt="{{ image.alt|default(title) }}" loading="lazy"
+           {% if image.width %}width="{{ image.width }}"{% endif %} {% if image.height %}height="{{ image.height }}"{% endif %}
+           class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+    {% endif %}
+    <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" aria-hidden="true"></div>
+    <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-[clamp(20px,2.4vw,40px)]">
+      <div class="min-w-0">
+        {% if category %}
+          <p class="m-2 !text-secondary text-xs md:text-sm">{{ category }}</p>
+        {% endif %}
+        <h3 class="!m-0 mt-2 md:mt-3 !font-heading !text-white !leading-tight [font-variant:small-caps] !text-[clamp(1.125rem,0.9rem+0.9vw,1.75rem)]">{{ title }}</h3>
+      </div>
+      {% if url %}
+        <span class="shrink-0 inline-flex items-center justify-center w-10 h-10 md:w-11 md:h-11 border border-white/80 text-white transition-colors group-hover:bg-white group-hover:text-primary">{{ arrow }}</span>
+      {% endif %}
+    </div>
+  </{{ tag }}>
+{% else %}
+  <{{ tag }}{{ link_attrs|raw }} class="gallery-card gallery-card--below group flex flex-col w-full h-full !no-underline border-b border-secondary pb-[clamp(16px,2vw,28px)]">
+    <div class="relative overflow-hidden aspect-[3/2]">
+      {% if image.src %}
+        <img src="{{ image.src }}" alt="{{ image.alt|default(title) }}" loading="lazy"
+             {% if image.width %}width="{{ image.width }}"{% endif %} {% if image.height %}height="{{ image.height }}"{% endif %}
+             class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+      {% endif %}
+    </div>
+    {% if category %}
+      <p class=" mt-7.5 !text-secondary text-xs md:text-sm">{{ category }}</p>
+    {% endif %}
+    <div class="flex items-center justify-between gap-4 mt-2 md:mt-3">
+      <h3 class="!m-0 min-w-0 !font-heading !text-heading !leading-tight [font-variant:small-caps] !text-[clamp(1.125rem,0.9rem+0.9vw,1.75rem)]">{{ title }}</h3>
+      {% if url %}
+        <span class="shrink-0 inline-flex items-center justify-center w-10 h-10 md:w-11 md:h-11 border border-secondary text-primary transition-colors group-hover:bg-primary group-hover:border-primary group-hover:text-white">{{ arrow }}</span>
+      {% endif %}
+    </div>
+  </{{ tag }}>
+{% endif %}

@@ -1,0 +1,46 @@
+{#
+/**
+ * Vehicle Specifications Component
+ *
+ * Heading + bordered rows: [icon] label ............ value.
+ * Rows with no value are not rendered. Long values wrap and stay right-aligned.
+ *
+ * Props: heading, engine, year, condition, transmission, fuel_type, exterior, interior
+ */
+#}
+{% set icon_attrs = 'class="w-[18px] h-[18px] shrink-0 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"' %}
+
+{% set rows = [
+  { label: 'Engine'|t, value: engine,
+    icon: '<path d="M7 8h7l2 2h2v2h2v-2h1v6h-1v-2h-2v3h-2l-2 2H8l-2-2H4v-3H2v-2h2V10h3z"/><path d="M9 5h4M11 5v3"/>' },
+  { label: 'Year'|t, value: year,
+    icon: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>' },
+  { label: 'Condition'|t, value: condition,
+    icon: '<path d="M5 17h14M5 17v2M19 17v2M4 13l2-6h12l2 6"/><rect x="3" y="13" width="18" height="4" rx="1"/><circle cx="7.5" cy="15" r=".6"/><circle cx="16.5" cy="15" r=".6"/>' },
+  { label: 'Transmission'|t, value: transmission,
+    icon: '<circle cx="5" cy="5" r="1.8"/><circle cx="12" cy="5" r="1.8"/><circle cx="19" cy="5" r="1.8"/><circle cx="5" cy="19" r="1.8"/><circle cx="12" cy="19" r="1.8"/><path d="M5 7v10M12 7v10M19 7v5H5"/>' },
+  { label: 'Fuel Type'|t, value: fuel_type,
+    icon: '<path d="M6 4h9l3 3v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M11.5 11c1.2 1.5 2 2.6 2 3.5a2 2 0 0 1-4 0c0-.9.8-2 2-3.5z"/>' },
+  { label: 'Exterior'|t, value: exterior,
+    icon: '<path d="M4 20V8l6-4 2 3-4 3v10z"/><path d="M10 20l3-9 7 3-3 6z"/><path d="M4 20h16"/>' },
+  { label: 'Interior'|t, value: interior,
+    icon: '<path d="M9 3h6v5H9z"/><path d="M7 21v-4h10v4M6 17l1-9h10l1 9"/><path d="M9 12h6"/>' },
+] %}
+
+<div class="vehicle-specifications w-full">
+  {% if heading %}
+    <h2 class="!m-0 !font-heading uppercase !text-body !leading-tight !text-[clamp(1.5rem,1.1rem+1.2vw,2rem)]">{{ heading }}</h2>
+  {% endif %}
+
+  <dl class="mt-5 md:mt-6 xl:mt-8 flex flex-col gap-2.5 md:gap-3 !mb-0">
+    {% for row in rows|filter(r => r.value is not empty) %}
+      <div class="flex items-center justify-between gap-4 bg-white border border-gray-200 rounded-sm px-4 py-3 md:px-5 md:py-3.5">
+        <dt class="flex items-center gap-3 shrink-0 !font-normal text-sm text-body opacity-80">
+          <svg {{ icon_attrs|raw }}>{{ row.icon|raw }}</svg>
+          {{ row.label }}
+        </dt>
+        <dd class="!m-0 min-w-0 text-right text-sm font-medium text-body break-words">{{ row.value }}</dd>
+      </div>
+    {% endfor %}
+  </dl>
+</div>

@@ -1,0 +1,9 @@
+uuid: bc3c32f1-1c18-4a7b-8fa4-435034b4b769
+langcode: en
+status: true
+dependencies: {  }
+name: 'Gallery category'
+vid: gallery_category
+description: 'Category label shown on gallery cards.'
+weight: 0
+new_revision: false

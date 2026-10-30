@@ -91,9 +91,13 @@ props:
       enum:
         - solid
         - outline
+        - underline
+        - text
       "meta:enum":
         solid: "Solid Button"
         outline: "Outline Button"
+        underline: "Link with Bottom Border"
+        text: "Text Link (no border)"
       examples:
         - 'solid'
 
@@ -129,6 +133,13 @@ props:
       type: boolean
       title: Open in New Tab
       description: "If enabled, the link opens in a new browser tab."
+      default: false
+      examples:
+        - false
+    full_width_mobile:
+      type: boolean
+      title: Full Width on Mobile
+      description: "Button stretches to the full available width below 768px."
       default: false
       examples:
         - false

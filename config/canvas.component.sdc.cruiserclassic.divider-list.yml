@@ -1,0 +1,73 @@
+uuid: ed2a3ec3-233e-4045-b5ac-fe5f8a461ac6
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - cruiserclassic
+active_version: 8caf17914a023763
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        items:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Detailed condition notes'
+            -
+              value: 'Documented rebuild work'
+            -
+              value: 'Straightforward guidance'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        text_color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: gold
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        line_color:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: light
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        top_spacing:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: md
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Divider List (Cruiserclassic)'
+id: sdc.cruiserclassic.divider-list
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:divider-list'

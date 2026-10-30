@@ -1,0 +1,26 @@
+uuid: e12ca2af-4b3c-45fa-b205-f5595ba2190c
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.services
+  module:
+    - views
+active_version: b32d1aaae462055c
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:services-block_1'
+        label: 'Services (What we offer)'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Services (What we offer)'
+id: block.views_block.services-block_1
+provider: views
+source: block
+source_local_id: 'views_block:services-block_1'

@@ -1,0 +1,46 @@
+uuid: 18cebd07-b03b-414a-866a-dc8053adf10e
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - cruiserclassic
+active_version: b38d2e6b50d01934
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        columns:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: '5'
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        outer_border:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        tiles:
+          title: Tiles
+          description: 'Add Link Tile components here.'
+label: 'Tile Grid (Cruiserclassic)'
+id: sdc.cruiserclassic.tile-grid
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:tile-grid'

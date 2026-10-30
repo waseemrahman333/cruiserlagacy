@@ -77,10 +77,24 @@ props:
 
     heading_alignment:
       type: string
-      title: "Heading Alignment"
+      title: "Heading Alignment (desktop)"
+      description: "From 1280px. Mobile is always left."
       enum: [left, center, right]
       default: left
       examples: ["left"]
+
+    heading_alignment_tab:
+      type: string
+      title: "Heading Alignment (tablet)"
+      description: "768–1279px."
+      enum: [same, left, center, right]
+      meta:enum:
+        same: "Same as desktop"
+        left: "Left"
+        center: "Center"
+        right: "Right"
+      default: same
+      examples: ["same"]
 
 # djf fldsa ndvsa
 
@@ -137,13 +151,27 @@ props:
         
     content_alignment:
       type: string
-      title: "Content Alignment"
+      title: "Content Alignment (desktop)"
+      description: "From 1280px. Mobile is always left."
       default: left
       enum: [left, center, right]
       meta:enum:
         left: "Left"
         center: "Center"
         right: "Right"
+
+    content_alignment_tab:
+      type: string
+      title: "Content Alignment (tablet)"
+      description: "768–1279px."
+      enum: [same, left, center, right]
+      meta:enum:
+        same: "Same as desktop"
+        left: "Left"
+        center: "Center"
+        right: "Right"
+      default: same
+      examples: ["same"]
 
     content_spacing:
       type: string

@@ -1,0 +1,130 @@
+uuid: 2f9c73e2-a665-4b54-bdaf-fe825551d575
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+  theme:
+    - cruiserclassic
+active_version: 27a86bc6ec8655e8
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        direction_mobile:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: column
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        direction_tablet:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: row
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        direction_desktop:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: row
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        justify:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: start
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        align:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: stretch
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        wrap:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: wrap
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        gap:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: md
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        min_height:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: auto
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+        enable_container:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: false
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        items:
+          title: Items
+          description: 'Add Flex Item components here (one per item)'
+label: 'Flexbox (Cruiserclassic)'
+id: sdc.cruiserclassic.flexbox
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:flexbox'

@@ -1,0 +1,26 @@
+{#
+/**
+ * Link Tile Component (Cruiserclassic)
+ *
+ * Beige tile with a centred label in the heading font. Renders an <a> when a
+ * link is set (hover: darker background), otherwise a <div>.
+ *
+ * Props: label, url, text_color, size, border_right
+ * Always has a 1px top and bottom border; the right border is optional.
+ */
+#}
+{% set color_map = { green: '!text-[#12301b]', primary: '!text-primary', body: '!text-body' } %}
+{% set size_map  = { sm: 'min-h-16 md:min-h-20', md: 'min-h-20 md:min-h-24', lg: 'min-h-24 md:min-h-32' } %}
+
+{% set tag = url ? 'a' : 'div' %}
+{% set classes = [
+  'link-tile flex items-center justify-center text-center px-4 py-5 bg-[#f4efe4] !no-underline',
+  '!font-heading uppercase !leading-tight !text-[clamp(1.125rem,0.95rem+0.6vw,1.5rem)]',
+  'border-y border-solid border-[#e5d8bc]',
+  (border_right ?? true) ? 'border-r' : '',
+  size_map[size|default('md')]|default(size_map.md),
+  color_map[text_color|default('green')]|default(color_map.green),
+  url ? 'transition-colors hover:bg-[#ebe2cf] focus-visible:outline-2 focus-visible:outline-primary' : '',
+]|join(' ') %}
+
+<{{ tag }}{% if url %} href="{{ url }}"{% endif %} class="{{ classes }}">{{ label }}</{{ tag }}>

@@ -3,13 +3,19 @@ langcode: en
 status: true
 dependencies:
   config:
+    - canvas.component.sdc.cruiserclassic.flex-item
+    - canvas.component.sdc.cruiserclassic.flexbox
     - canvas.component.sdc.cruiserclassic.section
+    - canvas.component.sdc.cruiserclassic.tile-grid
     - canvas.component.sdc.tailpine.canvas-section
     - canvas.component.sdc.tailpine.canvas-sidebar
 name: Layout
 configEntityTypeId: component
 weight: 0
 items:
+  - sdc.cruiserclassic.flex-item
+  - sdc.cruiserclassic.flexbox
   - sdc.cruiserclassic.section
+  - sdc.cruiserclassic.tile-grid
   - sdc.tailpine.canvas-section
   - sdc.tailpine.canvas-sidebar

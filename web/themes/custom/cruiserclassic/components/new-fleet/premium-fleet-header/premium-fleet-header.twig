@@ -1,4 +1,30 @@
-<section class="max-w-480 mx-auto w-full container py-[clamp(40px,calc(30px+5.714vw),120px)]">
+{# ===== BACKGROUND COLOR (for solid color mode) ===== #}
+{% set bg_variants = {
+  'primary': 'bg-primary text-primary-content',
+  'secondary': 'bg-secondary text-secondary-content',
+  'tertiary': 'bg-tertiary text-tertiary-content',
+
+  'body': 'bg-body text-body-bg',
+  'body-bg': 'bg-body-bg text-body',
+
+  'surface-100': 'bg-surface-100 text-body',
+  'surface-200': 'bg-surface-200 text-body',
+  'surface-300': 'bg-surface-300 text-body',
+
+  'success': 'bg-success text-success-content',
+  'warning': 'bg-warning text-warning-content',
+  'error': 'bg-error text-error-content',
+
+  'dark': 'bg-dark text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+  {# bg-colors #}
+{% set bg_color_class = bg_variants[color_varient] %}
+
+
+<section class="{{ bg_color_class }} py-[clamp(40px,calc(30px+5.714vw),120px)]">
+  <div class="max-w-480 mx-auto w-full container">
   <div class="flex items-center gap-5 ">
     <span class="flex-1 h-px bg-border"></span>
     <h3 class="text-center w-1/2 md:w-fit text-balance tracking-wider uppercase">
@@ -13,5 +39,5 @@
         {{ main }}
          </div>
       {% endif %}
-      
+</div>
 </section>

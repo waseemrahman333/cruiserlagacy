@@ -1,0 +1,43 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Vehicle Specifications (Cruiserclassic)
+status: stable
+description: "Heading and a list of vehicle specs (engine, year, condition, transmission, fuel type, exterior, interior) with icons. Empty rows are hidden."
+group: Vehicle
+
+props:
+  type: object
+  properties:
+    heading:
+      type: string
+      title: Heading
+      default: 'Specifications'
+      examples: ['Specifications']
+    engine:
+      type: string
+      title: Engine
+      examples: ['2F 4.2L I6']
+    year:
+      type: integer
+      title: Year
+      examples: [1982]
+    condition:
+      type: string
+      title: Condition
+      examples: ['Fully Restored']
+    transmission:
+      type: string
+      title: Transmission
+      examples: ['Manual']
+    fuel_type:
+      type: string
+      title: Fuel Type
+      examples: ['Petrol']
+    exterior:
+      type: string
+      title: Exterior
+      examples: ['Classic Heritage Green']
+    interior:
+      type: string
+      title: Interior
+      examples: ['Premium Leather Upholstery']

@@ -1,0 +1,26 @@
+uuid: 2465a061-8e0a-475e-8281-3dd9d8244bef
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.gallery
+  module:
+    - views
+active_version: 8bc374386bc42f92
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:gallery-block_page'
+        label: 'Gallery: all photos (paged)'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Gallery: all photos (paged)'
+id: block.views_block.gallery-block_page
+provider: views
+source: block
+source_local_id: 'views_block:gallery-block_page'

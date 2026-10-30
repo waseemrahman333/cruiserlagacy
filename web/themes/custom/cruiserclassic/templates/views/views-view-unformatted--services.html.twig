@@ -1,0 +1,13 @@
+{#
+/**
+ * @file
+ * Services list ("What we offer"): one Service Item per node, numbered
+ * 01, 02, 03… in the view's order. `items` is built in
+ * cruiserclassic_preprocess_views_view_unformatted__services().
+ */
+#}
+<div class="services-list w-full">
+  {% for item in items %}
+    {{ include('cruiserclassic:service-item', item, with_context = false) }}
+  {% endfor %}
+</div>

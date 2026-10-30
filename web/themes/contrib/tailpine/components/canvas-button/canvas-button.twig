@@ -1,7 +1,7 @@
 
 {% set border_radius = rounded|striptags %}
 
-{% set base_classes = 'inline-flex text-center w-fit items-center ' ~ (show_arrow ? 'justify-between' : 'justify-center') ~ ' font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
+{% set base_classes = 'inline-flex text-center ' ~ (full_width_mobile ? 'w-full md:w-fit' : 'w-fit') ~ ' items-center ' ~ (show_arrow ? (full_width_mobile ? 'justify-center md:justify-between' : 'justify-between') : 'justify-center') ~ ' font-semibold text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 ' %}
 
 
 {% set variant_key = style_variant|default('solid') %}
@@ -31,7 +31,16 @@
     ' text-' ~ color ~
     ' hover:bg-' ~ color ~
     ' hover:' ~ hover_text_color ~
-    ' focus:ring-' ~ color
+    ' focus:ring-' ~ color,
+
+  'underline':
+    'bg-transparent !border-t-0 !border-x-0 !border-b !border-solid border-' ~ color ~
+    ' text-' ~ color ~
+    ' !rounded-none hover:opacity-75 focus:ring-' ~ color,
+
+  'text':
+    'bg-transparent !border-0 text-' ~ color ~
+    ' hover:opacity-75 focus:ring-' ~ color
 }[variant_key]|default(
   'bg-primary text-primary-content hover:bg-primary/80 focus:ring-primary'
 ) %}
@@ -46,6 +55,11 @@
 
 {% set size_key = button_size|default('md') %}
 {% set size_class = sizeMap[size_key]|default(sizeMap['md']) %}
+
+{# Link styles: no side padding, slim vertical padding #}
+{% if variant_key in ['underline', 'text'] %}
+  {% set size_class = size_class ~ ' !px-0 !py-1.5' %}
+{% endif %}
 
 {# CTA Button #}
 <a

@@ -1,0 +1,52 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Divider List (Cruiserclassic)
+status: stable
+description: "Short list of items separated by thin lines (e.g. inside Media and Text)."
+group: Content
+
+props:
+  type: object
+  properties:
+    items:
+      type: array
+      title: List Items
+      description: "One item per line."
+      items:
+        type: string
+      examples:
+        - ['Detailed condition notes', 'Documented rebuild work', 'Straightforward guidance']
+
+    text_color:
+      type: string
+      title: Text Color
+      enum: [gold, white, body, primary]
+      meta:enum:
+        gold: Gold
+        white: White
+        body: Text color
+        primary: Primary (red)
+      default: gold
+      examples: [gold]
+
+    line_color:
+      type: string
+      title: Line Color
+      enum: [light, dark]
+      meta:enum:
+        light: 'Light (for dark backgrounds)'
+        dark: 'Dark (for light backgrounds)'
+      default: light
+      examples: [light]
+
+    top_spacing:
+      type: string
+      title: Space Above List
+      enum: [none, sm, md, lg]
+      meta:enum:
+        none: None
+        sm: Small
+        md: Medium
+        lg: Large
+      default: md
+      examples: [md]

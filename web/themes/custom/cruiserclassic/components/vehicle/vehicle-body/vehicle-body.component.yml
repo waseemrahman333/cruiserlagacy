@@ -1,0 +1,52 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Vehicle Body (Cruiserclassic)
+status: stable
+description: "Vehicle page body: description and video on the left; button, print and specifications on the right (stacked on mobile/tablet)."
+group: Vehicle
+
+slots:
+  cta:
+    title: Button
+    description: "e.g. I'm interested"
+  specifications:
+    title: Specifications
+    description: "Place the Vehicle Specifications component here"
+  bottom_first:
+    title: Bottom – Left
+    description: "First column of the full-width bottom row (e.g. Feature List)"
+  bottom_second:
+    title: Bottom – Right
+    description: "Second column of the bottom row; a divider line separates the two"
+  # media:
+  #   title: Video (embed)
+  #   description: "Optional: a remote video / embed. Used instead of the Video field when filled."
+
+props:
+  type: object
+  properties:
+    description_heading:
+      type: string
+      title: Description Heading
+      default: 'Description'
+      examples: ['Description']
+
+    description:
+      type: string
+      title: Description
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>The 1982 Toyota Land Cruiser is a true classic, celebrated for its rugged design and legendary capability.</p>'
+
+    video:
+      $ref: json-schema-definitions://canvas.module/video
+      type: object
+      title: Video
+
+    show_print:
+      type: boolean
+      title: Show Print Button
+      description: "Built-in print icon button next to the main button"
+      default: true
+      examples: [true]

@@ -2,11 +2,45 @@ uuid: 3f5b21b7-26f5-480b-b967-205acf2de2a7
 langcode: en
 status: true
 dependencies:
+  module:
+    - options
   theme:
     - cruiserclassic
-active_version: 2803a3116b057cd7
+active_version: 66a56ec3810434e0
 versioned_properties:
   active:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'New Land Crouiser'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        color_varient:
+          required: false
+          field_type: list_string
+          field_storage_settings:
+            allowed_values_function: canvas_load_allowed_values_for_component_prop
+          field_instance_settings: {  }
+          field_widget: options_select
+          default_value:
+            -
+              value: primary
+          expression: ℹ︎list_string␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        main:
+          title: 'Fleet Content'
+          description: 'fleet content comes here'
+  2803a3116b057cd7:
     settings:
       prop_field_definitions:
         title:

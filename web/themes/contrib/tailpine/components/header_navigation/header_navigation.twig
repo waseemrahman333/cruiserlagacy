@@ -11,7 +11,7 @@
   'surface-200': 'bg-surface-200 text-body',
   'surface-300': 'bg-surface-300 text-body',
   'dark':        'bg-dark text-content-on-dark',
-  'transparent': 'bg-transparent text-body xl:text-body-bg'
+  'transparent': 'bg-transparent !text-body-bg'
 } %}
 
 {% set py_map = {
@@ -53,15 +53,18 @@
       'fixed': 'fix',
       'static': 'relative'
     }[header_behavior] }} z-100">
+{# menuOpen: set by the main menu burger (mobile-menu event). While the
+   mobile menu is open the header gets the light page background and dark
+   text, so the burger and links always contrast. #}
 <div
-  x-data
+  x-data="{ menuOpen: false }"
+  x-on:mobile-menu.window="menuOpen = $event.detail.open"
+  x-bind:class="menuOpen ? 'max-xl:!bg-body-bg max-xl:!text-body max-xl:!backdrop-blur-none' : ''"
   {% if background_color == 'transparent' %}
     x-init="
       const updateScroll = () => {
         const scrolled = window.scrollY > 20;
         $el.classList.toggle('!bg-dark/20', scrolled);
-        $el.classList.toggle('!text-body', scrolled);
-        $el.classList.toggle('xl:!text-white', scrolled);
         $el.classList.toggle('!backdrop-blur-lg', scrolled);
         $el.classList.toggle('!border-b', scrolled);
         $el.classList.toggle('!border-white/10', scrolled);
@@ -70,7 +73,7 @@
       updateScroll();
     "
   {% endif %}
-  class=" site-header__inner  flex items-center z-50 {{ py_class }} {{ is_sticky_transparent ? '!bg-body/40 !backdrop-blur-xl text-body xl:!text-body-bg' : bg }} {{ border_on ? 'border-b border-border' : '' }} {{ shadow_on ? 'shadow-md' : '' }}">
+  class=" site-header__inner  flex items-center z-50 {{ py_class }} {{ is_sticky_transparent ? '!bg-body/40 !backdrop-blur-xl !text-body-bg' : bg }} {{ border_on ? 'border-b border-border' : '' }} {{ shadow_on ? 'shadow-md' : '' }}">
 
   {# ============================================================
      VARIANT: CENTERED MENU

@@ -20,7 +20,7 @@
 >
   <!-- Main Menu -->
   <ul
-    class="absolute container xl:!px-0 top-full  bg-body-bg border-t-2 xl:border-none border-border xl:border-0 pb-10 xl:pb-0 xl:bg-transparent w-full xl:w-auto xl:!flex xl:static left-0 right-0 text-start  xl:m-0 flex-col items-start flex xl:flex-row xl:items-center xl:gap-4 z-40 transition-all duration-300 [&[x-cloak]]:!hidden"
+    class="absolute container xl:!px-0 top-full  bg-body-bg max-xl:!text-body border-t-2 xl:border-none border-border xl:border-0 pb-10 xl:pb-0 xl:bg-transparent w-full xl:w-auto xl:!flex xl:static left-0 right-0 text-start  xl:m-0 flex-col items-start flex xl:flex-row xl:items-center xl:gap-4 z-40 transition-all duration-300 [&[x-cloak]]:!hidden"
     x-bind:class="{ 'hidden': !mobOpen, 'flex': mobOpen }"
     x-show="true"
     x-transition:enter="transition ease-out duration-200"
@@ -110,20 +110,20 @@
   <div class="flex items-center xl:!hidden">
     <button
       class="mobile-menu-toggle h-6 flex items-center justify-between flex-col gap-0.5 cursor-pointer"
-      x-on:click="mobOpen = !mobOpen"
+      x-on:click="mobOpen = !mobOpen; $dispatch('mobile-menu', { open: mobOpen })"
       aria-label="Toggle mobile menu"
       x-bind:aria-expanded="mobOpen.toString()"
     >
       <div
-        class="topLine w-8 h-1 bg-body transition-transform duration-300"
+        class="topLine w-8 h-1 bg-current transition-transform duration-300"
         x-bind:class="{ 'rotate-45 translate-y-2': mobOpen }"
       ></div>
       <div
-        class="midLine w-8 h-1 bg-body transition-opacity duration-300"
+        class="midLine w-8 h-1 bg-current transition-opacity duration-300"
         x-bind:class="{ 'opacity-0': mobOpen }"
       ></div>
       <div
-        class="bottomLine w-8 h-1 bg-body transition-transform duration-300"
+        class="bottomLine w-8 h-1 bg-current transition-transform duration-300"
         x-bind:class="{ '-rotate-45 -translate-y-3': mobOpen }"
       ></div>
     </button>

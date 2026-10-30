@@ -7,7 +7,7 @@
 
 :root {
   --t-container-padding-inline: clamp(20px, calc(10.582vw + -21.2698px), 60px);
-  --t-logo-width: 60px;
+  --t-logo-width: 45px;
   --h1-size: clamp(36px, calc(3.1746vw + 23.619px), 48px);
   --h2-size: clamp(30px, calc(1.5873vw + 23.8095px), 36px);
   --h3-size: clamp(26px, calc(0.5291vw + 23.9365px), 28px);
@@ -19,7 +19,7 @@
 @media (min-width: 768px) {
   :root {
     --t-container-padding-inline: clamp(60px, calc(7.0313vw + 6px), 96px);
-    --t-logo-width: 80px;
+    --t-logo-width: 60px;
     --h1-size: clamp(48px, calc(1.5625vw + 36px), 56px);
     --h2-size: clamp(36px, calc(0.7813vw + 30px), 40px);
     --h3-size: clamp(28px, calc(0.7813vw + 22px), 32px);
@@ -32,8 +32,8 @@
 @media (min-width: 1280px) {
   :root {
     --t-container-padding-inline: clamp(96px, calc(3.75vw + 48px), 120px);
-    --t-logo-width: 100px;
-    --h1-size: clamp(56px, calc(2.5vw + 24px), 72px);
+    --t-logo-width: 90px;
+    --h1-size: clamp(56px, calc(1.25vw + 40px), 64px);
     --h2-size: clamp(40px, calc(1.25vw + 24px), 48px);
     --h3-size: clamp(32px, calc(1.25vw + 16px), 40px);
     --h4-size: clamp(28px, calc(0.625vw + 20px), 32px);
@@ -45,7 +45,7 @@
 @media (min-width: 1920px) {
   :root {
     --t-container-padding-inline: 120px;
-    --h1-size: 72px;
+    --h1-size: 64px;
     --h2-size: 48px;
     --h3-size: 40px;
     --h4-size: 32px;
@@ -54,19 +54,19 @@
   }
 }
 html[data-theme="custom"] {
-  --t-primary: #991F2A;
+  --t-primary: #033017;
   --t-on-primary: #FFFFFF;
-  --t-secondary: #A3A39E;
+  --t-secondary: #C9A76A;
   --t-on-secondary: #FFFFFF;
-  --t-tertiary: #292A2C;
-  --t-on-tertiary: #FFFFFF;
+  --t-tertiary: #FFF7DF;
+  --t-on-tertiary: #555555;
   --t-body: #555555;
   --t-heading: #292A2C;
-  --t-body-bg: #FAFAFA;
+  --t-body-bg: #f4efe6;
   --t-surface-100: #FFFFFF;
   --t-surface-200: #FAFAFA;
   --t-surface-300: #ECECEC;
-  --t-border: #D9D9D9;
+  --t-border: #C8C1B2;
   --t-focus-ring: #eeaab0;
   --t-shadow: rgba(0, 0, 0, 0.1);
   --t-dark: #292A2C;

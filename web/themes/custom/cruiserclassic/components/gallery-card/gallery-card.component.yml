@@ -1,0 +1,53 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Gallery Card (Cruiserclassic)
+status: stable
+description: "Photo card with category, caption and arrow link. Overlay = text on the image; Below = text under the image."
+group: Content
+
+props:
+  type: object
+  required: [title]
+  properties:
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+      examples:
+        - src: https://placehold.co/1200x750
+          alt: 'Gallery photo'
+          width: 1200
+          height: 750
+
+    category:
+      type: string
+      title: Category
+      examples: ['Vehicles']
+
+    title:
+      type: string
+      title: Caption
+      examples: ['Rebuilt with purpose']
+
+    url:
+      type: string
+      format: uri-reference
+      title: Link
+      description: "Where the card goes. Empty = not clickable."
+      examples: ['/gallery']
+
+    new_tab:
+      type: boolean
+      title: Open in New Tab
+      default: false
+      examples: [false]
+
+    variant:
+      type: string
+      title: Style
+      enum: [overlay, below]
+      meta:enum:
+        overlay: 'Text on image'
+        below: 'Text below image'
+      default: below
+      examples: [below]

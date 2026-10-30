@@ -1,0 +1,153 @@
+uuid: f523eaf9-390a-4f80-8ab3-e94a8db31ffc
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.vehicle_card
+    - node.type.vehicle
+    - taxonomy.vocabulary.model_type
+  module:
+    - node
+    - user
+id: similar_vehicles
+label: 'Similar vehicles'
+module: views
+description: 'Up to 3 other vehicles with the same model type as the vehicle being viewed.'
+tag: ''
+base_table: node_field_data
+base_field: nid
+display:
+  default:
+    id: default
+    display_title: Default
+    display_plugin: default
+    position: 0
+    display_options:
+      title: 'Similar Models'
+      fields: {  }
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 3
+      exposed_form:
+        type: basic
+        options: {  }
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          granularity: second
+      arguments:
+        field_model_type_target_id:
+          id: field_model_type_target_id
+          table: node__field_model_type
+          field: field_model_type_target_id
+          relationship: none
+          plugin_id: numeric
+          default_action: default
+          default_argument_type: taxonomy_tid
+          default_argument_options:
+            term_page: '0'
+            node: true
+            limit: true
+            vids:
+              model_type: model_type
+            anyall: ','
+          summary_options: {  }
+          summary:
+            format: default_summary
+          specify_validation: false
+          break_phrase: true
+          not: false
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          relationship: none
+          entity_type: node
+          entity_field: nid
+          plugin_id: node_nid
+          default_action: default
+          default_argument_type: node
+          default_argument_options: {  }
+          summary_options: {  }
+          summary:
+            format: default_summary
+          specify_validation: false
+          break_phrase: false
+          not: true
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            vehicle: vehicle
+          group: 1
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: false
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: vehicle_card
+      query:
+        type: views_query
+        options:
+          distinct: true
+      display_extenders: {  }
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }
+  block_1:
+    id: block_1
+    display_title: Block
+    display_plugin: block
+    position: 1
+    display_options:
+      display_extenders: {  }
+      block_description: 'Similar vehicles'
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - 'user.node_grants:view'
+        - user.permissions
+      tags: {  }

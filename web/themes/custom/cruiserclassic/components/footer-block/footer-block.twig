@@ -45,22 +45,33 @@
    text  → text-align on the heading element
    self  → align-self on the heading wrapper (for underline positioning)
 ══════════════════════════════════════════ #}
+{# Mobile is always left; tablet (md) and desktop (xl) come from the props. #}
 {% set heading_align_map = {
-  left:   { text: 'text-left',   self: 'self-start',  items: 'items-start'  },
-  center: { text: 'text-center', self: 'self-center',  items: 'items-center' },
-  right:  { text: 'text-right',  self: 'self-end',    items: 'items-end'    }
+  left:   { text: 'md:text-left',   items: 'md:items-start'  },
+  center: { text: 'md:text-center', items: 'md:items-center' },
+  right:  { text: 'md:text-right',  items: 'md:items-end'    }
+} %}
+{% set heading_align_xl_map = {
+  left:   { text: 'xl:text-left',   items: 'xl:items-start'  },
+  center: { text: 'xl:text-center', items: 'xl:items-center' },
+  right:  { text: 'xl:text-right',  items: 'xl:items-end'    }
 } %}
 
 {# ══════════════════════════════════════════
    CONTENT ALIGNMENT MAP
    items  → align-items on the content flex wrapper
    text   → text-align inside content
-   self   → align-self for the inner content div
+   self   → horizontal margins of the inner content div
 ══════════════════════════════════════════ #}
 {% set content_align_map = {
-  left:   { items: 'items-start',  text: 'text-left',   self: ''           },
-  center: { items: 'items-center', text: 'text-center', self: 'mx-auto'    },
-  right:  { items: 'items-end',    text: 'text-right',  self: 'ml-auto'    }
+  left:   { items: 'md:items-start',  text: 'md:text-left',   self: 'md:mx-0'          },
+  center: { items: 'md:items-center', text: 'md:text-center', self: 'md:mx-auto'       },
+  right:  { items: 'md:items-end',    text: 'md:text-right',  self: 'md:ml-auto md:mr-0' }
+} %}
+{% set content_align_xl_map = {
+  left:   { items: 'xl:items-start',  text: 'xl:text-left',   self: 'xl:mx-0'          },
+  center: { items: 'xl:items-center', text: 'xl:text-center', self: 'xl:mx-auto'       },
+  right:  { items: 'xl:items-end',    text: 'xl:text-right',  self: 'xl:ml-auto xl:mr-0' }
 } %}
 
 {# ══════════════════════════════════════════
@@ -129,7 +140,12 @@
 {# Heading #}
 {% set h_size      = size_map[heading_size     ?? 'lg']   ?? 'text-lg'   %}
 {% set h_weight    = weight_map[heading_weight ?? 'bold'] ?? 'font-bold' %}
-{% set h_align     = heading_align_map[heading_alignment ?? 'left'] %}
+{% set h_desk = heading_alignment in ['left', 'center', 'right'] ? heading_alignment : 'left' %}
+{% set h_tab  = heading_alignment_tab in ['left', 'center', 'right'] ? heading_alignment_tab : h_desk %}
+{% set h_align = {
+  text:  'text-left '   ~ heading_align_map[h_tab].text  ~ ' ' ~ heading_align_xl_map[h_desk].text,
+  items: 'items-start ' ~ heading_align_map[h_tab].items ~ ' ' ~ heading_align_xl_map[h_desk].items,
+} %}
 {% set h_color     = heading_color ?? 'text-current' %}
 {% set h_text      = heading ?? '' %}
 
@@ -142,7 +158,13 @@
 {% set ul_spacing   = underline_spacing_map[underline_spacing ?? 'sm']   ?? 'mt-2' %}
 
 {# Content #}
-{% set c_align   = content_align_map[content_alignment ?? 'left'] %}
+{% set c_desk = content_alignment in ['left', 'center', 'right'] ? content_alignment : 'left' %}
+{% set c_tab  = content_alignment_tab in ['left', 'center', 'right'] ? content_alignment_tab : c_desk %}
+{% set c_align = {
+  items: 'items-start ' ~ content_align_map[c_tab].items ~ ' ' ~ content_align_xl_map[c_desk].items,
+  text:  'text-left '   ~ content_align_map[c_tab].text  ~ ' ' ~ content_align_xl_map[c_desk].text,
+  self:  content_align_map[c_tab].self ~ ' ' ~ content_align_xl_map[c_desk].self,
+} %}
 {% set c_spacing = content_spacing_map[content_spacing ?? 'md']   ?? 'mt-4' %}
 
 {# ══════════════════════════════════════════

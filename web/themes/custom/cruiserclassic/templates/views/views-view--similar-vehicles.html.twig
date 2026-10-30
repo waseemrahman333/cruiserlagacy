@@ -1,0 +1,17 @@
+{#
+/**
+ * @file
+ * Similar vehicles block (vehicle page): only the vehicle cards with the same
+ * model type. The heading and "Show all models" button are added in Canvas.
+ * Nothing is output when there are no similar vehicles.
+ *
+ * @see template_preprocess_views_view()
+ */
+#}
+{% if rows %}
+  <div{{ attributes.addClass('view', 'view-similar-vehicles', 'w-full') }}>
+    {{ title_prefix }}
+    {{ title_suffix }}
+    {{ rows }}
+  </div>
+{% endif %}

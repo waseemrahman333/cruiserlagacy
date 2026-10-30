@@ -1,0 +1,66 @@
+{#
+/**
+ * Flexbox Component (Cruiserclassic)
+ *
+ * Flex container with per-screen direction (mobile < 768px, tablet 768–1279px,
+ * desktop 1280px+), alignment, wrap, gap and minimum height.
+ * Put Flex Item components in the "items" slot.
+ * With a single item, Justify + Align (plus Minimum Height) move it around the box.
+ */
+#}
+
+{# ============================================================
+   1. MAPS (full class names so Tailwind finds them)
+   ============================================================ #}
+{% set direction_map = {
+  mobile:  { 'row': 'flex-row',    'column': 'flex-col',    'row-reverse': 'flex-row-reverse',    'column-reverse': 'flex-col-reverse' },
+  tablet:  { 'row': 'md:flex-row', 'column': 'md:flex-col', 'row-reverse': 'md:flex-row-reverse', 'column-reverse': 'md:flex-col-reverse' },
+  desktop: { 'row': 'xl:flex-row', 'column': 'xl:flex-col', 'row-reverse': 'xl:flex-row-reverse', 'column-reverse': 'xl:flex-col-reverse' },
+} %}
+
+{% set justify_map = {
+  start: 'justify-start', center: 'justify-center', end: 'justify-end',
+  between: 'justify-between', around: 'justify-around', evenly: 'justify-evenly',
+} %}
+
+{% set align_map = {
+  stretch: 'items-stretch', start: 'items-start', center: 'items-center',
+  end: 'items-end', baseline: 'items-baseline',
+} %}
+
+{% set wrap_map = { 'wrap': 'flex-wrap', 'nowrap': 'flex-nowrap', 'wrap-reverse': 'flex-wrap-reverse' } %}
+
+{# Gap is exposed as --flex-gap so Flex Items can size themselves exactly (e.g. two ½ items per row) #}
+{% set gap_map = {
+  none: '[--flex-gap:0px]',
+  xs:   '[--flex-gap:0.5rem]',
+  sm:   '[--flex-gap:0.75rem] md:[--flex-gap:1rem]',
+  md:   '[--flex-gap:1rem] md:[--flex-gap:1.5rem]',
+  lg:   '[--flex-gap:1.5rem] md:[--flex-gap:2rem] xl:[--flex-gap:2.5rem]',
+  xl:   '[--flex-gap:2rem] md:[--flex-gap:3rem] xl:[--flex-gap:4rem]',
+} %}
+
+{% set min_height_map = { auto: '', sm: 'min-h-50', md: 'min-h-100', lg: 'min-h-150', screen: 'min-h-screen' } %}
+
+{# ============================================================
+   2. CLASSES
+   ============================================================ #}
+{% set classes = [
+  'flexbox flex w-full gap-(--flex-gap)',
+  direction_map.mobile[direction_mobile]   ?? 'flex-col',
+  direction_map.tablet[direction_tablet]   ?? 'md:flex-row',
+  direction_map.desktop[direction_desktop] ?? 'xl:flex-row',
+  justify_map[justify]   ?? 'justify-start',
+  align_map[align]       ?? 'items-stretch',
+  wrap_map[wrap]         ?? 'flex-wrap',
+  gap_map[gap]           ?? gap_map.md,
+  min_height_map[min_height] ?? '',
+  enable_container ? 'container max-w-480 mx-auto' : '',
+] %}
+
+{# ============================================================
+   3. MARKUP
+   ============================================================ #}
+<div {{ attributes.addClass(classes) }}>
+  {% block items %}{% endblock %}
+</div>

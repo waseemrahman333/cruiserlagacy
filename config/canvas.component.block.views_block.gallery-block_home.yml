@@ -1,0 +1,26 @@
+uuid: e89a93ae-07ef-4b51-b487-657f5a4a5fea
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.gallery
+  module:
+    - views
+active_version: b12143f012ab6ca7
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:gallery-block_home'
+        label: 'Gallery: home (5 photos)'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Gallery: home (5 photos)'
+id: block.views_block.gallery-block_home
+provider: views
+source: block
+source_local_id: 'views_block:gallery-block_home'

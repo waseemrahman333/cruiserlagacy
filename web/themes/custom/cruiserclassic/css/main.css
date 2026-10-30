@@ -18,12 +18,10 @@
 @source inline("after:bg-surface-200");
 
 
-
-
 @font-face {
-  font-family: 'Conthrax';
-  src: url('../fonts/Conthrax/conthrax-sb.ttf') format('truetype');
-  font-weight: 600;
+  font-family: 'Cinzel';
+  src: url('../fonts/Cinzel/Cinzel-Variable.ttf') format('truetype');
+  font-weight: 400 800;
   font-style: normal;
   font-display: swap;
 }
@@ -66,7 +64,7 @@
 
 @theme {
   --font-body: "Helvetica";
-  --font-heading: "Conthrax";
+  --font-heading: "Cinzel";
 }
 
 
@@ -457,7 +455,7 @@ width: 140%;
   @apply sr-only;
 }
 
-/* Footer menu list (tailpine:footer-menu-list): medium weight for items and links */
+/* Footer menu list (cruiserclassic:footer-menu-list): medium weight for items and links */
 .footer-menu-list ul,
 .footer-menu-list li,
 .footer-menu-list li a {

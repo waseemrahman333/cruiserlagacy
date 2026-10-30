@@ -1,0 +1,122 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Flex Item (Cruiserclassic)
+status: stable
+description: "One item inside a Flexbox. Set its width, alignment, order and push it to a side."
+group: Layout
+
+slots:
+  content:
+    title: Content
+    description: "Anything: text, image, button, another Flexbox…"
+
+props:
+  type: object
+  properties:
+
+    # ── Size ─────────────────────────────────
+    width_mobile:
+      type: string
+      title: Width on Mobile
+      description: "Default follows the 'Full Width on Mobile' switch below"
+      enum: [default, auto, fill, '1/4', '1/3', '1/2', '2/3', '3/4', full]
+      meta:enum:
+        default: 'Default'
+        auto: 'Auto (fit content)'
+        fill: 'Fill remaining space'
+        '1/4': '¼'
+        '1/3': '⅓'
+        '1/2': '½'
+        '2/3': '⅔'
+        '3/4': '¾'
+        full: 'Full width'
+      default: default
+      examples: [default]
+
+    width:
+      type: string
+      title: Width on Tablet
+      description: "From 768px. Fractions account for the Flexbox gap, so ½ + ½ fit on one row"
+      enum: [auto, fill, '1/4', '1/3', '1/2', '2/3', '3/4', full]
+      meta:enum:
+        auto: 'Auto (fit content)'
+        fill: 'Fill remaining space'
+        '1/4': '¼'
+        '1/3': '⅓'
+        '1/2': '½'
+        '2/3': '⅔'
+        '3/4': '¾'
+        full: 'Full width'
+      default: auto
+      examples: [auto]
+
+    width_desktop:
+      type: string
+      title: Width on Desktop
+      description: "From 1280px"
+      enum: [same, auto, fill, '1/4', '1/3', '1/2', '2/3', '3/4', full]
+      meta:enum:
+        same: 'Same as tablet'
+        auto: 'Auto (fit content)'
+        fill: 'Fill remaining space'
+        '1/4': '¼'
+        '1/3': '⅓'
+        '1/2': '½'
+        '2/3': '⅔'
+        '3/4': '¾'
+        full: 'Full width'
+      default: same
+      examples: [same]
+
+    full_width_mobile:
+      type: boolean
+      title: Full Width on Mobile
+      description: "Only used when Width on Mobile is Default. Off = same width as tablet"
+      default: true
+      examples: [true]
+
+    # ── Position ─────────────────────────────
+    align_self:
+      type: string
+      title: Align Self
+      description: "Override the Flexbox Align for this item"
+      enum: [auto, start, center, end, stretch]
+      meta:enum:
+        auto: 'Same as Flexbox'
+        start: Start
+        center: Center
+        end: End
+        stretch: Stretch
+      default: auto
+      examples: [auto]
+
+    push:
+      type: string
+      title: Push
+      description: "Push this item (and the ones after it) to a side using auto margins"
+      enum: [none, start, end, center]
+      meta:enum:
+        none: None
+        start: 'Push to end (auto margin before)'
+        end: 'Push to start (auto margin after)'
+        center: 'Center (auto margins both sides)'
+      default: none
+      examples: [none]
+
+    order:
+      type: string
+      title: Order
+      enum: [default, first, last]
+      meta:enum:
+        default: Default
+        first: First
+        last: Last
+      default: default
+      examples: [default]
+
+    order_mobile_only:
+      type: boolean
+      title: Apply Order on Mobile Only
+      description: "e.g. show an image first on mobile but keep the normal order on larger screens"
+      default: false
+      examples: [false]

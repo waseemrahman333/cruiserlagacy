@@ -1,0 +1,12 @@
+{#
+/**
+ * @file
+ * Similar vehicles: cards in a 1 / 2 / 3 column grid.
+ * Each row is a vehicle in the "Vehicle card" view mode (Canvas template).
+ */
+#}
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-[clamp(16px,2vw,26px)]">
+  {% for row in rows %}
+    <div class="h-full">{{ row.content }}</div>
+  {% endfor %}
+</div>

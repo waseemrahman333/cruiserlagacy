@@ -1,0 +1,109 @@
+{#
+/**
+ * Vehicle Body Component
+ *
+ * Mobile / tablet: description → [button][print] → specifications → video.
+ * Desktop (1280px+): left = description + video, right = [button][print] + specifications.
+ *
+ * Props: description_heading, description (HTML), video {src, poster}, show_print
+ * Slots: cta, specifications, media,
+ *        bottom_first + bottom_second (full-width row at the end, divider between)
+ */
+#}
+{% set cta_html %}{% block cta %}{% endblock %}{% endset %}
+{% set specs_html %}{% block specifications %}{% endblock %}{% endset %}
+{% set media_html %}{% block media %}{% endblock %}{% endset %}
+{% set bottom_first_html %}{% block bottom_first %}{% endblock %}{% endset %}
+{% set bottom_second_html %}{% block bottom_second %}{% endblock %}{% endset %}
+
+{% set has_cta   = cta_html|trim is not empty %}
+{% set has_print = show_print ?? true %}
+{% set has_video = media_html|trim is not empty or (video.src is defined and video.src) %}
+
+<section class="vehicle-body container max-w-480 mx-auto w-full py-[clamp(40px,6vw,96px)]">
+  <div class="grid grid-cols-1 gap-10 md:gap-12 xl:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] xl:gap-x-[clamp(64px,7vw,128px)] xl:gap-y-16">
+
+    {# ---------- Description ---------- #}
+    <div class="vehicle-body__description min-w-0 xl:col-start-1 xl:row-start-1">
+      {% if description_heading %}
+        <h2 class="!m-0 !font-heading uppercase !text-body !leading-tight !text-[clamp(1.5rem,1.1rem+1.2vw,2rem)]">{{ description_heading }}</h2>
+      {% endif %}
+      {% if description %}
+        <div class="mt-5 md:mt-6 xl:mt-8 text-body text-sm leading-7 [&_p]:!m-0 [&_p+p]:!mt-0">
+          {{ description|raw }}
+        </div>
+      {% endif %}
+    </div>
+
+    {# ---------- Aside: actions + specifications ---------- #}
+    {% if has_cta or has_print or specs_html|trim is not empty %}
+      <aside class="vehicle-body__aside min-w-0 flex flex-col gap-8 md:gap-10 xl:col-start-2 xl:row-start-1 xl:row-span-2">
+        {% if has_cta or has_print %}
+          <div class="flex items-stretch gap-3 md:gap-4">
+            {% if has_cta %}
+              <div class="flex-1 min-w-0 [&_a]:!w-full [&_a]:!justify-center [&_button]:!w-full [&_button]:!justify-center">{{ cta_html }}</div>
+            {% endif %}
+            {% if has_print %}
+              <button type="button" data-vehicle-print
+                      class="shrink-0 inline-flex items-center justify-center w-20 md:w-24 xl:w-28 min-h-11 border-2 border-body rounded-lg text-primary hover:bg-primary hover:border-primary hover:text-white transition-colors"
+                      aria-label="{{ 'Print this page'|t }}">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="miter" aria-hidden="true">
+                  <path d="M7 8V3h10v5"/>
+                  <path d="M7 17H3V8h18v9h-4"/>
+                  <path d="M7 13h10v8H7z"/>
+                  <circle cx="17.5" cy="10.75" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </button>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if specs_html|trim is not empty %}
+          <div class="vehicle-body__specs">{{ specs_html }}</div>
+        {% endif %}
+      </aside>
+    {% endif %}
+
+    {# ---------- Video ---------- #}
+    {% if has_video %}
+      <div class="vehicle-body__video min-w-0 xl:col-start-1 xl:row-start-2">
+        {# {% if media_html|trim is not empty %}
+          <div class="aspect-video w-full overflow-hidden [&_iframe]:w-full [&_iframe]:h-full [&_video]:w-full [&_video]:h-full">{{ media_html }}</div>
+        {% else %} #}
+          <div class="relative aspect-video w-full overflow-hidden bg-dark" data-vehicle-video>
+            <video class="w-full h-full object-cover" src="{{ video.src }}#t=0.1" preload="{{ video.poster ? 'none' : 'metadata' }}" playsinline
+                   {% if video.poster %}poster="{{ video.poster }}"{% endif %}></video>
+            <button type="button" data-video-play
+                    class="absolute inset-0 flex items-center justify-center bg-black/25 hover:bg-black/35 transition-colors"
+                    aria-label="{{ 'Play video'|t }}">
+              <span class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full border-2 border-white text-white">
+                <svg class="w-6 h-6 ml-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+              </span>
+            </button>
+          </div>
+        {# {% endif %} #}
+      </div>
+    {% endif %}
+
+  </div>
+
+  {# ---------- Bottom row: two columns with a divider ----------
+     Mobile: stacked, horizontal line between.
+     Tablet and up: side by side, vertical line between.
+     With only one slot filled it takes the full width and no line is shown. #}
+  {% set has_first  = bottom_first_html|trim is not empty %}
+  {% set has_second = bottom_second_html|trim is not empty %}
+  {% if has_first or has_second %}
+    <div class="vehicle-body__bottom w-full mt-12 md:mt-14 xl:mt-16 grid grid-cols-1 {{ has_first and has_second ? 'md:grid-cols-[minmax(0,1fr)_1px_minmax(0,1fr)]' : '' }} gap-8 md:gap-x-10 xl:gap-x-[clamp(48px,7vw,128px)]">
+      {% if has_first %}
+        <div class="min-w-0">{{ bottom_first_html }}</div>
+      {% endif %}
+      {% if has_first and has_second %}
+        <div class="h-px w-full bg-gray-300 md:h-auto md:w-px md:self-stretch" aria-hidden="true"></div>
+      {% endif %}
+      {% if has_second %}
+        <div class="min-w-0">{{ bottom_second_html }}</div>
+      {% endif %}
+    </div>
+  {% endif %}
+</section>

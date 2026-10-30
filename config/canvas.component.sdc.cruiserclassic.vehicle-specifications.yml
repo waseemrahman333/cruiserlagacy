@@ -1,0 +1,214 @@
+uuid: 8c00f3e3-59e7-4bf2-9237-c0d1e10b9f21
+langcode: en
+status: true
+dependencies:
+  theme:
+    - cruiserclassic
+active_version: d3fd05c2604be3ef
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Specifications
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        engine:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '2F 4.2L I6'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        year:
+          required: false
+          field_type: integer
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value:
+            -
+              value: 1982
+          expression: ℹ︎integer␟value
+          derived_schema_metadata: {  }
+        condition:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Fully Restored'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        transmission:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Manual
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        fuel_type:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Petrol
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        exterior:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Classic Heritage Green'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        interior:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Premium Leather Upholstery'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+  9fa1cb4f853ac3bb:
+    settings:
+      prop_field_definitions:
+        heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Specifications
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        engine:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '2F 4.2L I6'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        year:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '1982'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        condition:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Fully Restored'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        transmission:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Manual
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        fuel_type:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Petrol
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        exterior:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Classic Heritage Green'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        interior:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Premium Leather Upholstery'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+    fallback_metadata:
+      slot_definitions: {  }
+label: 'Vehicle Specifications (Cruiserclassic)'
+id: sdc.cruiserclassic.vehicle-specifications
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:vehicle-specifications'

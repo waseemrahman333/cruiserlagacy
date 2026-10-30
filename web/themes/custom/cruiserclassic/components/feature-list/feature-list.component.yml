@@ -1,0 +1,193 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Feature List
+status: stable
+description: "Heading with a list of features. Choose bullets, numbers, checks or no marker, indentation, columns and spacing."
+group: Content
+
+props:
+  type: object
+  properties:
+
+    # ── Content ──────────────────────────────
+    heading:
+      type: string
+      title: Heading
+      examples: ['Why Cruiser Classic?']
+
+    heading_color:
+      type: string
+      title: Heading Color
+      enum: [body, heading, primary, secondary, tertiary, dark, white, gold, content-on-dark]
+      meta:enum:
+        body: Text color
+        heading: Heading color
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        dark: Dark
+        white: White
+        gold: Gold
+        content-on-dark: Text on dark
+      default: body
+      examples: [body]
+
+    item_color:
+      type: string
+      title: List Item Color
+      enum: [body, heading, primary, secondary, tertiary, dark, white, gold, content-on-dark]
+      meta:enum:
+        body: Text color
+        heading: Heading color
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        dark: Dark
+        white: White
+        gold: Gold
+        content-on-dark: Text on dark
+      default: body
+      examples: [body]
+
+    heading_level:
+      type: string
+      title: Heading Level
+      enum: ['h2', 'h3', 'h4']
+      default: 'h2'
+      examples: ['h2']
+
+    items:
+      type: array
+      title: List Items
+      description: "One feature per item."
+      items:
+        type: string
+      examples:
+        - ['Expertly Restored Classic Vehicles', 'Premium Quality Inspection', 'Authentic Restoration Standards', 'Trusted by Collectors & Enthusiasts', 'Nationwide & International Delivery', 'Dedicated Customer Support', 'Complete Vehicle History & Documentation', 'Passion for Automotive Heritage']
+
+    # ── List style ───────────────────────────
+    list_style:
+      type: string
+      title: Marker Style
+      description: "Numbers render an ordered list (ol); the rest an unordered list (ul)."
+      enum: [disc, circle, square, check, dash, numbers, none]
+      meta:enum:
+        disc: '• Bullet'
+        circle: '○ Circle'
+        square: '■ Square'
+        check: '✓ Check'
+        dash: '– Dash'
+        numbers: '1. Numbers (ordered)'
+        none: 'No marker'
+      default: disc
+      examples: [disc]
+
+    marker_color:
+      type: string
+      title: Marker Color
+      enum: [body, primary]
+      meta:enum:
+        body: Text color
+        primary: Primary (red)
+      default: body
+      examples: [body]
+
+    # ── Layout ───────────────────────────────
+    width:
+      type: string
+      title: Width
+      description: "Percentages apply from tablet up; on mobile the list is always full width."
+      enum: [fit, '25', '33', '50', '66', '75', full]
+      meta:enum:
+        fit: 'Fit content'
+        '25': '25%'
+        '33': '33%'
+        '50': '50%'
+        '66': '66%'
+        '75': '75%'
+        full: 'Full width (100%)'
+      default: fit
+      examples: [fit]
+
+    indent:
+      type: string
+      title: Left Indent
+      description: "Space between the left edge and the list"
+      enum: [none, sm, md, lg]
+      meta:enum:
+        none: 'None (aligned with heading)'
+        sm: Small
+        md: Medium
+        lg: Large
+      default: sm
+      examples: [sm]
+
+    columns:
+      type: string
+      title: Columns
+      description: "Desktop columns; always 1 column on mobile"
+      enum: ['1', '2', '3']
+      meta:enum:
+        '1': '1 column'
+        '2': '2 columns (tablet and up)'
+        '3': '3 columns (2 on tablet)'
+      default: '1'
+      examples: ['1']
+
+    item_spacing:
+      type: string
+      title: Space Between Items
+      enum: [sm, md, lg]
+      meta:enum:
+        sm: Small
+        md: Medium
+        lg: Large
+      default: sm
+      examples: [sm]
+
+    heading_spacing:
+      type: string
+      title: Space Below Heading
+      enum: [sm, md, lg]
+      meta:enum:
+        sm: Small
+        md: Medium
+        lg: Large
+      default: md
+      examples: [md]
+
+    # ── Borders ──────────────────────────────
+    heading_border_bottom:
+      type: boolean
+      title: Border Below Heading
+      default: false
+      examples: [false]
+
+    list_border_top:
+      type: boolean
+      title: Border Above List
+      default: false
+      examples: [false]
+
+    list_border_bottom:
+      type: boolean
+      title: Border Below List
+      default: false
+      examples: [false]
+
+    item_dividers:
+      type: boolean
+      title: Border After Each Item
+      default: false
+      examples: [false]
+
+    border_width:
+      type: string
+      title: Border Width
+      enum: [ '0.5px','1px', '2px']
+      meta:enum:
+        '0.5px': '0.5px'
+        '1px': '1px'
+        '2px': '2px'
+      default: '0.5px'
+      examples: ['0.5px']

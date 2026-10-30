@@ -17,31 +17,49 @@ id: contact
 title: Contact
 description: 'Basic email contact webform.'
 categories: {  }
-elements: |
-  name:
-    '#title': 'Your Name'
+elements: |-
+  first_name:
     '#type': textfield
+    '#title': 'First name'
+    '#title_display': invisible
+    '#placeholder': 'First name'
     '#required': true
-    '#default_value': '[current-user:display-name]'
+    '#required_error': 'Please enter your first name.'
+    '#autocomplete': given-name
+  last_name:
+    '#type': textfield
+    '#title': 'Last name'
+    '#title_display': invisible
+    '#placeholder': 'Last name'
+    '#required': true
+    '#required_error': 'Please enter your last name.'
+    '#autocomplete': family-name
   email:
-    '#title': 'Your Email'
     '#type': email
+    '#title': 'Email address'
+    '#title_display': invisible
+    '#placeholder': 'Email address'
     '#required': true
-    '#default_value': '[current-user:mail]'
-  subject:
-    '#title': Subject
-    '#type': textfield
-    '#required': true
-    '#test': 'Testing contact webform from [site:name]'
+    '#required_error': 'Please enter your email address.'
+    '#autocomplete': email
+  phone:
+    '#type': tel
+    '#title': 'Phone number'
+    '#title_display': invisible
+    '#placeholder': 'Phone number'
+    '#autocomplete': tel
   message:
-    '#title': Message
     '#type': textarea
+    '#title': Message
+    '#title_display': invisible
+    '#placeholder': Message
+    '#rows': 6
     '#required': true
-    '#test': 'Please ignore this email.'
+    '#required_error': 'Please enter a message.'
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
-    '#submit__label': 'Send message'
+    '#submit__label': 'Submit message'
 css: ''
 javascript: ''
 settings:
@@ -237,7 +255,7 @@ handlers:
     settings:
       states:
         - completed
-      to_mail: '[current-user:mail]'
+      to_mail: '[webform_submission:values:email:raw]'
       to_options: {  }
       bcc_mail: ''
       bcc_options: {  }
@@ -250,7 +268,7 @@ handlers:
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: '[webform_submission:values:subject:raw]'
+      subject: 'Thank you for contacting [site:name]'
       body: '[webform_submission:values:message:value]'
       excluded_elements: {  }
       ignore_access: false
@@ -283,12 +301,12 @@ handlers:
       cc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
-      from_name: '[webform_submission:values:name:raw]'
-      reply_to: ''
+      from_name: '[webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
+      reply_to: '[webform_submission:values:email:raw]'
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: '[webform_submission:values:subject:raw]'
+      subject: 'New contact message from [webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
       body: '[webform_submission:values:message:value]'
       excluded_elements: {  }
       ignore_access: false

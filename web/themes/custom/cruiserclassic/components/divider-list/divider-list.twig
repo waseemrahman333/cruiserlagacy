@@ -1,0 +1,26 @@
+{#
+/**
+ * Divider List Component (Cruiserclassic)
+ *
+ * Items in heading font, with a thin line above the first item,
+ * between items and below the last one.
+ *
+ * Props: items[], text_color, line_color, top_spacing
+ */
+#}
+{% set text_map    = { gold: '!text-[#b9a26a]', white: '!text-white', body: '!text-body', primary: '!text-primary' } %}
+{% set line_map    = { light: 'border-white/25', dark: 'border-gray-300' } %}
+{% set spacing_map = { none: 'mt-0', sm: 'mt-4 md:mt-6', md: 'mt-6 md:mt-8 xl:mt-10', lg: 'mt-8 md:mt-12 xl:mt-14' } %}
+
+{% set list = items|default([])|filter(i => i is not empty) %}
+{% set line = line_map[line_color|default('light')]|default(line_map.light) %}
+
+{% if list %}
+  <ul class="divider-list w-full list-none !m-0 !p-0 border-t {{ line }} {{ spacing_map[top_spacing|default('md')]|default(spacing_map.md) }}">
+    {% for item in list %}
+      <li class="!m-0 py-3 md:py-3.5 border-b {{ line }} !font-heading !text-base md:!text-lg !leading-snug [font-variant:small-caps] {{ text_map[text_color|default('gold')]|default(text_map.gold) }}">
+        {{ item }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}

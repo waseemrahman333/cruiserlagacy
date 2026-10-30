@@ -6,6 +6,12 @@ description: "Intro heading + text, a vehicle image that bleeds to the left edge
 group: About Us
 
 slots:
+  panel_heading:
+    title: Panel Heading
+    description: "Heading inside the red panel, e.g. Who we are"
+  panel_text:
+    title: Panel Text
+    description: "Text inside the red panel"
   cta:
     title: Button
     description: "Button inside the red panel"
@@ -36,16 +42,20 @@ props:
           width: 1200
           height: 720
 
-    panel_heading:
-      type: string
-      title: Panel Heading
-      examples: ['Who we are']
+    show_panel_heading:
+      type: boolean
+      title: Show Panel Heading
+      default: true
+      examples: [true]
 
-    panel_text:
-      title: Panel Text
-      type: string
-      description:  Text inside the red panel.
-      contentMediaType: text/html
-      x-formatting-context: block
-      examples: ['Classic Jeep design never goes out of style. At CruiserClassic, we combine heritage, craftsmanship, and advanced engineering to create exceptional vehicles that honor the past while embracing the future.']   
+    show_panel_text:
+      type: boolean
+      title: Show Panel Text
+      default: true
+      examples: [true]
 
+    show_cta:
+      type: boolean
+      title: Show Button
+      default: true
+      examples: [true]

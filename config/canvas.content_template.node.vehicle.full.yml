@@ -1,0 +1,273 @@
+uuid: 9c613b4a-166d-4f34-b85d-fad9d16136c6
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.views_block.similar_vehicles-block_1
+    - canvas.component.sdc.cruiserclassic.feature-list
+    - canvas.component.sdc.cruiserclassic.flex-item
+    - canvas.component.sdc.cruiserclassic.flexbox
+    - canvas.component.sdc.cruiserclassic.vehicle-body
+    - canvas.component.sdc.cruiserclassic.vehicle-slider
+    - canvas.component.sdc.cruiserclassic.vehicle-specifications
+    - canvas.component.sdc.tailpine.canvas-button
+    - canvas.component.sdc.tailpine.canvas-heading
+    - canvas.component.sdc.tailpine.canvas-section
+    - core.entity_view_mode.node.full
+    - field.field.media.image.field_media_image
+    - field.field.media.video.field_media_video_file
+    - field.field.node.vehicle.field_condition
+    - field.field.node.vehicle.field_description
+    - field.field.node.vehicle.field_engine
+    - field.field.node.vehicle.field_exterior_color
+    - field.field.node.vehicle.field_fuel_type
+    - field.field.node.vehicle.field_image
+    - field.field.node.vehicle.field_interior
+    - field.field.node.vehicle.field_transmission
+    - field.field.node.vehicle.field_video
+    - field.field.node.vehicle.field_year
+    - filter.format.basic_html
+    - filter.format.full_html
+    - image.style.canvas_parametrized_width
+    - media.type.image
+    - media.type.remote_video
+    - media.type.video
+    - node.type.vehicle
+    - taxonomy.vocabulary.engine
+    - taxonomy.vocabulary.exterior_color
+    - taxonomy.vocabulary.interior
+  module:
+    - file
+    - media
+    - node
+    - options
+    - taxonomy
+id: node.vehicle.full
+content_entity_type_id: node
+content_entity_type_bundle: vehicle
+content_entity_type_view_mode: full
+component_tree:
+  '0:c610bfcd-7efe-4d14-aebd-430617f2447d':
+    uuid: c610bfcd-7efe-4d14-aebd-430617f2447d
+    component_id: sdc.cruiserclassic.vehicle-slider
+    component_version: 1d058c95f23e573b
+    inputs:
+      images:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_image␞␟entity␜␜entity:media:image␝field_media_image␞␟{src↠src_with_alternate_widths,alt↠alt,width↠width,height↠height}'
+      title:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝title␞␟value'
+      heading_level: h1
+      autoplay: true
+  '1:2ab492bd-11f3-4c58-b22c-15403ca129f5':
+    uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    component_id: sdc.cruiserclassic.vehicle-body
+    component_version: f4731a8011dd70b1
+    inputs:
+      description_heading: Description
+      description:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_description␞␟processed'
+      video:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_video␞␟entity␜␜entity:media:video␝field_media_video_file␞␟{src↝entity␜␜entity:file␝uri␞␟url}'
+      show_print: true
+  '1:bottom_first:0:e6975aa6-83fc-4b8f-8543-b6534207cab7':
+    parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    slot: bottom_first
+    uuid: e6975aa6-83fc-4b8f-8543-b6534207cab7
+    component_id: sdc.cruiserclassic.feature-list
+    component_version: 904caba9865b8bf4
+    inputs:
+      heading: 'Why Cruiser Classic?'
+      heading_level: h3
+      items:
+        - 'Expertly Restored Classic Vehicles'
+        - 'Premium Quality Inspection'
+        - 'Authentic Restoration Standards'
+        - 'Trusted by Collectors & Enthusiasts'
+        - 'Nationwide & International Delivery'
+        - 'Dedicated Customer Support'
+        - 'Complete Vehicle History & Documentation'
+        - 'Passion for Automotive Heritage'
+      list_style: disc
+      marker_color: body
+      indent: none
+      columns: '1'
+      item_spacing: sm
+      heading_spacing: sm
+  '1:bottom_second:0:6852302d-a0ea-4cfa-a4de-248e65dedfed':
+    parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    slot: bottom_second
+    uuid: 6852302d-a0ea-4cfa-a4de-248e65dedfed
+    component_id: sdc.cruiserclassic.feature-list
+    component_version: 904caba9865b8bf4
+    inputs:
+      heading: Highlights
+      heading_level: h2
+      items:
+        - 'Complete professional restoration'
+        - 'Powerful and reliable engine'
+        - 'Premium handcrafted interior'
+        - 'Modern suspension and braking upgrades'
+        - 'Classic alloy wheels with all-terrain tires'
+        - 'LED lighting while preserving the vintage appearance'
+        - 'Complete restoration documentation'
+        - "Original owner's manual and toolkit"
+        - 'Premium soft-top with removable side windows'
+      list_style: disc
+      marker_color: body
+      indent: sm
+      columns: '1'
+      item_spacing: sm
+      heading_spacing: md
+  '1:cta:0:7db25d8e-47ef-405d-828d-d0a0a4b90f91':
+    parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    slot: cta
+    uuid: 7db25d8e-47ef-405d-828d-d0a0a4b90f91
+    component_id: sdc.tailpine.canvas-button
+    component_version: 5665b72b04ec53b0
+    inputs:
+      title: "I'm interested"
+      link: /contact-us
+      color_varient: primary
+      rounded: rounded-none
+      style_variant: solid
+      button_size: md
+      show_arrow: false
+      add_border: false
+      open_new_tab: false
+  '1:specifications:0:0ec1793c-254c-46b6-93b3-418bc26f1280':
+    parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    slot: specifications
+    uuid: 0ec1793c-254c-46b6-93b3-418bc26f1280
+    component_id: sdc.cruiserclassic.vehicle-specifications
+    component_version: d3fd05c2604be3ef
+    inputs:
+      heading: Specifications
+      engine:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_engine␞␟entity␜␜entity:taxonomy_term␝name␞␟value'
+      year:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_year␞␟value'
+      condition:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_condition␞␟label'
+      transmission:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_transmission␞␟label'
+      fuel_type:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_fuel_type␞␟label'
+      exterior:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_exterior_color␞␟entity␜␜entity:taxonomy_term␝name␞␟value'
+      interior:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:vehicle␝field_interior␞␟entity␜␜entity:taxonomy_term␝name␞␟value'
+  '2:80e56803-bf6f-4ef3-902a-667b0b9e56f2':
+    uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
+    component_id: sdc.tailpine.canvas-section
+    component_version: 9114a1443924e48f
+    inputs:
+      background_type: image
+      image_width: '50'
+      bg_color: transparent
+      grid_layout: 1
+      gap: sm
+      padding_block: md
+      enable_overlay: false
+      overlay_color: dark
+      reverse_top_content: false
+      show_top_region: true
+      show_content_region: true
+      show_bottom_region: true
+      show_cta: false
+      enable_container: true
+      show_heading: true
+      padding_t: md
+      padding_b: md
+      content_alignment: center
+      show_description: false
+  '2:bottom_slot:0:378170e4-8aa9-4576-b4f1-8e9fe4639298':
+    parent_uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
+    slot: bottom_slot
+    uuid: 378170e4-8aa9-4576-b4f1-8e9fe4639298
+    component_id: sdc.cruiserclassic.flexbox
+    component_version: 27a86bc6ec8655e8
+    inputs:
+      direction_mobile: row
+      direction_tablet: row
+      direction_desktop: row
+      justify: center
+      align: center
+      wrap: wrap
+      gap: md
+      min_height: auto
+      enable_container: false
+  '2:bottom_slot:0:items:0:bc7832ed-f11a-45db-a659-461cdcc182ed':
+    parent_uuid: 378170e4-8aa9-4576-b4f1-8e9fe4639298
+    slot: items
+    uuid: bc7832ed-f11a-45db-a659-461cdcc182ed
+    component_id: sdc.cruiserclassic.flex-item
+    component_version: 496a611856dbe27d
+    inputs:
+      width: auto
+      full_width_mobile: true
+      align_self: center
+      push: center
+      order_mobile_only: false
+  '2:bottom_slot:0:items:0:content:0:3ae82e7b-4501-40e2-a1c9-22870dc95c5e':
+    parent_uuid: bc7832ed-f11a-45db-a659-461cdcc182ed
+    slot: content
+    uuid: 3ae82e7b-4501-40e2-a1c9-22870dc95c5e
+    component_id: sdc.tailpine.canvas-button
+    component_version: 5665b72b04ec53b0
+    inputs:
+      title: 'Click Here'
+      link: 'https://example.com'
+      color_varient: primary
+      rounded: rounded-none
+      style_variant: solid
+      button_size: md
+      show_arrow: true
+      add_border: false
+      open_new_tab: false
+  '2:content:0:40697948-a1f2-4c07-94ab-fb069fceff27':
+    parent_uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
+    slot: content
+    uuid: 40697948-a1f2-4c07-94ab-fb069fceff27
+    component_id: block.views_block.similar_vehicles-block_1
+    component_version: 5587b3020aa7e914
+    inputs:
+      label: 'Similar vehicles'
+      label_display: '0'
+      views_label: ''
+      items_per_page: null
+  '2:heading:0:383aa4a7-0451-4bd2-bb61-2a5c51726bae':
+    parent_uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
+    slot: heading
+    uuid: 383aa4a7-0451-4bd2-bb61-2a5c51726bae
+    component_id: sdc.tailpine.canvas-heading
+    component_version: a66ba11b9609366d
+    inputs:
+      heading_text: 'Similar Models'
+      level: 2
+      text_size: text-5xl(48px)
+      font_weight: font-normal
+      heading_text_width: fit
+      text_color: none
+      highlight_color: body
+      text_align: left
+      underline: false
+      underline_color: border
+      text_underline_width: 33%
+      underline_offset: base
+      padding_inline: none
+      padding_block: none
+      margin_top: none
+      margin_bottom: none
+exposed_slots: {  }
+page_variant: null

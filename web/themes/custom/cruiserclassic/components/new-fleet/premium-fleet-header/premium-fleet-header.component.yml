@@ -12,6 +12,42 @@ props:
       default: New Land Cruiser
       examples: ['New Land Crouiser'] 
 
+    color_varient:
+      type: string
+      title: Color Variant
+      description: "Choose a color schema for the component."
+      default: secondary
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - success
+        - warning
+        - error
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        success: Success
+        warning: Warning
+        error: Error
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+
+
 slots:
   main:
     title: Fleet Content

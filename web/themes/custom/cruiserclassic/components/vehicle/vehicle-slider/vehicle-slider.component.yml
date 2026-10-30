@@ -1,0 +1,42 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Vehicle Slider (Cruiserclassic)
+status: stable
+description: "Vehicle page hero: image slider (Slick) with the vehicle title and prev/next arrows on a bottom gradient."
+group: Vehicle
+libraryOverrides:
+  dependencies:
+    - cruiserclassic/slick-carousel
+    - core/once
+
+props:
+  type: object
+  properties:
+    images:
+      type: array
+      title: Images
+      items:
+        $ref: json-schema-definitions://canvas.module/image
+        type: object
+      examples:
+        - - src: 'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?w=1600'
+            alt: 'Classic Land Cruiser'
+            width: 1600
+            height: 900
+
+    title:
+      type: string
+      title: Title
+      examples: ['CC Land Cruiser Jeep']
+
+    heading_level:
+      type: string
+      title: Title Heading Level
+      enum: ['h1', 'h2']
+      default: 'h1'
+      examples: ['h1']
+
+    autoplay:
+      type: boolean
+      title: Autoplay
+      default: false
+      examples: [false]

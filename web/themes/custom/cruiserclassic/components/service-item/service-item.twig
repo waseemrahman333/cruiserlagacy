@@ -1,0 +1,29 @@
+{#
+/**
+ * Service Item Component (Cruiserclassic)
+ *
+ * Mobile: number above the content. Tablet and up: number in a fixed left
+ * column, content beside it. Gold line below every row (and above the first).
+ *
+ * Props: number, title, description (HTML), link_text, url, first
+ */
+#}
+<div class="service-item w-full grid grid-cols-1 md:grid-cols-[clamp(80px,9vw,116px)_minmax(0,1fr)] gap-y-3 py-[clamp(28px,3vw,30px)] border-b border-solid border-border {{ first ? 'border-t' : '' }}">
+  {% if number %}
+    <div class="!font-heading !text-secondary !leading-none !text-[clamp(1.5rem,1.2rem+0.8vw,2rem)]">{{ number }}</div>
+  {% endif %}
+  <div class="min-w-0">
+    {% if title %}
+      <h3 class="!m-0 !font-heading !text-tertiary  !leading-tight [font-variant:small-caps] !text-[clamp(1.5rem,1.2rem+0.9vw,2rem)]">{{ title }}</h3>
+    {% endif %}
+    {% if description %}
+      <div class="mt-4  text-base md:text-lg leading-8 ">{{ description|raw }}</div>
+    {% endif %}
+    {% if url and link_text %}
+      <a href="{{ url }}" class="mt-4 inline-flex items-center gap-4 pb-2 border-b border-solid border-white !text-white !no-underline uppercase text-sm md:text-base tracking-wide hover:!text-secondary hover:border-border transition-colors">
+        <span>{{ link_text }}</span>
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    {% endif %}
+  </div>
+</div>
