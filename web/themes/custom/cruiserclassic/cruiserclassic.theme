@@ -79,37 +79,43 @@ function cruiserclassic_preprocess_breadcrumb(array &$variables) {
 /**
  * Implements hook_form_alter().
  *
- * Contact webform layout (Tailwind, so Tailpine's input styles are overridden):
- * - Mobile: one column, every field full width.
- * - Tablet and up: first/last name and email/phone in 2 columns,
- *   message full width, button always fits its text.
- * - Centered, max-w-5xl.
+ * Contact webform ("Send us an inquiry" design):
+ * - Mobile: one column.
+ * - Tablet and up: name/email and phone/interest in 2 columns; vehicle
+ *   specifications and message full width.
+ * - Labels above, underline-only fields, dark green button with an arrow.
  */
 function cruiserclassic_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   if (($form['#webform_id'] ?? NULL) !== 'contact') {
     return;
   }
 
-  $form['#attributes']['class'][] = 'contact-form grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 md:gap-y-5 w-full !max-w-5xl mx-auto';
+  $form['#attributes']['class'][] = 'contact-form grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6 md:gap-y-7 w-full';
 
-  $input = '!w-full !h-14 !m-0 !px-5 !py-0 !bg-white !text-body !text-sm !border !border-[#e7d9a8] !rounded-sm !shadow-none placeholder:!text-body/70 focus:!outline-none focus:!ring-0 focus:!border-primary';
-  $wrapper = '!m-0 w-full min-w-0';
+  $input = '!w-full !h-12 !m-0 !px-0 !py-0 !bg-transparent !text-body !text-base !border-0 !border-b !border-solid !border-[#cfcfc8] !rounded-none !shadow-none placeholder:!text-[#9a9a95] focus:!outline-none focus:!ring-0 focus:!border-primary';
+  $full = ['vehicle_specs', 'message'];
 
-  foreach (['first_name', 'last_name', 'email', 'phone', 'message'] as $key) {
+  foreach (['name', 'email', 'phone', 'interest', 'vehicle_specs', 'message'] as $key) {
     if (!isset($form['elements'][$key])) {
       continue;
     }
-    $form['elements'][$key]['#wrapper_attributes']['class'][] = $wrapper . ($key === 'message' ? ' md:col-span-2' : '');
-    $form['elements'][$key]['#attributes']['class'][] = $key === 'message'
-      ? str_replace(['!h-14', '!py-0'], ['!h-auto !min-h-48 resize-y', '!py-4'], $input)
-      : $input;
+    $element = &$form['elements'][$key];
+    $element['#wrapper_attributes']['class'][] = '!m-0 w-full min-w-0' . (in_array($key, $full, TRUE) ? ' md:col-span-2' : '');
+    $element['#label_attributes']['class'][] = '!block !mb-2 !text-body !text-sm md:!text-base !font-normal';
+    $classes = $input;
+    if ($key === 'message') {
+      $classes = str_replace(['!h-12', '!py-0'], ['!h-auto !min-h-28 resize-y', '!py-3'], $input);
+    }
+    if ($key === 'interest') {
+      $classes .= ' appearance-none cursor-pointer';
+    }
+    $element['#attributes']['class'][] = $classes;
+    unset($element);
   }
 
-  // Actions: full row, button sized to its label.
-  $actions = isset($form['elements']['actions']) ? 'elements' : NULL;
-  if ($actions) {
-    $form['elements']['actions']['#attributes']['class'][] = '!m-0 md:col-span-2 flex';
-    $form['elements']['actions']['#submit__attributes']['class'][] = '!w-fit !h-12 !px-7 !py-0 !m-0 !bg-primary !text-white !text-sm !font-medium uppercase !rounded-sm !shadow-none hover:!opacity-90 cursor-pointer';
+  if (isset($form['elements']['actions'])) {
+    $form['elements']['actions']['#attributes']['class'][] = '!m-0 md:col-span-2 flex pt-2';
+    $form['elements']['actions']['#submit__attributes']['class'][] = 'contact-form__submit !w-fit !h-auto !m-0 !py-4 !pl-8 !pr-14 !bg-[#12301b] !text-white !text-base !font-normal uppercase tracking-wide !border-0 !rounded-none !shadow-none hover:!bg-[#1d4a2b] cursor-pointer';
   }
 }
 

@@ -140,7 +140,7 @@ fixed-header:
     js/fixed-header-offset.js: {}
   dependencies:
     - core/drupal
-    - core/jquery
+    - core/once
 
 swiper:
   css:

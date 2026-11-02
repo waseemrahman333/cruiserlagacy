@@ -7,7 +7,7 @@
 
 :root {
   --t-container-padding-inline: clamp(20px, calc(10.582vw + -21.2698px), 60px);
-  --t-logo-width: 45px;
+  --t-logo-width: 60px;
   --h1-size: clamp(36px, calc(3.1746vw + 23.619px), 48px);
   --h2-size: clamp(30px, calc(1.5873vw + 23.8095px), 36px);
   --h3-size: clamp(26px, calc(0.5291vw + 23.9365px), 28px);
@@ -19,7 +19,7 @@
 @media (min-width: 768px) {
   :root {
     --t-container-padding-inline: clamp(60px, calc(7.0313vw + 6px), 96px);
-    --t-logo-width: 60px;
+    --t-logo-width: 80px;
     --h1-size: clamp(48px, calc(1.5625vw + 36px), 56px);
     --h2-size: clamp(36px, calc(0.7813vw + 30px), 40px);
     --h3-size: clamp(28px, calc(0.7813vw + 22px), 32px);
@@ -32,7 +32,7 @@
 @media (min-width: 1280px) {
   :root {
     --t-container-padding-inline: clamp(96px, calc(3.75vw + 48px), 120px);
-    --t-logo-width: 90px;
+    --t-logo-width: 100px;
     --h1-size: clamp(56px, calc(1.25vw + 40px), 64px);
     --h2-size: clamp(40px, calc(1.25vw + 24px), 48px);
     --h3-size: clamp(32px, calc(1.25vw + 16px), 40px);

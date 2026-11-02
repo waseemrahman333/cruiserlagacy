@@ -18,48 +18,51 @@ title: Contact
 description: 'Basic email contact webform.'
 categories: {  }
 elements: |-
-  first_name:
+  name:
     '#type': textfield
-    '#title': 'First name'
-    '#title_display': invisible
-    '#placeholder': 'First name'
+    '#title': Name
+    '#placeholder': 'Your full name'
     '#required': true
-    '#required_error': 'Please enter your first name.'
-    '#autocomplete': given-name
-  last_name:
-    '#type': textfield
-    '#title': 'Last name'
-    '#title_display': invisible
-    '#placeholder': 'Last name'
-    '#required': true
-    '#required_error': 'Please enter your last name.'
-    '#autocomplete': family-name
+    '#required_error': 'Please enter your name.'
+    '#autocomplete': name
   email:
     '#type': email
     '#title': 'Email address'
-    '#title_display': invisible
-    '#placeholder': 'Email address'
+    '#placeholder': you@email.com
     '#required': true
     '#required_error': 'Please enter your email address.'
     '#autocomplete': email
   phone:
     '#type': tel
     '#title': 'Phone number'
-    '#title_display': invisible
-    '#placeholder': 'Phone number'
+    '#placeholder': Optional
     '#autocomplete': tel
+  interest:
+    '#type': select
+    '#title': Interest
+    '#empty_option': 'Select one'
+    '#options':
+      classic_land_cruiser: 'Classic Land Cruiser'
+      rebuilt_engine: 'Rebuilt Engine'
+      rebuilt_transmission: 'Rebuilt Transmission'
+      other: Other
+    '#required': true
+    '#required_error': 'Please choose what you are interested in.'
+  vehicle_specs:
+    '#type': textfield
+    '#title': 'Vehicle year & specifications'
+    '#placeholder': 'If known'
   message:
     '#type': textarea
     '#title': Message
-    '#title_display': invisible
-    '#placeholder': Message
-    '#rows': 6
+    '#placeholder': "Tell us what you're looking for"
+    '#rows': 4
     '#required': true
     '#required_error': 'Please enter a message.'
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
-    '#submit__label': 'Submit message'
+    '#submit__label': 'Send inquiry'
 css: ''
 javascript: ''
 settings:
@@ -301,13 +304,13 @@ handlers:
       cc_options: {  }
       from_mail: '[webform_submission:values:email:raw]'
       from_options: {  }
-      from_name: '[webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
+      from_name: '[webform_submission:values:name:raw]'
       reply_to: '[webform_submission:values:email:raw]'
       return_path: ''
       sender_mail: ''
       sender_name: ''
-      subject: 'New contact message from [webform_submission:values:first_name:raw] [webform_submission:values:last_name:raw]'
-      body: '[webform_submission:values:message:value]'
+      subject: 'New contact message from [webform_submission:values:name:raw]'
+      body: '[webform_submission:values]'
       excluded_elements: {  }
       ignore_access: false
       exclude_empty: true

@@ -32,9 +32,9 @@ footer_class: style1
 header_fixed: '0'
 show_color_switcher: 0
 color_switcher_region: secondary_menu
-responsive_logo_mobile: '45'
-responsive_logo_tablet: '60'
-responsive_logo_desktop: '90'
+responsive_logo_mobile: '60'
+responsive_logo_tablet: '80'
+responsive_logo_desktop: '100'
 tailpine_customize_logo_size: 1
 color_theme: custom
 tailpine_enable_color: 1

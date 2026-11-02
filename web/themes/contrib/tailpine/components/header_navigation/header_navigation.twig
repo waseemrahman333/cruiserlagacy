@@ -63,7 +63,9 @@
   {% if background_color == 'transparent' %}
     x-init="
       const updateScroll = () => {
-        const scrolled = window.scrollY > 20;
+        // Logged-in users always get the glass background (admin tabs sit
+        // below the header, so white text would sit on the light page).
+        const scrolled = window.scrollY > 20 || document.body.classList.contains('user-logged-in');
         $el.classList.toggle('!bg-dark/20', scrolled);
         $el.classList.toggle('!backdrop-blur-lg', scrolled);
         $el.classList.toggle('!border-b', scrolled);

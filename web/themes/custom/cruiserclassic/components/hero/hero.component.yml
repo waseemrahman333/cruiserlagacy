@@ -7,6 +7,17 @@ category: Hero
 props:
   type: object
   properties:
+    background_type:
+      type: string
+      title: Background Type
+      enum: [image, video, color]
+      meta:enum:
+        image: Image
+        video: Video
+        color: Color
+      default: image
+      examples: [image]
+
     image_url:
       $ref: json-schema-definitions://canvas.module/image
       type: object
@@ -18,6 +29,27 @@ props:
           alt: 'Background Image'
           width: 1900
           height: 999
+    video:
+      $ref: json-schema-definitions://canvas.module/video
+      type: object
+      title: Background Video
+      description: "Used when Background Type is Video. Plays muted and on a loop; the poster shows while it loads."
+
+    bg_color:
+      type: string
+      title: Background Color
+      description: "Used when Background Type is Color."
+      enum: [primary, secondary, tertiary, dark, body, body-bg]
+      meta:enum:
+        primary: Primary (green)
+        secondary: Secondary (gold)
+        tertiary: Tertiary
+        dark: Dark
+        body: Text color
+        body-bg: Page background
+      default: primary
+      examples: [primary]
+
     title:
       title: Title
       type: string

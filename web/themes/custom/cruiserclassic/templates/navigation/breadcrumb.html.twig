@@ -3,7 +3,7 @@
  * @file
  * Theme override for a breadcrumb trail: HOME / SECTION / CURRENT PAGE.
  *
- * The current page (last item, no link) is shown in the primary color.
+ * The current page (last item, no link) is shown in the secondary color.
  * It is appended in cruiserclassic_preprocess_breadcrumb().
  *
  * Available variables:
@@ -17,9 +17,9 @@
       {% for item in breadcrumb %}
         <li class="breadcrumb__item flex items-center gap-2">
           {% if loop.last %}
-            <span class="text-primary" aria-current="page">{{ item.text }}</span>
+            <span class="text-secondary" aria-current="page">{{ item.text }}</span>
           {% elseif item.url %}
-            <a href="{{ item.url }}" class="text-white no-underline hover:text-primary transition-colors">{{ item.text }}</a>
+            <a href="{{ item.url }}" class="text-white no-underline hover:text-secondary transition-colors">{{ item.text }}</a>
           {% else %}
             <span>{{ item.text }}</span>
           {% endif %}

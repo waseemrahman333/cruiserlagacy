@@ -39,14 +39,23 @@
 {% set overlay_class = (show_overlay ?? true) ? (overlay_map[overlay_opacity|default('40')] ?? '') : '' %}
 {# {% set bg_image = imageurl|default('') %} #}
 
-<div 
-  class="w-full max-w-[1920px] mx-auto relative bg-cover bg-no-repeat bg-center"
-  {% if image_url %}
+{% set bg_type = background_type|default('image') %}
+{% set bg_color_map = {
+  'primary': 'bg-primary', 'secondary': 'bg-secondary', 'tertiary': 'bg-tertiary',
+  'dark': 'bg-dark', 'body': 'bg-body', 'body-bg': 'bg-body-bg',
+} %}
+{% set color_class = bg_type == 'color' ? (bg_color_map[bg_color|default('primary')] ?? 'bg-primary') : '' %}
+
+<div
+  class="hero w-full max-w-[1920px] mx-auto relative overflow-hidden bg-cover bg-no-repeat bg-center {{ color_class }}"
+  {% if bg_type == 'image' and image_url.src %}
   style="background-image: url('{{ image_url.src }}');"
   {% endif %}
-  role="img"
-  aria-label="Hero background"
 >
+  {% if bg_type == 'video' and video.src %}
+  <video class="hero__video absolute inset-0 w-full h-full object-cover pointer-events-none" src="{{ video.src }}" autoplay muted loop playsinline preload="metadata"{% if video.poster %} poster="{{ video.poster }}"{% endif %} aria-hidden="true"></video>
+  {% endif %}
+
   {% if overlay_class %}
   <div class="hero__overlay absolute inset-0 pointer-events-none {{ overlay_class }}" aria-hidden="true"></div>
   {% endif %}

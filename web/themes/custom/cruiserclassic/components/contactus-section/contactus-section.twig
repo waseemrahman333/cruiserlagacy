@@ -78,7 +78,7 @@
     {% if (show_form ?? true) and (form_title or form_html|trim is not empty) %}
       <div class="contact-section__form min-w-0 self-start w-full bg-white shadow-[0_20px_50px_rgba(0,0,0,0.08)] px-5 py-8 md:px-8 md:py-10">
         {% if form_title %}
-          <h3 class="!m-0 pb-6 md:pb-8 mb-6 md:mb-8 border-b border-solid border-[#e5e0d5] !font-heading !text-body [font-variant:small-caps] !leading-tight !text-[clamp(1.25rem,1.1rem+0.5vw,1.5rem)]">{{ form_title }}</h3>
+          <h3 class=" pb-6 md:pb-8 mb-6 md:mb-8 border-b border-solid border-border !font-heading !text-body [font-variant:small-caps] !leading-tight !text-[clamp(1.25rem,1.1rem+0.5vw,1.5rem)]">{{ form_title }}</h3>
         {% endif %}
         {{ form_html }}
       </div>
