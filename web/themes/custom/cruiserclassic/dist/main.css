@@ -3620,9 +3620,6 @@
   .pt-32 {
     padding-top: calc(var(--spacing) * 32);
   }
-  .pt-45 {
-    padding-top: calc(var(--spacing) * 45);
-  }
   .pt-50 {
     padding-top: calc(var(--spacing) * 50);
   }
@@ -3658,6 +3655,9 @@
   }
   .pt-\[320px\] {
     padding-top: 320px;
+  }
+  .pt-\[clamp\(8\.75rem\,-0\.792rem\+40\.712vw\,18\.75rem\)\] {
+    padding-top: clamp(8.75rem, -0.792rem + 40.712vw, 18.75rem);
   }
   .pt-\[clamp\(12px\,2vw\,5px\)\] {
     padding-top: clamp(12px, 2vw, 5px);
@@ -8166,11 +8166,6 @@
       padding-top: calc(var(--spacing) * 42);
     }
   }
-  .md\:pt-65 {
-    @media (width >= 48rem) {
-      padding-top: calc(var(--spacing) * 65);
-    }
-  }
   .md\:pt-88 {
     @media (width >= 48rem) {
       padding-top: calc(var(--spacing) * 88);
@@ -8229,6 +8224,11 @@
   .md\:pt-\[448px\] {
     @media (width >= 48rem) {
       padding-top: 448px;
+    }
+  }
+  .md\:pt-\[clamp\(18\.75rem\,12\.917rem\+12\.153vw\,27\.5rem\)\] {
+    @media (width >= 48rem) {
+      padding-top: clamp(18.75rem, 12.917rem + 12.153vw, 27.5rem);
     }
   }
   .md\:pr-1\.5 {
@@ -10641,11 +10641,6 @@
   .xl\:pt-30 {
     @media (width >= 80rem) {
       padding-top: calc(var(--spacing) * 30);
-    }
-  }
-  .xl\:pt-160 {
-    @media (width >= 80rem) {
-      padding-top: calc(var(--spacing) * 160);
     }
   }
   .xl\:pt-\[48px\] {
