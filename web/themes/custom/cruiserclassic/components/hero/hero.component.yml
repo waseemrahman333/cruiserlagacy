@@ -30,6 +30,13 @@ props:
       contentMediaType: text/html
       x-formatting-context: block
       examples: ['<p>Cruiser Legacy sells classic Toyota Land Cruiser FJ40, FJ45, BJ40, and BJ45 models from 1970 to 1980, along with professionally rebuilt engines and transmissions.</p>']
+    show_overlay:
+      type: boolean
+      title: Show Overlay
+      description: "Dark layer over the image so the text stays readable."
+      default: true
+      examples: [true]
+
     overlay_opacity:
       type: string
       title: Overlay Darkness
@@ -48,6 +55,12 @@ props:
         '90': 90%
       default: '40'
       examples: ['40']
+    show_cta:
+      type: boolean
+      title: Show CTA
+      description: "Turn off to hide the buttons slot."
+      default: true
+      examples: [true]
 
 slots:
   cta:

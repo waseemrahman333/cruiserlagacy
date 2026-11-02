@@ -1,0 +1,82 @@
+'$schema': 'https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json'
+name: Contact Us Section (cruiserlegacy)
+status: stable
+description: "Heading + text and a contact details list on the left, a form card on the right."
+group: About Us Section component
+
+slots:
+  heading:
+    title: Heading
+    description: "e.g. Let's talk Land Cruisers."
+  text:
+    title: Text
+    description: "Intro text below the heading"
+  form:
+    title: Form
+    description: "The contact form (webform block)"
+
+props:
+  type: object
+  properties:
+    show_heading:
+      type: boolean
+      title: Show Heading
+      default: true
+      examples: [true]
+
+    show_text:
+      type: boolean
+      title: Show Text
+      default: true
+      examples: [true]
+
+    contact_items:
+      type: array
+      title: Contact Details
+      description: "One line per item, written as Label | Value, e.g. Phone | (555) 123-4567. Phone numbers and emails become links."
+      items:
+        type: string
+      examples:
+        - ['Phone | (555) 123-4567', 'Email | info@gmail.com', 'Location | 123 Main Street, main city, CA']
+
+    show_contact_items:
+      type: boolean
+      title: Show Contact Details
+      default: true
+      examples: [true]
+
+    details_position:
+      type: string
+      title: Contact Details Position
+      description: "Right after the text, or pushed away from it (tablet: beside the text, desktop: at the bottom of the column)."
+      enum: [after, between]
+      meta:enum:
+        after: 'Right after the text'
+        between: 'Space between'
+      default: after
+      examples: [after]
+
+    form_title:
+      type: string
+      title: Form Title
+      examples: ['Send us an inquiry']
+
+    show_form:
+      type: boolean
+      title: Show Form Card
+      default: true
+      examples: [true]
+
+    backgroundcolor:
+      type: string
+      title: Background Color
+      enum: [beige, white, surface-primary, surface-secondary, surface-tertiary, none]
+      meta:enum:
+        beige: 'Beige'
+        white: 'White'
+        surface-primary: 'Primary surface'
+        surface-secondary: 'Secondary surface'
+        surface-tertiary: 'Tertiary surface'
+        none: 'None'
+      default: beige
+      examples: [beige]

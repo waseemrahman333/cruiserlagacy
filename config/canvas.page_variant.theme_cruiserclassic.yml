@@ -77,7 +77,7 @@ component_tree:
     slot: actions
     uuid: eec8da1a-afd7-4f9a-81ea-1fecce410390
     component_id: sdc.tailpine.canvas-button
-    component_version: 5665b72b04ec53b0
+    component_version: adcbe7eb1f45a3a7
     inputs:
       title: 'CONTACT US'
       link: /contact-us
@@ -165,20 +165,23 @@ component_tree:
     slot: footer
     uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
     component_id: sdc.tailpine.footer
-    component_version: 134ecc40912f7773
+    component_version: eced66fb64e1cff4
     inputs:
       background_color: primary
       padding_block: lg
       column_gap: md
       row_gap: lg
+      show_top: true
       top_columns: 1
       top_columns_tab: 1
       top_alignment: left
       top_width: full
+      show_main: false
       main_columns: 1
       main_columns_tab: 1
       main_alignment: left
       main_width: full
+      show_bottom: true
       bottom_columns: 3
       bottom_alignment: left
       bottom_width: full

@@ -36,8 +36,7 @@
   '10': 'bg-black/10', '20': 'bg-black/20', '30': 'bg-black/30', '40': 'bg-black/40', '50': 'bg-black/50',
   '60': 'bg-black/60', '70': 'bg-black/70', '80': 'bg-black/80', '90': 'bg-black/90',
 } %}
-{% set overlay_class = overlay_map[overlay_opacity|default('40')] ?? '' %}
-{% set hero_heading_level = heading_level|default(1) %}
+{% set overlay_class = (show_overlay ?? true) ? (overlay_map[overlay_opacity|default('40')] ?? '') : '' %}
 {# {% set bg_image = imageurl|default('') %} #}
 
 <div 
@@ -58,22 +57,22 @@
     aria-label="Hero section"
   >
     <div class="content max-w-177 w-full text-body-bg">
-      <h{{ hero_heading_level }} 
+      <h1
         class=" leading-tight !text-surface-100 md:leading-tight font-black uppercase text-shadow-lg"
       >
         {{ title }}
-      </h{{ hero_heading_level }}>
+      </h1>
 
       {% if description %}
-      <div class="hero__description mt-6 md:mt-8 max-w-[660px] !text-white/90 text-sm md:text-base leading-7 text-shadow-sm [&_*]:!text-white/90 [&_p]:!m-0 [&_p+p]:!mt-3">
+      <div class="hero__description mt-6 md:mt-8 max-w-[660px] !text-white/90 text-sm md:text-base leading-7 text-shadow-sm   ">
         {{ description }}
       </div>
       {% endif %}
 
-      {% if cta %}
-      <div class=" w-full md:w-fit pt-10 flex flex-col md:flex-row gap-5 min-w-25">
-        {{ cta }}
-      </div>
+      {# Note: keep tag names static (no <h{{ level }}>) — Canvas parses the
+         HTML before a slot and skips the slot markers if it is invalid. #}
+      {% if show_cta ?? true %}
+      <div class="hero__cta w-full md:w-fit pt-10 flex flex-col md:flex-row gap-5 min-w-25">{{ cta }}</div>
       {% endif %}
     </div>
   </section>
