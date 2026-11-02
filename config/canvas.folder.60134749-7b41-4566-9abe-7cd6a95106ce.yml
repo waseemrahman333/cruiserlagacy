@@ -7,6 +7,7 @@ dependencies:
     - canvas.component.sdc.cruiserclassic.feature-list
     - canvas.component.sdc.cruiserclassic.gallery-card
     - canvas.component.sdc.cruiserclassic.link-tile
+    - canvas.component.sdc.cruiserclassic.media-text
     - canvas.component.sdc.cruiserclassic.service-item
     - canvas.component.sdc.tailpine.canvas-figure
     - canvas.component.sdc.tailpine.node
@@ -19,6 +20,7 @@ items:
   - sdc.cruiserclassic.feature-list
   - sdc.cruiserclassic.gallery-card
   - sdc.cruiserclassic.link-tile
+  - sdc.cruiserclassic.media-text
   - sdc.cruiserclassic.service-item
   - sdc.tailpine.canvas-figure
   - sdc.tailpine.node

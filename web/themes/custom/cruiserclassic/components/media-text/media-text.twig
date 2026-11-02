@@ -1,0 +1,215 @@
+{#
+/**
+ * Media And Text (Cruiserclassic)
+ *
+ * Copy of Tailpine's Base Media And Text with one fixed layout:
+ * image left, content right from 1024px; stacked (image first) below.
+ *
+ * Slots: badge, heading, text, cta
+ */
+#}
+
+{% set bg_variants = {
+  'primary': 'bg-primary !text-primary-content',
+  'secondary': 'bg-secondary !text-secondary-content',
+  'tertiary': 'bg-tertiary !text-tertiary-content',
+
+  'body': 'bg-body !text-body-bg',
+  'body-bg': 'bg-body-bg !text-body',
+
+  'surface-100': 'bg-surface-100 !text-body',
+  'surface-200': 'bg-surface-200 !text-body',
+  'surface-300': 'bg-surface-300 !text-body',
+
+  'dark': 'bg-dark !text-content-on-dark',
+  'transparent': 'bg-transparent'
+} %}
+
+{% set class_list = [
+  'leading-8',
+  'lg:pr-18',
+] %}
+{% set bg_color_variant = bg_variants[bg_color]|default(bg_variants.primary) %}
+
+
+{# Padding per side (mobile → tablet → desktop) #}
+{% set pad_top = {
+  none: 'pt-0', xs: 'pt-1 md:pt-1.5 xl:pt-2', sm: 'pt-2 md:pt-3 xl:pt-4', md: 'pt-3 md:pt-4 xl:pt-6',
+  lg: 'pt-4 md:pt-6 xl:pt-8', xl: 'pt-6 md:pt-8 xl:pt-10', '2xl': 'pt-8 md:pt-10 xl:pt-12',
+  '3xl': 'pt-10 md:pt-12 xl:pt-16', huge: 'pt-12 md:pt-16 xl:pt-25',
+} %}
+{% set pad_bottom = {
+  none: 'pb-0', xs: 'pb-1 md:pb-1.5 xl:pb-2', sm: 'pb-2 md:pb-3 xl:pb-4', md: 'pb-3 md:pb-4 xl:pb-6',
+  lg: 'pb-4 md:pb-6 xl:pb-8', xl: 'pb-6 md:pb-8 xl:pb-10', '2xl': 'pb-8 md:pb-10 xl:pb-12',
+  '3xl': 'pb-10 md:pb-12 xl:pb-16', huge: 'pb-12 md:pb-16 xl:pb-25',
+} %}
+{% set pad_left = {
+  none: 'pl-0', xs: 'pl-1 md:pl-1.5 xl:pl-2', sm: 'pl-2 md:pl-3 xl:pl-4', md: 'pl-3 md:pl-4 xl:pl-6',
+  lg: 'pl-4 md:pl-6 xl:pl-8', xl: 'pl-6 md:pl-8 xl:pl-10', '2xl': 'pl-8 md:pl-10 xl:pl-12',
+  '3xl': 'pl-10 md:pl-12 xl:pl-16', huge: 'pl-12 md:pl-16 xl:pl-25',
+} %}
+{% set pad_right = {
+  none: 'pr-0', xs: 'pr-1 md:pr-1.5 xl:pr-2', sm: 'pr-2 md:pr-3 xl:pr-4', md: 'pr-3 md:pr-4 xl:pr-6',
+  lg: 'pr-4 md:pr-6 xl:pr-8', xl: 'pr-6 md:pr-8 xl:pr-10', '2xl': 'pr-8 md:pr-10 xl:pr-12',
+  '3xl': 'pr-10 md:pr-12 xl:pr-16', huge: 'pr-12 md:pr-16 xl:pr-25',
+} %}
+
+{% set section_padding_class = [
+  pad_top[section_padding_top] ?? pad_top.none,
+  pad_bottom[section_padding_bottom] ?? pad_bottom.none,
+  pad_left[section_padding_left] ?? pad_left.none,
+  pad_right[section_padding_right] ?? pad_right.none,
+]|join(' ') %}
+{% set content_padding_class = [
+  pad_top[content_padding_top] ?? pad_top.none,
+  pad_bottom[content_padding_bottom] ?? pad_bottom.none,
+  pad_left[content_padding_left] ?? pad_left.none,
+  pad_right[content_padding_right] ?? pad_right.none,
+]|join(' ') %}
+
+{# Container
+   both:  normal .container on all screens.
+   right: below xl the image is full bleed and only the content gets the
+          container side spacing (left and right); from xl the row gets right
+          padding that lines the content up with the container's right edge. #}
+{% set container_map = {
+  both: 'container',
+  right: 'w-full xl:pr-[max(var(--t-container-padding-inline),calc((100%_-_var(--container-max-width,100%))/2_+_var(--t-container-padding-inline)))]',
+} %}
+{% set container_mode = enable_container ? (container_side in ['both', 'right'] ? container_side : 'both') : '' %}
+{% set container_class = container_mode ? container_map[container_mode] : '' %}
+{% set content_container_class = container_mode == 'right' ? 'mx-[var(--t-container-padding-inline)] xl:mx-0' : '' %}
+
+{# Gap between image and content (mobile → tablet → desktop) #}
+{% set media_gap_map = {
+  none:  'gap-0',
+  sm:    'gap-4 md:gap-5 xl:gap-6',
+  md:    'gap-6 md:gap-8 xl:gap-10',
+  lg:    'gap-8 md:gap-12 xl:gap-16',
+  xl:    'gap-10 md:gap-14 xl:gap-20',
+  '2xl': 'gap-12 md:gap-16 xl:gap-24',
+  '3xl': 'gap-14 md:gap-20 xl:gap-30',
+} %}
+{% set media_gap_class = media_gap_map[media_gap] ?? 'gap-[clamp(30px,5vw,40px)]' %}
+
+{# Image width on desktop; the content takes the rest #}
+{% set image_width_map = {
+  '25': 'lg:w-1/4', '33': 'lg:w-1/3', '40': 'lg:w-2/5', '50': 'lg:w-1/2',
+  '60': 'lg:w-3/5', '66': 'lg:w-2/3', '75': 'lg:w-3/4',
+} %}
+{% set image_col_class = (image_width_map[image_width] ?? 'lg:w-1/2') ~ ' lg:shrink-0' %}
+{% set content_col_class = 'lg:flex-1 lg:min-w-0' %}
+
+
+{% set horizontal_alignment_map = {
+  'left': 'text-left items-start',
+  'center': 'text-center items-center',
+  'right': 'text-right items-end'
+} %}
+{% set vertical_alignment_map = {
+  'top': 'justify-start',
+  'center': 'justify-center',
+  'bottom': ' justify-end'
+} %}
+
+
+{% set add_horizontal_alignment = horizontal_alignment_map[content_horizontal_alignment]|default(horizontal_alignment_map.left) %}
+{% set add_vertical_alignment = vertical_alignment_map[content_vertical_alignment]|default(vertical_alignment_map.top) %}
+
+
+{% set gap_variants = {
+  none:  'gap-0',
+  xs:    'gap-2',
+  sm:    'gap-2 md:gap-3 lg:gap-4',
+  md:    'gap-3 md:gap-4 lg:gap-6',
+  lg:    'gap-4 md:gap-6 lg:gap-8',
+  xl:    'gap-6 md:gap-8 lg:gap-10',
+  xxl:  "gap-8 md:gap-10 xl:gap-12",
+
+} %}
+
+<section {{ (attributes|default(create_attribute())).addClass(
+  'wrapper',
+  'relative',
+  'mx-auto',
+  'flex',
+  'w-full',
+  'flex-col',
+  'gap-10',
+  'relative',
+   bg_color_variant,
+   'wrapper',
+   'mx-auto'
+) }}>
+
+  <div class="flex flex-col {{ section_padding_class }} lg:flex-row {{ container_class }}  {{ media_gap_class }}">
+    
+    {# Image Column #}
+    {% if image %}
+     <div class="{{ image_col_class }} relative overflow-hidden min-h-[91.6vw] xl:min-h-[600px] xl:h-auto">
+    <img
+      class="absolute inset-0 w-full h-full object-cover"
+      src="{{ image.src }}"
+      alt="{{ image.alt }}"
+      loading="lazy"
+        />
+   </div>
+    {% endif %}
+
+    {# Content Column #}
+    <div class="info_container flex flex-col {{ add_horizontal_alignment }} {{ add_vertical_alignment }}   {{ gap_variants[gap]|default(gap_variants["8px"]) }} {{ content_col_class }} {{ content_container_class }} {{ content_padding_class }} ">
+
+      {% if show_badge %}
+        {% set badge_text %}
+          {% block badge %}
+
+          {% endblock %}
+        {% endset %}
+        {% if badge_text|trim is not empty %}
+          <div class="h-fit min-w-30">
+            {{ badge_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+      {% if show_heading %}
+        {% set heading_text %}
+          {% block heading %}
+
+          {% endblock %}
+        {% endset %}
+        {% if heading_text|trim is not empty %}
+          <div class="h-fit min-w-30 ">
+            {{ heading_text }}
+          </div>
+        {% endif %}
+      {% endif %}
+
+    <!-- sub hero Description -->
+      {% if show_description %}
+        {% set description_text %}
+          {% block text %}
+
+          {% endblock %}
+        {% endset %}
+        {% if description_text|trim is not empty %}
+         <div class="h-fit min-w-30 ">
+            {{ description_text }}
+         </div>
+        {% endif %}
+      {% endif %}
+
+      {% if cta %}
+        <div class="flex min-w-30 w-full">
+          {{ cta }}
+        </div>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+
+
+    
+

@@ -1,0 +1,355 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
+name: Media And Text (Cruiserclassic)
+description: "Image on the left, content on the right (stacked on mobile and tablet)."
+group: Content
+status: stable
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Media And Text Image
+      description: >
+        Media and Text Component  Image
+      examples:
+        - src: https://placehold.co/600x700
+          alt: 'Background Image'
+          width: 600
+          height: 700
+
+    bg_color:
+      type: string
+      title: Background color
+      enum:
+        - primary
+        - secondary
+        - tertiary
+        - body
+        - body-bg
+        - surface-100
+        - surface-200
+        - surface-300
+        - dark
+        - transparent
+      meta:enum:
+        primary: Primary
+        secondary: Secondary
+        tertiary: Tertiary
+        body: Body
+        body-bg: Body Background
+        surface-100: Light Surface
+        surface-200: Medium Surface
+        surface-300: Strong Surface
+        dark: Dark Color
+        transparent: Transparent
+      examples: ['primary']
+
+    enable_container:
+      type: boolean
+      title: Enable container class
+      examples:
+        - false
+      default:
+        - false
+
+    container_side:
+      type: string
+      title: Container side
+      description: "Used when the container is enabled. Right side only lets the image reach the left edge of the screen."
+      enum: [both, right]
+      meta:enum:
+        both: 'Both sides'
+        right: 'Right side only'
+      default: both
+      examples: [both]
+
+    show_description:
+      type: boolean
+      title: Show description text
+      examples:
+        - true
+      default:
+        - true
+    show_badge:
+      type: boolean
+      title: Show badge slot
+      examples:
+        - false
+      default:
+        - false
+    show_heading:
+      type: boolean
+      title: show heading slot 
+      examples:
+        - true
+      default:
+        - true
+
+    # image_width:
+    #   title: Image Width
+    #   type: integer
+    #   minimum: 0
+    #   maximum: 1000
+    #   default: 400
+
+    # image_height:
+    #   title: Image height
+    #   type: integer
+    #   minimum: 0
+    #   maximum: 1000
+    #   default: 400
+
+    # image_position_mode:
+    #   title: Image Position Mode
+    #   type: string
+    #   enum: ['static', 'relative', 'absolute']
+    #   default: 'static'
+    # image_translate_x:
+    #   title: Image move X axis
+    #   type: integer
+    #   minimum: -1000
+    #   maximum: 1000
+    #   default: 1
+
+    # image_translate_y:
+    #   title: Image  move y axis
+    #   type: integer
+    #   minimum: -500
+    #   maximum: 500
+    #   default: 1
+
+    gap:
+      title: "Content Gap"
+      description: "Gap between card elements"
+      type: string
+      enum:
+        - none
+        - xs
+        - sm
+        - md
+        - lg
+        - xl
+        - xxl
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small"
+        sm: "Small"
+        md: "Medium"
+        lg: "Large"
+        xl: "Extra Large"
+        xxl: "2x Large"
+      examples: [sm]
+    
+      
+    image_width:
+      title: Image Width
+      description: "Share of the row taken by the image on desktop . The content fills the rest. Always full width on mobile and tablet."
+      type: string
+      enum: ['25', '33', '40', '50', '60', '66', '75']
+      "meta:enum":
+        '25': '25%'
+        '33': '33%'
+        '40': '40%'
+        '50': '50% (equal)'
+        '60': '60%'
+        '66': '66%'
+        '75': '75%'
+      default: '50'
+      examples: ['50']
+
+    media_gap:
+      title: "Image / Content Gap"
+      description: "Space between the image and the content. Scales down on smaller screens."
+      type: string
+      enum: [none, sm, md, lg, xl, 2xl, 3xl]
+      "meta:enum":
+        none: "None"
+        sm: "Small (up to 24px)"
+        md: "Medium (up to 40px)"
+        lg: "Large (up to 64px)"
+        xl: "Extra Large (up to 80px)"
+        2xl: "2X Large (up to 96px)"
+        3xl: "3X Large (up to 120px)"
+      default: md
+      examples: [md]
+
+    content_horizontal_alignment:
+      type: string
+      title: Content Horizontal Alignment
+      enum:
+        - left
+        - center
+        - right
+      meta:enum:
+        left: Left
+        center: Centered
+        right: Right
+      default: left
+
+    content_vertical_alignment:
+      type: string
+      title: Content Vertcal Alignment
+      enum:
+        - top
+        - center
+        - bottom
+      meta:enum:
+        top: Top
+        center: Centered
+        bottom: bottom
+      default: top
+
+    section_padding_top:
+      type: string
+      title: "Section Padding Top"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    section_padding_bottom:
+      type: string
+      title: "Section Padding Bottom"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    section_padding_left:
+      type: string
+      title: "Section Padding Left"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    section_padding_right:
+      type: string
+      title: "Section Padding Right"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    content_padding_top:
+      type: string
+      title: "Content Padding Top"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    content_padding_bottom:
+      type: string
+      title: "Content Padding Bottom"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    content_padding_left:
+      type: string
+      title: "Content Padding Left"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+    content_padding_right:
+      type: string
+      title: "Content Padding Right"
+      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
+      "meta:enum":
+        none: "None"
+        xs: "Extra Small (up to 8px)"
+        sm: "Small (up to 16px)"
+        md: "Medium (up to 24px)"
+        lg: "Large (up to 32px)"
+        xl: "Extra Large (up to 40px)"
+        2xl: "2X Large (up to 48px)"
+        3xl: "3X Large (up to 64px)"
+        huge: "Huge (up to 100px)"
+      default: none
+      examples: [none]
+
+slots:
+  badge:
+    title: "badge"
+    description: "Small label shown above the heading (e.g. Our philosophy)."
+  heading:
+    title: "heading"
+    descriptoin: "heading of the main sectoin."
+  text:
+    title: "text"
+    descriptoin: "text of the main sectoin."
+  cta:
+    title: Add  CTA
+    description: Add CTA

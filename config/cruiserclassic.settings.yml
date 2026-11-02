@@ -1,7 +1,9 @@
 _core:
   default_config_hash: eoh_623C3gZapCZ4LsaBH5CragyqHJWRe13abOMpNiw
 favicon:
-  use_default: true
+  mimetype: image/svg+xml
+  path: themes/custom/cruiserclassic/favicon.svg
+  use_default: false
 features:
   comment_user_picture: true
   comment_user_verification: true
