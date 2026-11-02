@@ -9,7 +9,7 @@
 @source "../../../contrib/tailpine/components/**/**/*.yml";
 @source "../../../contrib/tailpine/templates/**/*.twig";
 
-@source inline("after:bg-t-surface-200");
+@source inline("after:bg-t-surface-200 border-l-2");
 
 @source inline("after:bg-surface-200");
 

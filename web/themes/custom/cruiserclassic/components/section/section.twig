@@ -221,6 +221,18 @@
     ? "w-full" 
     : "md:w-2/3 xl:w-1/2" }} flex-col  {{show_cta ? 'md:w-7/10 xl:w-1/2' : ' '}} ">
 {# ------------------- #}
+      {% if show_badge ?? true %}
+        {% set badge_text %}
+          {% block badge %}
+
+          {% endblock %}
+        {% endset %}
+        {% if badge_text|trim is not empty %}
+          <div class="section__badge h-fit w-fit">
+            {{ badge_text }}
+          </div>
+        {% endif %}
+      {% endif %}
       {% if show_heading %}
         {% set heading_text %}
           {% block heading %}
@@ -260,7 +272,11 @@
           {% endblock %}
         {% endset %}
         {% if cta_content|trim is not empty %}
-          <div class="md:w-1/5 min-w-40 {{cta_alignment}} md:min-h-fit cursor-pointer  {{reverse_top_content ? 'md:justify-start' : 'md:justify-end' }}  flex gap-2">
+          {% set cta_width_map = {
+            '10': 'md:w-1/10', '20': 'md:w-1/5', '25': 'md:w-1/4', '30': 'md:w-3/10',
+            '40': 'md:w-2/5', '50': 'md:w-1/2', 'auto': 'md:w-auto',
+          } %}
+          <div class="{{ cta_width_map[cta_width|default('20')] ?? 'md:w-1/5' }} min-w-40 {{cta_alignment}} md:min-h-fit cursor-pointer  {{reverse_top_content ? 'md:justify-start' : 'md:justify-end' }}  flex gap-2">
             {{ cta_content }}
           </div>
         {% endif %}

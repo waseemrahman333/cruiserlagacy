@@ -262,6 +262,28 @@ props:
       examples:
         - true
       default: true
+    show_badge:
+      type: boolean
+      title: Show Badge Slot
+      description: "Small slot above the heading for a badge or short text."
+      default: true
+      examples:
+        - true
+    cta_width:
+      type: string
+      title: Cta Width
+      description: "Width of the CTA / side content slot on tablet and up."
+      enum: ['10', '20', '25', '30', '40', '50', auto]
+      meta:enum:
+        '10': 10%
+        '20': 20%
+        '25': 25%
+        '30': 30%
+        '40': 40%
+        '50': 50%
+        auto: Auto (fit content)
+      default: '20'
+      examples: ['20']
     show_heading:
       type: boolean
       title: Show Heading Slot 
@@ -356,6 +378,9 @@ slots:
   header:
     title: "Header"
     description: "Full-width area at the top of the section; place any component here."
+  badge:
+    title: "Badge"
+    description: "Small badge or short text above the heading."
   heading:
     title: "heading"
     description: "heading of the main section."
@@ -364,6 +389,7 @@ slots:
     description: "text of the main section."
   cta:
     title: "cta"
+    description: "Generic side slot (buttons, text, etc.). Width set by Cta Width."
   content:
     title: Content
     description: "Content slot you can insert any component here."
