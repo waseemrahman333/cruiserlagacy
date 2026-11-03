@@ -1,0 +1,15 @@
+{#
+/**
+ * @file
+ * Series tiles (FJ40 · FJ45 · BJ40 …): one Link Tile per series, opening
+ * /vehicles with that series selected.
+ *
+ * `tiles` is built in cruiserclassic_preprocess_views_view_unformatted__series_tiles().
+ * Mobile: 2 per row. Tablet: 3. Desktop: all in one row.
+ */
+#}
+<div class="series-tiles w-full grid grid-cols-2 md:grid-cols-3 xl:grid-flow-col xl:auto-cols-fr xl:grid-cols-none border-l border-solid border-[#e5d8bc]">
+  {% for tile in tiles %}
+    {{ include('cruiserclassic:link-tile', tile|merge({ border_right: true, size: 'md' }), with_context = false) }}
+  {% endfor %}
+</div>

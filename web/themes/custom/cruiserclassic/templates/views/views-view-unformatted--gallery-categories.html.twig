@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * Homepage gallery: one tile per category (2 large, then 3), each opening
+ * /gallery/{category}.
+ *
+ * `cards` is built in cruiserclassic_preprocess_views_view_unformatted__gallery_categories().
+ */
+#}
+<div class="gallery-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-x-[clamp(16px,2vw,28px)] gap-y-[clamp(20px,2.6vw,36px)]">
+  {% for card in cards %}
+    <div class="min-w-0 {{ card.variant == 'overlay' ? 'xl:col-span-3' : 'xl:col-span-2' }}">
+      {{ include('cruiserclassic:gallery-card', card, with_context = false) }}
+    </div>
+  {% endfor %}
+</div>

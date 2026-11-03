@@ -214,7 +214,7 @@ display:
           exposed: true
           expose:
             operator_id: field_trim_op
-            label: Trim
+            label: 'Body Style'
             identifier: trim
             required: false
             remember: false

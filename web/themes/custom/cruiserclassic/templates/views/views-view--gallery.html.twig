@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Gallery view.
+ *
+ * - Home block: the cards only.
+ * - /gallery (block_page): cards and pager. The category select is its own
+ *   block (Exposed form: gallery-block_page), placed in Canvas.
+ */
+#}
+<div{{ attributes.addClass('view', 'view-gallery', 'view-display-id-' ~ display_id, dom_id ? 'js-view-dom-id-' ~ dom_id, 'w-full') }}>
+  {{ title_prefix }}
+  {{ title_suffix }}
+  {% if display_id == 'block_page' %}
+    {% if rows %}
+      <div class="view-content">{{ rows }}</div>
+    {% else %}
+      <p class="view-empty py-10 text-center">{{ 'No projects in this category yet.'|t }}</p>
+    {% endif %}
+    {% if pager %}
+      <div class="mt-[clamp(24px,3vw,40px)]">{{ pager }}</div>
+    {% endif %}
+  {% else %}
+    {{ rows }}
+  {% endif %}
+</div>

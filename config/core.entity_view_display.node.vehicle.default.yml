@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.vehicle.field_transmission
     - field.field.node.vehicle.field_trim
     - field.field.node.vehicle.field_vehicle_model
+    - field.field.node.vehicle.field_vehicle_photos
     - field.field.node.vehicle.field_video
     - field.field.node.vehicle.field_year
     - node.type.vehicle
@@ -151,4 +152,5 @@ content:
     third_party_settings: {  }
     weight: 100
     region: content
-hidden: {  }
+hidden:
+  field_vehicle_photos: true

@@ -1,0 +1,24 @@
+uuid: 29020a44-26ad-4de2-ab51-bf03a9d8a7dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_cover_image
+    - media.type.image
+    - taxonomy.vocabulary.gallery_category
+id: taxonomy_term.gallery_category.field_cover_image
+field_name: field_cover_image
+entity_type: taxonomy_term
+bundle: gallery_category
+label: 'Cover image'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

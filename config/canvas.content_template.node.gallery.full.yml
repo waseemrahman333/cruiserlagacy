@@ -1,0 +1,123 @@
+uuid: cd26e40a-e22c-4360-8347-5fc0703e1848
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.cruiser_gallery_more
+    - canvas.component.block.cruiser_vehicle_gallery
+    - canvas.component.block.system_breadcrumb_block
+    - canvas.component.sdc.cruiserclassic.gallery-detail
+    - canvas.component.sdc.cruiserclassic.sub-hero
+    - canvas.component.sdc.tailpine.canvas-button
+    - core.entity_view_mode.node.full
+    - field.field.media.image.field_media_image
+    - field.field.node.gallery.field_condition_notes
+    - field.field.node.gallery.field_gallery_category
+    - field.field.node.gallery.field_gallery_specs
+    - field.field.node.gallery.field_gallery_summary
+    - field.field.node.gallery.field_work_completed
+    - image.style.canvas_parametrized_width
+    - media.type.image
+    - node.type.gallery
+    - taxonomy.vocabulary.gallery_category
+  content:
+    - 'file:file:a9ec6536-f9f8-4e45-a463-f6460fd5c972'
+    - 'media:image:a523f816-f94e-40a0-85fc-244ef9adc07e'
+  module:
+    - file
+    - media
+    - node
+    - options
+    - taxonomy
+id: node.gallery.full
+content_entity_type_id: node
+content_entity_type_bundle: gallery
+content_entity_type_view_mode: full
+component_tree:
+  '0:a08fe428-454e-4e90-bf57-2d684bfd742f':
+    uuid: a08fe428-454e-4e90-bf57-2d684bfd742f
+    component_id: sdc.cruiserclassic.sub-hero
+    component_version: 69def20efc48b524
+    inputs:
+      background_type: both
+      bg_color: primary
+      image_opacity: '100'
+      image:
+        target_id: '28'
+      title:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝title␞␟value'
+      height: small
+      show_overlay: false
+      overlay: '45'
+      image_position: center
+  '0:breadcrumb:0:d2352054-6faf-415f-9295-51a00647c976':
+    parent_uuid: a08fe428-454e-4e90-bf57-2d684bfd742f
+    slot: breadcrumb
+    uuid: d2352054-6faf-415f-9295-51a00647c976
+    component_id: block.system_breadcrumb_block
+    component_version: 0d7e961dd03aa710
+    inputs:
+      label: Breadcrumbs
+      label_display: '0'
+  '1:1e8e5841-f8b0-46ed-a47f-0b607b012d4e':
+    uuid: 1e8e5841-f8b0-46ed-a47f-0b607b012d4e
+    component_id: sdc.cruiserclassic.gallery-detail
+    component_version: c1682f27f0387088
+    inputs:
+      category:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_gallery_category␞␟entity␜␜entity:taxonomy_term␝name␞␟value'
+      category_id:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_gallery_category␞␟target_id'
+      description_heading: Description
+      summary:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_gallery_summary␞␟value'
+      specs_heading: Specifications
+      specs:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_gallery_specs␞␟value'
+      condition_notes:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_condition_notes␞␟processed'
+      work_completed:
+        sourceType: entity-field
+        expression: 'ℹ︎␜entity:node:gallery␝field_work_completed␞␟processed'
+  '1:cta:0:7502c798-f37c-4efa-8157-f7ecfab979da':
+    parent_uuid: 1e8e5841-f8b0-46ed-a47f-0b607b012d4e
+    slot: cta
+    uuid: 7502c798-f37c-4efa-8157-f7ecfab979da
+    component_id: sdc.tailpine.canvas-button
+    component_version: adcbe7eb1f45a3a7
+    inputs:
+      title: "I'm interested"
+      link: /contact-us
+      color_varient: primary
+      rounded: rounded-none
+      style_variant: solid
+      button_size: md
+      show_arrow: false
+      add_border: false
+      open_new_tab: false
+  '1:gallery:0:793f8fda-2598-4a55-85d1-8b91acdd4515':
+    parent_uuid: 1e8e5841-f8b0-46ed-a47f-0b607b012d4e
+    slot: gallery
+    uuid: 793f8fda-2598-4a55-85d1-8b91acdd4515
+    component_id: block.cruiser_vehicle_gallery
+    component_version: 7f07d606694a7bf8
+    inputs:
+      label: 'Photo gallery'
+      label_display: '0'
+  '2:b1326503-34a6-4ec3-b019-0a87fa9b6fdb':
+    uuid: b1326503-34a6-4ec3-b019-0a87fa9b6fdb
+    component_id: block.cruiser_gallery_more
+    component_version: b37319f37d096f80
+    inputs:
+      label: 'More from this category'
+      label_display: '0'
+      heading: 'More from this category'
+      count: 3
+exposed_slots: {  }
+page_variant: null

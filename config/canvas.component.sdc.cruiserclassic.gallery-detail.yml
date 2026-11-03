@@ -1,0 +1,472 @@
+uuid: bbbcecf5-c404-47e2-8434-36bad3ea040e
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.canvas_html_block
+  module:
+    - text
+  theme:
+    - cruiserclassic
+active_version: c1682f27f0387088
+versioned_properties:
+  active:
+    settings:
+      prop_field_definitions:
+        category:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Vehicles
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        category_id:
+          required: false
+          field_type: integer
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value:
+            -
+              value: 244
+          expression: ℹ︎integer␟value
+          derived_schema_metadata: {  }
+        description_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Description
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        summary:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'A complete frame-off restoration of a 1978 FJ40.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Specifications
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Engine | 2F 4.2L I6'
+            -
+              value: 'Year | 1978'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        condition_notes:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Rust-free tub, new canvas.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+        work_completed:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Full engine rebuild.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+    fallback_metadata:
+      slot_definitions:
+        cta:
+          title: Buttons
+          description: 'e.g. Ask About This Vehicle and Request More Photos buttons (side by side from 640px)'
+        gallery:
+          title: Gallery
+          description: 'Place the Photo gallery block here'
+        extra:
+          title: 'Extra (right column)'
+          description: 'Optional content below the notes in the right column'
+  caae396f87754845:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '1978 FJ40 Frame-Off Restoration'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        category:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Vehicles
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        category_id:
+          required: false
+          field_type: integer
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: number
+          default_value:
+            -
+              value: 244
+          expression: ℹ︎integer␟value
+          derived_schema_metadata: {  }
+        show_buttons:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: true
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        ask_label:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Ask About This Vehicle'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        photos_label:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Request More Photos'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        description_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Description
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        summary:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'A complete frame-off restoration of a 1978 FJ40.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Specifications
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Engine | 2F 4.2L I6'
+            -
+              value: 'Year | 1978'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        condition_notes:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Rust-free tub, new canvas.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+        work_completed:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Full engine rebuild.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+    fallback_metadata:
+      slot_definitions:
+        gallery:
+          title: Gallery
+          description: 'Place the Photo gallery block here'
+        extra:
+          title: 'Extra (right column)'
+          description: 'Optional content below the notes in the right column'
+  941def061bd4a019:
+    settings:
+      prop_field_definitions:
+        title:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '1978 FJ40 Frame-Off Restoration'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        category:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Vehicles
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        category_id:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: '244'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        show_buttons:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: true
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+        ask_label:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Ask About This Vehicle'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        photos_label:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Request More Photos'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        description_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Description
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        summary:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'A complete frame-off restoration of a 1978 FJ40.'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Specifications
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        specs:
+          required: false
+          field_type: string
+          cardinality: -1
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: 'Engine | 2F 4.2L I6'
+            -
+              value: 'Year | 1978'
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        condition_notes:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Rust-free tub, new canvas.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+        work_completed:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>Full engine rebuild.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+    fallback_metadata:
+      slot_definitions:
+        gallery:
+          title: Gallery
+          description: 'Place the Photo gallery block here'
+        extra:
+          title: 'Extra (right column)'
+          description: 'Optional content below the notes in the right column'
+label: 'Gallery Detail (Cruiserclassic)'
+id: sdc.cruiserclassic.gallery-detail
+provider: cruiserclassic
+source: sdc
+source_local_id: 'cruiserclassic:gallery-detail'

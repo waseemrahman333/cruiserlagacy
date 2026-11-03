@@ -3,12 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - canvas.component.block.cruiser_vehicle_gallery
+    - canvas.component.block.system_breadcrumb_block
     - canvas.component.block.views_block.similar_vehicles-block_1
     - canvas.component.sdc.cruiserclassic.feature-list
     - canvas.component.sdc.cruiserclassic.flex-item
     - canvas.component.sdc.cruiserclassic.flexbox
+    - canvas.component.sdc.cruiserclassic.sub-hero
     - canvas.component.sdc.cruiserclassic.vehicle-body
-    - canvas.component.sdc.cruiserclassic.vehicle-slider
     - canvas.component.sdc.cruiserclassic.vehicle-specifications
     - canvas.component.sdc.tailpine.canvas-button
     - canvas.component.sdc.tailpine.canvas-heading
@@ -21,7 +23,6 @@ dependencies:
     - field.field.node.vehicle.field_engine
     - field.field.node.vehicle.field_exterior_color
     - field.field.node.vehicle.field_fuel_type
-    - field.field.node.vehicle.field_image
     - field.field.node.vehicle.field_interior
     - field.field.node.vehicle.field_transmission
     - field.field.node.vehicle.field_video
@@ -36,6 +37,9 @@ dependencies:
     - taxonomy.vocabulary.engine
     - taxonomy.vocabulary.exterior_color
     - taxonomy.vocabulary.interior
+  content:
+    - 'file:file:a9ec6536-f9f8-4e45-a463-f6460fd5c972'
+    - 'media:image:a523f816-f94e-40a0-85fc-244ef9adc07e'
   module:
     - file
     - media
@@ -47,23 +51,35 @@ content_entity_type_id: node
 content_entity_type_bundle: vehicle
 content_entity_type_view_mode: full
 component_tree:
-  '0:c610bfcd-7efe-4d14-aebd-430617f2447d':
-    uuid: c610bfcd-7efe-4d14-aebd-430617f2447d
-    component_id: sdc.cruiserclassic.vehicle-slider
-    component_version: 1d058c95f23e573b
+  '0:71e7919a-b27a-4fc9-8f08-b7722b7608dd':
+    uuid: 71e7919a-b27a-4fc9-8f08-b7722b7608dd
+    component_id: sdc.cruiserclassic.sub-hero
+    component_version: 69def20efc48b524
     inputs:
-      images:
-        sourceType: entity-field
-        expression: 'ℹ︎␜entity:node:vehicle␝field_image␞␟entity␜␜entity:media:image␝field_media_image␞␟{src↠src_with_alternate_widths,alt↠alt,width↠width,height↠height}'
+      background_type: both
+      bg_color: primary
+      image:
+        target_id: '28'
       title:
         sourceType: entity-field
         expression: 'ℹ︎␜entity:node:vehicle␝title␞␟value'
-      heading_level: h1
-      autoplay: true
+      height: small
+      show_overlay: false
+      overlay: '45'
+      image_position: center
+  '0:breadcrumb:0:77ea8e82-bf7e-421f-93b9-0fea69d00ccc':
+    parent_uuid: 71e7919a-b27a-4fc9-8f08-b7722b7608dd
+    slot: breadcrumb
+    uuid: 77ea8e82-bf7e-421f-93b9-0fea69d00ccc
+    component_id: block.system_breadcrumb_block
+    component_version: 0d7e961dd03aa710
+    inputs:
+      label: Breadcrumbs
+      label_display: '0'
   '1:2ab492bd-11f3-4c58-b22c-15403ca129f5':
     uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
     component_id: sdc.cruiserclassic.vehicle-body
-    component_version: f4731a8011dd70b1
+    component_version: ea25c14d3cd65791
     inputs:
       description_heading: Description
       description:
@@ -127,7 +143,7 @@ component_tree:
     slot: cta
     uuid: 7db25d8e-47ef-405d-828d-d0a0a4b90f91
     component_id: sdc.tailpine.canvas-button
-    component_version: 5665b72b04ec53b0
+    component_version: adcbe7eb1f45a3a7
     inputs:
       title: "I'm interested"
       link: /contact-us
@@ -138,6 +154,15 @@ component_tree:
       show_arrow: false
       add_border: false
       open_new_tab: false
+  '1:gallery:0:b8c49360-2b32-44b2-81f5-d9270958e35b':
+    parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
+    slot: gallery
+    uuid: b8c49360-2b32-44b2-81f5-d9270958e35b
+    component_id: block.cruiser_vehicle_gallery
+    component_version: 5b39c478e2be14e9
+    inputs:
+      label: 'Vehicle photo gallery'
+      label_display: '0'
   '1:specifications:0:0ec1793c-254c-46b6-93b3-418bc26f1280':
     parent_uuid: 2ab492bd-11f3-4c58-b22c-15403ca129f5
     slot: specifications
@@ -224,7 +249,7 @@ component_tree:
     slot: content
     uuid: 3ae82e7b-4501-40e2-a1c9-22870dc95c5e
     component_id: sdc.tailpine.canvas-button
-    component_version: 5665b72b04ec53b0
+    component_version: adcbe7eb1f45a3a7
     inputs:
       title: 'Click Here'
       link: 'https://example.com'

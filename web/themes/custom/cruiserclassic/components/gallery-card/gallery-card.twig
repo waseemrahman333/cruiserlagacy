@@ -17,12 +17,18 @@
   <svg class="w-4 h-4 md:w-5 md:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
 {% endset %}
 
+{% set placeholder %}
+  <div class="absolute inset-0 flex items-center justify-center bg-[#e9e2d3] text-[#8a7a55] text-xs md:text-sm uppercase tracking-wide">{{ 'Photo coming soon'|t }}</div>
+{% endset %}
+
 {% if is_overlay %}
   <{{ tag }}{{ link_attrs|raw }} class="gallery-card gallery-card--overlay group relative block w-full h-full overflow-hidden !no-underline aspect-[4/3] md:aspect-[16/10]">
     {% if image.src %}
       <img src="{{ image.src }}" alt="{{ image.alt|default(title) }}" loading="lazy"
            {% if image.width %}width="{{ image.width }}"{% endif %} {% if image.height %}height="{{ image.height }}"{% endif %}
            class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+    {% else %}
+      {{ placeholder }}
     {% endif %}
     <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" aria-hidden="true"></div>
     <div class="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-[clamp(20px,2.4vw,40px)]">
@@ -44,6 +50,8 @@
         <img src="{{ image.src }}" alt="{{ image.alt|default(title) }}" loading="lazy"
              {% if image.width %}width="{{ image.width }}"{% endif %} {% if image.height %}height="{{ image.height }}"{% endif %}
              class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+      {% else %}
+        {{ placeholder }}
       {% endif %}
     </div>
     {% if category %}

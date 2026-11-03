@@ -92,3 +92,74 @@ function cruiser_vehicle_taxonomy_term_presave($term) {
     \Drupal\Core\Cache\Cache::invalidateTags(['taxonomy_term_list']);
   }
 }
+
+/**
+ * Implements hook_ENTITY_TYPE_presave() for node.
+ *
+ * Gallery projects get the URL /gallery/{title} when no alias is set.
+ */
+function cruiser_vehicle_node_presave($node) {
+  if ($node->bundle() !== 'gallery' || !$node->hasField('path')) {
+    return;
+  }
+  $path = $node->get('path')->first();
+  if ($path && trim((string) $path->alias) !== '') {
+    return;
+  }
+  $slug = trim(preg_replace('/[^a-z0-9]+/', '-', mb_strtolower($node->label())), '-');
+  $alias = '/gallery/' . $slug;
+  $own_path = $node->isNew() ? NULL : '/node/' . $node->id();
+  $repository = \Drupal::service('path_alias.repository');
+  $candidate = $alias;
+  for ($i = 2; ($existing = $repository->lookupByAlias($candidate, $node->language()->getId())) && $existing['path'] !== $own_path; $i++) {
+    $candidate = $alias . '-' . $i;
+  }
+  $node->set('path', ['alias' => $candidate]);
+}
+
+/**
+ * Implements hook_views_post_execute().
+ *
+ * Homepage gallery block: one project per category (the latest in each),
+ * in category order.
+ */
+function cruiser_vehicle_views_post_execute($view) {
+  if ($view->id() !== 'gallery' || $view->current_display !== 'block_home') {
+    return;
+  }
+  $picked = [];
+  foreach ($view->result as $row) {
+    $term = $row->_entity ? $row->_entity->get('field_gallery_category')->entity : NULL;
+    if ($term && !isset($picked[$term->id()])) {
+      $picked[$term->id()] = ['row' => $row, 'weight' => $term->getWeight()];
+    }
+  }
+  uasort($picked, fn($a, $b) => $a['weight'] <=> $b['weight']);
+  $view->result = [];
+  foreach (array_values($picked) as $index => $item) {
+    $item['row']->index = $index;
+    $view->result[] = $item['row'];
+  }
+}
+
+/**
+ * Implements hook_system_breadcrumb_alter().
+ *
+ * Gallery projects: Home / Gallery / {Category} (the theme appends the title).
+ */
+function cruiser_vehicle_system_breadcrumb_alter(\Drupal\Core\Breadcrumb\Breadcrumb &$breadcrumb, \Drupal\Core\Routing\RouteMatchInterface $route_match, array $context) {
+  $node = $route_match->getParameter('node');
+  if ($route_match->getRouteName() !== 'entity.node.canonical' || !$node instanceof \Drupal\node\NodeInterface || $node->bundle() !== 'gallery') {
+    return;
+  }
+  $links = [\Drupal\Core\Link::createFromRoute(t('Home'), '<front>'), \Drupal\Core\Link::fromTextAndUrl(t('Gallery'), \Drupal\Core\Url::fromUserInput('/gallery'))];
+  if ($category = $node->get('field_gallery_category')->entity) {
+    $links[] = \Drupal\Core\Link::fromTextAndUrl($category->label(), \Drupal\Core\Url::fromUserInput('/gallery', ['query' => ['category' => $category->id()]]));
+  }
+  $replacement = new \Drupal\Core\Breadcrumb\Breadcrumb();
+  $replacement->setLinks($links);
+  $replacement->addCacheableDependency($breadcrumb);
+  $replacement->addCacheableDependency($node);
+  $replacement->addCacheContexts(['route']);
+  $breadcrumb = $replacement;
+}

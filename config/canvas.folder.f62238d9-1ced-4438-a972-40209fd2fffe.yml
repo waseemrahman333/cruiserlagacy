@@ -3,11 +3,13 @@ langcode: en
 status: true
 dependencies:
   config:
+    - canvas.component.block.views_exposed_filter_block.gallery-block_page
     - canvas.component.block.views_exposed_filter_block.vehicles-block_1
     - canvas.component.block.views_exposed_filter_block.vehicles-page_1
 name: Views
 configEntityTypeId: component
 weight: 0
 items:
+  - block.views_exposed_filter_block.gallery-block_page
   - block.views_exposed_filter_block.vehicles-block_1
   - block.views_exposed_filter_block.vehicles-page_1

@@ -52,6 +52,7 @@ elements: |-
     '#type': textfield
     '#title': 'Vehicle year & specifications'
     '#placeholder': 'If known'
+    '#prepopulate': true
   message:
     '#type': textarea
     '#title': Message
@@ -59,6 +60,7 @@ elements: |-
     '#rows': 4
     '#required': true
     '#required_error': 'Please enter a message.'
+    '#prepopulate': true
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'

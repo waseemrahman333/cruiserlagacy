@@ -2,8 +2,8 @@ uuid: 99e34424-b202-412a-bdd0-d44173d4b3cb
 langcode: en
 status: true
 dependencies: {  }
-name: trim
+name: 'Body Style'
 vid: trim
-description: null
+description: 'Physical shape of the vehicle: Hardtop, Soft Top, Pickup, Cab Chassis, Troop Carrier.'
 weight: 0
 new_revision: false

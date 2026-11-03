@@ -2,7 +2,7 @@ $schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc
 
 name: Sub Hero (Cruiserclassic)
 status: stable
-description: "Inner-page hero with background image, dark overlay, breadcrumb slot and title."
+description: "Inner-page hero with background image, color or both (image over color), overlay, breadcrumb slot and title."
 group: Heros
 
 slots:
@@ -13,6 +13,47 @@ slots:
 props:
   type: object
   properties:
+    background_type:
+      type: string
+      title: Background Type
+      description: "Image on Color: the color is the base layer and the image sits on top of it."
+      enum: [image, color, both]
+      meta:enum:
+        image: Image
+        color: Color
+        both: Image on Color
+      default: image
+      examples: [image]
+
+    bg_color:
+      type: string
+      title: Background Color
+      description: "Used for Color and Image on Color."
+      enum: [primary, secondary, tertiary, dark, body, body-bg]
+      meta:enum:
+        primary: Primary (green)
+        secondary: Secondary (gold)
+        tertiary: Tertiary
+        dark: Dark
+        body: Text color
+        body-bg: Page background
+      default: primary
+      examples: [primary]
+
+    image_opacity:
+      type: string
+      title: Image Opacity
+      description: "Lower it to let the background color show through (Image on Color)."
+      enum: ['100', '80', '60', '40', '20']
+      meta:enum:
+        '100': 100%
+        '80': 80%
+        '60': 60%
+        '40': 40%
+        '20': 20%
+      default: '100'
+      examples: ['100']
+
     image:
       $ref: json-schema-definitions://canvas.module/image
       type: object
@@ -38,6 +79,13 @@ props:
         large: Large
       default: 'default'
       examples: ['default']
+
+    show_overlay:
+      type: boolean
+      title: Show Overlay
+      description: "Dark layer over the background so the text stays readable."
+      default: true
+      examples: [true]
 
     overlay:
       type: string

@@ -1,0 +1,80 @@
+{#
+/**
+ * Gallery Detail Component
+ *
+ * Mobile / tablet: gallery → buttons → description → specifications → notes.
+ * Desktop (1280px+): left = gallery (7/12), right = the rest (5/12, sticky).
+ *
+ * Props: category, category_id, description_heading, summary, specs_heading, specs ("Label | Value"),
+ *        condition_notes (HTML), work_completed (HTML)
+ * Slots: cta (buttons), gallery, extra
+ */
+#}
+{% set gallery_html %}{% block gallery %}{% endblock %}{% endset %}
+{% set extra_html %}{% block extra %}{% endblock %}{% endset %}
+{% set cta_html %}{% block cta %}{% endblock %}{% endset %}
+
+<section class="gallery-detail bg-body-bg py-[clamp(48px,6vw,96px)]">
+  <div class="container mx-auto w-full max-w-480 grid grid-cols-1 xl:grid-cols-12 gap-[clamp(32px,4vw,72px)] items-start">
+
+    <div class="gallery-detail__photos xl:col-span-7 min-w-0">{{ gallery_html }}</div>
+
+    <aside class="gallery-detail__aside xl:col-span-5 min-w-0 flex flex-col gap-8 md:gap-10 xl:sticky xl:top-32">
+      {% if cta_html|trim is not empty %}
+        <div class="gallery-detail__cta grid grid-cols-1 sm:grid-flow-col sm:auto-cols-fr gap-3 [&_a]:!w-full [&_a]:!justify-center [&_button]:!w-full [&_button]:!justify-center">{{ cta_html }}</div>
+      {% endif %}
+
+      <div>
+        {% if category %}
+          {% if category_id %}
+            <a href="/gallery?category={{ category_id }}" class="!no-underline !text-secondary uppercase tracking-wider text-xs md:text-sm">{{ category }}</a>
+          {% else %}
+            <span class="text-secondary uppercase tracking-wider text-xs md:text-sm">{{ category }}</span>
+          {% endif %}
+        {% endif %}
+        {% if description_heading %}
+          <h2 class="!mt-2 !mb-4 !font-heading uppercase">{{ description_heading }}</h2>
+        {% endif %}
+        {% if summary %}
+          <p class="!m-0 leading-relaxed">{{ summary }}</p>
+        {% endif %}
+      </div>
+
+      {% if specs is not empty %}
+        <div>
+          {% if specs_heading %}
+            <h2 class="!mt-0 !mb-5 !font-heading uppercase">{{ specs_heading }}</h2>
+          {% endif %}
+          <dl class="flex flex-col gap-2.5 !m-0">
+            {% for spec in specs %}
+              {% set parts = spec|split('|', 2) %}
+              {% if spec|trim %}
+                <div class="flex items-center justify-between gap-6 px-4 md:px-5 py-3.5 bg-white border border-[#e5d8bc]">
+                  {% if parts|length > 1 %}<dt class="text-sm text-body/70">{{ parts[0]|trim }}</dt>{% endif %}
+                  <dd class="!m-0 text-sm text-right font-medium">{{ parts|last|trim }}</dd>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </dl>
+        </div>
+      {% endif %}
+
+      {% if condition_notes|striptags|trim %}
+        <div>
+          <h3 class="!mt-0 !mb-3 !font-heading uppercase !text-xl">{{ 'Condition notes'|t }}</h3>
+          <div class="*:!mt-0 *:last:!mb-0 leading-relaxed">{{ condition_notes|raw }}</div>
+        </div>
+      {% endif %}
+      {% if work_completed|striptags|trim %}
+        <div>
+          <h3 class="!mt-0 !mb-3 !font-heading uppercase !text-xl">{{ 'Work completed'|t }}</h3>
+          <div class="*:!mt-0 *:last:!mb-0 leading-relaxed">{{ work_completed|raw }}</div>
+        </div>
+      {% endif %}
+
+      {% if extra_html|trim is not empty %}
+        <div>{{ extra_html }}</div>
+      {% endif %}
+    </aside>
+  </div>
+</section>

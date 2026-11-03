@@ -13,9 +13,83 @@ dependencies:
     - text
   theme:
     - cruiserclassic
-active_version: f4731a8011dd70b1
+active_version: ea25c14d3cd65791
 versioned_properties:
   active:
+    settings:
+      prop_field_definitions:
+        description_heading:
+          required: false
+          field_type: string
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: string_textfield
+          default_value:
+            -
+              value: Description
+          expression: ℹ︎string␟value
+          derived_schema_metadata:
+            string_shape: {  }
+        description:
+          required: false
+          field_type: text_long
+          field_storage_settings: {  }
+          field_instance_settings:
+            allowed_formats:
+              - canvas_html_block
+          field_widget: text_textarea
+          default_value:
+            -
+              value: '<p>The 1982 Toyota Land Cruiser is a true classic, celebrated for its rugged design and legendary capability.</p>'
+              format: canvas_html_block
+          expression: ℹ︎text_long␟processed
+          derived_schema_metadata:
+            string_shape:
+              contentMediaType: text/html
+              x-formatting-context: block
+        video:
+          required: false
+          field_type: entity_reference
+          field_storage_settings:
+            target_type: media
+          field_instance_settings:
+            handler: 'default:media'
+            handler_settings:
+              target_bundles:
+                video: video
+          field_widget: media_library_widget
+          default_value: {  }
+          expression: 'ℹ︎entity_reference␟entity␜␜entity:media:video␝field_media_video_file␞␟{src↝entity␜␜entity:file␝uri␞␟url}'
+          derived_schema_metadata: {  }
+        show_print:
+          required: false
+          field_type: boolean
+          field_storage_settings: {  }
+          field_instance_settings: {  }
+          field_widget: boolean_checkbox
+          default_value:
+            -
+              value: true
+          expression: ℹ︎boolean␟value
+          derived_schema_metadata: {  }
+    fallback_metadata:
+      slot_definitions:
+        gallery:
+          title: Gallery
+          description: 'Place the Vehicle photo gallery block here (shows when the vehicle has extra photos)'
+        cta:
+          title: Button
+          description: "e.g. I'm interested"
+        specifications:
+          title: Specifications
+          description: 'Place the Vehicle Specifications component here'
+        bottom_first:
+          title: 'Bottom – Left'
+          description: 'First column of the full-width bottom row (e.g. Feature List)'
+        bottom_second:
+          title: 'Bottom – Right'
+          description: 'Second column of the bottom row; a divider line separates the two'
+  f4731a8011dd70b1:
     settings:
       prop_field_definitions:
         description_heading:

@@ -15,6 +15,10 @@ use Drupal\Core\Form\FormStateInterface;
  */
 function cruiserclassic_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   $view = $form_state->get('view');
+  if ($view && $view->id() === 'gallery') {
+    cruiserclassic_gallery_exposed_form($form);
+    return;
+  }
   if (!$view || $view->id() !== 'vehicles') {
     return;
   }
@@ -42,6 +46,30 @@ function cruiserclassic_form_views_exposed_form_alter(array &$form, FormStateInt
   // The brand filter uses the field_vehicle_model field.
   if (isset($form['brand']['#options']['All'])) {
     $form['brand']['#options']['All'] = t('Model Brand');
+  }
+}
+
+/**
+ * Gallery category filter (/gallery): a single select that applies on change.
+ */
+function cruiserclassic_gallery_exposed_form(array &$form): void {
+  $form['#attributes']['class'][] = 'gallery-filter !max-w-none !m-0 flex flex-wrap items-end gap-4';
+  if (isset($form['category'])) {
+    // Label hidden (kept for screen readers); "All categories" acts as the placeholder.
+    $form['category']['#title'] = t('Category');
+    $form['category']['#title_display'] = 'invisible';
+    if (isset($form['category']['#options']['All'])) {
+      $form['category']['#options']['All'] = t('All categories');
+    }
+    $form['category']['#attributes']['onchange'] = 'this.form.submit()';
+    // Same look as the vehicles filters: white box, grey border, chevron.
+    $form['category']['#attributes']['class'][] = '!w-full !h-11 !m-0 !pl-4 !pr-10 !py-0 appearance-none !bg-white !bg-none !text-body !text-sm !border !border-solid !border-gray-300 !rounded-sm !shadow-none cursor-pointer focus:!outline-none focus:!ring-0 focus:!border-primary';
+    $form['category']['#wrapper_attributes']['class'][] = 'relative !m-0 w-full sm:w-64';
+    $form['category']['#field_suffix'] = \Drupal\Core\Render\Markup::create('<svg class="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-body" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>');
+  }
+  if (isset($form['actions'])) {
+    // Applies on change; the button stays for keyboard / no-JS users.
+    $form['actions']['#attributes']['class'][] = 'visually-hidden focus-within:not-sr-only';
   }
 }
 
@@ -120,43 +148,184 @@ function cruiserclassic_form_alter(array &$form, FormStateInterface $form_state,
 }
 
 /**
+ * Returns image data {src, alt, width, height} from an image Media entity.
+ */
+function cruiserclassic_media_image($media, string $fallback_alt = ''): array {
+  $item = ($media && $media->hasField('field_media_image')) ? $media->get('field_media_image')->first() : NULL;
+  if (!$item || !$item->entity) {
+    return [];
+  }
+  return [
+    'src' => \Drupal::service('file_url_generator')->generateString($item->entity->getFileUri()),
+    'alt' => $item->alt ?: $fallback_alt,
+    'width' => (int) $item->width,
+    'height' => (int) $item->height,
+  ];
+}
+
+/**
+ * URL of the gallery filtered to a category, e.g. /gallery?category=245.
+ */
+function cruiserclassic_gallery_category_url($term): string {
+  return \Drupal\Core\Url::fromUserInput('/gallery', ['query' => ['category' => $term->id()]])->toString();
+}
+
+/**
+ * The gallery categories, ordered by weight.
+ *
+ * @return \Drupal\taxonomy\TermInterface[]
+ */
+function cruiserclassic_gallery_categories(): array {
+  $storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+  $ids = $storage->getQuery()->accessCheck(TRUE)->condition('vid', 'gallery_category')->condition('status', 1)->sort('weight')->sort('name')->execute();
+  return $storage->loadMultiple($ids);
+}
+
+/**
+ * Cover image of a category: its own cover, else its latest project's cover.
+ */
+function cruiserclassic_gallery_category_image($term): array {
+  $image = cruiserclassic_media_image($term->get('field_cover_image')->entity, $term->label());
+  if ($image) {
+    return $image;
+  }
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  foreach ([TRUE, FALSE] as $same_category) {
+    $query = $storage->getQuery()->accessCheck(TRUE)->condition('type', 'gallery')->condition('status', 1)->sort('created', 'DESC')->range(0, 1);
+    if ($same_category) {
+      $query->condition('field_gallery_category', $term->id());
+    }
+    $ids = $query->execute();
+    $node = $ids ? $storage->load(reset($ids)) : NULL;
+    if ($node && ($image = cruiserclassic_media_image($node->get('field_image')->entity, $node->label()))) {
+      return $image;
+    }
+  }
+  return [];
+}
+
+/**
+ * Card data for one gallery project (node).
+ */
+function cruiserclassic_gallery_card($node, string $variant = 'below'): array {
+  $category = $node->get('field_gallery_category')->entity;
+  $image = cruiserclassic_media_image($node->get('field_image')->entity, $node->label());
+  return array_filter([
+    'image' => $image ?: NULL,
+    'category' => $category ? $category->label() : '',
+    'title' => $node->label(),
+    'url' => $node->toUrl()->toString(),
+    'new_tab' => FALSE,
+    'variant' => $variant,
+  ], fn($value) => $value !== NULL);
+}
+
+/**
  * Implements hook_preprocess_HOOK() for the gallery view rows.
  *
- * Builds `cards` for the Gallery Card component. The arrow goes to the
- * optional link, or to the full-size photo (new tab) when no link is set.
+ * Builds `cards` for the Gallery Card component; each card opens the
+ * project's detail page.
  */
 function cruiserclassic_preprocess_views_view_unformatted__gallery(array &$variables) {
   $variables['cards'] = [];
-  $file_url = \Drupal::service('file_url_generator');
-  foreach ($variables['view']->result as $index => $row) {
-    $node = $row->_entity ?? NULL;
-    if (!$node) {
+  $home = $variables['view']->current_display === 'block_home';
+  foreach (array_values($variables['view']->result) as $index => $row) {
+    if (empty($row->_entity)) {
       continue;
     }
-    // field_image references a Media image; read its source image item.
-    $image = [];
-    $media = $node->get('field_image')->entity;
-    $image_item = ($media && $media->hasField('field_media_image')) ? $media->get('field_media_image')->first() : NULL;
-    if ($image_item && $image_item->entity) {
-      $image = [
-        'src' => $file_url->generateString($image_item->entity->getFileUri()),
-        'alt' => $image_item->alt ?: $node->label(),
-        'width' => (int) $image_item->width,
-        'height' => (int) $image_item->height,
-      ];
+    $card = cruiserclassic_gallery_card($row->_entity, $index < 2 ? 'overlay' : 'below');
+    // Homepage: one card per category, opening /gallery with it selected.
+    $category = $home ? $row->_entity->get('field_gallery_category')->entity : NULL;
+    if ($category) {
+      $card['url'] = cruiserclassic_gallery_category_url($category);
     }
-    $link = $node->get('field_gallery_link')->first();
-    $url = $link ? $link->getUrl()->toString() : ($image['src'] ?? '');
-    $category = $node->get('field_gallery_category')->entity;
+    $variables['cards'][] = $card;
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the gallery categories view rows.
+ *
+ * Homepage: one tile per category (2 large, then 3), each opening
+ * /gallery/{category}.
+ */
+function cruiserclassic_preprocess_views_view_unformatted__gallery_categories(array &$variables) {
+  $variables['cards'] = [];
+  foreach (array_values($variables['view']->result) as $index => $row) {
+    $term = $row->_entity ?? NULL;
+    if (!$term) {
+      continue;
+    }
     $variables['cards'][] = [
-      'image' => $image,
-      'category' => $category ? $category->label() : '',
-      'title' => $node->label(),
-      'url' => $url,
-      'new_tab' => !$link && $url,
+      'image' => cruiserclassic_gallery_category_image($term),
+      'category' => $term->label(),
+      'title' => $term->get('field_short_title')->value ?: $term->label(),
+      'url' => cruiserclassic_gallery_category_url($term),
+      'new_tab' => FALSE,
       'variant' => $index < 2 ? 'overlay' : 'below',
     ];
   }
+  $variables['#cache']['tags'][] = 'node_list:gallery';
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for gallery project nodes.
+ *
+ * Detail page: photos, specifications, contact links and 3 more projects
+ * from the same category.
+ */
+function cruiserclassic_preprocess_node__gallery(array &$variables) {
+  if ($variables['view_mode'] !== 'full') {
+    return;
+  }
+  $node = $variables['node'];
+  $category = $node->get('field_gallery_category')->entity;
+  $cover = cruiserclassic_media_image($node->get('field_image')->entity, $node->label());
+
+  $photos = $cover ? [$cover] : [];
+  foreach ($node->get('field_gallery_photos')->referencedEntities() as $media) {
+    if ($image = cruiserclassic_media_image($media, $node->label())) {
+      $photos[] = $image;
+    }
+  }
+
+  $specs = [];
+  foreach ($node->get('field_gallery_specs') as $item) {
+    $parts = array_map('trim', explode('|', (string) $item->value, 2));
+    if ($parts[0] !== '') {
+      $specs[] = ['label' => count($parts) > 1 ? $parts[0] : '', 'value' => end($parts)];
+    }
+  }
+
+  $contact = fn(array $query) => \Drupal\Core\Url::fromUserInput('/contact-us', ['query' => $query])->toString();
+  $more = [];
+  if ($category) {
+    $storage = \Drupal::entityTypeManager()->getStorage('node');
+    $ids = $storage->getQuery()->accessCheck(TRUE)->condition('type', 'gallery')->condition('status', 1)
+      ->condition('field_gallery_category', $category->id())->condition('nid', $node->id(), '<>')
+      ->sort('created', 'DESC')->range(0, 3)->execute();
+    foreach ($storage->loadMultiple($ids) as $other) {
+      $more[] = cruiserclassic_gallery_card($other);
+    }
+  }
+
+  $variables['gallery'] = [
+    'cover' => $cover,
+    'photos' => $photos,
+    'category' => $category ? ['label' => $category->label(), 'url' => cruiserclassic_gallery_category_url($category)] : NULL,
+    'summary' => $node->get('field_gallery_summary')->value,
+    'specs' => $specs,
+    'ask_url' => $contact(['vehicle_specs' => $node->label()]),
+    'photos_url' => $contact(['vehicle_specs' => $node->label(), 'message' => t('Please send me more photos of @title.', ['@title' => $node->label()])]),
+    'more' => $more,
+    'breadcrumb' => array_filter([
+      ['text' => t('Home'), 'url' => \Drupal\Core\Url::fromRoute('<front>')->toString()],
+      ['text' => t('Gallery'), 'url' => \Drupal\Core\Url::fromUserInput('/gallery')->toString()],
+      $category ? ['text' => $category->label(), 'url' => cruiserclassic_gallery_category_url($category)] : NULL,
+      ['text' => $node->label()],
+    ]),
+  ];
+  $variables['#cache']['tags'][] = 'node_list:gallery';
 }
 
 /**
@@ -180,5 +349,23 @@ function cruiserclassic_preprocess_views_view_unformatted__services(array &$vari
       'url' => $link ? $link->getUrl()->toString() : '',
       'first' => $index === 0,
     ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for the series tiles view rows.
+ *
+ * Each tile opens /vehicles with that series selected.
+ */
+function cruiserclassic_preprocess_views_view_unformatted__series_tiles(array &$variables) {
+  $variables['tiles'] = [];
+  foreach ($variables['view']->result as $row) {
+    $term = $row->_entity ?? NULL;
+    if ($term) {
+      $variables['tiles'][] = [
+        'label' => $term->label(),
+        'url' => \Drupal\Core\Url::fromUserInput('/vehicles', ['query' => ['series' => $term->id()]])->toString(),
+      ];
+    }
   }
 }

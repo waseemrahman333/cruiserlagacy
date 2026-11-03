@@ -1,16 +1,16 @@
-uuid: 95da3e49-b658-4b9d-9817-c6c92e67574b
+uuid: ab25fc9e-0a7f-4649-b1c1-3921f12149cd
 langcode: en
 status: true
 dependencies:
   module:
-    - link
     - node
-id: node.field_gallery_link
-field_name: field_gallery_link
+    - text
+id: node.field_work_completed
+field_name: field_work_completed
 entity_type: node
-type: link
+type: text_long
 settings: {  }
-module: link
+module: text
 locked: false
 cardinality: 1
 translatable: true

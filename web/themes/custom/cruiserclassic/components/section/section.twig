@@ -191,7 +191,7 @@
   </div>
    {% endif %}
 
-<div class=" wrapper mx-auto w-full max-w-480 container  {{enable_container ? 'container' : ' '}} grid ">
+<div class=" wrapper mx-auto w-full {{enable_container ? 'container' : ' '}} grid ">
 
   {# Color overlay only when image exists #}
   {% if bg_image_available and enable_overlay %}
@@ -228,7 +228,7 @@
           {% endblock %}
         {% endset %}
         {% if badge_text|trim is not empty %}
-          <div class="section__badge h-fit w-fit">
+          <div class="section__badge h-fit min-w-25 w-fit">
             {{ badge_text }}
           </div>
         {% endif %}

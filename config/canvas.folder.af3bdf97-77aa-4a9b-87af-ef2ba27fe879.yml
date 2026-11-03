@@ -1,0 +1,11 @@
+uuid: af3bdf97-77aa-4a9b-87af-ef2ba27fe879
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.sdc.cruiserclassic.gallery-detail
+name: Gallery
+configEntityTypeId: component
+weight: 0
+items:
+  - sdc.cruiserclassic.gallery-detail

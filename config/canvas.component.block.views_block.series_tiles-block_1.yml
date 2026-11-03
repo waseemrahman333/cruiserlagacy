@@ -1,0 +1,26 @@
+uuid: c438c0f4-a6fe-4af5-81da-88193a2149c0
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.series_tiles
+  module:
+    - views
+active_version: 777d228fdb2019af
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:series_tiles-block_1'
+        label: 'Vehicles: series tiles'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Vehicles: series tiles'
+id: block.views_block.series_tiles-block_1
+provider: views
+source: block
+source_local_id: 'views_block:series_tiles-block_1'

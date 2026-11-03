@@ -2,10 +2,13 @@ $schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc
 
 name: Vehicle Body (Cruiserclassic)
 status: stable
-description: "Vehicle page body: description and video on the left; button, print and specifications on the right (stacked on mobile/tablet)."
+description: "Vehicle page body: description and video on the left; specifications and button on the right (stacked on mobile/tablet)."
 group: Vehicle
 
 slots:
+  gallery:
+    title: Gallery
+    description: "Place the Vehicle photo gallery block here (shows when the vehicle has extra photos)"
   cta:
     title: Button
     description: "e.g. I'm interested"
@@ -46,7 +49,7 @@ props:
 
     show_print:
       type: boolean
-      title: Show Print Button
-      description: "Built-in print icon button next to the main button"
+      title: Show Print Button (no longer used)
+      description: "Print button was removed; this setting has no effect"
       default: true
       examples: [true]

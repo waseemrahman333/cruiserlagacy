@@ -1,0 +1,31 @@
+uuid: 999b54a6-cde0-4ce4-8420-5137505603b9
+langcode: en
+status: true
+dependencies:
+  module:
+    - cruiser_vehicle
+active_version: 7f07d606694a7bf8
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: cruiser_vehicle_gallery
+        label: 'Photo gallery (vehicle / gallery project)'
+        label_display: '0'
+        provider: cruiser_vehicle
+    fallback_metadata:
+      slot_definitions: null
+  5b39c478e2be14e9:
+    settings:
+      default_settings:
+        id: cruiser_vehicle_gallery
+        label: 'Vehicle photo gallery'
+        label_display: '0'
+        provider: cruiser_vehicle
+    fallback_metadata:
+      slot_definitions: null
+label: 'Photo gallery (vehicle / gallery project)'
+id: block.cruiser_vehicle_gallery
+provider: cruiser_vehicle
+source: block
+source_local_id: cruiser_vehicle_gallery

@@ -136,6 +136,13 @@ props:
         "90": "90% Width" 
       examples: ["full"]
 
+    top_underline:
+      type: boolean
+      title: "Top Row — Border Below"
+      description: "Adds a divider line under the top row."
+      default: false
+      examples: [false]
+
     # ══════════════════════════════
     # MAIN ROW
     # ══════════════════════════════
@@ -183,6 +190,54 @@ props:
         "80": "80% Width"
         "90": "90% Width"
       examples: ["full"]
+
+    main_underline:
+      type: boolean
+      title: "Main Row — Border Below"
+      description: "Adds a divider line under the main row."
+      default: false
+      examples: [false]
+
+    underline_color:
+      type: string
+      title: "Border Color"
+      description: "Color of the top / main row divider lines."
+      enum: [secondary, primary, tertiary, body, body-bg, surface-300, dark]
+      meta:enum:
+        secondary: "Secondary (gold)"
+        primary: "Primary"
+        tertiary: "Tertiary"
+        body: "Text color"
+        body-bg: "Page background"
+        surface-300: "Surface 300"
+        dark: "Dark"
+      default: secondary
+      examples: ["secondary"]
+
+    underline_opacity:
+      type: string
+      title: "Border Opacity"
+      enum: ["100", "75", "50", "25"]
+      meta:enum:
+        "100": "100%"
+        "75": "75%"
+        "50": "50%"
+        "25": "25%"
+      default: "50"
+      examples: ["50"]
+
+    underline_thickness:
+      type: string
+      title: "Border Thickness"
+      enum: [half, px, "2", "4", "8"]
+      meta:enum:
+        half: "Ultra Thin"
+        px: "Hairline"
+        "2": "Thin"
+        "4": "Medium"
+        "8": "Thick"
+      default: px
+      examples: ["px"]
 
 
     # ══════════════════════════════

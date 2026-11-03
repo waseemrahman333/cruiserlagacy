@@ -1,0 +1,24 @@
+uuid: 7d0ef4be-65bb-4ade-bf93-5719d702290a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vehicle_photos
+    - media.type.image
+    - node.type.vehicle
+id: node.vehicle.field_vehicle_photos
+field_name: field_vehicle_photos
+entity_type: node
+bundle: vehicle
+label: Photos
+description: 'Extra photos (exterior, interior, engine…). The main image stays at the top; these show in the photo gallery.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      image: image
+field_type: entity_reference

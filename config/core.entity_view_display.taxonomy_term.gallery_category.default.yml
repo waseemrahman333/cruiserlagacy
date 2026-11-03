@@ -1,0 +1,41 @@
+uuid: c9125441-c6c8-4851-8abc-f920900af1fb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.gallery_category.field_cover_image
+    - field.field.taxonomy_term.gallery_category.field_short_title
+    - taxonomy.vocabulary.gallery_category
+  module:
+    - text
+id: taxonomy_term.gallery_category.default
+targetEntityType: taxonomy_term
+bundle: gallery_category
+mode: default
+content:
+  description:
+    type: text_default
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_cover_image:
+    type: entity_reference_entity_view
+    label: above
+    settings:
+      view_mode: default
+      link: false
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_short_title:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+      link_rel: canonical
+    third_party_settings: {  }
+    weight: 2
+    region: content
+hidden: {  }

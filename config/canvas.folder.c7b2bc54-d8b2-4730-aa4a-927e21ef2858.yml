@@ -1,0 +1,13 @@
+uuid: c7b2bc54-d8b2-4730-aa4a-927e21ef2858
+langcode: en
+status: true
+dependencies:
+  config:
+    - canvas.component.block.cruiser_gallery_more
+    - canvas.component.block.cruiser_vehicle_gallery
+name: Cruiser
+configEntityTypeId: component
+weight: 0
+items:
+  - block.cruiser_gallery_more
+  - block.cruiser_vehicle_gallery

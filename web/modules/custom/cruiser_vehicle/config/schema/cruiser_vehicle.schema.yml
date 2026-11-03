@@ -1,0 +1,16 @@
+block.settings.cruiser_gallery_more:
+  type: block_settings
+  label: 'Gallery: more from this category'
+  constraints:
+    FullyValidatable: ~
+  mapping:
+    heading:
+      type: label
+      label: Heading
+    count:
+      type: integer
+      label: 'Number of projects'
+      constraints:
+        Range:
+          min: 1
+          max: 12

@@ -6,8 +6,10 @@ dependencies:
     - canvas.component.block.views_block.content_recent-block_1
     - canvas.component.block.views_block.gallery-block_home
     - canvas.component.block.views_block.gallery-block_page
+    - canvas.component.block.views_block.gallery_categories-block_1
     - canvas.component.block.views_block.latest_vehicles-block_1
     - canvas.component.block.views_block.review_row-block_1
+    - canvas.component.block.views_block.series_tiles-block_1
     - canvas.component.block.views_block.services-block_1
     - canvas.component.block.views_block.similar_vehicles-block_1
     - canvas.component.block.views_block.vehicles-block_1
@@ -19,8 +21,10 @@ items:
   - block.views_block.content_recent-block_1
   - block.views_block.gallery-block_home
   - block.views_block.gallery-block_page
+  - block.views_block.gallery_categories-block_1
   - block.views_block.latest_vehicles-block_1
   - block.views_block.review_row-block_1
+  - block.views_block.series_tiles-block_1
   - block.views_block.services-block_1
   - block.views_block.similar_vehicles-block_1
   - block.views_block.vehicles-block_1

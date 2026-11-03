@@ -1,0 +1,83 @@
+{#
+/**
+ * Photo Gallery Component (Cruiserclassic)
+ *
+ * Main photo with previous/next arrows and a counter, thumbnails underneath,
+ * and a full-screen viewer (arrows, Esc). Used on gallery project pages and
+ * vehicle pages.
+ *
+ * Props: photos (list of {src, alt}), empty_text
+ */
+#}
+{% set g = { photos: photos|default([]) } %}
+<div class="photo-gallery w-full min-w-0"
+     x-data="{ open: false, i: 0, photos: {{ g.photos|json_encode|e('html_attr') }},
+               next() { this.i = (this.i + 1) % this.photos.length },
+               prev() { this.i = (this.i - 1 + this.photos.length) % this.photos.length } }"
+     x-on:keydown.escape.window="open = false"
+     x-on:keydown.arrow-right.window="open && next()"
+     x-on:keydown.arrow-left.window="open && prev()">
+        {% if g.photos %}
+          <div class="relative group overflow-hidden bg-[#e9e2d3] aspect-[4/3] md:aspect-[16/10]">
+            {% for photo in g.photos %}
+              <img src="{{ photo.src }}" alt="{{ photo.alt }}" loading="{{ loop.first ? 'eager' : 'lazy' }}"
+                   class="absolute inset-0 w-full h-full object-cover transition-opacity duration-500 {{ loop.first ? '' : 'opacity-0' }}"
+                   x-bind:class="i === {{ loop.index0 }} ? '!opacity-100' : '!opacity-0'">
+            {% endfor %}
+            <button type="button" class="absolute inset-0 w-full h-full p-0 border-0 bg-transparent cursor-zoom-in" x-on:click="open = true" aria-label="{{ 'View full screen'|t }}"></button>
+
+            {% if g.photos|length > 1 %}
+              <button type="button" x-on:click="prev()" aria-label="{{ 'Previous photo'|t }}"
+                      class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-body-bg/90 text-primary border-0 cursor-pointer transition-colors hover:bg-secondary hover:text-white">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <button type="button" x-on:click="next()" aria-label="{{ 'Next photo'|t }}"
+                      class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-11 h-11 md:w-12 md:h-12 flex items-center justify-center bg-body-bg/90 text-primary border-0 cursor-pointer transition-colors hover:bg-secondary hover:text-white">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+              </button>
+            {% endif %}
+
+            <div class="absolute bottom-3 md:bottom-5 inset-x-3 md:inset-x-5 flex items-center justify-between gap-3 pointer-events-none">
+              <span class="px-3 py-1.5 bg-black/60 text-white text-xs tracking-wider" x-text="(i + 1) + ' / ' + photos.length">1 / {{ g.photos|length }}</span>
+              <span class="hidden md:inline-flex items-center gap-2 px-3 py-1.5 bg-black/60 text-white text-xs uppercase tracking-wider">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+                {{ 'Full screen'|t }}
+              </span>
+            </div>
+          </div>
+
+          {% if g.photos|length > 1 %}
+            <ul class="grid grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2 md:gap-3 !mt-3 md:!mt-4 !mb-0 !p-0 list-none">
+              {% for photo in g.photos %}
+                <li class="!m-0">
+                  <button type="button" x-on:click="i = {{ loop.index0 }}" aria-label="{{ 'Show photo @n'|t({'@n': loop.index}) }}"
+                          class="relative block w-full aspect-[4/3] p-0 overflow-hidden border-0 bg-[#e9e2d3] cursor-pointer outline-2 -outline-offset-2 transition-all"
+                          x-bind:class="i === {{ loop.index0 }} ? 'outline outline-secondary opacity-100' : 'opacity-60 hover:opacity-100'">
+                    <img src="{{ photo.src }}" alt="" loading="lazy" class="w-full h-full object-cover">
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+          <div x-show="open" x-cloak x-transition.opacity class="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-12" role="dialog" aria-modal="true" x-on:click.self="open = false">
+            <img x-bind:src="photos[i] && photos[i].src" x-bind:alt="photos[i] && photos[i].alt" class="max-w-full max-h-[80vh] object-contain">
+            <button type="button" class="absolute top-4 right-4 w-11 h-11 flex items-center justify-center text-white bg-transparent border border-white/50 cursor-pointer hover:bg-white hover:text-black" x-on:click="open = false" aria-label="{{ 'Close'|t }}">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <template x-if="photos.length > 1">
+              <div>
+                <button type="button" class="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white bg-transparent border border-white/50 cursor-pointer hover:bg-white hover:text-black" x-on:click="prev()" aria-label="{{ 'Previous photo'|t }}">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+                <button type="button" class="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center text-white bg-transparent border border-white/50 cursor-pointer hover:bg-white hover:text-black" x-on:click="next()" aria-label="{{ 'Next photo'|t }}">
+                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+                </button>
+              </div>
+            </template>
+            <p class="absolute bottom-4 inset-x-0 text-center text-white/80 text-sm tracking-wider !m-0" x-text="(i + 1) + ' / ' + photos.length"></p>
+          </div>
+        {% else %}
+          <div class="flex items-center justify-center aspect-[16/10] bg-[#e9e2d3] text-[#8a7a55] uppercase tracking-wide text-sm">{{ empty_text|default('Photos coming soon'|t) }}</div>
+        {% endif %}
+</div>

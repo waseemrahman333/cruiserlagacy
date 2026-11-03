@@ -1,0 +1,22 @@
+uuid: b9a074d0-c028-47b1-b369-28aeadb083a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_work_completed
+    - node.type.gallery
+  module:
+    - text
+id: node.gallery.field_work_completed
+field_name: field_work_completed
+entity_type: node
+bundle: gallery
+label: 'Work completed'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

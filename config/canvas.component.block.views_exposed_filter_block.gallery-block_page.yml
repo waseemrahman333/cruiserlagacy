@@ -1,0 +1,25 @@
+uuid: 1bf57392-9553-4a1d-b045-faf38de7ab11
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.gallery
+  module:
+    - views
+active_version: 85357e1f23e405fe
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_exposed_filter_block:gallery-block_page'
+        label: 'Exposed form: gallery-block_page'
+        label_display: '0'
+        provider: views
+        views_label: ''
+    fallback_metadata:
+      slot_definitions: null
+label: 'Exposed form: gallery-block_page'
+id: block.views_exposed_filter_block.gallery-block_page
+provider: views
+source: block
+source_local_id: 'views_exposed_filter_block:gallery-block_page'

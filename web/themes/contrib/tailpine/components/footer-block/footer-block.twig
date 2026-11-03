@@ -11,18 +11,21 @@
    Every value is a complete static Tailwind class.
    JIT scans these and includes them all.
 ══════════════════════════════════════════ #}
+{# 'default' adds no class, so the h2–h6 size from the theme CSS applies.
+   Other sizes use ! (important) so they win over the theme's heading styles. #}
 {% set size_map = {
-  xs:    'text-xs',
-  sm:    'text-sm',
-  base:  'text-base',
-  lg:    'text-lg',
-  xl:    'text-xl',
-  '2xl': 'text-2xl',
-  '3xl': 'text-3xl',
-  '4xl': 'text-4xl',
-  '5xl': 'text-5xl',
-  '6xl': 'text-6xl',
-  '7xl': 'text-7xl'
+  default: ' ',
+  xs:    '!text-xs',
+  sm:    '!text-sm',
+  base:  '!text-base',
+  lg:    '!text-lg',
+  xl:    '!text-xl',
+  '2xl': '!text-2xl',
+  '3xl': '!text-3xl',
+  '4xl': '!text-4xl',
+  '5xl': '!text-5xl',
+  '6xl': '!text-6xl',
+  '7xl': '!text-7xl'
 } %}
 
 {# ══════════════════════════════════════════
@@ -138,7 +141,8 @@
 ══════════════════════════════════════════ #}
 
 {# Heading #}
-{% set h_size      = size_map[heading_size     ?? 'lg']   ?? 'text-lg'   %}
+{% set h_size      = size_map[heading_size ?? 'default'] ?? '' %}
+{% set h_level     = 'h' ~ (heading_level in [2, 3, 4, 5, 6] ? heading_level : 4) %}
 {% set h_weight    = weight_map[heading_weight ?? 'bold'] ?? 'font-bold' %}
 {% set h_desk = heading_alignment in ['left', 'center', 'right'] ? heading_alignment : 'left' %}
 {% set h_tab  = heading_alignment_tab in ['left', 'center', 'right'] ? heading_alignment_tab : h_desk %}
@@ -177,14 +181,19 @@
   {% if h_text and show_title %}
     <div class="content-block__heading-wrap flex flex-col {{ h_align.items }}">
       
-      <h3 class="content-block__heading 
-                          leading-tight tracking-wide uppercase
-                          {{ h_size }}
-                          {{ h_weight }}
-                          {{ h_align.text }}
-                          {{ h_color }}">
-        {{- h_text -}}
-      </h3>
+      {# Static tags (no <{{ tag }}>): Canvas skips slot markers after invalid HTML. #}
+      {% set h_classes = 'content-block__heading leading-tight tracking-wide uppercase ' ~ h_size ~ ' ' ~ h_weight ~ ' ' ~ h_align.text ~ ' ' ~ h_color %}
+      {% if h_level == 'h2' %}
+        <h2 class="{{ h_classes }}">{{- h_text -}}</h2>
+      {% elseif h_level == 'h3' %}
+        <h3 class="{{ h_classes }}">{{- h_text -}}</h3>
+      {% elseif h_level == 'h5' %}
+        <h5 class="{{ h_classes }}">{{- h_text -}}</h5>
+      {% elseif h_level == 'h6' %}
+        <h6 class="{{ h_classes }}">{{- h_text -}}</h6>
+      {% else %}
+        <h4 class="{{ h_classes }}">{{- h_text -}}</h4>
+      {% endif %}
 
       {# Underline — width via inline style, all other styles via Tailwind classes #}
       {% if show_ul %}

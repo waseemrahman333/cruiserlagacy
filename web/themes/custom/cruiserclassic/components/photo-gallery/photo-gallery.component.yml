@@ -1,0 +1,22 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+name: Photo Gallery (Cruiserclassic)
+status: stable
+description: "Main photo with thumbnails and a full-screen viewer."
+group: Media
+noUi: true
+props:
+  type: object
+  properties:
+    photos:
+      type: array
+      title: Photos
+      items:
+        type: object
+        properties:
+          src: { type: string }
+          alt: { type: string }
+          width: { type: integer }
+          height: { type: integer }
+    empty_text:
+      type: string
+      title: Empty text

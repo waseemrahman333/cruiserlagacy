@@ -1,0 +1,75 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Gallery Detail (Cruiserclassic)
+status: stable
+description: "Gallery project page body: photo gallery on the left; buttons slot, description, specifications and notes on the right (sticky on desktop)."
+group: Gallery
+
+slots:
+  cta:
+    title: Buttons
+    description: "e.g. Ask About This Vehicle and Request More Photos buttons (side by side from 640px)"
+  gallery:
+    title: Gallery
+    description: "Place the Photo gallery block here"
+  extra:
+    title: Extra (right column)
+    description: "Optional content below the notes in the right column"
+
+props:
+  type: object
+  properties:
+
+    category:
+      type: string
+      title: Category
+      examples: ['Vehicles']
+
+    category_id:
+      type: integer
+      title: Category ID
+      description: "Links the category label to /gallery?category=ID"
+      examples: [244]
+
+
+
+
+    description_heading:
+      type: string
+      title: Description Heading
+      default: 'Description'
+      examples: ['Description']
+
+    summary:
+      type: string
+      title: Description
+      examples: ['A complete frame-off restoration of a 1978 FJ40.']
+
+    specs_heading:
+      type: string
+      title: Specifications Heading
+      default: 'Specifications'
+      examples: ['Specifications']
+
+    specs:
+      type: array
+      title: Specifications
+      description: 'One per line as "Label | Value"'
+      items:
+        type: string
+      examples:
+        - ['Engine | 2F 4.2L I6', 'Year | 1978']
+
+    condition_notes:
+      type: string
+      title: Condition Notes
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>Rust-free tub, new canvas.</p>']
+
+    work_completed:
+      type: string
+      title: Work Completed
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples: ['<p>Full engine rebuild.</p>']

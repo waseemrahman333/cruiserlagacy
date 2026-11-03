@@ -16,6 +16,7 @@ dependencies:
     - field.field.node.vehicle.field_transmission
     - field.field.node.vehicle.field_trim
     - field.field.node.vehicle.field_vehicle_model
+    - field.field.node.vehicle.field_vehicle_photos
     - field.field.node.vehicle.field_video
     - field.field.node.vehicle.field_year
     - node.type.vehicle
@@ -116,6 +117,13 @@ content:
     weight: 5
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_vehicle_photos:
+    type: media_library_widget
+    weight: 3
+    region: content
+    settings:
+      media_types: {  }
     third_party_settings: {  }
   field_video:
     type: media_library_widget

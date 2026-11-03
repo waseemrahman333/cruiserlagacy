@@ -127,7 +127,12 @@
 {% set underline_   = width_map[top_width    ?? 'full'] ?? 'max-w-full' %}
 
 {% set thickness_class   = thickness_map[underline_thickness ?? 'px']   ?? '' %}
-{% set underline_color_class = bg_variants[underline_color]|default(bg_variants.light) %}
+{% set line_color_map = {
+  'secondary': 'bg-secondary', 'primary': 'bg-primary', 'tertiary': 'bg-tertiary',
+  'body': 'bg-body', 'body-bg': 'bg-body-bg', 'surface-300': 'bg-surface-300', 'dark': 'bg-dark'
+} %}
+{% set line_opacity_map = { '100': 'opacity-100', '75': 'opacity-75', '50': 'opacity-50', '25': 'opacity-25' } %}
+{% set underline_color_class = (line_color_map[underline_color ?? 'secondary'] ?? 'bg-secondary') ~ ' ' ~ (line_opacity_map[underline_opacity ?? '50'] ?? 'opacity-50') %}
 
 
 {# ══════════════════════════════════════════

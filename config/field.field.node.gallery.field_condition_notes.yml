@@ -1,0 +1,22 @@
+uuid: a60550d2-dd03-45f0-a0cd-9ee3cf3e7bba
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_condition_notes
+    - node.type.gallery
+  module:
+    - text
+id: node.gallery.field_condition_notes
+field_name: field_condition_notes
+entity_type: node
+bundle: gallery
+label: 'Condition notes'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  allowed_formats: {  }
+field_type: text_long

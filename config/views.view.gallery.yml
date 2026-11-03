@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - node.type.gallery
+    - taxonomy.vocabulary.gallery_category
   module:
     - node
+    - taxonomy
     - user
 id: gallery
 label: Gallery
@@ -112,12 +114,18 @@ display:
       tags: {  }
   block_home:
     id: block_home
-    display_title: 'Home (5 photos)'
+    display_title: 'Home (1 per category)'
     display_plugin: block
     position: 1
     display_options:
+      pager:
+        type: none
+        options:
+          offset: 0
+      defaults:
+        pager: false
       display_extenders: {  }
-      block_description: 'Gallery: home (5 photos)'
+      block_description: 'Gallery: home (1 per category)'
       block_hide_empty: true
     cache_metadata:
       max-age: -1
@@ -143,10 +151,73 @@ display:
             next: Next
             previous: Prev
           quantity: 9
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            gallery: gallery
+          group: 1
+        field_gallery_category_target_id:
+          id: field_gallery_category_target_id
+          table: node__field_gallery_category
+          field: field_gallery_category_target_id
+          plugin_id: taxonomy_index_tid
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_gallery_category_target_id_op
+            label: Category
+            identifier: category
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          vid: gallery_category
+          type: select
+          hierarchy: false
+          limit: true
+          error_message: true
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       defaults:
         use_ajax: false
         pager: false
+        exposed_form: false
+        filters: false
+        filter_groups: false
       use_ajax: true
+      exposed_block: true
       display_extenders: {  }
       block_description: 'Gallery: all photos (paged)'
     cache_metadata:
@@ -154,6 +225,7 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
         - user.permissions

@@ -10,7 +10,7 @@ id: node.gallery.field_image
 field_name: field_image
 entity_type: node
 bundle: gallery
-label: Image
+label: 'Cover image'
 description: 'One photo. Use a landscape image (at least 1600px wide).'
 required: true
 translatable: true

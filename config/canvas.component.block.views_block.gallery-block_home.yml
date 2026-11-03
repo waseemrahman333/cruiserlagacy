@@ -6,9 +6,20 @@ dependencies:
     - views.view.gallery
   module:
     - views
-active_version: b12143f012ab6ca7
+active_version: 5b89512c66892605
 versioned_properties:
   active:
+    settings:
+      default_settings:
+        id: 'views_block:gallery-block_home'
+        label: 'Gallery: home (1 per category)'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+  b12143f012ab6ca7:
     settings:
       default_settings:
         id: 'views_block:gallery-block_home'
@@ -19,7 +30,7 @@ versioned_properties:
         items_per_page: null
     fallback_metadata:
       slot_definitions: null
-label: 'Gallery: home (5 photos)'
+label: 'Gallery: home (1 per category)'
 id: block.views_block.gallery-block_home
 provider: views
 source: block

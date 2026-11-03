@@ -1,0 +1,24 @@
+uuid: 0ae182c3-85c1-4f71-9371-90e61b5b01b0
+langcode: en
+status: true
+dependencies:
+  module:
+    - cruiser_vehicle
+active_version: b37319f37d096f80
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: cruiser_gallery_more
+        label: 'Gallery: more from this category'
+        label_display: '0'
+        provider: cruiser_vehicle
+        heading: 'More from this category'
+        count: 3
+    fallback_metadata:
+      slot_definitions: null
+label: 'Gallery: more from this category'
+id: block.cruiser_gallery_more
+provider: cruiser_vehicle
+source: block
+source_local_id: cruiser_gallery_more

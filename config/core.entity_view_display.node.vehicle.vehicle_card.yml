@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.vehicle.field_transmission
     - field.field.node.vehicle.field_trim
     - field.field.node.vehicle.field_vehicle_model
+    - field.field.node.vehicle.field_vehicle_photos
     - field.field.node.vehicle.field_video
     - field.field.node.vehicle.field_year
     - node.type.vehicle
@@ -46,5 +47,6 @@ hidden:
   field_transmission: true
   field_trim: true
   field_vehicle_model: true
+  field_vehicle_photos: true
   field_video: true
   field_year: true

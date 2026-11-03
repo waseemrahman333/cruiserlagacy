@@ -1,0 +1,26 @@
+uuid: 74077ee4-7587-420b-a904-dff1a367274d
+langcode: en
+status: true
+dependencies:
+  config:
+    - views.view.gallery_categories
+  module:
+    - views
+active_version: 0836836534b885e5
+versioned_properties:
+  active:
+    settings:
+      default_settings:
+        id: 'views_block:gallery_categories-block_1'
+        label: 'Gallery: categories (home)'
+        label_display: '0'
+        provider: views
+        views_label: ''
+        items_per_page: null
+    fallback_metadata:
+      slot_definitions: null
+label: 'Gallery: categories (home)'
+id: block.views_block.gallery_categories-block_1
+provider: views
+source: block
+source_local_id: 'views_block:gallery_categories-block_1'

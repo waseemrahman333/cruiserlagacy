@@ -6,7 +6,8 @@
  * and title sit at the bottom left. Leaves room at the top for the
  * transparent site header that overlays it.
  *
- * Props: image, title, heading_level, height, overlay, image_position
+ * Props: background_type (image|color|both), bg_color, image_opacity, image,
+ *        title, height, show_overlay, overlay, image_position
  * Slots: breadcrumb
  */
 #}
@@ -17,18 +18,30 @@
 } %}
 {% set overlays = {'30': 'bg-black/30', '45': 'bg-black/45', '60': 'bg-black/60', '75': 'bg-black/75'} %}
 {% set positions = {'center': 'object-center', 'left': 'object-left', 'right': 'object-right'} %}
+{% set colors = {
+  'primary': 'bg-primary', 'secondary': 'bg-secondary', 'tertiary': 'bg-tertiary',
+  'dark': 'bg-dark', 'body': 'bg-body', 'body-bg': 'bg-body-bg',
+} %}
+{% set opacities = {'100': 'opacity-100', '80': 'opacity-80', '60': 'opacity-60', '40': 'opacity-40', '20': 'opacity-20'} %}
+{% set bg_type = background_type|default('image') %}
+{% set use_color = bg_type in ['color', 'both'] %}
+{% set use_image = bg_type in ['image', 'both'] and image.src %}
+{% set color_class = use_color ? (colors[bg_color|default('primary')] ?? 'bg-primary') : '' %}
 {# {% set tag = heading_level in ['h1', 'h2'] ? heading_level : 'h1' %} #}
 
-<section class="sub-hero relative w-full mx-auto overflow-hidden flex items-end {{ heights[height]|default(heights.medium) }}">
+<section class="sub-hero relative w-full mx-auto overflow-hidden flex items-end {{ heights[height]|default(heights.medium) }} {{ color_class }}">
 
-  {% if image.src %}
+  {# Layers: color (section bg) → image → overlay → content #}
+  {% if use_image %}
     <img src="{{ image.src }}" alt="{{ image.alt|default('') }}"
          {% if image.width %}width="{{ image.width }}"{% endif %}
          {% if image.height %}height="{{ image.height }}"{% endif %}
-         class="absolute inset-0 w-full h-full object-cover {{ positions[image_position]|default('object-center') }}"
+         class="absolute inset-0 w-full h-full object-cover {{ positions[image_position]|default('object-center') }} {{ bg_type == 'both' ? (opacities[image_opacity|default('100')] ?? '') : '' }}"
          fetchpriority="high">
   {% endif %}
-  <div class="absolute inset-0 {{ overlays[overlay]|default('bg-black/45') }}" aria-hidden="true"></div>
+  {% if show_overlay ?? true %}
+    <div class="absolute inset-0 {{ overlays[overlay]|default('bg-black/45') }}" aria-hidden="true"></div>
+  {% endif %}
 
   <div class="relative container z-10 w-full pt-32 pb-[clamp(48px,7vw,64px)]">
     {% if breadcrumb %}

@@ -10,7 +10,7 @@ id: node.vehicle.field_trim
 field_name: field_trim
 entity_type: node
 bundle: vehicle
-label: Trim
+label: 'Body Style'
 description: ''
 required: false
 translatable: true

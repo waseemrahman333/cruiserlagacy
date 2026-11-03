@@ -40,16 +40,32 @@ props:
       description: "Leave empty to hide the heading entirely."
       examples: ["Quick Links"]
 
+    heading_level:
+      type: number
+      title: HTML heading level (h4)
+      description: "Size follows the theme's h2–h6 styles unless Heading Size is set."
+      enum: [2, 3, 4, 5, 6]
+      "meta:enum":
+        2: H2
+        3: H3
+        4: H4
+        5: H5
+        6: H6
+      default: 4
+      examples:
+        - 4
+
     heading_size:
       type: string
       title: "Heading Size"
-      default: lg
-      enum: [xs, sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl]
+      description: "Default uses the heading level's size from main.css. Any other value overrides it."
+      default: default
+      enum: [default, xs, sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl, 6xl, 7xl]
       meta:enum:
-        none: "None"
+        default: "Default (from heading level)"
         xs: "Extra Small"
         sm: "Small"
-        md: "Medium"
+        base: "Base"
         lg: "Large"
         xl: "Extra Large"
         2xl: "2X Large"
@@ -58,6 +74,7 @@ props:
         5xl: "5X Large"
         6xl: "6X Large"
         7xl: "7X Large"
+      examples: ["default"]
 
     heading_weight:
       type: string

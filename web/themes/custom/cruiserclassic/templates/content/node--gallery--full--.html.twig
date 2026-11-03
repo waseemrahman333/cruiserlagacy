@@ -1,0 +1,85 @@
+{#
+/**
+ * @file
+ * Gallery project detail page.
+ *
+ * Sub-hero (cover + breadcrumb + title). Left: main photo with thumbnails and
+ * a full-screen viewer. Right (sticky on desktop): contact buttons,
+ * description, specifications, notes. Then 3 more projects from the category.
+ * `gallery` comes from cruiserclassic_preprocess_node__gallery().
+ */
+#}
+{% set g = gallery %}
+<article{{ attributes.addClass('gallery-item', 'w-full') }}>
+  {% set crumbs %}{% include '@cruiserclassic/navigation/breadcrumb.html.twig' with { breadcrumb: g.breadcrumb } only %}{% endset %}
+  {% set hero = { title: label|render|striptags|trim, height: 'small', breadcrumb: crumbs } %}
+  {{ include('cruiserclassic:sub-hero', g.cover ? hero|merge({ image: g.cover }) : hero, with_context = false) }}
+
+  <section class="bg-body-bg py-[clamp(48px,6vw,96px)]">
+    <div class="container mx-auto w-full max-w-480 grid grid-cols-1 xl:grid-cols-12 gap-[clamp(32px,4vw,72px)] items-start">
+
+      {# Photos: main photo + thumbnails, full-screen viewer #}
+      <div class="xl:col-span-7 min-w-0">
+        {{ include('cruiserclassic:photo-gallery', { photos: g.photos }, with_context = false) }}
+      </div>
+
+      {# Details #}
+      <aside class="xl:col-span-5 flex flex-col gap-8 md:gap-10 xl:sticky xl:top-32">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <a href="{{ g.ask_url }}" class="inline-flex justify-center items-center px-6 py-4 !no-underline uppercase tracking-wide text-sm !bg-[#12301b] !text-white hover:!bg-[#1d4a2b] transition-colors">{{ 'Ask About This Vehicle'|t }}</a>
+          <a href="{{ g.photos_url }}" class="inline-flex justify-center items-center px-6 py-4 !no-underline uppercase tracking-wide text-sm !bg-secondary !text-white hover:opacity-90 transition-opacity">{{ 'Request More Photos'|t }}</a>
+        </div>
+
+        <div>
+          {% if g.category %}
+            <a href="{{ g.category.url }}" class="!no-underline !text-secondary uppercase tracking-wider text-xs md:text-sm">{{ g.category.label }}</a>
+          {% endif %}
+          <h2 class="!mt-2 !mb-4 !font-heading uppercase">{{ 'Description'|t }}</h2>
+          {% if g.summary %}
+            <p class="!m-0 leading-relaxed">{{ g.summary }}</p>
+          {% endif %}
+        </div>
+
+        {% if g.specs %}
+          <div>
+            <h2 class="!mt-0 !mb-5 !font-heading uppercase">{{ 'Specifications'|t }}</h2>
+            <dl class="flex flex-col gap-2.5 !m-0">
+              {% for spec in g.specs %}
+                <div class="flex items-center justify-between gap-6 px-4 md:px-5 py-3.5 bg-white border border-[#e5d8bc]">
+                  {% if spec.label %}<dt class="text-sm text-body/70">{{ spec.label }}</dt>{% endif %}
+                  <dd class="!m-0 text-sm text-right font-medium">{{ spec.value }}</dd>
+                </div>
+              {% endfor %}
+            </dl>
+          </div>
+        {% endif %}
+
+        {% if content.field_condition_notes|render|trim %}
+          <div>
+            <h3 class="!mt-0 !mb-3 !font-heading uppercase !text-xl">{{ 'Condition notes'|t }}</h3>
+            <div class="*:!mt-0 *:last:!mb-0 leading-relaxed">{{ node.field_condition_notes.processed }}</div>
+          </div>
+        {% endif %}
+        {% if content.field_work_completed|render|trim %}
+          <div>
+            <h3 class="!mt-0 !mb-3 !font-heading uppercase !text-xl">{{ 'Work completed'|t }}</h3>
+            <div class="*:!mt-0 *:last:!mb-0 leading-relaxed">{{ node.field_work_completed.processed }}</div>
+          </div>
+        {% endif %}
+      </aside>
+    </div>
+  </section>
+
+  {% if g.more %}
+    <section class="bg-body-bg pb-[clamp(48px,6vw,96px)]">
+      <div class="container mx-auto w-full max-w-480">
+        <h2 class="!mt-0 !mb-[clamp(24px,3vw,40px)] !font-heading uppercase">{{ 'More from this category'|t }}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-x-[clamp(16px,2vw,28px)] gap-y-[clamp(20px,2.6vw,36px)]">
+          {% for card in g.more %}
+            {{ include('cruiserclassic:gallery-card', card, with_context = false) }}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+</article>
