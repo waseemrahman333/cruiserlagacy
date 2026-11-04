@@ -1,0 +1,68 @@
+{#
+/**
+ * Confirmation Modal
+ *
+ * Opens on load. Gold-framed panel with a check badge, title, gold rule,
+ * message and a Close button. Esc, the backdrop, × and Close dismiss it.
+ * Props: title, message (HTML), close_label
+ */
+#}
+<div x-data="{ open: false }"
+     x-init="$nextTick(() => open = true)"
+     x-on:keydown.escape.window="open = false"
+     class="confirmation-modal contents">
+  <div x-show="open" x-cloak
+       class="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-8"
+       role="dialog" aria-modal="true" aria-labelledby="confirmation-modal-title">
+
+    {# Backdrop #}
+    <div x-show="open"
+         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         x-on:click="open = false"
+         class="absolute inset-0 bg-black/75 backdrop-blur-sm" aria-hidden="true"></div>
+
+    {# Panel #}
+    <div x-show="open" x-trap.noscroll="open"
+         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
+         class="relative w-full max-w-xl bg-body-bg border-t-4 border-solid border-secondary shadow-[0_30px_80px_rgba(0,0,0,0.35)] p-2.5 md:p-3">
+
+      {# Inner gold frame #}
+      <div class="relative border border-solid border-secondary/40 px-6 py-12 md:px-14 md:py-16 text-center">
+
+
+        {# Check badge: gold ring around a dark green disc #}
+        <div class="mx-auto flex items-center justify-center w-24 h-24 md:w-28 md:h-28 rounded-full border-2 border-solid border-secondary p-2.5">
+          <span class="flex items-center justify-center w-full h-full rounded-full bg-primary">
+            <svg class="w-8 h-8 md:w-9 md:h-9 text-secondary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+          </span>
+        </div>
+
+        <h2 id="confirmation-modal-title" class="!mt-8 md:!mt-10 !mb-0 !font-heading !text-primary uppercase !leading-tight !text-[clamp(2rem,1.5rem+2vw,3rem)]">
+          {{ title|default('Thank You'|t) }}
+        </h2>
+
+        <div class="mx-auto mt-6 h-0.5 w-20 bg-secondary" aria-hidden="true"></div>
+
+        {% if message %}
+          <div class="mt-6 mx-auto max-w-md text-body/80 text-base md:text-lg leading-relaxed [&_p]:!m-0">
+            {{ message|raw }}
+          </div>
+        {% endif %}
+
+        <button type="button" x-on:click="open = false"
+                class="mt-10 inline-flex items-center justify-center min-w-44 px-10 py-4 bg-primary text-white uppercase tracking-[0.15em] text-sm font-semibold border border-solid border-primary hover:bg-transparent hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:ring-offset-body-bg">
+          {{ close_label|default('Close'|t) }}
+        </button>
+
+        {# × after Close in the DOM so the focus trap lands on Close first. #}
+        <button type="button" x-on:click="open = false"
+                class="absolute top-3 right-3 md:top-4 md:right-4 inline-flex items-center justify-center w-10 h-10 text-body/60 hover:text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-secondary"
+                aria-label="{{ 'Close'|t }}">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

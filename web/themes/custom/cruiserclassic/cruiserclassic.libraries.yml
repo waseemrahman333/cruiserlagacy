@@ -196,3 +196,10 @@ testimonial-carousel:
     - core/once
     - cruiserclassic/slick-carousel
 
+
+views-ajax-loading:
+  version: 1.x
+  js:
+    js/views-ajax-loading.js: {}
+  dependencies:
+    - core/jquery

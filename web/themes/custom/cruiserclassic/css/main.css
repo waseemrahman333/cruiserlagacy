@@ -469,3 +469,16 @@ width: 140%;
   background-position: right 1.5rem center;
   background-size: 1.25rem;
 }
+
+/* Views AJAX filters (vehicles, gallery): fade the results while loading
+   instead of the full-screen throbber. See js/views-ajax-loading.js. */
+.ajax-progress-fullscreen:has(~ * .is-view-loading),
+body:has(.is-view-loading) .ajax-progress-fullscreen {
+  display: none;
+}
+.is-view-loading {
+  @apply opacity-40 pointer-events-none transition-opacity duration-200;
+}
+[class*="js-view-dom-id-"] {
+  @apply transition-opacity duration-200;
+}

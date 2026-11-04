@@ -61,7 +61,8 @@ function cruiserclassic_gallery_exposed_form(array &$form): void {
     if (isset($form['category']['#options']['All'])) {
       $form['category']['#options']['All'] = t('All categories');
     }
-    $form['category']['#attributes']['onchange'] = 'this.form.submit()';
+    // Click the (hidden) Apply button so Views AJAX handles it, not a page reload.
+    $form['category']['#attributes']['onchange'] = "this.form.querySelector('[type=submit]').click()";
     // Same look as the vehicles filters: white box, grey border, chevron.
     $form['category']['#attributes']['class'][] = '!w-full !h-11 !m-0 !pl-4 !pr-10 !py-0 appearance-none !bg-white !bg-none !text-body !text-sm !border !border-solid !border-gray-300 !rounded-sm !shadow-none cursor-pointer focus:!outline-none focus:!ring-0 focus:!border-primary';
     $form['category']['#wrapper_attributes']['class'][] = 'relative !m-0 w-full sm:w-64';
@@ -114,6 +115,9 @@ function cruiserclassic_preprocess_breadcrumb(array &$variables) {
  * - Labels above, underline-only fields, dark green button with an arrow.
  */
 function cruiserclassic_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  if (isset($form['#webform_id'])) {
+    cruiserclassic_webform_confirmation_modal($form, $form_state);
+  }
   if (($form['#webform_id'] ?? NULL) !== 'contact') {
     return;
   }
@@ -368,4 +372,28 @@ function cruiserclassic_preprocess_views_view_unformatted__series_tiles(array &$
       ];
     }
   }
+}
+
+/**
+ * Webform submission forms: show the "modal" confirmation with the Cruiser
+ * confirmation-modal component instead of Webform's jQuery UI dialog.
+ *
+ * Called from cruiserclassic_form_alter().
+ */
+function cruiserclassic_webform_confirmation_modal(array &$form, FormStateInterface $form_state): void {
+  if (empty($form['webform_confirmation_modal'])) {
+    return;
+  }
+  $modal = $form_state->get('webform_confirmation_modal') ?? [];
+  $content = $modal['content'] ?? [];
+  $form['webform_confirmation_modal'] = [
+    '#type' => 'component',
+    '#component' => 'cruiserclassic:confirmation-modal',
+    '#props' => [
+      'title' => (string) ($modal['title'] ?? '') ?: t('Thank You'),
+      'message' => (string) \Drupal::service('renderer')->renderInIsolation($content),
+      'close_label' => t('Close'),
+    ],
+    '#weight' => -1000,
+  ];
 }

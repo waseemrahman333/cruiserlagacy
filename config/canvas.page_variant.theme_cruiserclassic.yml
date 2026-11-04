@@ -165,7 +165,7 @@ component_tree:
     slot: footer
     uuid: 0771e57a-86bc-41b0-9253-867d31ffdf2a
     component_id: sdc.tailpine.footer
-    component_version: eced66fb64e1cff4
+    component_version: 61f5c26306f1b8de
     inputs:
       background_color: primary
       padding_block: lg
@@ -297,7 +297,7 @@ component_tree:
     slot: bottom_first
     uuid: 7025de18-7e14-40e8-8762-dba421669e99
     component_id: sdc.tailpine.footer-block
-    component_version: 272ec5c1fafbef87
+    component_version: adc4a29f13ec1a5a
     inputs:
       show_title: false
       show_underline: false
@@ -320,7 +320,7 @@ component_tree:
     slot: bottom_middle
     uuid: 64b0dd64-e5c0-4fbb-b194-2af280268b92
     component_id: sdc.tailpine.footer-block
-    component_version: 272ec5c1fafbef87
+    component_version: adc4a29f13ec1a5a
     inputs:
       show_title: false
       show_underline: false
@@ -343,7 +343,7 @@ component_tree:
     slot: bottom_last
     uuid: 400a41e3-7172-4828-9894-fa636e384bcc
     component_id: sdc.tailpine.footer-block
-    component_version: 272ec5c1fafbef87
+    component_version: adc4a29f13ec1a5a
     inputs:
       show_title: false
       show_underline: false
@@ -351,6 +351,7 @@ component_tree:
       heading: 'Quick Links'
       heading_alignment: left
       content_alignment: right
+      content_alignment_tab: left
       content_width: fit
   a44520c1-2551-4d6c-83b8-ddf6d92e9132:
     parent_uuid: 400a41e3-7172-4828-9894-fa636e384bcc

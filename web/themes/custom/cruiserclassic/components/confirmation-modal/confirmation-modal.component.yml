@@ -1,0 +1,24 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json
+
+name: Confirmation Modal (Cruiserclassic)
+status: stable
+noUi: true
+description: "Success modal shown after a form submission (opens on load; Esc, backdrop or Close dismisses it)."
+group: Forms
+
+props:
+  type: object
+  properties:
+    title:
+      type: string
+      title: Title
+      examples: ['Thank You']
+    message:
+      type: string
+      title: Message (HTML)
+      contentMediaType: text/html
+      examples: ["<p>Thank you for contacting Cruiser Legacy. We'll get back to you shortly.</p>"]
+    close_label:
+      type: string
+      title: Close Button Text
+      examples: ['Close']

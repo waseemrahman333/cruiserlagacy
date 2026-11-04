@@ -244,22 +244,6 @@ component_tree:
       align_self: center
       push: center
       order_mobile_only: false
-  '2:bottom_slot:0:items:0:content:0:3ae82e7b-4501-40e2-a1c9-22870dc95c5e':
-    parent_uuid: bc7832ed-f11a-45db-a659-461cdcc182ed
-    slot: content
-    uuid: 3ae82e7b-4501-40e2-a1c9-22870dc95c5e
-    component_id: sdc.tailpine.canvas-button
-    component_version: adcbe7eb1f45a3a7
-    inputs:
-      title: 'Click Here'
-      link: 'https://example.com'
-      color_varient: primary
-      rounded: rounded-none
-      style_variant: solid
-      button_size: md
-      show_arrow: true
-      add_border: false
-      open_new_tab: false
   '2:content:0:40697948-a1f2-4c07-94ab-fb069fceff27':
     parent_uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
     slot: content

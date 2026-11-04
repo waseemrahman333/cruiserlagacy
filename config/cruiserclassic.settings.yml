@@ -41,12 +41,12 @@ tailpine_customize_logo_size: 1
 color_theme: custom
 tailpine_enable_color: 1
 container_padding_mobile: '20'
-container_padding_tablet: '60'
-container_padding_desktop: '96'
-container_padding_wide: '120'
+container_padding_tablet: '40'
+container_padding_desktop: '60'
+container_padding_wide: '150'
 h1_mobile: '36'
 h1_tablet: '48'
-h1_desktop: '56'
+h1_desktop: '52'
 h1_wide_desktop: '64'
 h2_mobile: '30'
 h2_tablet: '36'

@@ -6,7 +6,7 @@
  */
 
 :root {
-  --t-container-padding-inline: clamp(20px, calc(10.582vw + -21.2698px), 60px);
+  --t-container-padding-inline: clamp(20px, calc(5.291vw + -0.6349px), 40px);
   --t-logo-width: 60px;
   --h1-size: clamp(36px, calc(3.1746vw + 23.619px), 48px);
   --h2-size: clamp(30px, calc(1.5873vw + 23.8095px), 36px);
@@ -18,9 +18,9 @@
 
 @media (min-width: 768px) {
   :root {
-    --t-container-padding-inline: clamp(60px, calc(7.0313vw + 6px), 96px);
+    --t-container-padding-inline: clamp(40px, calc(3.9063vw + 10px), 60px);
     --t-logo-width: 80px;
-    --h1-size: clamp(48px, calc(1.5625vw + 36px), 56px);
+    --h1-size: clamp(48px, calc(0.7813vw + 42px), 52px);
     --h2-size: clamp(36px, calc(0.7813vw + 30px), 40px);
     --h3-size: clamp(28px, calc(0.7813vw + 22px), 32px);
     --h4-size: clamp(24px, calc(0.7813vw + 18px), 28px);
@@ -31,9 +31,9 @@
 
 @media (min-width: 1280px) {
   :root {
-    --t-container-padding-inline: clamp(96px, calc(3.75vw + 48px), 120px);
+    --t-container-padding-inline: clamp(60px, calc(14.0625vw + -120px), 150px);
     --t-logo-width: 100px;
-    --h1-size: clamp(56px, calc(1.25vw + 40px), 64px);
+    --h1-size: clamp(52px, calc(1.875vw + 28px), 64px);
     --h2-size: clamp(40px, calc(1.25vw + 24px), 48px);
     --h3-size: clamp(32px, calc(1.25vw + 16px), 40px);
     --h4-size: clamp(28px, calc(0.625vw + 20px), 32px);
@@ -44,7 +44,7 @@
 
 @media (min-width: 1920px) {
   :root {
-    --t-container-padding-inline: 120px;
+    --t-container-padding-inline: 150px;
     --h1-size: 64px;
     --h2-size: 48px;
     --h3-size: 40px;
