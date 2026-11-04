@@ -163,3 +163,19 @@ function cruiser_vehicle_system_breadcrumb_alter(\Drupal\Core\Breadcrumb\Breadcr
   $replacement->addCacheContexts(['route']);
   $breadcrumb = $replacement;
 }
+
+/**
+ * Implements hook_views_pre_build().
+ *
+ * Gallery page: the DraggableViews order (Content → Gallery order) applies to
+ * "All categories" only; with a category selected the order is newest first.
+ */
+function cruiser_vehicle_views_pre_build(\Drupal\views\ViewExecutable $view) {
+  if ($view->id() !== 'gallery' || $view->current_display !== 'block_page') {
+    return;
+  }
+  $category = $view->getExposedInput()['category'] ?? 'All';
+  if ($category !== 'All' && $category !== '') {
+    unset($view->sort['weight']);
+  }
+}

@@ -3,9 +3,11 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.field_gallery_category
     - node.type.gallery
     - taxonomy.vocabulary.gallery_category
   module:
+    - draggableviews
     - node
     - taxonomy
     - user
@@ -122,8 +124,27 @@ display:
         type: none
         options:
           offset: 0
+      sorts:
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          granularity: second
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          entity_type: node
+          entity_field: nid
+          plugin_id: standard
+          order: DESC
       defaults:
         pager: false
+        sorts: false
       display_extenders: {  }
       block_description: 'Gallery: home (1 per category)'
       block_hide_empty: true
@@ -160,6 +181,40 @@ display:
           expose_sort_order: false
           sort_asc_label: Asc
           sort_desc_label: Desc
+      sorts:
+        weight:
+          id: weight
+          table: draggableviews_structure
+          field: weight
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: draggable_views_sort_default
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          draggable_views_reference: 'gallery:page_order'
+          draggable_views_null_order: after
+          draggable_views_pass_arguments: false
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          granularity: second
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          entity_type: node
+          entity_field: nid
+          plugin_id: standard
+          order: DESC
       filters:
         status:
           id: status
@@ -214,6 +269,7 @@ display:
         use_ajax: false
         pager: false
         exposed_form: false
+        sorts: false
         filters: false
         filter_groups: false
       use_ajax: true
@@ -230,3 +286,197 @@ display:
         - 'user.node_grants:view'
         - user.permissions
       tags: {  }
+  page_order:
+    id: page_order
+    display_title: 'Gallery order (admin)'
+    display_plugin: page
+    position: 3
+    display_options:
+      title: 'Gallery order'
+      fields:
+        draggableviews:
+          id: draggableviews
+          table: node_field_data
+          field: draggableviews
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: nid
+          plugin_id: draggable_views_field
+          label: ''
+          exclude: false
+          draggable_views_handler: draggableviews_handler_native
+          hide_label: true
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: field
+          label: Project
+          exclude: false
+          type: string
+          settings:
+            link_to_entity: true
+        field_gallery_category:
+          id: field_gallery_category
+          table: node__field_gallery_category
+          field: field_gallery_category
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: Category
+          exclude: false
+          type: entity_reference_label
+          settings:
+            link: false
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: status
+          plugin_id: field
+          label: Published
+          exclude: false
+          type: boolean
+          settings:
+            format: yes-no
+            format_custom_false: ''
+            format_custom_true: ''
+      pager:
+        type: none
+        options:
+          offset: 0
+      access:
+        type: perm
+        options:
+          perm: 'access content overview'
+      empty:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: true
+          content: 'No gallery projects yet.'
+      sorts:
+        weight:
+          id: weight
+          table: draggableviews_structure
+          field: weight
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: draggable_views_sort_default
+          order: ASC
+          expose:
+            label: ''
+            field_identifier: ''
+          exposed: false
+          draggable_views_reference: 'gallery:page_order'
+          draggable_views_null_order: after
+          draggable_views_pass_arguments: false
+        created:
+          id: created
+          table: node_field_data
+          field: created
+          entity_type: node
+          entity_field: created
+          plugin_id: date
+          order: DESC
+          granularity: second
+        nid:
+          id: nid
+          table: node_field_data
+          field: nid
+          entity_type: node
+          entity_field: nid
+          plugin_id: standard
+          order: DESC
+      filters:
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            gallery: gallery
+          group: 1
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      style:
+        type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          columns:
+            draggableviews: draggableviews
+            title: title
+            field_gallery_category: field_gallery_category
+            status: status
+          default: '-1'
+          info: {  }
+          override: true
+          sticky: false
+          summary: ''
+          empty_table: true
+          class: ''
+      row:
+        type: fields
+        options: {  }
+      defaults:
+        empty: false
+        access: false
+        title: false
+        use_ajax: false
+        pager: false
+        style: false
+        row: false
+        fields: false
+        sorts: false
+        filters: false
+        filter_groups: false
+        header: false
+      use_ajax: false
+      header:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          plugin_id: text_custom
+          empty: false
+          content: 'Drag projects into the order you want on /gallery when "All categories" is selected, then click Save order. Projects not yet ordered show after these, newest first. Selecting a single category always shows newest first.'
+      display_extenders: {  }
+      path: admin/content/gallery-order
+      menu:
+        type: tab
+        title: 'Gallery order'
+        description: 'Drag gallery projects into the order shown on /gallery (All categories).'
+        weight: 5
+        menu_name: admin
+        parent: system.admin_content
+        context: ''
+    cache_metadata:
+      max-age: 0
+      contexts:
+        - 'languages:language_content'
+        - 'languages:language_interface'
+        - 'user.node_grants:view'
+        - user.permissions
+      tags:
+        - 'config:field.storage.node.field_gallery_category'
