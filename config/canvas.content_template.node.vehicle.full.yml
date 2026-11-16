@@ -14,7 +14,7 @@ dependencies:
     - canvas.component.sdc.cruiserclassic.vehicle-specifications
     - canvas.component.sdc.tailpine.canvas-button
     - canvas.component.sdc.tailpine.canvas-heading
-    - canvas.component.sdc.tailpine.canvas-section
+    - canvas.component.sdc.tailpine.section
     - core.entity_view_mode.node.full
     - field.field.media.image.field_media_image
     - field.field.media.video.field_media_video_file
@@ -194,8 +194,8 @@ component_tree:
         expression: 'ℹ︎␜entity:node:vehicle␝field_interior␞␟entity␜␜entity:taxonomy_term␝name␞␟value'
   '2:80e56803-bf6f-4ef3-902a-667b0b9e56f2':
     uuid: 80e56803-bf6f-4ef3-902a-667b0b9e56f2
-    component_id: sdc.tailpine.canvas-section
-    component_version: 9114a1443924e48f
+    component_id: sdc.tailpine.section
+    component_version: c810afcce3d6733c
     inputs:
       background_type: image
       image_width: '50'
