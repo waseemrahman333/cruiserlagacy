@@ -1,0 +1,23 @@
+uuid: 2d9a4693-86e6-4709-9a61-740504a0bde3
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.vehicle
+  module:
+    - node
+id: vehicle_path
+label: Vehicle
+type: 'canonical_entities:node'
+pattern: '/vehicles/[node:title]'
+selection_criteria:
+  b4f9f4ec-e1c6-472d-924b-b023dd1ae706:
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      vehicle: vehicle
+selection_logic: and
+weight: 0
+relationships: {  }

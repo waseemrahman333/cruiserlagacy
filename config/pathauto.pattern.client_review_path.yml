@@ -1,0 +1,23 @@
+uuid: 9890d0d2-b289-46ae-9176-32162d099868
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.client_review
+  module:
+    - node
+id: client_review_path
+label: 'Client review'
+type: 'canonical_entities:node'
+pattern: '/reviews/[node:title]'
+selection_criteria:
+  20e124df-bd06-4d4e-a46d-7e927ccdd5d0:
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      client_review: client_review
+selection_logic: and
+weight: 3
+relationships: {  }

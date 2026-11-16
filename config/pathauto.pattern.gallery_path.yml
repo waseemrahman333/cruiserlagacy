@@ -1,0 +1,23 @@
+uuid: 4cc09770-5537-416d-ab2a-059e4edcff78
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.gallery
+  module:
+    - node
+id: gallery_path
+label: 'Gallery project'
+type: 'canonical_entities:node'
+pattern: '/gallery/[node:title]'
+selection_criteria:
+  8732bf71-3429-44b5-ba0f-0be96c13889b:
+    id: 'entity_bundle:node'
+    negate: false
+    context_mapping:
+      node: node
+    bundles:
+      gallery: gallery
+selection_logic: and
+weight: 1
+relationships: {  }

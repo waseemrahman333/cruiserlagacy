@@ -28,6 +28,7 @@
         "drupal/media_thumbnail_url_formatter": "^4.0",
         "drupal/nomarkup": "^1.0",
         "drupal/paragraphs": "^1.23",
+        "drupal/pathauto": "^1.16",
         "drupal/webform": "^6.3",
         "drush/drush": "^13.7"
     },
