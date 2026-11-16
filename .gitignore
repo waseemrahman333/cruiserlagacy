@@ -95,7 +95,6 @@ node_modules/
 
 
 # Environment-specific Drupal settings
-/web/sites/*/settings.ddev.php
 /web/sites/*/services.local.yml
 
 # Database dumps and backups (contain site data and user info)
