@@ -57,8 +57,6 @@
 {% set section_padding_class = [
   pad_top[section_padding_top] ?? pad_top.none,
   pad_bottom[section_padding_bottom] ?? pad_bottom.none,
-  pad_left[section_padding_left] ?? pad_left.none,
-  pad_right[section_padding_right] ?? pad_right.none,
 ]|join(' ') %}
 {% set content_padding_class = [
   pad_top[content_padding_top] ?? pad_top.none,
@@ -67,18 +65,42 @@
   pad_right[content_padding_right] ?? pad_right.none,
 ]|join(' ') %}
 
-{# Container
-   both:  normal .container on all screens.
-   right: below xl the image is full bleed and only the content gets the
-          container side spacing (left and right); from xl the row gets right
-          padding that lines the content up with the container's right edge. #}
-{% set container_map = {
-  both: 'container',
-  right: 'w-full xl:pr-[max(var(--t-container-padding-inline),calc((100%_-_var(--container-max-width,100%))/2_+_var(--t-container-padding-inline)))]',
+{# Layout #}
+{% set layout_mode = layout in ['image_left', 'image_right', 'image_top', 'image_bottom'] ? layout : 'image_left' %}
+{% set is_side = layout_mode in ['image_left', 'image_right'] %}
+{% set row_direction_map = {
+  image_left: 'flex-col lg:flex-row',
+  image_right: 'flex-col lg:flex-row-reverse',
+  image_top: 'flex-col',
+  image_bottom: 'flex-col-reverse',
 } %}
-{% set container_mode = enable_container ? (container_side in ['both', 'right'] ? container_side : 'both') : '' %}
-{% set container_class = container_mode ? container_map[container_mode] : '' %}
-{% set content_container_class = container_mode == 'right' ? 'mx-[var(--t-container-padding-inline)] xl:mx-0' : '' %}
+{% set row_direction_class = row_direction_map[layout_mode] %}
+
+{# Container
+   boxed:   normal .container around image and content.
+   content: (stored value 'right') only the content lines up with the
+            container; the image bleeds to the edge on its own side. The row
+            is capped at --container-max-width and centred, so on very wide
+            screens image + content stay inside it; the background stays
+            full width.
+            Side layouts: below lg the image is full width and the content
+            gets the container gutter; from lg the row gets the gutter on the
+            content side only (right for image left, left for image right).
+            Top / bottom layouts: image full width, content in a .container. #}
+{% set container_mode = enable_container ? (container_side in ['right', 'content'] ? 'content' : 'boxed') : '' %}
+{% set container_class = '' %}
+{% set content_container_class = '' %}
+{% if container_mode == 'boxed' %}
+  {% set container_class = 'container' %}
+{% elseif container_mode == 'content' and is_side %}
+  {% set container_class = layout_mode == 'image_left'
+    ? 'w-full max-w-[var(--container-max-width)] mx-auto lg:pr-[var(--t-container-padding-inline)]'
+    : 'w-full max-w-[var(--container-max-width)] mx-auto lg:pl-[var(--t-container-padding-inline)]' %}
+  {% set content_container_class = 'mx-[var(--t-container-padding-inline)] lg:mx-0' %}
+{% elseif container_mode == 'content' %}
+  {% set container_class = 'w-full max-w-[var(--container-max-width)] mx-auto' %}
+  {% set content_container_class = 'container' %}
+{% endif %}
 
 {# Gap between image and content (mobile → tablet → desktop) #}
 {% set media_gap_map = {
@@ -97,8 +119,13 @@
   '25': 'lg:w-1/4', '33': 'lg:w-1/3', '40': 'lg:w-2/5', '50': 'lg:w-1/2',
   '60': 'lg:w-3/5', '66': 'lg:w-2/3', '75': 'lg:w-3/4',
 } %}
-{% set image_col_class = (image_width_map[image_width] ?? 'lg:w-1/2') ~ ' lg:shrink-0' %}
-{% set content_col_class = 'lg:flex-1 lg:min-w-0' %}
+{% if is_side %}
+  {% set image_col_class = (image_width_map[image_width] ?? 'lg:w-1/2') ~ ' lg:shrink-0 min-h-[91.6vw] lg:min-h-[480px] xl:min-h-[600px]' %}
+  {% set content_col_class = 'lg:flex-1 lg:min-w-0' %}
+{% else %}
+  {% set image_col_class = 'w-full h-[clamp(280px,50vw,640px)]' %}
+  {% set content_col_class = 'w-full' %}
+{% endif %}
 
 
 {% set horizontal_alignment_map = {
@@ -141,12 +168,11 @@
    'wrapper',
    'mx-auto'
 ) }}>
-
-  <div class="flex flex-col {{ section_padding_class }} lg:flex-row {{ container_class }}  {{ media_gap_class }}">
+  <div class="flex {{ row_direction_class }} {{ section_padding_class }} {{ container_class }} {{ media_gap_class }}">
     
     {# Image Column #}
     {% if image %}
-     <div class="{{ image_col_class }} relative overflow-hidden min-h-[91.6vw] xl:min-h-[600px] xl:h-auto">
+     <div class="{{ image_col_class }} relative overflow-hidden">
     <img
       class="absolute inset-0 w-full h-full object-cover"
       src="{{ image.src }}"

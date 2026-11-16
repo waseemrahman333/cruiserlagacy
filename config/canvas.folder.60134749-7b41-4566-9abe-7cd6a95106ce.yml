@@ -10,6 +10,7 @@ dependencies:
     - canvas.component.sdc.cruiserclassic.media-text
     - canvas.component.sdc.cruiserclassic.service-item
     - canvas.component.sdc.tailpine.canvas-figure
+    - canvas.component.sdc.tailpine.media-text
     - canvas.component.sdc.tailpine.node
     - canvas.component.sdc.tailpine.node-teaser
 name: Content
@@ -23,5 +24,6 @@ items:
   - sdc.cruiserclassic.media-text
   - sdc.cruiserclassic.service-item
   - sdc.tailpine.canvas-figure
+  - sdc.tailpine.media-text
   - sdc.tailpine.node
   - sdc.tailpine.node-teaser

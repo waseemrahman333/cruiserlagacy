@@ -8,7 +8,7 @@
  * Mobile: 2 per row. Tablet: 3. Desktop: all in one row.
  */
 #}
-<div class="series-tiles w-full grid grid-cols-2 md:grid-cols-3 xl:grid-flow-col xl:auto-cols-fr xl:grid-cols-none border-l border-solid border-[#e5d8bc]">
+<div class="series-tiles mx-auto max-w-480 w-full grid grid-cols-2 md:grid-cols-3 xl:grid-flow-col xl:auto-cols-fr xl:grid-cols-none border-l border-solid border-border">
   {% for tile in tiles %}
     {{ include('cruiserclassic:link-tile', tile|merge({ border_right: true, size: 'md' }), with_context = false) }}
   {% endfor %}

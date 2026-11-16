@@ -23,10 +23,8 @@
  * - content:         (markup) Slot — Flexible Grid Item components.
  *
  * Layout contract:
- * Fractional widths in child Grid Items (Half, One-third, etc.) assume a
- * 12-column parent. Changing desktop/wide away from 12 may cause fractions to
- * not divide evenly. Keeping columns_desktop and columns_wide at 12 is
- * strongly recommended.
+ * Each Flexible Grid Item chooses how many of these columns it spans per
+ * screen size (1–12, or the full row).
  *
  * Tailwind v4 — @source inline() directives required in css/main.css:
  *

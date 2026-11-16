@@ -1,7 +1,6 @@
 
 {% set bg_image_available = bg_media is defined and bg_media.src is defined and bg_media.src %}
 
-
 {% set grid_columns = {
   1: 'grid-cols-1',
   2: 'grid-cols-1 md:grid-cols-2',
@@ -11,9 +10,7 @@
   6: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6',
 } %}
 
-
 {% set grid_column_classes = grid_columns[grid_layout]|default(1) %}
-
 
 {% set padding_top_map = {
   "none": "pt-0",
@@ -26,7 +23,6 @@
   "3xl": "pt-10 md:pt-14 xl:pt-20",
   "huge": "pt-12 md:pt-16 xl:pt-24"
 } %}
-
 
 {% set padding_bottom_map = {
   "none": "pb-0",
@@ -65,7 +61,7 @@
   'responsive': 'text-center items-center md:text-left md:items-start'
 } %}
 
-{% set add_content_alignment = content_alignment_map[content_alignment]|default(title_alignment_map.left) %}
+{% set add_content_alignment = content_alignment_map[content_alignment]|default(content_alignment_map.left) %}
 {# Normalize and default background color #}
 {% set bg_color = bg_color|default('primary')|striptags %}
 
@@ -178,7 +174,6 @@
   {% endif %}
 >
  
-
   <!-- Background Split Layer -->
     {% if bg_image_available and background_type == 'both' %}
   <div class="absolute inset-0 flex flex-col xl:flex-row">
@@ -191,15 +186,25 @@
   </div>
    {% endif %}
 
-<div class=" wrapper mx-auto w-full max-w-480 container  {{enable_container ? 'container' : ' '}} grid ">
+<div class=" wrapper mx-auto w-full {{enable_container ? 'container' : ' '}} grid ">
 
   {# Color overlay only when image exists #}
   {% if bg_image_available and enable_overlay %}
   <div class="absolute inset-0 z-0  {{overlay_bg}} {{opacity_class}} pointer-events-none"></div>
   {% endif %}
 
+  {# ---------- Header slot: full width, on by default ---------- #}
+  {% if show_header ?? true %}
+    {% set header_content %}
+      {% block header %}
+      {% endblock %}
+    {% endset %}
+    <header class="section__header relative z-10 w-full col-span-full min-h-10">
+      {{ header_content }}
+    </header>
+  {% endif %}
+
    {# ---------------------------------------------------------- #}
- {#  #}
    {% if show_top_region %}
   {% if heading or description or (cta is defined and cta.label and cta.url) %}
 
@@ -211,6 +216,18 @@
     ? "w-full" 
     : "md:w-2/3 xl:w-1/2" }} flex-col  {{show_cta ? 'md:w-7/10 xl:w-1/2' : ' '}} ">
 {# ------------------- #}
+      {% if show_badge ?? true %}
+        {% set badge_text %}
+          {% block badge %}
+
+          {% endblock %}
+        {% endset %}
+        {% if badge_text|trim is not empty %}
+          <div class="section__badge h-fit min-w-25 w-fit">
+            {{ badge_text }}
+          </div>
+        {% endif %}
+      {% endif %}
       {% if show_heading %}
         {% set heading_text %}
           {% block heading %}
@@ -250,7 +267,11 @@
           {% endblock %}
         {% endset %}
         {% if cta_content|trim is not empty %}
-          <div class="md:w-1/5 {{cta_alignment}} md:min-h-fit cursor-pointer  {{reverse_top_content ? 'md:justify-start' : 'md:justify-end' }}  flex gap-2">
+          {% set cta_width_map = {
+            '10': 'md:w-1/10', '20': 'md:w-1/5', '25': 'md:w-1/4', '30': 'md:w-3/10',
+            '40': 'md:w-2/5', '50': 'md:w-1/2', 'auto': 'md:w-auto',
+          } %}
+          <div class="{{ cta_width_map[cta_width|default('20')] ?? 'md:w-1/5' }} min-w-40 {{cta_alignment}} md:min-h-fit cursor-pointer  {{reverse_top_content ? 'md:justify-start' : 'md:justify-end' }}  flex gap-2">
             {{ cta_content }}
           </div>
         {% endif %}
@@ -282,7 +303,7 @@
           {% endblock %}
         {% endset %}
         {% if bottom_content|trim is not empty %}
-          <div class="">
+          <div class="w-full">
             {{ bottom_content }}
           </div>
         {% endif %}

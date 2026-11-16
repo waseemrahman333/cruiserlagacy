@@ -1,0 +1,92 @@
+{#
+/**
+ * Flexible Grid Item (Canvas)
+ *
+ * A single item inside a Flexible Grid. The parent sets the number of
+ * columns per screen size; this item sets how many of them it spans.
+ *
+ * Breakpoint tiers:
+ *   Mobile  — no prefix  — all screen sizes (base)
+ *   Tablet  — md:        — ≥ 768px
+ *   Desktop — lg:        — ≥ 1024px
+ *   Wide    — xl:        — ≥ 1280px
+ *
+ * Available variables:
+ * - span_mobile:  (string) '1'–'12' or 'full'. Default: full.
+ * - span_tablet:  (string) 'inherit', '1'–'12' or 'full'. Default: inherit.
+ * - span_desktop: (string) 'inherit', '1'–'12' or 'full'. Default: inherit.
+ * - span_wide:    (string) 'inherit', '1'–'12' or 'full'. Default: inherit.
+ * - extra_height:  (string) normal|double. Default: normal.
+ * - align_self:    (string) default|top|center|bottom. Default: default.
+ * - extra_classes: (string) Optional additional CSS classes.
+ * - content:       (markup) Slot — any child component.
+ *
+ * 'inherit' adds no class, so the span from the smaller screen carries on.
+ * Spans larger than the parent's column count are clamped by the browser
+ * (the item fills the row). Class names are written out in full so
+ * Tailwind can find them.
+ */
+#}
+
+{% set span_mobile_map = {
+  '1': 'col-span-1', '2': 'col-span-2', '3': 'col-span-3', '4': 'col-span-4', '5': 'col-span-5', '6': 'col-span-6',
+  '7': 'col-span-7', '8': 'col-span-8', '9': 'col-span-9', '10': 'col-span-10', '11': 'col-span-11', '12': 'col-span-12', 'full': 'col-span-full',
+} %}
+{% set span_tablet_map = {
+  '1': 'md:col-span-1', '2': 'md:col-span-2', '3': 'md:col-span-3', '4': 'md:col-span-4', '5': 'md:col-span-5', '6': 'md:col-span-6',
+  '7': 'md:col-span-7', '8': 'md:col-span-8', '9': 'md:col-span-9', '10': 'md:col-span-10', '11': 'md:col-span-11', '12': 'md:col-span-12', 'full': 'md:col-span-full',
+} %}
+{% set span_desktop_map = {
+  '1': 'lg:col-span-1', '2': 'lg:col-span-2', '3': 'lg:col-span-3', '4': 'lg:col-span-4', '5': 'lg:col-span-5', '6': 'lg:col-span-6',
+  '7': 'lg:col-span-7', '8': 'lg:col-span-8', '9': 'lg:col-span-9', '10': 'lg:col-span-10', '11': 'lg:col-span-11', '12': 'lg:col-span-12', 'full': 'lg:col-span-full',
+} %}
+{% set span_wide_map = {
+  '1': 'xl:col-span-1', '2': 'xl:col-span-2', '3': 'xl:col-span-3', '4': 'xl:col-span-4', '5': 'xl:col-span-5', '6': 'xl:col-span-6',
+  '7': 'xl:col-span-7', '8': 'xl:col-span-8', '9': 'xl:col-span-9', '10': 'xl:col-span-10', '11': 'xl:col-span-11', '12': 'xl:col-span-12', 'full': 'xl:col-span-full',
+} %}
+
+{# Items saved before the span options used fraction widths of a 12-column
+   grid (width_*); read those when no span is set so old pages keep their layout. #}
+{% set legacy_span = {
+  full: 'full', half: '6', one_third: '4', two_thirds: '8',
+  one_quarter: '3', three_quarters: '9', one_sixth: '2', five_sixths: '10',
+} %}
+{% set s_mobile  = span_mobile  ?? legacy_span[width_mobile]  ?? 'full' %}
+{% set s_tablet  = span_tablet  ?? legacy_span[width_tablet]  ?? 'inherit' %}
+{% set s_desktop = span_desktop ?? legacy_span[width_desktop] ?? 'inherit' %}
+{% set s_wide    = span_wide    ?? legacy_span[width_wide]    ?? 'inherit' %}
+
+{% set mobile_class  = span_mobile_map[s_mobile] ?? 'col-span-full' %}
+{% set tablet_class  = span_tablet_map[s_tablet] ?? '' %}
+{% set desktop_class = span_desktop_map[s_desktop] ?? '' %}
+{% set wide_class    = span_wide_map[s_wide] ?? '' %}
+
+{# Resolve row-span (double height) #}
+{% set height_class = (extra_height == 'double') ? 'row-span-2' : '' %}
+
+{# Resolve self-alignment #}
+{% set self_map = {
+  'default': '',
+  'top':     'self-start',
+  'center':  'self-center',
+  'bottom':  'self-end',
+} %}
+{% set self_class = self_map[align_self|default('default')]|default('') %}
+
+{# Sanitise extra_classes #}
+{% set extra_safe = extra_classes|default('')|striptags %}
+
+<div {{ attributes.addClass(
+  mobile_class,
+  tablet_class,
+  desktop_class,
+  wide_class,
+  height_class,
+  self_class,
+  extra_safe
+) }}>
+  {% set content_slot %}
+    {% block content %}{% endblock %}
+  {% endset %}
+  {{ content_slot }}
+</div>

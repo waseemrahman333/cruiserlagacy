@@ -1,11 +1,19 @@
 "$schema": "https://git.drupalcode.org/project/drupal/-/raw/10.1.x/core/modules/sdc/src/metadata.schema.json"
-name: Section (Tailpine)
+name: Section (tailpine)
 description: 'A flexible section component with customizable layout and styling options.'
 group: Layout
 status: stable
 props:
   type: object
   properties:
+
+    show_header:
+      type: boolean
+      title: Show Header Slot
+      description: "Full-width slot at the very top of the section"
+      default: true
+      examples:
+        - true
 
     background_type:
       type: string
@@ -19,15 +27,14 @@ props:
         color: Colored (Bg)
         image: Image (bg)
         both: Both(Image and Color)
-      default: image
+      default: color
       examples:
-        - 'image'
+        - 'color'
 
     bg_media:
       $ref: json-schema-definitions://canvas.module/image
       title: Background image
       type: object  
-
 
     image_width:
       type: string
@@ -220,53 +227,46 @@ props:
       title: Reverse Top Content
       examples:
         - false
-      default:
-        - false
+      default: false
 
     show_top_region:
       type: boolean
       title: Show Top Region
       examples:
         - true
-      default:
-        - true
+      default: true
 
     show_content_region:
       type: boolean
       title: Show Content Region
       examples:
         - true
-      default:
-        - true
+      default: true
 
     show_bottom_region:
       type: boolean
       title: Show Bottom Region
       examples:
         - true
-      default:
-        - true
+      default: true
     show_cta:
       type: boolean
       title: Show Cta Region
       examples:
         - true
-      default:
-        - true
+      default: true
     enable_container:
       type: boolean
       title: Enable Container Class
       examples:
         - true
-      default:
-        - true
+      default: true
     show_heading:
       type: boolean
       title: Show Heading Slot 
       examples:
         - true
-      default:
-        - true
+      default: true
     padding_t:
       type: string
       title: Content Region Padding Top 
@@ -349,16 +349,18 @@ props:
       title: Show Description Text
       examples:
         - false
-      default:
-        - false
+      default: false
 
 slots:
+  header:
+    title: "Header"
+    description: "Full-width area at the top of the section; place any component here."
   heading:
     title: "heading"
-    descriptoin: "heading of the main sectoin."
+    description: "heading of the main section."
   text:
     title: "text"
-    descriptoin: "text of the main sectoin."
+    description: "text of the main section."
   cta:
     title: "cta"
   content:

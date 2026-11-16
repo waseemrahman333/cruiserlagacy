@@ -1,0 +1,207 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
+name: Flexible Grid Item (Tailpin)
+status: stable
+group: Layout
+description: "A single item inside a Flexible Grid. Set how many of the grid's columns it spans on each screen size, then drop any component inside."
+
+props:
+  type: object
+  properties:
+    attributes:
+      type: Drupal\Core\Template\Attribute
+      title: HTML attributes
+      description: Additional HTML attributes.
+
+    span_mobile:
+      type: string
+      title: "Column span — mobile"
+      description: "How many of the parent grid’s mobile columns this item covers."
+      default: 'full'
+      enum:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+        - 'full'
+      "meta:enum":
+        '1': "1 column"
+        '2': "2 columns"
+        '3': "3 columns"
+        '4': "4 columns"
+        '5': "5 columns"
+        '6': "6 columns"
+        '7': "7 columns"
+        '8': "8 columns"
+        '9': "9 columns"
+        '10': "10 columns"
+        '11': "11 columns"
+        '12': "12 columns"
+        'full': "Full row (all columns)"
+      examples:
+        - 'full'
+
+    span_tablet:
+      type: string
+      title: "Column span — tablet"
+      description: "Columns covered from 768px. ‘Same as smaller screen’ keeps the mobile span."
+      default: 'inherit'
+      enum:
+        - 'inherit'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+        - 'full'
+      "meta:enum":
+        'inherit': "Same as smaller screen"
+        '1': "1 column"
+        '2': "2 columns"
+        '3': "3 columns"
+        '4': "4 columns"
+        '5': "5 columns"
+        '6': "6 columns"
+        '7': "7 columns"
+        '8': "8 columns"
+        '9': "9 columns"
+        '10': "10 columns"
+        '11': "11 columns"
+        '12': "12 columns"
+        'full': "Full row (all columns)"
+      examples:
+        - 'inherit'
+
+    span_desktop:
+      type: string
+      title: "Column span — desktop"
+      description: "Columns covered from 1024px. ‘Same as smaller screen’ keeps the tablet span."
+      default: 'inherit'
+      enum:
+        - 'inherit'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+        - 'full'
+      "meta:enum":
+        'inherit': "Same as smaller screen"
+        '1': "1 column"
+        '2': "2 columns"
+        '3': "3 columns"
+        '4': "4 columns"
+        '5': "5 columns"
+        '6': "6 columns"
+        '7': "7 columns"
+        '8': "8 columns"
+        '9': "9 columns"
+        '10': "10 columns"
+        '11': "11 columns"
+        '12': "12 columns"
+        'full': "Full row (all columns)"
+      examples:
+        - 'inherit'
+
+    span_wide:
+      type: string
+      title: "Column span — wide"
+      description: "Columns covered from 1280px. ‘Same as smaller screen’ keeps the desktop span."
+      default: 'inherit'
+      enum:
+        - 'inherit'
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+        - '10'
+        - '11'
+        - '12'
+        - 'full'
+      "meta:enum":
+        'inherit': "Same as smaller screen"
+        '1': "1 column"
+        '2': "2 columns"
+        '3': "3 columns"
+        '4': "4 columns"
+        '5': "5 columns"
+        '6': "6 columns"
+        '7': "7 columns"
+        '8': "8 columns"
+        '9': "9 columns"
+        '10': "10 columns"
+        '11': "11 columns"
+        '12': "12 columns"
+        'full': "Full row (all columns)"
+      examples:
+        - 'inherit'
+
+    extra_height:
+      type: string
+      title: "Cell height"
+      description: "Make this cell taller so it spans two rows of the grid."
+      default: normal
+      enum:
+        - normal
+        - double
+      "meta:enum":
+        normal: "Normal (single row)"
+        double: "Double (span two rows)"
+      examples:
+        - normal
+
+    align_self:
+      type: string
+      title: "Vertical position"
+      description: "Override vertical alignment for this cell only (overrides the parent grid's Align items setting)."
+      default: default
+      enum:
+        - default
+        - top
+        - center
+        - bottom
+      "meta:enum":
+        default: "Inherit from grid"
+        top: "Top"
+        center: "Center"
+        bottom: "Bottom"
+      examples:
+        - default
+
+    extra_classes:
+      type: string
+      title: "Extra CSS classes"
+      description: "Additional CSS classes appended to this cell."
+      examples:
+        - 'overflow-hidden'
+
+slots:
+  content:
+    title: "Cell content"
+    description: "Drop any component here."

@@ -47,7 +47,7 @@
 {% set color_class = bg_type == 'color' ? (bg_color_map[bg_color|default('primary')] ?? 'bg-primary') : '' %}
 
 <div
-  class="hero w-full max-w-[1920px] mx-auto relative overflow-hidden bg-cover bg-no-repeat bg-center {{ color_class }}"
+  class="hero w-full  mx-auto relative overflow-hidden bg-cover bg-no-repeat bg-center {{ color_class }}"
   {% if bg_type == 'image' and image_url.src %}
   style="background-image: url('{{ image_url.src }}');"
   {% endif %}
@@ -63,7 +63,7 @@
   <!-- Hero Section -->
 
   <section 
-    class="relative z-10 h-screen flex flex-col gap-4 justify-end  pb-12.5 xl:pb-16 container "
+    class="relative z-10 flex flex-col gap-4 justify-end min-h-[min(100svh,1200px)] pt-[calc(76px+40px)] md:pt-[calc(96px+56px)] xl:pt-[calc(116px+64px)] pb-10 md:pb-[clamp(5rem,2.333rem+5.556vw,9rem)] container-right container"
     aria-label="Hero section"
   >
     <div class="content max-w-177 w-full text-body-bg">

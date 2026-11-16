@@ -9,6 +9,11 @@ dependencies:
     - canvas.component.sdc.cruiserclassic.tile-grid
     - canvas.component.sdc.tailpine.canvas-section
     - canvas.component.sdc.tailpine.canvas-sidebar
+    - canvas.component.sdc.tailpine.flex-item
+    - canvas.component.sdc.tailpine.flexbox
+    - canvas.component.sdc.tailpine.flexible-grid
+    - canvas.component.sdc.tailpine.flexible-grid-item
+    - canvas.component.sdc.tailpine.section
 name: Layout
 configEntityTypeId: component
 weight: 0
@@ -19,3 +24,8 @@ items:
   - sdc.cruiserclassic.tile-grid
   - sdc.tailpine.canvas-section
   - sdc.tailpine.canvas-sidebar
+  - sdc.tailpine.flex-item
+  - sdc.tailpine.flexbox
+  - sdc.tailpine.flexible-grid
+  - sdc.tailpine.flexible-grid-item
+  - sdc.tailpine.section

@@ -1,6 +1,7 @@
 $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/modules/sdc/src/schema/sdc.schema.json
-name: Base Media And Text (Canvas)
-description: Media and Text
+name: Media And Text (Tailpine)
+description: "Image and content side by side (left or right) or stacked (image top or bottom)."
+group: Content
 status: stable
 props:
   type: object
@@ -21,23 +22,6 @@ props:
           width: 600
           height: 700
 
-    layout_direction:
-      title: Layout Direction
-      description: Controls the orientation of media and content.
-      type: string
-      default: row
-      enum:
-        - 'row'
-        - 'row-reverse'
-        - 'column'
-        - 'column-reverse'
-      meta:enum:
-        row: 'Text Right / Image Left'
-        row-reverse: 'Text Left / Image Right'
-        column: 'Image Top / text Bottom'
-        column-reverse: 'Image Bottom / text Top'
-      examples:
-        - 'row'
     bg_color:
       type: string
       title: Background color
@@ -75,14 +59,27 @@ props:
 
     container_side:
       type: string
-      title: Container side
-      description: "Used when the container is enabled. Right side only lets the image reach the left edge of the screen."
+      title: Container width
+      description: "Used when the container is enabled. 'Content side only' lets the image run to the screen edge; the container follows the content (right when the image is left, left when the image is right)."
       enum: [both, right]
       meta:enum:
-        both: 'Both sides'
-        right: 'Right side only'
+        both: 'Boxed (both sides)'
+        right: 'Content side only (image bleeds to edge)'
       default: both
       examples: [both]
+
+    layout:
+      type: string
+      title: Layout
+      description: "Left / right: side by side from 1024px, image first when stacked. Top / bottom: stacked on all screens."
+      enum: [image_left, image_right, image_top, image_bottom]
+      meta:enum:
+        image_left: 'Image left, content right'
+        image_right: 'Image right, content left'
+        image_top: 'Image top, content bottom'
+        image_bottom: 'Content top, image bottom'
+      default: image_left
+      examples: [image_left]
 
     show_description:
       type: boolean
@@ -164,7 +161,7 @@ props:
       
     image_width:
       title: Image Width
-      description: "Share of the row taken by the image on desktop (side-by-side layouts). The content fills the rest. Always full width on mobile and tablet."
+      description: "Share of the row taken by the image on desktop . The content fills the rest. Always full width on mobile and tablet."
       type: string
       enum: ['25', '33', '40', '50', '60', '66', '75']
       "meta:enum":
@@ -254,39 +251,6 @@ props:
       default: none
       examples: [none]
 
-    section_padding_left:
-      type: string
-      title: "Section Padding Left"
-      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
-      "meta:enum":
-        none: "None"
-        xs: "Extra Small (up to 8px)"
-        sm: "Small (up to 16px)"
-        md: "Medium (up to 24px)"
-        lg: "Large (up to 32px)"
-        xl: "Extra Large (up to 40px)"
-        2xl: "2X Large (up to 48px)"
-        3xl: "3X Large (up to 64px)"
-        huge: "Huge (up to 100px)"
-      default: none
-      examples: [none]
-
-    section_padding_right:
-      type: string
-      title: "Section Padding Right"
-      enum: [none, xs, sm, md, lg, xl, 2xl, 3xl, huge]
-      "meta:enum":
-        none: "None"
-        xs: "Extra Small (up to 8px)"
-        sm: "Small (up to 16px)"
-        md: "Medium (up to 24px)"
-        lg: "Large (up to 32px)"
-        xl: "Extra Large (up to 40px)"
-        2xl: "2X Large (up to 48px)"
-        3xl: "3X Large (up to 64px)"
-        huge: "Huge (up to 100px)"
-      default: none
-      examples: [none]
 
     content_padding_top:
       type: string

@@ -54,6 +54,11 @@
     padding-inline: var(--t-container-padding-inline);
     margin-inline: auto;
 }
+.container-right {
+    max-width: var(--container-max-width);
+    padding-right: var(--t-container-padding-inline);
+    margin-inline: auto;
+}
 
 /* --------------------------------------------------------------------------
    BODY

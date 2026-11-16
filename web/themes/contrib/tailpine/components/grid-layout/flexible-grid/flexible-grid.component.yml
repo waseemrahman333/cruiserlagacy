@@ -1,8 +1,8 @@
 $schema: https://git.drupalcode.org/project/drupal/-/raw/HEAD/core/assets/schemas/v1/metadata.schema.json
 name: Flexible Grid (Canvas)
 status: stable
-group: Tailpine
-description: "A flexible grid container. Choose how many columns the grid should have on each screen size, then drop Flexible Grid Item components inside. Defaults to 12 columns on desktop for maximum flexibility — Flexible Grid Items can then claim any fraction (half, third, quarter, etc.) of that width."
+group: Layout
+description: "A flexible grid container. Choose how many columns the grid has on each screen size, then drop Flexible Grid Item components inside and set how many columns each one spans."
 
 props:
   type: object
@@ -35,7 +35,7 @@ props:
     columns_desktop:
       type: integer
       title: "Columns on desktop."
-      description: "Column tracks at the lg: breakpoint (≥ 1024px). Recommended: keep at 12 so Flexible Grid Items can claim exact fractions."
+      description: "Column tracks at the lg: breakpoint (≥ 1024px). Range: 1–12."
       default: 12
       minimum: 1
       maximum: 12
